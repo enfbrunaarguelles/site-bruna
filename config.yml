@@ -1,0 +1,38 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+locale: "pt"
+
+site_url: https://brunaarguelles.com.br
+display_url: https://brunaarguelles.com.br
+logo_url: https://brunaarguelles.com.br/assets/monogram.png
+
+collections:
+  - name: "dicas"
+    label: "Dicas do Blog"
+    description: "Crie, edite e organize as dicas que aparecem no site."
+    files:
+      - name: "lista"
+        label: "Todas as Dicas"
+        file: "content/dicas.json"
+        editor:
+          preview: false
+        fields:
+          - label: "Dicas"
+            name: "posts"
+            label_singular: "Dica"
+            widget: "list"
+            summary: "{{fields.titulo}}"
+            fields:
+              - { label: "Publicar no site?", name: "publicado", widget: "boolean", default: true }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Link da dica (slug)", name: "slug", widget: "string", hint: "Endereço da dica no site. Use só letras minúsculas e hífens. Ex: cuidados-com-pe-diabetico" }
+              - { label: "Categoria", name: "categoria", widget: "string", hint: "Ex: Cuidado em casa, Laserterapia, Cicatrização" }
+              - { label: "Data", name: "data", widget: "string", hint: "Ex: 25/06/2026" }
+              - { label: "Imagem de capa", name: "imagem", widget: "image", required: false, hint: "Opcional. Aparece no card e no topo da dica." }
+              - { label: "Resumo (aparece no card)", name: "resumo", widget: "text", hint: "1 a 2 frases curtas." }
+              - { label: "Conteúdo completo", name: "conteudo", widget: "markdown", hint: "O texto da dica. Use títulos, listas e negrito à vontade." }
