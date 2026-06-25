@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dica — Bruna Arguelles</title>
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B44; --cream-2:#efe7d6;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  html,body{ margin:0; padding:0; }
+  body{ background:var(--pergaminho); font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; font-size:19px; line-height:1.7; }
+  a{ color:inherit; }
+
+  /* topbar */
+  .topbar{ height:74px; display:flex; align-items:center; border-bottom:1px solid var(--line); position:sticky; top:0; background:#F7F2E8f2; backdrop-filter:blur(8px); z-index:10; }
+  .topbar .in{ width:min(900px,92vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand img{ height:36px; }
+  .brand .nm{ font-family:var(--serif-display); font-size:20px; font-weight:600; color:var(--cipreste); line-height:1; }
+  .brand .rl{ font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin-top:3px; }
+  .back{ font-size:15px; color:var(--ink-soft); display:inline-flex; align-items:center; gap:7px; transition:color .2s; }
+  .back:hover{ color:var(--cipreste); }
+
+  /* article */
+  .article{ width:min(760px,90vw); margin:0 auto; padding:56px 0 40px; }
+  .kicker{ font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--terracota); font-weight:600; display:flex; align-items:center; gap:10px; }
+  .kicker .d{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); }
+  .kicker .date{ color:var(--salvia); letter-spacing:.1em; }
+  h1.title{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); font-size:clamp(34px,5.5vw,52px); line-height:1.06; margin:16px 0 0; letter-spacing:.005em; }
+  .cover{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; border:1px solid var(--line); margin:34px 0 8px; box-shadow:0 18px 45px rgba(42,58,51,.14); }
+  .content{ margin-top:30px; }
+  .content h2{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); font-size:30px; line-height:1.1; margin:38px 0 10px; }
+  .content h3{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); font-size:24px; margin:28px 0 8px; }
+  .content p{ margin:16px 0; color:var(--ink-soft); text-wrap:pretty; }
+  .content strong{ color:var(--cipreste); font-weight:600; }
+  .content a{ color:var(--terracota); font-weight:600; text-decoration:underline; text-underline-offset:3px; }
+  .content ul{ margin:16px 0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .content ul li{ position:relative; padding-left:22px; color:var(--ink-soft); }
+  .content ul li::before{ content:""; position:absolute; left:2px; top:11px; width:6px; height:6px; background:var(--salvia); transform:rotate(45deg); }
+  .content blockquote{ margin:26px 0; padding:18px 24px; border-left:3px solid var(--terracota); background:var(--cream-2); border-radius:0 8px 8px 0; font-family:var(--serif-display); font-style:italic; font-size:22px; color:var(--cipreste); }
+  .content blockquote p{ margin:0; color:var(--cipreste); }
+
+  /* footer cta */
+  .cta{ margin-top:48px; padding-top:34px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; }
+  .cta .msg{ font-family:var(--serif-display); font-size:23px; color:var(--cipreste); font-weight:600; }
+  .btn{ display:inline-flex; align-items:center; gap:9px; font-family:var(--serif-body); font-weight:600; font-size:16px; padding:12px 24px; border-radius:34px; border:1.5px solid var(--terracota); background:var(--terracota); color:#fff; transition:transform .15s, box-shadow .2s; }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(201,120,98,.3); }
+  .btn svg{ width:18px; height:18px; }
+  .notfound{ text-align:center; padding:80px 0; }
+  .notfound h1{ font-family:var(--serif-display); color:var(--cipreste); font-size:38px; }
+  .notfound a{ color:var(--terracota); font-weight:600; }
+  footer{ width:min(760px,90vw); margin:0 auto; padding:30px 0 50px; font-size:13px; color:var(--ink-soft); border-top:1px solid var(--line); }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="in">
+      <a class="brand" href="index.html">
+        <img src="assets/monogram.png" alt="" />
+        <div>
+          <div class="nm">Bruna Arguelles</div>
+          <div class="rl">Enfermagem Especializada</div>
+        </div>
+      </a>
+      <a class="back" href="index.html#dicas">← Todas as dicas</a>
+    </div>
+  </div>
+
+  <article class="article" id="article">
+    <p style="color:var(--ink-soft);">Carregando…</p>
+  </article>
+
+  <footer>Bruna Arguelles — Enfermagem Especializada · COREN/MG 761268-ENF · Juiz de Fora/MG</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script>
+  function relImg(p){ return p ? String(p).replace(/^\//,'') : ''; }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  const params = new URLSearchParams(location.search);
+  const slug = params.get('slug');
+  const art = document.getElementById('article');
+
+  const wa = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.737-.98a9.913 9.913 0 0 0 .241.273z"/></svg>';
+
+  function notFound(){
+    art.className = 'article notfound';
+    art.innerHTML = '<h1>Dica não encontrada</h1><p><a href="index.html#dicas">Voltar para todas as dicas →</a></p>';
+  }
+
+  fetch('content/dicas.json', { cache:'no-store' })
+    .then(r => r.json())
+    .then(data => {
+      const p = (data.posts||[]).find(x => x.slug === slug && x.publicado !== false);
+      if (!p){ notFound(); return; }
+      document.title = p.titulo + ' — Bruna Arguelles';
+      const cover = p.imagem ? '<img class="cover" src="'+esc(relImg(p.imagem))+'" alt="">' : '';
+      const body = (window.marked ? marked.parse(p.conteudo||'') : '<p>'+esc(p.conteudo||'')+'</p>');
+      art.innerHTML =
+        '<div class="kicker"><span class="d"></span><span>'+esc(p.categoria||'')+'</span>'
+          + (p.data ? '<span class="date">'+esc(p.data)+'</span>' : '') + '</div>'
+        + '<h1 class="title">'+esc(p.titulo)+'</h1>'
+        + cover
+        + '<div class="content">'+body+'</div>'
+        + '<div class="cta"><span class="msg">Posso ajudar no seu caso?</span>'
+        + '<a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">'+wa+'Falar no WhatsApp</a></div>';
+    })
+    .catch(notFound);
+</script>
+</body>
+</html>

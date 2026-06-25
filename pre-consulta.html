@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Formulário de Pré-Consulta — Bruna Arguelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#566860; --line:#5A7A6B40; --line-strong:#2A3A3326;
+    --salvia-soft:#5A7A6B14; --terracota-soft:#C9786214; --paper:#FFFFFF;
+    --display:"Cormorant Garamond", Georgia, serif;
+    --body:"Lato", system-ui, -apple-system, sans-serif;
+    --shadow:0 14px 40px rgba(42,58,51,.14);
+    --radius:14px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--pergaminho);
+    background-image:radial-gradient(circle at 18% 0%, #fbf8f1 0%, var(--pergaminho) 46%);
+    font-family:var(--body); color:var(--ink); -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility; line-height:1.5; min-height:100vh;
+  }
+  ::selection{ background:var(--terracota); color:#fff; }
+
+  .wrap{ max-width:760px; margin:0 auto; padding:0 18px 64px; }
+
+  /* ---------- HEADER ---------- */
+  .hero{
+    background:var(--cipreste);
+    background-image:linear-gradient(165deg,#31443b 0%, #2A3A33 55%, #243029 100%);
+    color:var(--pergaminho); text-align:center;
+    padding:38px 22px 30px; position:relative; overflow:hidden;
+  }
+  .hero::before{ content:""; position:absolute; left:0; right:0; top:0; height:5px; background:var(--terracota); }
+  .hero .badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    background:var(--pergaminho); border-radius:16px; padding:16px 26px;
+    box-shadow:0 10px 28px rgba(0,0,0,.25); margin-bottom:18px;
+  }
+  .hero .badge img{ height:46px; width:auto; display:block; }
+  .hero .name{
+    font-family:var(--display); font-weight:600; font-size:30px; letter-spacing:.04em;
+    color:var(--pergaminho); line-height:1.05; margin:0;
+  }
+  .hero .role{
+    font-size:11px; letter-spacing:.34em; text-transform:uppercase; color:var(--terracota);
+    font-weight:700; margin-top:9px;
+  }
+  .hero .orn{ display:flex; align-items:center; justify-content:center; gap:10px; margin:16px auto 14px; max-width:230px; }
+  .hero .orn .l{ height:1px; flex:1; background:rgba(247,242,232,.32); }
+  .hero .orn .d{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); }
+  .hero .sub{ font-family:var(--display); font-style:italic; font-size:18px; color:rgba(247,242,232,.92); letter-spacing:.01em; }
+
+  /* ---------- STEPPER ---------- */
+  .stepper{
+    background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow);
+    margin:-26px auto 22px; padding:22px 22px 18px; position:relative; z-index:3;
+  }
+  .steps{ display:flex; align-items:flex-start; justify-content:space-between; gap:6px; position:relative; }
+  .track{ position:absolute; left:0; right:0; top:17px; height:3px; background:var(--line); border-radius:3px; z-index:0; }
+  .track-fill{ position:absolute; left:0; top:17px; height:3px; width:0; background:var(--salvia); border-radius:3px; z-index:1; transition:width .45s cubic-bezier(.4,0,.2,1); }
+  .step{ position:relative; z-index:2; flex:1; text-align:center; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:default; }
+  .step .dot{
+    width:36px; height:36px; border-radius:50%; background:var(--paper); border:2px solid var(--line);
+    color:var(--ink-soft); font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center;
+    transition:all .35s ease; font-family:var(--display); font-size:17px;
+  }
+  .step .lbl{ font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); font-weight:700; line-height:1.25; max-width:90px; }
+  .step.active .dot{ background:var(--salvia); border-color:var(--salvia); color:#fff; box-shadow:0 0 0 5px var(--salvia-soft); }
+  .step.active .lbl{ color:var(--cipreste); }
+  .step.done .dot{ background:var(--cipreste); border-color:var(--cipreste); color:#fff; }
+  .step.done .dot::after{ content:"\2713"; font-size:15px; }
+  .step.done .dot span{ display:none; }
+
+  /* ---------- CARD / PANELS ---------- */
+  form{ display:block; }
+  .panel{
+    background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:30px 30px 26px; display:none; animation:fade .4s ease;
+  }
+  .panel.active{ display:block; }
+  @keyframes fade{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+
+  .panel-head{ margin-bottom:22px; }
+  .panel-kicker{ font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--salvia); font-weight:700; }
+  .panel-head h2{ font-family:var(--display); font-weight:600; font-size:30px; color:var(--cipreste); margin:4px 0 0; line-height:1.08; }
+  .panel-head p{ font-size:13.5px; color:var(--ink-soft); margin:8px 0 0; max-width:54ch; }
+
+  /* section sub-title (terracota) */
+  .sec{ display:flex; align-items:center; gap:10px; margin:26px 0 14px; }
+  .sec .d{ width:7px; height:7px; background:var(--terracota); transform:rotate(45deg); flex:none; }
+  .sec h3{ font-family:var(--display); font-weight:600; font-size:21px; color:var(--terracota); margin:0; letter-spacing:.01em; }
+  .sec .l{ height:1px; flex:1; background:var(--line); }
+  .sec:first-of-type{ margin-top:6px; }
+
+  /* grid + fields */
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px 18px; }
+  .field{ display:flex; flex-direction:column; gap:7px; }
+  .field.full{ grid-column:1 / -1; }
+  label.lab{ font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--salvia); font-weight:700; }
+  label.lab .req{ color:var(--terracota); margin-left:2px; }
+  .hint{ font-size:11.5px; color:var(--ink-soft); font-style:italic; margin-top:-2px; }
+
+  input[type=text], input[type=tel], input[type=date], input[type=number], select, textarea{
+    font-family:var(--body); font-size:14.5px; color:var(--ink);
+    background:#fdfcf9; border:1.5px solid var(--line); border-radius:10px;
+    padding:11px 13px; width:100%; transition:border-color .2s, box-shadow .2s, background .2s;
+  }
+  textarea{ resize:vertical; min-height:78px; line-height:1.5; }
+  input::placeholder, textarea::placeholder{ color:#9aa8a0; }
+  input:focus, select:focus, textarea:focus{
+    outline:none; border-color:var(--salvia); background:#fff; box-shadow:0 0 0 4px var(--salvia-soft);
+  }
+  select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235A7A6B' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 13px center; padding-right:36px; cursor:pointer; }
+  .field.invalid input, .field.invalid select, .field.invalid textarea{ border-color:var(--terracota); background:var(--terracota-soft); }
+  .err-msg{ font-size:11.5px; color:var(--terracota); font-weight:700; display:none; }
+  .field.invalid .err-msg{ display:block; }
+
+  /* choice options (checkbox + radio) */
+  .opts{ display:grid; gap:10px; }
+  .opts.cols-2{ grid-template-columns:1fr 1fr; }
+  .opts.cols-3{ grid-template-columns:repeat(3,1fr); }
+  .opts.inline{ display:flex; flex-wrap:wrap; gap:10px; }
+  .opt{
+    display:flex; align-items:center; gap:10px; padding:11px 14px; border:1.5px solid var(--line);
+    border-radius:10px; background:#fdfcf9; cursor:pointer; font-size:14px; color:var(--ink);
+    transition:all .18s ease; user-select:none; line-height:1.3;
+  }
+  .opts.inline .opt{ flex:0 1 auto; }
+  .opt:hover{ border-color:var(--salvia); background:#fff; }
+  .opt input{ position:absolute; opacity:0; width:0; height:0; }
+  .opt .mark{
+    flex:none; width:20px; height:20px; border:1.8px solid var(--salvia); border-radius:6px;
+    display:flex; align-items:center; justify-content:center; transition:all .18s ease; background:#fff;
+  }
+  .opt input[type=radio] + .mark{ border-radius:50%; }
+  .opt .mark::after{ content:""; opacity:0; transition:opacity .15s ease; }
+  .opt input[type=checkbox] + .mark::after{ width:6px; height:11px; border:solid #fff; border-width:0 2.5px 2.5px 0; transform:rotate(45deg) translate(-1px,-1px); }
+  .opt input[type=radio] + .mark::after{ width:9px; height:9px; border-radius:50%; background:#fff; }
+  .opt:has(input:checked){ border-color:var(--salvia); background:var(--salvia-soft); color:var(--cipreste); font-weight:700; }
+  .opt input:checked + .mark{ background:var(--salvia); border-color:var(--salvia); }
+  .opt input:checked + .mark::after{ opacity:1; }
+
+  /* conditional reveal */
+  .cond{ margin-top:14px; }
+  .cond.hidden{ display:none; }
+
+  /* pain (EVA) slider */
+  .eva-wrap{ padding:6px 4px 2px; }
+  .eva-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .eva-badge{
+    font-family:var(--display); font-weight:700; font-size:30px; color:#fff; min-width:64px; height:54px;
+    border-radius:12px; display:flex; align-items:center; justify-content:center; transition:background .3s;
+    box-shadow:0 6px 16px rgba(42,58,51,.18);
+  }
+  .eva-cap{ font-size:13px; color:var(--ink-soft); font-weight:700; text-align:right; }
+  .eva-cap span{ display:block; font-family:var(--display); font-size:19px; color:var(--cipreste); font-weight:600; }
+  input[type=range].eva{
+    -webkit-appearance:none; appearance:none; width:100%; height:10px; border-radius:6px;
+    background:linear-gradient(90deg,#5A7A6B 0%, #C9a85a 45%, #C97862 78%, #b2503a 100%);
+    outline:none; cursor:pointer;
+  }
+  input[type=range].eva::-webkit-slider-thumb{ -webkit-appearance:none; width:28px; height:28px; border-radius:50%; background:#fff; border:3px solid var(--cipreste); box-shadow:0 3px 8px rgba(0,0,0,.25); cursor:pointer; margin-top:0; }
+  input[type=range].eva::-moz-range-thumb{ width:24px; height:24px; border-radius:50%; background:#fff; border:3px solid var(--cipreste); box-shadow:0 3px 8px rgba(0,0,0,.25); cursor:pointer; }
+  .eva-scale{ display:flex; justify-content:space-between; font-size:11px; color:var(--salvia); font-weight:700; margin-top:9px; }
+
+  /* body map */
+  .bodymap{ display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; }
+  .bm-fig{ flex:none; }
+  .bm-fig svg{ display:block; }
+  .bm-fig .hot{ cursor:pointer; fill:#5A7A6B33; stroke:var(--salvia); stroke-width:1.4; transition:fill .18s, stroke .18s; }
+  .bm-fig .hot:hover{ fill:#5A7A6B55; }
+  .bm-fig .hot.sel{ fill:var(--terracota); stroke:#a85942; }
+  .bm-fig .body-sil{ fill:#e9e2d3; stroke:#cbbfa8; stroke-width:1.2; }
+  .bm-cap{ text-align:center; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); font-weight:700; margin-top:6px; }
+  .bm-side{ flex:1; min-width:220px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+  .chip{
+    border:1.5px solid var(--line); background:#fdfcf9; border-radius:30px; padding:8px 15px;
+    font-size:13px; color:var(--ink); cursor:pointer; transition:all .16s ease; user-select:none; font-weight:600;
+  }
+  .chip:hover{ border-color:var(--salvia); }
+  .chip.sel{ background:var(--terracota); border-color:var(--terracota); color:#fff; }
+
+  /* instruction box */
+  .instruct{
+    background:var(--salvia-soft); border:1.5px solid var(--line); border-left:5px solid var(--salvia);
+    border-radius:12px; padding:18px 20px; margin-bottom:8px;
+  }
+  .instruct h4{ font-family:var(--display); font-size:20px; color:var(--cipreste); margin:0 0 12px; font-weight:600; }
+  .instruct ol{ margin:0; padding-left:0; list-style:none; counter-reset:i; display:grid; gap:11px; }
+  .instruct li{ counter-increment:i; display:grid; grid-template-columns:28px 1fr; gap:12px; align-items:start; font-size:13.5px; color:var(--ink-soft); }
+  .instruct li::before{ content:counter(i); background:var(--terracota); color:#fff; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .instruct li b{ color:var(--cipreste); }
+
+  /* file upload */
+  .drop{
+    border:2px dashed var(--salvia); border-radius:14px; background:#fdfcf9; padding:30px 20px; text-align:center;
+    cursor:pointer; transition:all .2s ease;
+  }
+  .drop:hover{ background:var(--salvia-soft); border-color:var(--cipreste); }
+  .drop svg{ display:block; margin:0 auto 12px; }
+  .drop .t{ font-family:var(--display); font-size:21px; color:var(--cipreste); font-weight:600; }
+  .drop .s{ font-size:12.5px; color:var(--ink-soft); margin-top:4px; }
+  .previews{ display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:10px; margin-top:14px; }
+  .thumb{ position:relative; aspect-ratio:1; border-radius:10px; overflow:hidden; border:1.5px solid var(--line); }
+  .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .thumb .rm{ position:absolute; top:5px; right:5px; width:24px; height:24px; border-radius:50%; background:rgba(42,58,51,.82); color:#fff; border:none; cursor:pointer; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center; }
+  .file-count{ font-size:12px; color:var(--ink-soft); margin-top:8px; font-weight:600; }
+
+  /* nav buttons */
+  .nav{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:30px; padding-top:22px; border-top:1px solid var(--line); }
+  .btn{
+    font-family:var(--body); font-weight:700; font-size:14.5px; letter-spacing:.02em; border:none; cursor:pointer;
+    padding:14px 26px; border-radius:11px; transition:all .2s ease; display:inline-flex; align-items:center; gap:9px;
+    touch-action:manipulation; -webkit-tap-highlight-color:rgba(90,122,107,.25);
+  }
+  .btn-prev{ background:transparent; color:var(--salvia); border:1.5px solid var(--line); }
+  .btn-prev:hover{ background:var(--salvia-soft); border-color:var(--salvia); }
+  .btn-prev[disabled]{ opacity:0; pointer-events:none; }
+  .btn-next{ background:var(--salvia); color:#fff; box-shadow:0 8px 20px rgba(90,122,107,.32); margin-left:auto; }
+  .btn-next:hover{ background:#4d6a5c; transform:translateY(-1px); }
+  .btn-submit{ background:var(--terracota); color:#fff; box-shadow:0 8px 22px rgba(201,120,98,.4); margin-left:auto; }
+  .btn-submit:hover{ background:#b8634d; transform:translateY(-1px); }
+
+  /* confirmation */
+  .confirm{ background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow); padding:54px 36px; text-align:center; display:none; animation:fade .5s ease; }
+  .confirm.active{ display:block; }
+  .confirm .seal{
+    width:88px; height:88px; margin:0 auto 24px; border-radius:50%; background:var(--salvia);
+    display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 10px var(--salvia-soft);
+  }
+  .confirm .seal svg{ width:44px; height:44px; }
+  .confirm h2{ font-family:var(--display); font-weight:600; font-size:34px; color:var(--cipreste); margin:0 0 4px; }
+  .confirm .orn{ display:flex; align-items:center; justify-content:center; gap:10px; margin:14px auto 18px; max-width:200px; }
+  .confirm .orn .l{ height:1px; flex:1; background:var(--line); }
+  .confirm .orn .d{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); }
+  .confirm p{ font-size:15px; color:var(--ink-soft); max-width:46ch; margin:0 auto 10px; }
+  .confirm p b{ color:var(--cipreste); }
+  .confirm .summary{ display:inline-block; text-align:left; background:var(--salvia-soft); border-radius:12px; padding:16px 22px; margin-top:18px; font-size:13.5px; color:var(--cipreste); }
+  .confirm .summary span{ color:var(--ink-soft); }
+
+  /* consent */
+  .consent{ margin-top:24px; background:var(--salvia-soft); border:1.5px solid var(--line); border-radius:12px; padding:16px 18px; transition:border-color .2s, background .2s; }
+  .consent .opt{ border:none; background:transparent; padding:0; align-items:flex-start; font-weight:400; font-size:13px; line-height:1.55; color:var(--ink-soft); }
+  .consent .opt:hover{ background:transparent; }
+  .consent .opt:has(input:checked){ background:transparent; color:var(--ink); font-weight:400; }
+  .consent .mark{ margin-top:2px; }
+  .consent .opt b{ color:var(--cipreste); font-weight:700; }
+  .consent.invalid{ border-color:var(--terracota); background:var(--terracota-soft); }
+  .consent .err-msg{ margin-top:9px; }
+  .consent.invalid .err-msg{ display:block; }
+
+  /* footer */
+  .foot{ text-align:center; margin-top:30px; font-size:12px; color:var(--ink-soft); }
+  .foot .orn{ display:flex; align-items:center; justify-content:center; gap:10px; margin:0 auto 12px; max-width:260px; }
+  .foot .orn .l{ height:1px; flex:1; background:var(--line); }
+  .foot .orn .d{ width:5px; height:5px; background:var(--salvia); transform:rotate(45deg); }
+  .foot b{ color:var(--cipreste); }
+  .foot .nm{ font-family:var(--display); font-size:15px; color:var(--cipreste); font-weight:600; letter-spacing:.02em; }
+
+  /* responsive */
+  @media (max-width:620px){
+    .wrap{ padding:0 12px 48px; }
+    .hero{ padding:30px 16px 26px; }
+    .hero .name{ font-size:25px; }
+    .hero .sub{ font-size:15px; }
+    .stepper{ padding:18px 14px 14px; }
+    .step .lbl{ font-size:9px; letter-spacing:.02em; }
+    .step .dot{ width:32px; height:32px; font-size:14px; }
+    .track, .track-fill{ top:15px; }
+    .panel{ padding:22px 18px 22px; }
+    .panel-head h2{ font-size:25px; }
+    .grid{ grid-template-columns:1fr; }
+    .opts.cols-2, .opts.cols-3{ grid-template-columns:1fr; }
+    .sec h3{ font-size:19px; }
+    .btn{ padding:13px 18px; font-size:13.5px; }
+    .confirm{ padding:40px 22px; }
+    .confirm h2{ font-size:27px; }
+  }
+  @media (max-width:380px){
+    .step .lbl{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+  <noscript>
+    <div style="background:#C97862; color:#fff; font-family:'Lato',sans-serif; text-align:center; padding:16px 20px; font-size:15px; line-height:1.5;">
+      <b>Este formulário precisa do navegador para funcionar.</b><br/>
+      Se você abriu pelo app Arquivos, toque em <b>Compartilhar &rarr; Abrir no Safari</b> (iPhone) ou no Chrome (Android).
+    </div>
+  </noscript>
+
+  <header class="hero">
+    <div class="badge"><img src="data:image/png;base64,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" alt="Bruna Arguelles — Enfermagem Especializada" /></div>
+    <h1 class="name">Bruna Arguelles</h1>
+    <div class="role">Enfermagem Especializada</div>
+    <div class="orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+    <div class="sub">Formulário de Pré-Consulta &nbsp;|&nbsp; Avaliação de Feridas Online</div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- STEPPER -->
+    <div class="stepper">
+      <div class="steps" id="steps">
+        <div class="track"></div>
+        <div class="track-fill" id="trackFill"></div>
+        <div class="step active" data-step="0"><div class="dot"><span>1</span></div><div class="lbl">Identificação</div></div>
+        <div class="step" data-step="1"><div class="dot"><span>2</span></div><div class="lbl">Histórico</div></div>
+        <div class="step" data-step="2"><div class="dot"><span>3</span></div><div class="lbl">A Ferida</div></div>
+        <div class="step" data-step="3"><div class="dot"><span>4</span></div><div class="lbl">Avaliação Visual</div></div>
+      </div>
+    </div>
+
+    <form id="form" novalidate>
+
+      <!-- ============ PASSO 1 ============ -->
+      <section class="panel active" data-step="0">
+        <div class="panel-head">
+          <div class="panel-kicker">Passo 1 de 4</div>
+          <h2>Identificação do Paciente</h2>
+          <p>Vamos começar com algumas informações para conhecermos você e mantermos contato.</p>
+        </div>
+
+        <div class="grid">
+          <div class="field full">
+            <label class="lab" for="nome">Nome completo <span class="req">*</span></label>
+            <input type="text" id="nome" name="nome" placeholder="Nome e sobrenome" required />
+            <div class="err-msg">Por favor, informe o nome completo.</div>
+          </div>
+          <div class="field">
+            <label class="lab" for="nasc">Data de nascimento</label>
+            <input type="date" id="nasc" name="nasc" />
+          </div>
+          <div class="field">
+            <label class="lab" for="cidade">Cidade / Estado</label>
+            <input type="text" id="cidade" name="cidade" placeholder="Ex.: Belo Horizonte / MG" />
+          </div>
+          <div class="field full">
+            <label class="lab" for="tel">Telefone para contato (WhatsApp) <span class="req">*</span></label>
+            <input type="tel" id="tel" name="tel" placeholder="(00) 00000-0000" required />
+            <div class="err-msg">Por favor, informe um telefone para contato.</div>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Quem está preenchendo</h3><span class="l"></span></div>
+        <div class="opts cols-3" role="radiogroup">
+          <label class="opt"><input type="radio" name="quem" value="O próprio paciente" checked /><span class="mark"></span>O próprio paciente</label>
+          <label class="opt"><input type="radio" name="quem" value="Familiar" data-reveal="#quemCond" /><span class="mark"></span>Familiar</label>
+          <label class="opt"><input type="radio" name="quem" value="Cuidador" data-reveal="#quemCond" /><span class="mark"></span>Cuidador(a)</label>
+        </div>
+        <div class="cond hidden" id="quemCond">
+          <div class="grid">
+            <div class="field">
+              <label class="lab" for="acompNome">Nome de quem preenche</label>
+              <input type="text" id="acompNome" name="acompNome" placeholder="Nome completo" />
+            </div>
+            <div class="field">
+              <label class="lab" for="parentesco">Grau de parentesco / relação</label>
+              <input type="text" id="parentesco" name="parentesco" placeholder="Ex.: filha, esposo, cuidadora" />
+            </div>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Como nos encontrou</h3><span class="l"></span></div>
+        <div class="grid">
+          <div class="field full">
+            <label class="lab" for="origem">Por onde chegou até nós?</label>
+            <select id="origem" name="origem">
+              <option value="" selected disabled>Selecione uma opção</option>
+              <option>Indicação de amigo ou familiar</option>
+              <option>Indicação médica / outro profissional</option>
+              <option>Instagram</option>
+              <option>Google / busca na internet</option>
+              <option>Facebook</option>
+              <option>Já fui paciente</option>
+              <option>Outro</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PASSO 2 ============ -->
+      <section class="panel" data-step="1">
+        <div class="panel-head">
+          <div class="panel-kicker">Passo 2 de 4</div>
+          <h2>Histórico de Saúde</h2>
+          <p>Essas informações ajudam a enfermeira a entender o contexto da sua saúde e o que pode influenciar a cicatrização.</p>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Comorbidades</h3><span class="l"></span></div>
+        <p class="hint">Marque todas as condições que você possui.</p>
+        <div class="opts cols-2" style="margin-top:6px">
+          <label class="opt"><input type="checkbox" name="comorb" value="Diabetes Mellitus" /><span class="mark"></span>Diabetes Mellitus</label>
+          <label class="opt"><input type="checkbox" name="comorb" value="Hipertensão" /><span class="mark"></span>Hipertensão</label>
+          <label class="opt"><input type="checkbox" name="comorb" value="Insuficiência Venosa" /><span class="mark"></span>Insuficiência Venosa</label>
+          <label class="opt"><input type="checkbox" name="comorb" value="Doença Arterial Periférica" /><span class="mark"></span>Doença Arterial Periférica</label>
+          <label class="opt"><input type="checkbox" name="comorb" value="Insuficiência Renal" /><span class="mark"></span>Insuficiência Renal</label>
+          <label class="opt"><input type="checkbox" name="comorb" value="Obesidade" /><span class="mark"></span>Obesidade</label>
+          <label class="opt"><input type="checkbox" name="comorb" value="Imunossupressão" /><span class="mark"></span>Imunossupressão</label>
+          <label class="opt"><input type="checkbox" name="comorb" value="Câncer" /><span class="mark"></span>Câncer</label>
+        </div>
+        <div class="field full" style="margin-top:14px">
+          <label class="lab" for="comorbOutras">Outras comorbidades</label>
+          <input type="text" id="comorbOutras" name="comorbOutras" placeholder="Descreva, se houver" />
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Medicamentos e Alergias</h3><span class="l"></span></div>
+        <div class="grid">
+          <div class="field full">
+            <label class="lab" for="medic">Medicamentos em uso contínuo</label>
+            <textarea id="medic" name="medic" placeholder="Liste os medicamentos e, se souber, as doses"></textarea>
+          </div>
+          <div class="field full">
+            <label class="lab" for="alergia">Alergias conhecidas</label>
+            <div class="hint">Especialmente a curativos, adesivos, prata ou iodo.</div>
+            <textarea id="alergia" name="alergia" placeholder="Descreva alergias conhecidas, ou escreva 'nenhuma'"></textarea>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Hábitos e Nutrição</h3><span class="l"></span></div>
+        <div class="grid">
+          <div class="field">
+            <label class="lab">Fuma?</label>
+            <div class="opts inline">
+              <label class="opt"><input type="radio" name="fuma" value="Não" checked /><span class="mark"></span>Não</label>
+              <label class="opt"><input type="radio" name="fuma" value="Sim" data-reveal="#fumaCond" /><span class="mark"></span>Sim</label>
+            </div>
+            <div class="cond hidden" id="fumaCond">
+              <input type="text" name="fumaQtd" placeholder="Quantidade por dia" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="lab">Ingere bebida alcoólica regularmente?</label>
+            <div class="opts inline">
+              <label class="opt"><input type="radio" name="alcool" value="Não" checked /><span class="mark"></span>Não</label>
+              <label class="opt"><input type="radio" name="alcool" value="Sim" /><span class="mark"></span>Sim</label>
+            </div>
+          </div>
+        </div>
+        <div class="field full" style="margin-top:16px">
+          <label class="lab">Estado nutricional percebido</label>
+          <div class="opts cols-3">
+            <label class="opt"><input type="radio" name="nutri" value="Bom" /><span class="mark"></span>Bom</label>
+            <label class="opt"><input type="radio" name="nutri" value="Perda de peso recente" /><span class="mark"></span>Perda de peso recente</label>
+            <label class="opt"><input type="radio" name="nutri" value="Dificuldade de alimentação" /><span class="mark"></span>Dificuldade de alimentação</label>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Exames recentes disponíveis</h3><span class="l"></span></div>
+        <div class="opts cols-3">
+          <label class="opt"><input type="checkbox" name="exames" value="HbA1c" /><span class="mark"></span>HbA1c</label>
+          <label class="opt"><input type="checkbox" name="exames" value="Hemograma" /><span class="mark"></span>Hemograma</label>
+          <label class="opt"><input type="checkbox" name="exames" value="Albumina" /><span class="mark"></span>Albumina</label>
+          <label class="opt"><input type="checkbox" name="exames" value="Cultura de ferida" /><span class="mark"></span>Cultura de ferida</label>
+          <label class="opt"><input type="checkbox" name="exames" value="Nenhum" /><span class="mark"></span>Nenhum</label>
+        </div>
+      </section>
+
+      <!-- ============ PASSO 3 ============ -->
+      <section class="panel" data-step="2">
+        <div class="panel-head">
+          <div class="panel-kicker">Passo 3 de 4</div>
+          <h2>História da Ferida</h2>
+          <p>Conte-nos sobre a ferida: onde está, há quanto tempo e como você tem se sentido.</p>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Localização</h3><span class="l"></span></div>
+        <div class="bodymap">
+          <div class="bm-fig">
+            <svg width="124" height="280" viewBox="0 0 124 280" aria-label="Silhueta corporal">
+              <!-- silhouette -->
+              <g class="body-sil">
+                <circle cx="62" cy="22" r="17"/>
+                <rect x="54" y="38" width="16" height="12" rx="5"/>
+                <path d="M40 52 Q62 44 84 52 L92 70 L86 140 L80 150 L44 150 L38 140 L32 70 Z"/>
+                <path d="M40 56 L24 66 L16 128 L26 132 L36 80 Z"/>
+                <path d="M84 56 L100 66 L108 128 L98 132 L88 80 Z"/>
+                <path d="M46 150 L44 210 L40 268 L54 268 L58 212 L62 175 Z"/>
+                <path d="M78 150 L80 210 L84 268 L70 268 L66 212 L62 175 Z"/>
+              </g>
+              <!-- clickable hotspots (lado do paciente: esquerda da figura = lado direito) -->
+              <rect class="hot" data-region="Membro superior direito" x="12" y="70" width="20" height="56" rx="9"/>
+              <rect class="hot" data-region="Membro superior esquerdo" x="92" y="70" width="20" height="56" rx="9"/>
+              <rect class="hot" data-region="Abdômen" x="46" y="92" width="32" height="40" rx="9"/>
+              <rect class="hot" data-region="Coxa direita" x="40" y="155" width="18" height="42" rx="9"/>
+              <rect class="hot" data-region="Coxa esquerda" x="66" y="155" width="18" height="42" rx="9"/>
+              <rect class="hot" data-region="Joelho direito" x="40" y="198" width="18" height="16" rx="7"/>
+              <rect class="hot" data-region="Joelho esquerdo" x="66" y="198" width="18" height="16" rx="7"/>
+              <rect class="hot" data-region="Perna direita" x="40" y="215" width="17" height="36" rx="8"/>
+              <rect class="hot" data-region="Perna esquerda" x="67" y="215" width="17" height="36" rx="8"/>
+              <rect class="hot" data-region="Tornozelo direito" x="40" y="252" width="16" height="9" rx="4"/>
+              <rect class="hot" data-region="Tornozelo esquerdo" x="68" y="252" width="16" height="9" rx="4"/>
+              <rect class="hot" data-region="Pé direito" x="38" y="261" width="18" height="11" rx="4"/>
+              <rect class="hot" data-region="Pé esquerdo" x="68" y="261" width="18" height="11" rx="4"/>
+            </svg>
+            <div class="bm-cap">Toque na região</div>
+          </div>
+          <div class="bm-side">
+            <label class="lab" style="display:block; margin-bottom:4px">Selecione a(s) região(ões)</label>
+            <div class="hint" style="margin:0 0 8px">Marque o lado afetado. D = direito · E = esquerdo.</div>
+            <div class="chips" id="regionChips">
+              <span class="chip" data-region="Pé direito">Pé D</span>
+              <span class="chip" data-region="Pé esquerdo">Pé E</span>
+              <span class="chip" data-region="Tornozelo direito">Tornozelo D</span>
+              <span class="chip" data-region="Tornozelo esquerdo">Tornozelo E</span>
+              <span class="chip" data-region="Perna direita">Perna D</span>
+              <span class="chip" data-region="Perna esquerda">Perna E</span>
+              <span class="chip" data-region="Joelho direito">Joelho D</span>
+              <span class="chip" data-region="Joelho esquerdo">Joelho E</span>
+              <span class="chip" data-region="Coxa direita">Coxa D</span>
+              <span class="chip" data-region="Coxa esquerda">Coxa E</span>
+              <span class="chip" data-region="Membro superior direito">Membro sup. D</span>
+              <span class="chip" data-region="Membro superior esquerdo">Membro sup. E</span>
+              <span class="chip" data-region="Sacral">Sacral</span>
+              <span class="chip" data-region="Abdômen">Abdômen</span>
+              <span class="chip" data-region="Outro">Outro</span>
+            </div>
+            <input type="hidden" name="regioes" id="regioes" />
+            <div class="field full" style="margin-top:16px">
+              <label class="lab" for="localDesc">Descrição da localização</label>
+              <input type="text" id="localDesc" name="localDesc" placeholder="Ex.: lateral externa do tornozelo direito" />
+            </div>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Origem e Tempo</h3><span class="l"></span></div>
+        <div class="grid">
+          <div class="field">
+            <label class="lab" for="tempo">Há quanto tempo existe esta ferida?</label>
+            <select id="tempo" name="tempo">
+              <option value="" selected disabled>Selecione</option>
+              <option>Menos de 2 semanas</option>
+              <option>2 a 4 semanas</option>
+              <option>1 a 3 meses</option>
+              <option>3 a 6 meses</option>
+              <option>Mais de 6 meses</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="lab" for="surgiu">Como surgiu?</label>
+            <select id="surgiu" name="surgiu">
+              <option value="" selected disabled>Selecione</option>
+              <option>Trauma / queda</option>
+              <option>Cirurgia</option>
+              <option>Pressão prolongada</option>
+              <option>Surgiu espontaneamente</option>
+              <option>Complicação do diabetes</option>
+              <option>Úlcera venosa / varicosa</option>
+              <option>Queimadura</option>
+              <option>Não sei</option>
+              <option>Outro</option>
+            </select>
+          </div>
+        </div>
+        <div class="field full" style="margin-top:16px">
+          <label class="lab">Já fez algum tratamento antes?</label>
+          <div class="opts inline">
+            <label class="opt"><input type="radio" name="tratou" value="Não" checked /><span class="mark"></span>Não</label>
+            <label class="opt"><input type="radio" name="tratou" value="Sim" data-reveal="#tratouCond" /><span class="mark"></span>Sim</label>
+          </div>
+          <div class="cond hidden" id="tratouCond">
+            <textarea name="tratouQual" placeholder="O que já foi feito? (pomadas, curativos, antibióticos, procedimentos...)"></textarea>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Dor</h3><span class="l"></span></div>
+        <div class="eva-wrap">
+          <div class="eva-top">
+            <div class="eva-badge" id="evaBadge" style="background:#5A7A6B">0</div>
+            <div class="eva-cap">Intensidade da dor<span id="evaWord">Sem dor</span></div>
+          </div>
+          <input type="range" class="eva" id="dor" name="dor" min="0" max="10" step="1" value="0" />
+          <div class="eva-scale"><span>0 · Sem dor</span><span>5 · Moderada</span><span>10 · Insuportável</span></div>
+        </div>
+        <div class="field full" style="margin-top:18px">
+          <label class="lab">A dor piora quando?</label>
+          <div class="opts cols-2">
+            <label class="opt"><input type="checkbox" name="dorPiora" value="Em repouso" /><span class="mark"></span>Em repouso</label>
+            <label class="opt"><input type="checkbox" name="dorPiora" value="Ao caminhar" /><span class="mark"></span>Ao caminhar</label>
+            <label class="opt"><input type="checkbox" name="dorPiora" value="Na troca do curativo" /><span class="mark"></span>Na troca do curativo</label>
+            <label class="opt"><input type="checkbox" name="dorPiora" value="Não sabe informar" /><span class="mark"></span>Não sabe informar</label>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Sinais Recentes</h3><span class="l"></span></div>
+        <div class="grid">
+          <div class="field">
+            <label class="lab">Febre nos últimos dias?</label>
+            <div class="opts inline">
+              <label class="opt"><input type="radio" name="febre" value="Não" checked /><span class="mark"></span>Não</label>
+              <label class="opt"><input type="radio" name="febre" value="Sim" data-reveal="#febreCond" /><span class="mark"></span>Sim</label>
+            </div>
+            <div class="cond hidden" id="febreCond">
+              <input type="text" name="febreTemp" placeholder="Temperatura (ex.: 38,5 °C)" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="lab">A ferida piorou recentemente?</label>
+            <div class="opts inline">
+              <label class="opt"><input type="radio" name="piorou" value="Não" checked /><span class="mark"></span>Não</label>
+              <label class="opt"><input type="radio" name="piorou" value="Sim" data-reveal="#piorouCond" /><span class="mark"></span>Sim</label>
+            </div>
+            <div class="cond hidden" id="piorouCond">
+              <textarea name="piorouDesc" placeholder="Descreva brevemente o que mudou"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Mobilidade e Vida Diária</h3><span class="l"></span></div>
+        <div class="field full">
+          <label class="lab">A pessoa consegue caminhar?</label>
+          <div class="opts cols-3">
+            <label class="opt"><input type="radio" name="anda" value="Caminha normalmente" /><span class="mark"></span>Caminha normalmente</label>
+            <label class="opt"><input type="radio" name="anda" value="Caminha com dificuldade ou apoio" /><span class="mark"></span>Com dificuldade ou apoio</label>
+            <label class="opt"><input type="radio" name="anda" value="Não caminha (acamado ou cadeira de rodas)" /><span class="mark"></span>Não caminha (acamado / cadeira)</label>
+          </div>
+        </div>
+        <div class="field full" style="margin-top:18px">
+          <label class="lab">Como a ferida tem afetado o dia a dia?</label>
+          <div class="opts cols-2">
+            <label class="opt"><input type="checkbox" name="impacto" value="Atrapalha o sono" /><span class="mark"></span>Atrapalha o sono</label>
+            <label class="opt"><input type="checkbox" name="impacto" value="Dificulta caminhar ou trabalhar" /><span class="mark"></span>Dificulta caminhar ou trabalhar</label>
+            <label class="opt"><input type="checkbox" name="impacto" value="Afeta o emocional e o humor" /><span class="mark"></span>Afeta o emocional e o humor</label>
+            <label class="opt"><input type="checkbox" name="impacto" value="Limita atividades sociais e lazer" /><span class="mark"></span>Limita atividades sociais e lazer</label>
+            <label class="opt"><input type="checkbox" name="impacto" value="Pouco ou nenhum impacto" /><span class="mark"></span>Pouco ou nenhum impacto</label>
+          </div>
+        </div>
+        <div class="field full" style="margin-top:14px">
+          <label class="lab" for="impactoDesc">Conte um pouco como tem sido conviver com a ferida</label>
+          <textarea id="impactoDesc" name="impactoDesc" placeholder="Opcional — fique à vontade para descrever"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ PASSO 4 ============ -->
+      <section class="panel" data-step="3">
+        <div class="panel-head">
+          <div class="panel-kicker">Passo 4 de 4</div>
+          <h2>Avaliação Visual da Ferida</h2>
+          <p>As fotos são essenciais para a avaliação. Siga as orientações abaixo para que a enfermeira veja a ferida com clareza.</p>
+        </div>
+
+        <div class="instruct">
+          <h4>Como fotografar a ferida</h4>
+          <ol>
+            <li><span><b>Sem o curativo</b> e com a ferida limpa, se possível, antes de tirar a foto.</span></li>
+            <li><span>Faça uma foto <b>aproximada do leito da ferida</b>, com boa iluminação e foco nítido.</span></li>
+            <li><span>Coloque uma <b>régua ou objeto de referência</b> ao lado (moeda, fita métrica) para indicar o tamanho.</span></li>
+          </ol>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Envio das fotos</h3><span class="l"></span></div>
+        <input type="file" id="fileInput" name="fotos" accept="image/*" multiple hidden />
+        <div class="drop" id="dropZone" role="button" tabindex="0">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#5A7A6B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div class="t">Adicionar fotos da ferida</div>
+          <div class="s">Toque para escolher da galeria ou tirar uma foto · até 5 imagens</div>
+        </div>
+        <div class="previews" id="previews"></div>
+        <div class="file-count" id="fileCount"></div>
+
+        <div class="sec"><span class="d"></span><h3>O que você observa</h3><span class="l"></span></div>
+        <div class="grid">
+          <div class="field">
+            <label class="lab">Quantidade de secreção</label>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="secrecao" value="Nenhuma" /><span class="mark"></span>Nenhuma</label>
+              <label class="opt"><input type="radio" name="secrecao" value="Pouca" /><span class="mark"></span>Pouca</label>
+              <label class="opt"><input type="radio" name="secrecao" value="Moderada" /><span class="mark"></span>Moderada</label>
+              <label class="opt"><input type="radio" name="secrecao" value="Muita" /><span class="mark"></span>Muita</label>
+            </div>
+          </div>
+          <div class="field">
+            <label class="lab">Odor</label>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="odor" value="Sem odor" /><span class="mark"></span>Sem odor</label>
+              <label class="opt"><input type="radio" name="odor" value="Leve" /><span class="mark"></span>Leve</label>
+              <label class="opt"><input type="radio" name="odor" value="Forte / fétido" /><span class="mark"></span>Forte / fétido</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field full" style="margin-top:18px">
+          <label class="lab">Pele ao redor da ferida</label>
+          <div class="opts cols-2">
+            <label class="opt"><input type="checkbox" name="pele" value="Normal" /><span class="mark"></span>Normal</label>
+            <label class="opt"><input type="checkbox" name="pele" value="Avermelhada" /><span class="mark"></span>Avermelhada</label>
+            <label class="opt"><input type="checkbox" name="pele" value="Inchada" /><span class="mark"></span>Inchada</label>
+            <label class="opt"><input type="checkbox" name="pele" value="Machucada / ferida pelo curativo" /><span class="mark"></span>Machucada pelo curativo</label>
+            <label class="opt"><input type="checkbox" name="pele" value="Descamando" /><span class="mark"></span>Descamando</label>
+            <label class="opt"><input type="checkbox" name="pele" value="Muito seca" /><span class="mark"></span>Muito seca</label>
+            <label class="opt"><input type="checkbox" name="pele" value="Não sei avaliar" /><span class="mark"></span>Não sei avaliar</label>
+          </div>
+        </div>
+
+        <div class="sec"><span class="d"></span><h3>Curativo Atual</h3><span class="l"></span></div>
+        <div class="grid">
+          <div class="field full">
+            <label class="lab" for="curativo">Curativo atual em uso</label>
+            <input type="text" id="curativo" name="curativo" placeholder="Ex.: gaze com pomada, espuma, hidrocoloide..." />
+          </div>
+          <div class="field full">
+            <label class="lab" for="trocaFreq">Frequência de troca atual</label>
+            <select id="trocaFreq" name="trocaFreq">
+              <option value="" selected disabled>Selecione</option>
+              <option>Mais de uma vez ao dia</option>
+              <option>Uma vez ao dia</option>
+              <option>Em dias alternados</option>
+              <option>2 a 3 vezes por semana</option>
+              <option>Uma vez por semana</option>
+              <option>Não troco / não sei</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="consent" id="consentBox">
+          <label class="opt">
+            <input type="checkbox" id="consent" name="consent" />
+            <span class="mark"></span>
+            <span><b>Li e concordo.</b> Ao enviar este formulário, autorizo a Enfermeira Bruna Arguelles a utilizar as informações e fotos aqui fornecidas exclusivamente para a avaliação da minha ferida e o atendimento de enfermagem. Estou ciente de que meus dados serão tratados com sigilo, conforme a LGPD (Lei nº 13.709/2018), e não serão compartilhados sem o meu consentimento.</span>
+          </label>
+          <div class="err-msg" id="consentErr">É necessário concordar com o termo para enviar o formulário.</div>
+        </div>
+      </section>
+
+      <!-- NAV -->
+      <div class="panel active" style="display:block; padding:0; box-shadow:none; background:transparent;">
+        <div class="nav" style="background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 22px; margin-top:18px; border-top:none;">
+          <button type="button" class="btn btn-prev" id="btnPrev" disabled>← Voltar</button>
+          <button type="button" class="btn btn-next" id="btnNext">Próximo passo →</button>
+          <button type="submit" class="btn btn-submit" id="btnSubmit" style="display:none">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="#fff"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+            Enviar meu formulário e aguardar contato
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- CONFIRMATION -->
+    <div class="confirm" id="confirm">
+      <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h2>Quase lá!</h2>
+      <div class="orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+      <p>Obrigada, <b id="confName">paciente</b>! Para finalizar, <b>toque no botão verde abaixo</b>: ele abre o WhatsApp da Enfermeira Bruna com todas as suas respostas já preenchidas — é só tocar em <b>enviar</b> na conversa.</p>
+      <p style="background:var(--terracota-soft); border-radius:10px; padding:12px 16px; color:var(--cipreste); font-weight:700;">📷 Não esqueça de anexar as fotos da ferida na conversa do WhatsApp — elas não vão automaticamente.</p>
+      <p>Assim que receber, a <b>Enfermeira Bruna Arguelles</b> entrará em contato para agendar a sua teleconsulta.</p>
+      <a id="waOpen" class="btn btn-submit" href="#" target="_blank" rel="noopener" style="margin:18px auto 0; text-decoration:none;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="#fff"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+        Abrir conversa no WhatsApp
+      </a>
+      <div class="summary" id="confSummary"></div>
+    </div>
+
+    <footer class="foot">
+      <div class="orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+      <div class="nm">Bruna Arguelles — Enfermagem Especializada</div>
+      <div style="margin-top:6px">CNPJ <b>66.913.603/0001-92</b></div>
+    </footer>
+
+  </div>
+
+  
+
+<script>
+(function(){
+  var TOTAL = 4;
+  var current = 0;
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel[data-step]'));
+  var stepEls = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var trackFill = document.getElementById('trackFill');
+  var btnPrev = document.getElementById('btnPrev');
+  var btnNext = document.getElementById('btnNext');
+  var btnSubmit = document.getElementById('btnSubmit');
+  var form = document.getElementById('form');
+
+  function render(){
+    panels.forEach(function(p){ p.classList.toggle('active', +p.dataset.step === current); });
+    stepEls.forEach(function(s){
+      var n = +s.dataset.step;
+      s.classList.toggle('active', n === current);
+      s.classList.toggle('done', n < current);
+    });
+    trackFill.style.width = (current/(TOTAL-1)*100) + '%';
+    btnPrev.disabled = current === 0;
+    var last = current === TOTAL-1;
+    btnNext.style.display = last ? 'none' : '';
+    btnSubmit.style.display = last ? '' : 'none';
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  // ---- validation ----
+  function validate(step){
+    var panel = panels[step];
+    var ok = true;
+    panel.querySelectorAll('[required]').forEach(function(f){
+      var wrap = f.closest('.field');
+      if(!f.value.trim()){ ok = false; if(wrap) wrap.classList.add('invalid'); }
+      else if(wrap){ wrap.classList.remove('invalid'); }
+    });
+    return ok;
+  }
+  document.addEventListener('input', function(e){
+    var w = e.target.closest && e.target.closest('.field.invalid');
+    if(w && e.target.value.trim()) w.classList.remove('invalid');
+  });
+
+  function goNext(){
+    if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    if(!validate(current)){
+      var bad = panels[current].querySelector('.field.invalid');
+      if(bad){ var y = bad.getBoundingClientRect().top + window.pageYOffset - 90; window.scrollTo({ top:y, behavior:'smooth' }); }
+      return;
+    }
+    if(current < TOTAL-1){ current++; render(); }
+  }
+  function goPrev(){
+    if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    if(current>0){ current--; render(); }
+  }
+  // Bind to click; on touch devices also bind touchend so the first tap
+  // registers even when the on-screen keyboard is dismissing (iOS quirk).
+  function bindTap(el, fn){
+    var handled = false;
+    el.addEventListener('touchend', function(e){ handled = true; e.preventDefault(); fn(); setTimeout(function(){ handled = false; }, 500); }, { passive:false });
+    el.addEventListener('click', function(){ if(!handled) fn(); });
+  }
+  bindTap(btnNext, goNext);
+  bindTap(btnPrev, goPrev);
+
+  // ---- conditional reveals ----
+  function syncReveals(){
+    var targets = {};
+    document.querySelectorAll('input[type=radio][data-reveal]').forEach(function(r){
+      var sel = r.dataset.reveal;
+      if(!(sel in targets)) targets[sel] = false;
+      if(r.checked) targets[sel] = true;
+    });
+    Object.keys(targets).forEach(function(sel){
+      var t = document.querySelector(sel);
+      if(t) t.classList.toggle('hidden', !targets[sel]);
+    });
+  }
+  document.addEventListener('change', function(e){
+    if(e.target.matches('input[type=radio]')) syncReveals();
+  });
+  syncReveals();
+
+  // ---- EVA pain slider ----
+  var dor = document.getElementById('dor');
+  var evaBadge = document.getElementById('evaBadge');
+  var evaWord = document.getElementById('evaWord');
+  function painColor(v){
+    if(v===0) return '#5A7A6B';
+    if(v<=3) return '#7d8a55';
+    if(v<=6) return '#C9a85a';
+    if(v<=8) return '#C97862';
+    return '#b2503a';
+  }
+  function painWord(v){
+    if(v===0) return 'Sem dor';
+    if(v<=3) return 'Leve';
+    if(v<=6) return 'Moderada';
+    if(v<=8) return 'Intensa';
+    return 'Insuportável';
+  }
+  function updateDor(){
+    var v = +dor.value;
+    evaBadge.textContent = v;
+    evaBadge.style.background = painColor(v);
+    evaWord.textContent = painWord(v);
+  }
+  dor.addEventListener('input', updateDor);
+  updateDor();
+
+  // ---- body map + region chips ----
+  var selectedRegions = new Set();
+  var regioesInput = document.getElementById('regioes');
+  function syncRegions(){
+    regioesInput.value = Array.from(selectedRegions).join(', ');
+    document.querySelectorAll('.chip').forEach(function(c){
+      c.classList.toggle('sel', selectedRegions.has(c.dataset.region));
+    });
+    document.querySelectorAll('.bm-fig .hot').forEach(function(h){
+      h.classList.toggle('sel', selectedRegions.has(h.dataset.region));
+    });
+  }
+  function toggleRegion(r){
+    if(selectedRegions.has(r)) selectedRegions.delete(r); else selectedRegions.add(r);
+    syncRegions();
+  }
+  document.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click', function(){ toggleRegion(c.dataset.region); });
+  });
+  document.querySelectorAll('.bm-fig .hot').forEach(function(h){
+    h.addEventListener('click', function(){ toggleRegion(h.dataset.region); });
+  });
+
+  // ---- file upload ----
+  var fileInput = document.getElementById('fileInput');
+  var dropZone = document.getElementById('dropZone');
+  var previews = document.getElementById('previews');
+  var fileCount = document.getElementById('fileCount');
+  var files = [];
+  var MAX = 5;
+  dropZone.addEventListener('click', function(){ fileInput.click(); });
+  dropZone.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fileInput.click(); } });
+  fileInput.addEventListener('change', function(){
+    Array.prototype.forEach.call(fileInput.files, function(f){
+      if(files.length < MAX && f.type.indexOf('image') === 0) files.push(f);
+    });
+    fileInput.value = '';
+    renderPreviews();
+  });
+  function renderPreviews(){
+    previews.innerHTML = '';
+    files.forEach(function(f, i){
+      var url = URL.createObjectURL(f);
+      var div = document.createElement('div');
+      div.className = 'thumb';
+      div.innerHTML = '<img src="'+url+'" alt=""><button type="button" class="rm" data-i="'+i+'" aria-label="Remover">×</button>';
+      previews.appendChild(div);
+    });
+    previews.querySelectorAll('.rm').forEach(function(b){
+      b.addEventListener('click', function(){ files.splice(+b.dataset.i,1); renderPreviews(); });
+    });
+    fileCount.textContent = files.length ? (files.length + ' de ' + MAX + ' foto(s) anexada(s)') : '';
+    dropZone.style.display = files.length >= MAX ? 'none' : '';
+  }
+
+  // ---- WhatsApp destination ----
+  var WHATSAPP = '5532991027249'; // Enf. Bruna Arguelles
+
+  // helpers to read fields by name
+  function val(name){
+    var el = form.elements[name];
+    if(!el) return '';
+    if(el.length && el[0] && el[0].type === 'radio'){
+      var r = form.querySelector('input[name="'+name+'"]:checked');
+      return r ? r.value : '';
+    }
+    return (el.value || '').trim();
+  }
+  function multi(name){
+    return Array.prototype.map.call(form.querySelectorAll('input[name="'+name+'"]:checked'), function(c){ return c.value; }).join(', ');
+  }
+  function line(label, value){ return value ? ('*'+label+':* '+value+'\n') : ''; }
+
+  function buildMessage(nome){
+    var m = '';
+    m += '🩺 *PRÉ-CONSULTA — AVALIAÇÃO DE FERIDAS*\n';
+    m += 'Enf. Bruna Arguelles\n';
+    m += '━━━━━━━━━━━━━━━\n\n';
+
+    m += '👤 *1. IDENTIFICAÇÃO*\n';
+    m += line('Nome', nome);
+    m += line('Nascimento', val('nasc'));
+    m += line('Cidade/UF', val('cidade'));
+    m += line('WhatsApp', val('tel'));
+    m += line('Preenchido por', val('quem'));
+    m += line('Nome de quem preencheu', val('acompNome'));
+    m += line('Parentesco', val('parentesco'));
+    m += line('Como nos encontrou', val('origem'));
+
+    m += '\n🫀 *2. HISTÓRICO DE SAÚDE*\n';
+    m += line('Comorbidades', multi('comorb'));
+    m += line('Outras comorbidades', val('comorbOutras'));
+    m += line('Medicamentos contínuos', val('medic'));
+    m += line('Alergias', val('alergia'));
+    var fuma = val('fuma'); if(fuma === 'Sim' && val('fumaQtd')) fuma += ' ('+val('fumaQtd')+')';
+    m += line('Fuma', fuma);
+    m += line('Bebida alcoólica', val('alcool'));
+    m += line('Estado nutricional', val('nutri'));
+    m += line('Exames disponíveis', multi('exames'));
+
+    m += '\n🩹 *3. HISTÓRIA DA FERIDA*\n';
+    m += line('Localização', regioesInput.value);
+    m += line('Descrição do local', val('localDesc'));
+    m += line('Tempo de existência', val('tempo'));
+    m += line('Como surgiu', val('surgiu'));
+    var trat = val('tratou'); if(trat === 'Sim' && val('tratouQual')) trat += ' — '+val('tratouQual');
+    m += line('Tratamento anterior', trat);
+    m += line('Nível de dor', val('dor')+'/10');
+    m += line('Dor piora quando', multi('dorPiora'));
+    var febre = val('febre'); if(febre === 'Sim' && val('febreTemp')) febre += ' ('+val('febreTemp')+')';
+    m += line('Febre recente', febre);
+    var pior = val('piorou'); if(pior === 'Sim' && val('piorouDesc')) pior += ' — '+val('piorouDesc');
+    m += line('Piorou recentemente', pior);
+    m += line('Locomoção', val('anda'));
+    m += line('Impacto na vida diária', multi('impacto'));
+    m += line('Relato do impacto', val('impactoDesc'));
+
+    m += '\n🔎 *4. AVALIAÇÃO VISUAL*\n';
+    m += line('Secreção', val('secrecao'));
+    m += line('Odor', val('odor'));
+    m += line('Pele ao redor', multi('pele'));
+    m += line('Curativo atual', val('curativo'));
+    m += line('Frequência de troca', val('trocaFreq'));
+
+    m += '\n📷 *FOTOS:* '+files.length+' selecionada(s) — vou anexar aqui na conversa.\n';
+    m += '\n━━━━━━━━━━━━━━━\nEnviado pelo formulário de pré-consulta.';
+    return m;
+  }
+
+  // ---- submit ----
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    // validate all steps
+    for(var s=0; s<TOTAL; s++){
+      if(!validate(s)){ current = s; render(); return; }
+    }
+    // consent check
+    var consent = document.getElementById('consent');
+    if(consent && !consent.checked){
+      current = 3; render();
+      var cb = document.getElementById('consentBox');
+      if(cb){ cb.classList.add('invalid'); }
+      return;
+    }
+
+    var nome = (document.getElementById('nome').value || 'paciente').trim();
+    var first = nome.split(' ')[0];
+    document.getElementById('confName').textContent = first;
+
+    var regioes = regioesInput.value || '—';
+    var tel = document.getElementById('tel').value || '—';
+    var dorV = document.getElementById('dor').value;
+    document.getElementById('confSummary').innerHTML =
+      '<div><span>Paciente:</span> <b>'+nome+'</b></div>' +
+      '<div><span>Contato:</span> '+tel+'</div>' +
+      '<div><span>Região da ferida:</span> '+regioes+'</div>' +
+      '<div><span>Nível de dor:</span> '+dorV+'/10</div>' +
+      '<div><span>Fotos selecionadas:</span> '+files.length+'</div>';
+
+    // build WhatsApp link and wire the confirmation button (the reliable path)
+    var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(buildMessage(nome));
+    var waBtn = document.getElementById('waOpen');
+    if(waBtn) waBtn.href = url;
+
+    form.style.display = 'none';
+    document.querySelector('.stepper').style.display = 'none';
+    document.getElementById('confirm').classList.add('active');
+    window.scrollTo({ top:0, behavior:'smooth' });
+
+    // best-effort automatic open (alguns navegadores/visualizadores bloqueiam; o botão acima sempre funciona)
+    try { window.open(url, '_blank'); } catch(err){}
+  });
+
+  // clear consent error once checked
+  var consentChk = document.getElementById('consent');
+  if(consentChk){ consentChk.addEventListener('change', function(){ if(consentChk.checked){ var cb = document.getElementById('consentBox'); if(cb) cb.classList.remove('invalid'); } }); }
+
+  render();
+})();
+</script>
+</body>
+</html>
