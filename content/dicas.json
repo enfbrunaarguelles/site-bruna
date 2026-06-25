@@ -1,0 +1,34 @@
+{
+  "posts": [
+    {
+      "publicado": true,
+      "titulo": "Quando uma ferida precisa de avaliação profissional?",
+      "slug": "quando-avaliar-uma-ferida",
+      "categoria": "Cuidado em casa",
+      "data": "10/06/2026",
+      "imagem": "assets/tratamento-feridas.jpg",
+      "resumo": "Nem toda ferida cicatriza sozinha. Veja os sinais de alerta que indicam a hora de procurar um enfermeiro especialista.",
+      "conteudo": "Pequenos cortes e arranhões costumam cicatrizar bem em casa. Mas algumas feridas precisam do olhar de um profissional para não evoluírem para complicações.\n\n## Sinais de que é hora de procurar ajuda\n\n- **Vermelhidão que aumenta** ao redor da ferida, com calor ou inchaço\n- **Dor que piora** com o passar dos dias\n- **Secreção** amarelada ou esverdeada, ou **odor** forte\n- A ferida **não mostra melhora** após uma a duas semanas\n- Você tem **diabetes**, problemas de circulação ou permanece muito tempo acamado\n\n## Por que a avaliação faz diferença\n\nCada ferida tem uma causa e um estágio de cicatrização. Identificar isso permite escolher o curativo certo, controlar infecções e acelerar o fechamento — evitando que um problema simples se torne grave.\n\n> Na dúvida, não espere. Uma avaliação precoce protege a sua saúde e poupa tempo de tratamento.\n\nQuer que eu avalie o seu caso? [Fale comigo no WhatsApp](https://wa.me/5532991027249)."
+    },
+    {
+      "publicado": true,
+      "titulo": "O papel da nutrição na cicatrização",
+      "slug": "nutricao-na-cicatrizacao",
+      "categoria": "Cicatrização",
+      "data": "10/06/2026",
+      "imagem": "",
+      "resumo": "A pele se reconstrói a partir do que comemos. Conheça os nutrientes que ajudam o corpo a fechar uma ferida.",
+      "conteudo": "A pele se reconstrói a partir do que comemos. Uma alimentação adequada é uma das ferramentas mais subestimadas na cicatrização de feridas.\n\n## Nutrientes que ajudam a pele a se recuperar\n\n- **Proteínas** (carnes, ovos, leite, leguminosas): matéria-prima para reconstruir o tecido\n- **Vitamina C** (acerola, goiaba, frutas cítricas): essencial para a formação de colágeno\n- **Zinco** (carnes, sementes, castanhas): participa da renovação celular\n- **Hidratação**: água suficiente mantém os tecidos saudáveis\n\n## Um cuidado que vai além do curativo\n\nDe nada adianta o melhor curativo se o corpo não recebe os nutrientes para cicatrizar. Em feridas de difícil cicatrização, avaliar a alimentação faz parte do tratamento.\n\nCada pessoa tem necessidades diferentes — em casos específicos, o acompanhamento com nutricionista é indicado."
+    },
+    {
+      "publicado": true,
+      "titulo": "Laserterapia: mitos e verdades",
+      "slug": "laserterapia-mitos-e-verdades",
+      "categoria": "Laserterapia",
+      "data": "10/06/2026",
+      "imagem": "assets/laserterapia.jpg",
+      "resumo": "É segura? Dói? Para quem é indicada? Esclareço as principais dúvidas sobre a fotobiomodulação no cuidado de feridas.",
+      "conteudo": "A laserterapia (fotobiomodulação) é uma aliada poderosa na cicatrização, mas ainda gera muitas dúvidas. Vamos esclarecer as principais.\n\n## \"O laser dói ou queima\"\n\n**Mito.** O laser terapêutico é indolor. A maioria das pessoas sente apenas um leve calor — ou nada. Ele não corta nem queima a pele.\n\n## \"Serve só para estética\"\n\n**Mito.** Na enfermagem, o laser é usado para acelerar a cicatrização, reduzir dor e inflamação e estimular a regeneração dos tecidos em feridas de diversos tipos.\n\n## \"É perigoso\"\n\n**Mito.** Quando aplicado por profissional habilitado, com os parâmetros corretos e proteção ocular, é um procedimento seguro.\n\n## Para quem é indicada?\n\n- Feridas agudas e crônicas\n- Lesões por pressão\n- Pós-operatório\n- Controle de dor\n\nA indicação é sempre individual, feita após avaliação."
+    }
+  ]
+}
