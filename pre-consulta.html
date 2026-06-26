@@ -991,13 +991,16 @@
     }).then(function(r){ return r.json(); });
   }
   function photoSectionLinks(links, folderUrl){
-    var s = '\n📷 *FOTOS (' + links.length + '):*\n';
-    if(folderUrl) s += '📂 Pasta com todas: ' + folderUrl + '\n';
-    links.forEach(function(u, i){ s += (i+1) + '. ' + u + '\n'; });
+    var s = '\n*Fotos da ferida (' + links.length + ')*\n';
+    if(folderUrl){
+      s += 'Ver no Drive: ' + folderUrl + '\n';
+    } else {
+      links.forEach(function(u){ s += '• ' + u + '\n'; });
+    }
     return s;
   }
   function photoSectionManual(){
-    return '\n📷 *FOTOS:* ' + files.length + ' selecionada(s) — vou anexar aqui na conversa.\n';
+    return '\n*FOTOS:* ' + files.length + ' selecionada(s) — vou anexar aqui na conversa.\n';
   }
 
   // helpers to read fields by name
@@ -1017,11 +1020,11 @@
 
   function buildMessage(nome, photoSection){
     var m = '';
-    m += '🩺 *PRÉ-CONSULTA — AVALIAÇÃO DE FERIDAS*\n';
+    m += '*PRÉ-CONSULTA — AVALIAÇÃO DE FERIDAS*\n';
     m += 'Enf. Bruna Arguelles\n';
     m += '━━━━━━━━━━━━━━━\n\n';
 
-    m += '👤 *1. IDENTIFICAÇÃO*\n';
+    m += '*1. IDENTIFICAÇÃO*\n';
     m += line('Nome', nome);
     m += line('Nascimento', val('nasc'));
     m += line('Cidade/UF', val('cidade'));
@@ -1031,7 +1034,7 @@
     m += line('Parentesco', val('parentesco'));
     m += line('Como nos encontrou', val('origem'));
 
-    m += '\n🫀 *2. HISTÓRICO DE SAÚDE*\n';
+    m += '\n*2. HISTÓRICO DE SAÚDE*\n';
     m += line('Comorbidades', multi('comorb'));
     m += line('Outras comorbidades', val('comorbOutras'));
     m += line('Medicamentos contínuos', val('medic'));
@@ -1042,7 +1045,7 @@
     m += line('Estado nutricional', val('nutri'));
     m += line('Exames disponíveis', multi('exames'));
 
-    m += '\n🩹 *3. HISTÓRIA DA FERIDA*\n';
+    m += '\n*3. HISTÓRIA DA FERIDA*\n';
     m += line('Localização', regioesInput.value);
     m += line('Descrição do local', val('localDesc'));
     m += line('Tempo de existência', val('tempo'));
@@ -1059,14 +1062,14 @@
     m += line('Impacto na vida diária', multi('impacto'));
     m += line('Relato do impacto', val('impactoDesc'));
 
-    m += '\n🔎 *4. AVALIAÇÃO VISUAL*\n';
+    m += '\n*4. AVALIAÇÃO VISUAL*\n';
     m += line('Secreção', val('secrecao'));
     m += line('Odor', val('odor'));
     m += line('Pele ao redor', multi('pele'));
     m += line('Curativo atual', val('curativo'));
     m += line('Frequência de troca', val('trocaFreq'));
 
-    m += photoSection || ('\n📷 *FOTOS:* '+files.length+' selecionada(s) — vou anexar aqui na conversa.\n');
+    m += photoSection || ('\n*FOTOS:* '+files.length+' selecionada(s) — vou anexar aqui na conversa.\n');
     m += '\n━━━━━━━━━━━━━━━\nEnviado pelo formulário de pré-consulta.';
     return m;
   }
