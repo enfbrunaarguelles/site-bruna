@@ -744,13 +744,23 @@
 
     </form>
 
+<style>
+  .upload-status{ font-size:14px; font-weight:700; border-radius:10px; padding:13px 16px; margin:4px 0 2px; line-height:1.45; text-align:left; }
+  .upload-status.uploading{ background:var(--salvia-soft); color:var(--cipreste); }
+  .upload-status.ok{ background:#e7f3ec; color:#1f6b45; }
+  .upload-status.err{ background:var(--terracota-soft); color:var(--cipreste); }
+  .upload-status .spin{ display:inline-block; width:15px; height:15px; margin-right:9px; vertical-align:-2px; border:2.5px solid var(--salvia); border-top-color:transparent; border-radius:50%; animation:waspin .7s linear infinite; }
+  @keyframes waspin{ to{ transform:rotate(360deg); } }
+</style>
+
     <!-- CONFIRMATION -->
     <div class="confirm" id="confirm">
       <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <h2>Quase lá!</h2>
       <div class="orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
       <p>Obrigada, <b id="confName">paciente</b>! Para finalizar, <b>toque no botão verde abaixo</b>: ele abre o WhatsApp da Enfermeira Bruna com todas as suas respostas já preenchidas — é só tocar em <b>enviar</b> na conversa.</p>
-      <p style="background:var(--terracota-soft); border-radius:10px; padding:12px 16px; color:var(--cipreste); font-weight:700;">📷 Não esqueça de anexar as fotos da ferida na conversa do WhatsApp — elas não vão automaticamente.</p>
+      <div id="uploadStatus" class="upload-status" style="display:none"></div>
+      <p id="manualNote" style="background:var(--terracota-soft); border-radius:10px; padding:12px 16px; color:var(--cipreste); font-weight:700;">📷 Não esqueça de anexar as fotos da ferida na conversa do WhatsApp — elas não vão automaticamente.</p>
       <p>Assim que receber, a <b>Enfermeira Bruna Arguelles</b> entrará em contato para agendar a sua teleconsulta.</p>
       <a id="waOpen" class="btn btn-submit" href="#" target="_blank" rel="noopener" style="margin:18px auto 0; text-decoration:none;">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="#fff"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
@@ -938,6 +948,58 @@
   // ---- WhatsApp destination ----
   var WHATSAPP = '5532991027249'; // Enf. Bruna Arguelles
 
+  // ---- Google Drive (Apps Script Web App) ----
+  // Cole abaixo a URL do seu Apps Script publicado (termina em /exec).
+  // Enquanto estiver vazio (''), o formulário usa o modo "anexar manualmente".
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbxeSi4sxr7ySJK1lmNiaPWwFb9BlWv1ajuBnNwmsp6hC9riALqtECx4xYVcmI_eTqPizQ/exec';
+  var GAS_OK = /^https?:\/\//.test(GAS_URL);
+
+  function waLink(msg){ return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg); }
+
+  function compressImage(file, maxDim, quality){
+    return new Promise(function(resolve){
+      try{
+        var img = new Image();
+        var u = URL.createObjectURL(file);
+        img.onload = function(){
+          var w = img.width, h = img.height;
+          var sc = Math.min(1, maxDim / Math.max(w, h));
+          var cw = Math.max(1, Math.round(w*sc)), ch = Math.max(1, Math.round(h*sc));
+          var c = document.createElement('canvas'); c.width = cw; c.height = ch;
+          c.getContext('2d').drawImage(img, 0, 0, cw, ch);
+          URL.revokeObjectURL(u);
+          c.toBlob(function(b){ resolve(b || file); }, 'image/jpeg', quality);
+        };
+        img.onerror = function(){ URL.revokeObjectURL(u); resolve(file); };
+        img.src = u;
+      }catch(e){ resolve(file); }
+    });
+  }
+  function blobToBase64(blob){
+    return new Promise(function(resolve, reject){
+      var r = new FileReader();
+      r.onload = function(){ resolve(String(r.result).split(',')[1]); };
+      r.onerror = reject;
+      r.readAsDataURL(blob);
+    });
+  }
+  function uploadOne(b64, filename, patient){
+    return fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ data: b64, filename: filename, mimeType: 'image/jpeg', patient: patient })
+    }).then(function(r){ return r.json(); });
+  }
+  function photoSectionLinks(links, folderUrl){
+    var s = '\n📷 *FOTOS (' + links.length + '):*\n';
+    if(folderUrl) s += '📂 Pasta com todas: ' + folderUrl + '\n';
+    links.forEach(function(u, i){ s += (i+1) + '. ' + u + '\n'; });
+    return s;
+  }
+  function photoSectionManual(){
+    return '\n📷 *FOTOS:* ' + files.length + ' selecionada(s) — vou anexar aqui na conversa.\n';
+  }
+
   // helpers to read fields by name
   function val(name){
     var el = form.elements[name];
@@ -953,7 +1015,7 @@
   }
   function line(label, value){ return value ? ('*'+label+':* '+value+'\n') : ''; }
 
-  function buildMessage(nome){
+  function buildMessage(nome, photoSection){
     var m = '';
     m += '🩺 *PRÉ-CONSULTA — AVALIAÇÃO DE FERIDAS*\n';
     m += 'Enf. Bruna Arguelles\n';
@@ -1004,7 +1066,7 @@
     m += line('Curativo atual', val('curativo'));
     m += line('Frequência de troca', val('trocaFreq'));
 
-    m += '\n📷 *FOTOS:* '+files.length+' selecionada(s) — vou anexar aqui na conversa.\n';
+    m += photoSection || ('\n📷 *FOTOS:* '+files.length+' selecionada(s) — vou anexar aqui na conversa.\n');
     m += '\n━━━━━━━━━━━━━━━\nEnviado pelo formulário de pré-consulta.';
     return m;
   }
@@ -1039,19 +1101,56 @@
       '<div><span>Nível de dor:</span> '+dorV+'/10</div>' +
       '<div><span>Fotos selecionadas:</span> '+files.length+'</div>';
 
-    // build WhatsApp link and wire the confirmation button (the reliable path)
-    var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(buildMessage(nome));
-    var waBtn = document.getElementById('waOpen');
-    if(waBtn) waBtn.href = url;
-
     form.style.display = 'none';
     document.querySelector('.stepper').style.display = 'none';
     document.getElementById('confirm').classList.add('active');
     window.scrollTo({ top:0, behavior:'smooth' });
 
-    // best-effort automatic open (alguns navegadores/visualizadores bloqueiam; o botão acima sempre funciona)
-    try { window.open(url, '_blank'); } catch(err){}
+    finishSubmit(nome);
   });
+
+  // Sobe as fotos pro Drive (se configurado) e monta o link do WhatsApp com os links das fotos.
+  function finishSubmit(nome){
+    var waBtn = document.getElementById('waOpen');
+    var manualNote = document.getElementById('manualNote');
+    var statusEl = document.getElementById('uploadStatus');
+    var spin = '<span class="spin"></span>';
+
+    function useManual(){
+      if(manualNote) manualNote.style.display = files.length ? '' : 'none';
+      var url = waLink(buildMessage(nome, photoSectionManual()));
+      if(waBtn){ waBtn.href = url; waBtn.style.display = ''; }
+      try { window.open(url, '_blank'); } catch(err){}
+    }
+
+    if(!GAS_OK || files.length === 0){ useManual(); return; }
+
+    if(manualNote) manualNote.style.display = 'none';
+    if(waBtn) waBtn.style.display = 'none';
+    if(statusEl){ statusEl.style.display = ''; statusEl.className = 'upload-status uploading'; statusEl.innerHTML = spin + 'Enviando suas fotos com segurança… <b>0 de ' + files.length + '</b>'; }
+
+    (async function(){
+      var links = [], folderUrl = '';
+      try{
+        for(var i=0; i<files.length; i++){
+          if(statusEl) statusEl.innerHTML = spin + 'Enviando suas fotos com segurança… <b>' + i + ' de ' + files.length + '</b>';
+          var blob = await compressImage(files[i], 1600, 0.82);
+          var b64 = await blobToBase64(blob);
+          var res = await uploadOne(b64, 'foto-' + (i+1) + '.jpg', nome);
+          if(!res || !res.ok || !res.url) throw new Error('falha no envio');
+          links.push(res.url);
+          if(!folderUrl && res.folder) folderUrl = res.folder;
+        }
+        if(statusEl){ statusEl.className = 'upload-status ok'; statusEl.innerHTML = '✅ <b>' + links.length + ' foto(s) enviada(s) com sucesso!</b> Já estão anexadas na mensagem — é só tocar no botão verde e enviar.'; }
+        var url = waLink(buildMessage(nome, photoSectionLinks(links, folderUrl)));
+        if(waBtn){ waBtn.href = url; waBtn.style.display = ''; }
+        try { window.open(url, '_blank'); } catch(err){}
+      }catch(err){
+        if(statusEl){ statusEl.className = 'upload-status err'; statusEl.innerHTML = '⚠️ Não consegui enviar as fotos automaticamente. Sem problema: toque no botão verde, envie a mensagem e <b>anexe as fotos manualmente</b> na conversa.'; }
+        useManual();
+      }
+    })();
+  }
 
   // clear consent error once checked
   var consentChk = document.getElementById('consent');
