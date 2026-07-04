@@ -137,6 +137,10 @@
     .input-custo input { padding-left: 28px; background: var(--amarelo); }
     .input-qtd { text-align: center; background: var(--amarelo); }
     .input-qtd:disabled { background: transparent; opacity: .5; }
+    .input-uso { position: relative; }
+    .input-uso input { width: 100%; padding: 6px 8px; font-size: 13px; font-family: inherit; border: .5px solid var(--borda); outline: none; color: var(--cipestre); background: var(--amarelo); text-align: center; }
+    .input-uso input:disabled { background: transparent; opacity: .5; }
+    .input-uso .unidade { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--claro); pointer-events: none; }
     .subtotal { font-size: 13px; color: var(--claro); text-align: right; }
     .subtotal.ativo { font-weight: 500; color: var(--cipestre); }
 
@@ -361,9 +365,9 @@ const MATERIAIS = [
   { id:'m8',  cat:'EPIs e biossegurança',                   item:'Óculos ou protetor facial',                  custo:null  },
   { id:'m9',  cat:'EPIs e biossegurança',                   item:'Campo estéril',                              custo:6.21  },
   { id:'m10', cat:'EPIs e biossegurança',                   item:'Saco para descarte',                         custo:0.21  },
-  { id:'m11', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 100 ml',               custo:7.01  },
-  { id:'m12', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 250 ml',               custo:7.52  },
-  { id:'m13', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 500 ml',               custo:12.12 },
+  { id:'m11', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 100 ml',               custo:7.01,  embalagem:100, unidade:'ml' },
+  { id:'m12', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 250 ml',               custo:7.52,  embalagem:250, unidade:'ml' },
+  { id:'m13', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 500 ml',               custo:12.12, embalagem:500, unidade:'ml' },
   { id:'m14', cat:'Limpeza, irrigação e antissepsia',       item:'Clorexidina aquosa',                         custo:null  },
   { id:'m15', cat:'Limpeza, irrigação e antissepsia',       item:'Clorexidina alcoólica 0,5%',                 custo:9.03  },
   { id:'m16', cat:'Limpeza, irrigação e antissepsia',       item:'PVPI, se aplicável',                         custo:null  },
@@ -386,7 +390,7 @@ const MATERIAIS = [
   { id:'m33', cat:'Materiais básicos de curativo',          item:'Malha tubular',                              custo:null  },
   { id:'m34', cat:'Materiais básicos de curativo',          item:'Tesoura (depreciação)',                      custo:null  },
   { id:'m35', cat:'Materiais básicos de curativo',          item:'Pinça (depreciação)',                        custo:null  },
-  { id:'m36', cat:'Coberturas primárias e especiais',       item:'Hidrogel (tubo 30 g)',                       custo:54.10 },
+  { id:'m36', cat:'Coberturas primárias e especiais',       item:'Hidrogel (tubo 30 g)',                       custo:54.10, embalagem:30,  unidade:'g'  },
   { id:'m37', cat:'Coberturas primárias e especiais',       item:'Hidrocoloide (placa 10x10)',                 custo:32.60 },
   { id:'m38', cat:'Coberturas primárias e especiais',       item:'Alginato de cálcio (placa 10x10)',           custo:38.60 },
   { id:'m39', cat:'Coberturas primárias e especiais',       item:'Alginato com prata',                         custo:null  },
@@ -403,9 +407,9 @@ const MATERIAIS = [
   { id:'m50', cat:'Coberturas primárias e especiais',       item:'Cobertura absorvente',                      custo:null  },
   { id:'m51', cat:'Coberturas primárias e especiais',       item:'Cobertura superabsorvente',                 custo:null  },
   { id:'m52', cat:'Coberturas primárias e especiais',       item:'Placa de colágeno',                         custo:null  },
-  { id:'m53', cat:'Coberturas primárias e especiais',       item:'Barreira protetora de pele (spray 28 ml)', custo:135.22},
-  { id:'m54', cat:'Coberturas primárias e especiais',       item:'Creme barreira (tubo 92-100 g)',            custo:100.72},
-  { id:'m55', cat:'Coberturas primárias e especiais',       item:'Protetor cutâneo spray (28 ml)',            custo:135.22},
+  { id:'m53', cat:'Coberturas primárias e especiais',       item:'Barreira protetora de pele (spray 28 ml)', custo:135.22, embalagem:28,  unidade:'ml' },
+  { id:'m54', cat:'Coberturas primárias e especiais',       item:'Creme barreira (tubo 92-100 g)',            custo:100.72, embalagem:96,  unidade:'g'  },
+  { id:'m55', cat:'Coberturas primárias e especiais',       item:'Protetor cutâneo spray (28 ml)',            custo:135.22, embalagem:28,  unidade:'ml' },
   { id:'m56', cat:'Materiais para desbridamento',           item:'Lâmina de bisturi',                         custo:null  },
   { id:'m57', cat:'Materiais para desbridamento',           item:'Cabo de bisturi (depreciação)',              custo:null  },
 ]
@@ -528,12 +532,27 @@ document.querySelectorAll('.tab').forEach(btn => {
 })
 
 // ── Seletor de Materiais ─────────────────────────────────────────────────────
+
+// Para itens fracionados: subtotal = custo × (uso / embalagem)
+// Para itens normais:     subtotal = custo × qtd
+function calcSubtotal(m, s) {
+  const custo = custos[m.id]
+  if (custo == null || !s || !s.ativo) return null
+  if (m.embalagem) {
+    const uso = s.uso || 0
+    if (!uso) return null
+    return custo * (uso / m.embalagem)
+  }
+  return custo * (s.qtd || 1)
+}
+
 function atualizarTotal() {
   let total = 0, count = 0
   MATERIAIS.forEach(m => {
     const s = selecao[m.id]
     if (s && s.ativo) {
-      total += (custos[m.id] || 0) * (s.qtd || 1)
+      const sub = calcSubtotal(m, s)
+      if (sub != null) total += sub
       count++
     }
   })
@@ -553,52 +572,76 @@ function renderizarMateriais() {
     lista.appendChild(header)
 
     MATERIAIS.filter(m => m.cat === cat).forEach((m, idx) => {
-      const s = selecao[m.id] || { ativo:false, qtd:1 }
+      const s = selecao[m.id] || { ativo:false, qtd:1, uso:0 }
       const custo = custos[m.id]
-      const subtotal = s.ativo && custo != null ? custo * (s.qtd||1) : null
+      const subtotal = calcSubtotal(m, s)
 
       const div = document.createElement('div')
       div.className = 'item ' + (s.ativo ? 'ativo' : (idx % 2 === 0 ? 'par' : 'impar'))
+
+      // Coluna de quantidade: fracionado → campo "uso" com unidade; normal → qtd inteira
+      const colQtd = m.embalagem
+        ? `<div class="input-uso">
+             <input type="number" value="${s.uso || ''}" placeholder="0" min="0" step="0.5" data-uso="${m.id}" ${!s.ativo ? 'disabled' : ''} title="Quantidade usada por paciente (${m.unidade})" />
+             <span class="unidade">${m.unidade}</span>
+           </div>`
+        : `<input type="number" class="input-qtd" value="${s.qtd||1}" min="1" step="1" data-qtd="${m.id}" ${!s.ativo ? 'disabled' : ''} />`
+
       div.innerHTML = `
         <input type="checkbox" ${s.ativo ? 'checked' : ''} data-id="${m.id}" />
         <span class="nome">${m.item}</span>
         <div class="input-custo">
           <span class="prefix">R$</span>
-          <input type="number" value="${custo != null ? custo : ''}" placeholder="—" min="0" step="0.01" data-custo="${m.id}" />
+          <input type="number" value="${custo != null ? custo : ''}" placeholder="—" min="0" step="0.01" data-custo="${m.id}" title="${m.embalagem ? `Preço da embalagem (${m.embalagem}${m.unidade})` : 'Custo unitário'}" />
         </div>
-        <input type="number" class="input-qtd" value="${s.qtd||1}" min="0.01" step="0.5" data-qtd="${m.id}" ${!s.ativo ? 'disabled' : ''} />
+        ${colQtd}
         <span class="subtotal ${s.ativo ? 'ativo' : ''}">${subtotal !== null ? fmt(subtotal) : '—'}</span>
       `
       lista.appendChild(div)
 
       div.querySelector('[data-id]').addEventListener('change', e => {
-        selecao[m.id] = { ativo: e.target.checked, qtd: (selecao[m.id] || {}).qtd || 1 }
+        selecao[m.id] = { ativo: e.target.checked, qtd: (selecao[m.id] || {}).qtd || 1, uso: (selecao[m.id] || {}).uso || 0 }
         salvar()
         renderizarMateriais()
         atualizarTotal()
       })
+
       div.querySelector('[data-custo]').addEventListener('input', e => {
         custos[m.id] = parseFloat(e.target.value) || 0
         salvar()
         atualizarTotal()
         const sub = div.querySelector('.subtotal')
         const s2 = selecao[m.id]
-        if (s2 && s2.ativo && custos[m.id] != null) {
-          sub.textContent = fmt(custos[m.id] * (s2.qtd||1))
-          sub.className = 'subtotal ativo'
-        }
+        const st = calcSubtotal(m, s2)
+        if (st != null) { sub.textContent = fmt(st); sub.className = 'subtotal ativo' }
       })
-      div.querySelector('[data-qtd]').addEventListener('input', e => {
-        if (!selecao[m.id]) selecao[m.id] = { ativo:false, qtd:1 }
-        selecao[m.id].qtd = parseFloat(e.target.value) || 1
-        salvar()
-        atualizarTotal()
-        const sub = div.querySelector('.subtotal')
-        const s2 = selecao[m.id]
-        if (s2 && s2.ativo && custos[m.id] != null) {
-          sub.textContent = fmt(custos[m.id] * (s2.qtd||1))
-        }
-      })
+
+      const qtdEl = div.querySelector('[data-qtd]')
+      if (qtdEl) {
+        qtdEl.addEventListener('input', e => {
+          if (!selecao[m.id]) selecao[m.id] = { ativo:false, qtd:1, uso:0 }
+          selecao[m.id].qtd = parseFloat(e.target.value) || 1
+          salvar()
+          atualizarTotal()
+          const sub = div.querySelector('.subtotal')
+          const st = calcSubtotal(m, selecao[m.id])
+          if (st != null) sub.textContent = fmt(st)
+        })
+      }
+
+      const usoEl = div.querySelector('[data-uso]')
+      if (usoEl) {
+        usoEl.addEventListener('input', e => {
+          if (!selecao[m.id]) selecao[m.id] = { ativo:false, qtd:1, uso:0 }
+          selecao[m.id].uso = parseFloat(e.target.value) || 0
+          salvar()
+          atualizarTotal()
+          const sub = div.querySelector('.subtotal')
+          const st = calcSubtotal(m, selecao[m.id])
+          if (st != null) { sub.textContent = fmt(st); sub.className = 'subtotal ativo' }
+          else { sub.textContent = '—'; sub.className = 'subtotal' }
+        })
+      }
     })
   })
   atualizarTotal()
