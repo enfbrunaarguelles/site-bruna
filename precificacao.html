@@ -277,13 +277,6 @@
           <button class="btn-limpar" id="btn-limpar">Limpar seleção</button>
         </div>
       </div>
-      <div class="exportar-barra">
-        <div class="exportar-campo">
-          <label for="nome-paciente">Nome do paciente</label>
-          <input type="text" id="nome-paciente" placeholder="Ex: Maria da Silva" />
-        </div>
-        <button class="btn-exportar" id="btn-exportar">↓ Exportar orçamento PDF</button>
-      </div>
       <p class="instrucao">Marque os materiais utilizados, ajuste o custo unitário e a quantidade.<br>O total atualiza automaticamente.</p>
       <div id="lista-materiais"></div>
     </div>
@@ -307,6 +300,13 @@
           </div>
         </div>
         <button class="btn-restaurar" id="btn-restaurar">Restaurar valores padrão</button>
+        <div class="exportar-barra" style="margin-top:32px">
+          <div class="exportar-campo">
+            <label for="nome-paciente">Nome do paciente</label>
+            <input type="text" id="nome-paciente" placeholder="Ex: Maria da Silva" />
+          </div>
+          <button class="btn-exportar" id="btn-exportar">↓ Exportar orçamento PDF</button>
+        </div>
       </div>
     </div>
 
@@ -752,19 +752,22 @@ function exportarPDF() {
   const { jsPDF } = window.jspdf
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
 
-  const CIP = [42, 58, 51]       // #2A3A33
-  const SAL = [90, 122, 107]     // #5A7A6B
-  const TER = [201, 120, 98]     // #C97862
-  const PERG = [247, 242, 232]   // #F7F2E8
-  const BORDA = [212, 205, 184]  // #D4CDB8
-  const W = 210
-  const M = 18  // margem lateral
+  const CIP   = [42, 58, 51]
+  const SAL   = [90, 122, 107]
+  const TER   = [201, 120, 98]
+  const PERG  = [247, 242, 232]
+  const BORDA = [212, 205, 184]
+  const W = 210, M = 18
 
-  // Faixa cipestre no topo
+  const paciente = document.getElementById('nome-paciente').value.trim()
+  const data = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
+  const totalSim = calcularSim()
+
+  // ── Faixa topo
   doc.setFillColor(...CIP)
   doc.rect(0, 0, W, 4, 'F')
 
-  // Cabeçalho
+  // ── Cabeçalho pergaminho
   doc.setFillColor(...PERG)
   doc.rect(0, 4, W, 38, 'F')
 
@@ -785,117 +788,125 @@ function exportarPDF() {
   doc.setTextColor(...SAL)
   doc.text('CNPJ 66.913.603/0001-92', M, 30)
 
-  // Data e paciente (lado direito)
-  const data = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
-  const paciente = document.getElementById('nome-paciente').value.trim()
-
+  // Data + paciente (direita)
   doc.setFontSize(8)
   doc.setTextColor(...CIP)
   doc.text(data, W - M, 16, { align: 'right' })
   if (paciente) {
     doc.setFontSize(7.5)
     doc.setTextColor(...SAL)
+    doc.setCharSpace(1)
     doc.text('PACIENTE', W - M, 22, { align: 'right' })
-    doc.setFontSize(10)
+    doc.setCharSpace(0)
+    doc.setFontSize(11)
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(...CIP)
-    doc.text(paciente, W - M, 28, { align: 'right' })
+    doc.text(paciente, W - M, 29, { align: 'right' })
   }
 
-  // Linha separadora
+  // ── Separador
   doc.setDrawColor(...BORDA)
   doc.setLineWidth(0.3)
   doc.line(M, 42, W - M, 42)
 
-  // Título da seção
+  // ── Composição do valor (tabela do simulador)
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(7)
   doc.setTextColor(...TER)
   doc.setCharSpace(1.5)
-  doc.text('ORÇAMENTO DE MATERIAIS', M, 49)
+  doc.text('COMPOSIÇÃO DO ATENDIMENTO', M, 50)
   doc.setCharSpace(0)
 
-  // Coletar materiais selecionados
-  const itens = []
-  MATERIAIS.forEach(m => {
-    const s = selecao[m.id]
-    if (!s || !s.ativo) return
-    const custo = custos[m.id]
-    const sub = calcSubtotal(m, s)
-    let descQtd = ''
-    if (m.embalagem) {
-      descQtd = `${s.uso || 0} ${m.unidade} de ${m.embalagem}${m.unidade}`
-    } else {
-      descQtd = `${s.qtd || 1} un.`
-    }
-    itens.push([
-      m.item,
-      descQtd,
-      custo != null ? fmt(custo) : '—',
-      sub != null ? fmt(sub) : '—'
-    ])
-  })
+  const linhasSim = [
+    ['Honorário técnico',         fmt(simVals.honorario)],
+    ['Custo do material especial',fmt(simVals.material)],
+    ['Multiplicador de material', `× ${simVals.multiplicador.toFixed(1)}`],
+    ['Taxa de deslocamento',      fmt(simVals.deslocamento)],
+    ['Laser associado',           fmt(simVals.laser)],
+  ]
 
-  if (itens.length === 0) {
-    alert('Nenhum material selecionado.')
-    return
-  }
-
-  // Tabela de materiais
   doc.autoTable({
-    startY: 53,
-    head: [['Material', 'Quantidade usada', 'Custo da embalagem', 'Subtotal']],
-    body: itens,
+    startY: 54,
+    head: [['Item', 'Valor']],
+    body: linhasSim,
     margin: { left: M, right: M },
+    tableWidth: 100,
     styles: {
-      font: 'helvetica',
-      fontSize: 8.5,
+      font: 'helvetica', fontSize: 9,
       cellPadding: { top: 4, bottom: 4, left: 5, right: 5 },
-      textColor: CIP,
-      lineColor: BORDA,
-      lineWidth: 0.2,
+      textColor: CIP, lineColor: BORDA, lineWidth: 0.2,
     },
-    headStyles: {
-      fillColor: CIP,
-      textColor: [255, 255, 255],
-      fontStyle: 'normal',
-      fontSize: 7,
-      letterSpacing: 1,
-    },
+    headStyles: { fillColor: CIP, textColor: [255,255,255], fontSize: 7, fontStyle: 'normal' },
     alternateRowStyles: { fillColor: PERG },
     columnStyles: {
       0: { cellWidth: 'auto' },
-      1: { cellWidth: 42, halign: 'center' },
-      2: { cellWidth: 38, halign: 'right' },
-      3: { cellWidth: 28, halign: 'right', fontStyle: 'bold' },
+      1: { cellWidth: 30, halign: 'right', fontStyle: 'bold' },
     },
   })
 
-  // Total
-  const finalY = doc.lastAutoTable.finalY + 6
-  doc.setDrawColor(...TER)
-  doc.setLineWidth(0.5)
-  doc.line(W - M - 66, finalY, W - M, finalY)
+  // ── Valor final (destaque)
+  const afterSim = doc.lastAutoTable.finalY + 5
+  doc.setFillColor(...CIP)
+  doc.rect(M, afterSim, 100, 14, 'F')
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(255, 255, 255)
+  doc.setCharSpace(1)
+  doc.text('VALOR TOTAL DO ATENDIMENTO', M + 5, afterSim + 6)
+  doc.setCharSpace(0)
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(13)
+  doc.text(fmt(totalSim), M + 95, afterSim + 10, { align: 'right' })
 
+  // ── Fórmula explicativa
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(7.5)
   doc.setTextColor(...SAL)
-  doc.setCharSpace(1)
-  doc.text('TOTAL DE MATERIAIS', W - M - 66, finalY + 7)
-  doc.setCharSpace(0)
+  doc.text(
+    `Fórmula: ${fmt(simVals.honorario)} + (${fmt(simVals.material)} × ${simVals.multiplicador.toFixed(1)}) + ${fmt(simVals.deslocamento)} + ${fmt(simVals.laser)}`,
+    M, afterSim + 22
+  )
 
-  let totalGeral = 0
+  // ── Materiais selecionados (se houver)
+  const itensMat = []
   MATERIAIS.forEach(m => {
-    const sub = calcSubtotal(m, selecao[m.id])
-    if (sub != null) totalGeral += sub
+    const s = selecao[m.id]
+    if (!s || !s.ativo) return
+    const sub = calcSubtotal(m, s)
+    const descQtd = m.embalagem ? `${s.uso || 0} ${m.unidade}` : `${s.qtd || 1} un.`
+    itensMat.push([m.item, descQtd, sub != null ? fmt(sub) : '—'])
   })
 
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(16)
-  doc.setTextColor(...CIP)
-  doc.text(fmt(totalGeral), W - M, finalY + 7, { align: 'right' })
+  if (itensMat.length > 0) {
+    const startMat = afterSim + 30
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(7)
+    doc.setTextColor(...TER)
+    doc.setCharSpace(1.5)
+    doc.text('MATERIAIS UTILIZADOS', M, startMat)
+    doc.setCharSpace(0)
 
-  // Rodapé
+    doc.autoTable({
+      startY: startMat + 4,
+      head: [['Material', 'Qtd / uso', 'Custo']],
+      body: itensMat,
+      margin: { left: M, right: M },
+      styles: {
+        font: 'helvetica', fontSize: 8.5,
+        cellPadding: { top: 3, bottom: 3, left: 5, right: 5 },
+        textColor: CIP, lineColor: BORDA, lineWidth: 0.2,
+      },
+      headStyles: { fillColor: CIP, textColor: [255,255,255], fontSize: 7, fontStyle: 'normal' },
+      alternateRowStyles: { fillColor: PERG },
+      columnStyles: {
+        0: { cellWidth: 'auto' },
+        1: { cellWidth: 30, halign: 'center' },
+        2: { cellWidth: 28, halign: 'right', fontStyle: 'bold' },
+      },
+    })
+  }
+
+  // ── Rodapé
   doc.setDrawColor(...BORDA)
   doc.setLineWidth(0.2)
   doc.line(M, 277, W - M, 277)
@@ -903,14 +914,13 @@ function exportarPDF() {
   doc.setFontSize(7)
   doc.setTextColor(...SAL)
   doc.text('Bruna Arguelles · Enfermagem Especializada · CNPJ 66.913.603/0001-92', M, 282)
-  doc.text('Este orçamento refere-se apenas ao custo de materiais utilizados no procedimento.', M, 287)
+  doc.text('Orçamento válido por 15 dias. Valores sujeitos a alteração conforme avaliação clínica.', M, 287)
   doc.setTextColor(...BORDA)
   doc.text('@cuidarpelabruna', W - M, 282, { align: 'right' })
 
-  // Nome do arquivo
   const nomeArq = paciente
     ? `orcamento_${paciente.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`
-    : `orcamento_materiais_${new Date().toISOString().slice(0,10)}.pdf`
+    : `orcamento_${new Date().toISOString().slice(0,10)}.pdf`
 
   doc.save(nomeArq)
 }
