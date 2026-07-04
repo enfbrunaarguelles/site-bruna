@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabela de Precificação · Bruna Arguelles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cipestre:   #2A3A33;
+      --salvia:     #5A7A6B;
+      --terracota:  #C97862;
+      --pergaminho: #F7F2E8;
+      --branco:     #FFFFFF;
+      --borda:      #D4CDB8;
+      --medio:      #3D5247;
+      --claro:      #7A9587;
+      --bg:         #E8E4DA;
+      --amarelo:    #FEFCE8;
+    }
+
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--bg); color: var(--cipestre); min-height: 100vh; }
+
+    /* ── Login ── */
+    #login {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .login-card {
+      background: var(--pergaminho); border: 1px solid var(--borda);
+      box-shadow: 0 2px 32px rgba(42,58,51,.07); width: 400px; overflow: hidden;
+    }
+    .login-card .topo { height: 3px; background: var(--cipestre); }
+    .login-inner { padding: 52px 48px 48px; text-align: center; }
+    .login-inner img { height: 110px; width: auto; opacity: .88; margin-bottom: 36px; display: block; margin-left: auto; margin-right: auto; }
+    .login-label { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 24px; }
+    .login-label span { font-size: 10px; letter-spacing: .24em; color: var(--salvia); text-transform: uppercase; }
+    .linha-terracota { flex: none; width: 28px; height: .5px; background: var(--terracota); opacity: .7; }
+    .login-inner h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 28px; font-style: italic; font-weight: 500; color: var(--cipestre); line-height: 1.2; margin-bottom: 8px; }
+    .login-inner p.nome { font-size: 13px; color: var(--medio); margin-bottom: 4px; }
+    .login-inner p.cnpj { font-size: 11px; color: var(--claro); letter-spacing: .04em; margin-bottom: 40px; }
+    .divisor { height: .5px; background: var(--cipestre); opacity: .1; margin-bottom: 32px; }
+    .login-inner input[type=password] {
+      width: 100%; padding: 13px 16px; font-size: 14px; font-family: inherit;
+      border: 1px solid var(--borda); background: var(--branco); color: var(--cipestre);
+      outline: none; margin-bottom: 10px;
+    }
+    .login-inner input[type=password].erro { border-color: var(--terracota); }
+    .login-inner .msg-erro { font-size: 12px; color: var(--terracota); margin-bottom: 8px; display: none; }
+    .login-inner button {
+      width: 100%; padding: 13px; background: var(--cipestre); color: var(--branco);
+      border: none; font-size: 13px; font-weight: 500; font-family: inherit;
+      letter-spacing: .1em; cursor: pointer;
+    }
+
+    /* ── App ── */
+    #app { display: none; min-height: 100vh; }
+    .faixa-topo { height: 3px; background: var(--cipestre); }
+
+    /* Header */
+    .header {
+      background: var(--bg); padding: 20px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: .5px solid var(--borda);
+    }
+    .header-esq { display: flex; align-items: center; gap: 24px; }
+    .header-esq img { height: 60px; width: auto; opacity: .88; }
+    .header-divisor { width: .5px; height: 38px; background: var(--cipestre); opacity: .15; }
+    .header-info p.label-h { font-size: 10px; letter-spacing: .20em; color: var(--salvia); text-transform: uppercase; margin-bottom: 3px; }
+    .header-info h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-style: italic; font-weight: 500; color: var(--cipestre); }
+    .header-info p.cnpj-h { font-size: 10px; color: var(--claro); margin-top: 2px; letter-spacing: .04em; }
+    .btn-sair {
+      background: none; border: .5px solid var(--borda); padding: 9px 20px;
+      font-size: 12px; color: var(--medio); font-family: inherit;
+      letter-spacing: .06em; cursor: pointer;
+    }
+
+    /* Main */
+    main { max-width: 1080px; margin: 0 auto; padding: 48px 48px 80px; }
+
+    /* Tabs */
+    .tabs { display: flex; flex-wrap: wrap; border-bottom: .5px solid var(--borda); margin-bottom: 48px; }
+    .tab {
+      padding: 13px 20px; font-size: 13px; cursor: pointer; border: none;
+      background: none; color: var(--medio); font-family: inherit;
+      border-bottom: 1.5px solid transparent; margin-bottom: -1px; transition: all .15s;
+    }
+    .tab.ativo { color: var(--cipestre); font-weight: 500; border-bottom-color: var(--terracota); }
+
+    /* Seção título */
+    .secao-label { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+    .secao-label .tr { width: 20px; height: .5px; background: var(--terracota); opacity: .7; flex-none; }
+    .secao-label span { font-size: 10px; letter-spacing: .22em; color: var(--salvia); text-transform: uppercase; }
+    .secao-titulo { font-family: 'Playfair Display', Georgia, serif; font-size: 30px; font-style: italic; font-weight: 500; color: var(--cipestre); margin-bottom: 32px; }
+
+    /* Painel total */
+    .painel-total {
+      background: var(--pergaminho); border: 1px solid var(--borda);
+      margin-bottom: 40px; overflow: hidden;
+    }
+    .painel-total .topo2 { height: 2px; background: var(--cipestre); opacity: .8; }
+    .painel-total .corpo { padding: 28px 36px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .painel-total .label-t { font-size: 10px; letter-spacing: .22em; color: var(--salvia); text-transform: uppercase; margin-bottom: 8px; }
+    .painel-total .valor-t { font-family: 'Playfair Display', Georgia, serif; font-size: 46px; font-style: italic; font-weight: 500; color: var(--cipestre); line-height: 1; }
+    .painel-total .count-t { font-size: 12px; color: var(--claro); margin-top: 8px; }
+    .btn-limpar { background: none; border: .5px solid var(--borda); padding: 9px 20px; font-size: 12px; color: var(--medio); font-family: inherit; letter-spacing: .06em; cursor: pointer; }
+
+    .instrucao { font-size: 13px; color: var(--medio); line-height: 1.7; margin-bottom: 36px; }
+
+    /* Categoria */
+    .cat-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; margin-top: 8px; }
+    .cat-header .tr { width: 20px; height: .5px; background: var(--terracota); opacity: .7; flex-none; }
+    .cat-header span { font-size: 10px; letter-spacing: .22em; color: var(--salvia); text-transform: uppercase; }
+    .cat-header .linha { flex: 1; height: .5px; background: var(--cipestre); opacity: .08; }
+
+    /* Item material */
+    .item {
+      display: grid; grid-template-columns: 22px 1fr 130px 90px 120px;
+      align-items: center; gap: 12px; padding: 10px 14px; margin-bottom: 3px;
+      border-left: 2px solid transparent; transition: all .15s;
+    }
+    .item.par { background: var(--pergaminho); }
+    .item.impar { background: var(--branco); }
+    .item.ativo { background: #EFF3EF; border-left-color: var(--salvia); }
+    .item input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--salvia); }
+    .item .nome { font-size: 13px; color: var(--cipestre); }
+    .item.ativo .nome { font-weight: 500; }
+    .input-custo { position: relative; }
+    .input-custo .prefix { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--claro); pointer-events: none; }
+    .input-custo input, .input-qtd {
+      width: 100%; padding: 6px 8px; font-size: 13px; font-family: inherit;
+      border: .5px solid var(--borda); outline: none; color: var(--cipestre);
+    }
+    .input-custo input { padding-left: 28px; background: var(--amarelo); }
+    .input-qtd { text-align: center; background: var(--amarelo); }
+    .input-qtd:disabled { background: transparent; opacity: .5; }
+    .subtotal { font-size: 13px; color: var(--claro); text-align: right; }
+    .subtotal.ativo { font-weight: 500; color: var(--cipestre); }
+
+    /* Simulador */
+    .sim-wrap { max-width: 540px; }
+    .sim-campo { margin-bottom: 20px; }
+    .sim-sep { height: .5px; background: var(--cipestre); opacity: .07; margin: 0 0 20px; }
+    .sim-campo label { display: block; font-size: 13px; font-weight: 500; color: var(--cipestre); margin-bottom: 3px; }
+    .sim-campo .hint { font-size: 11px; color: var(--claro); margin-bottom: 10px; }
+    .sim-input-wrap { position: relative; }
+    .sim-input-wrap .prefix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--medio); pointer-events: none; }
+    .sim-input-wrap input {
+      width: 100%; padding: 12px 16px; font-size: 16px; font-weight: 500;
+      font-family: inherit; border: .5px solid var(--borda); background: var(--amarelo);
+      color: var(--cipestre); outline: none;
+    }
+    .sim-input-wrap.com-prefix input { padding-left: 42px; }
+    .sim-resultado {
+      background: var(--pergaminho); border: 1px solid var(--borda);
+      overflow: hidden; margin-top: 36px; text-align: center;
+    }
+    .sim-resultado .topo3 { height: 2px; background: var(--cipestre); opacity: .8; }
+    .sim-resultado .corpo3 { padding: 28px 36px; }
+    .sim-resultado .label-r { font-size: 10px; letter-spacing: .22em; color: var(--salvia); text-transform: uppercase; margin-bottom: 10px; }
+    .sim-resultado .valor-r { font-family: 'Playfair Display', Georgia, serif; font-size: 50px; font-style: italic; font-weight: 500; color: var(--cipestre); line-height: 1; }
+    .sim-resultado .formula-r { font-size: 11px; color: var(--claro); margin-top: 12px; letter-spacing: .02em; }
+    .btn-restaurar { margin-top: 14px; background: none; border: .5px solid var(--borda); padding: 9px 20px; font-size: 12px; color: var(--medio); font-family: inherit; letter-spacing: .06em; cursor: pointer; }
+
+    /* Tabelas */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      padding: 10px 16px; text-align: left; font-size: 10px; font-weight: 500;
+      letter-spacing: .18em; color: var(--salvia); text-transform: uppercase;
+      border-bottom: .5px solid var(--borda); background: var(--pergaminho);
+    }
+    tbody tr:nth-child(odd)  { background: var(--branco); }
+    tbody tr:nth-child(even) { background: var(--pergaminho); }
+    tbody td { padding: 12px 16px; color: var(--cipestre); }
+    td.cod { color: var(--terracota); font-weight: 500; white-space: nowrap; }
+    td.val { font-weight: 600; white-space: nowrap; }
+    td.obs { color: var(--claro); font-size: 12px; }
+    td.muted { color: var(--medio); }
+
+    /* Rodapé */
+    .footer {
+      margin-top: 72px; border-top: .5px solid var(--borda); padding-top: 28px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer p { font-size: 11px; color: var(--claro); letter-spacing: .04em; }
+
+    /* Tabs content */
+    .tab-content { display: none; }
+    .tab-content.ativo { display: block; }
+
+    @media (max-width: 640px) {
+      main { padding: 32px 20px 60px; }
+      .header { padding: 16px 20px; }
+      .item { grid-template-columns: 22px 1fr 100px 70px 90px; gap: 8px; }
+      .login-card { width: 92vw; }
+      .login-inner { padding: 40px 28px 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-card">
+    <div class="topo"></div>
+    <div class="login-inner">
+      <img src="/assets/logo.png" alt="Bruna Arguelles" />
+      <div class="login-label">
+        <div class="linha-terracota"></div>
+        <span>Acesso restrito</span>
+        <div class="linha-terracota"></div>
+      </div>
+      <h1>Tabela de Precificação</h1>
+      <p class="nome">Bruna Arguelles · Enfermagem Especializada</p>
+      <p class="cnpj">CNPJ 66.913.603/0001-92</p>
+      <div class="divisor"></div>
+      <input type="password" id="senha-input" placeholder="Senha" />
+      <p class="msg-erro" id="msg-erro">Senha incorreta.</p>
+      <button id="btn-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="faixa-topo"></div>
+
+  <div class="header">
+    <div class="header-esq">
+      <img src="/assets/logo.png" alt="Bruna Arguelles" />
+      <div class="header-divisor"></div>
+      <div class="header-info">
+        <p class="label-h">Enfermagem Especializada</p>
+        <h1>Tabela de Precificação</h1>
+        <p class="cnpj-h">CNPJ 66.913.603/0001-92</p>
+      </div>
+    </div>
+    <button class="btn-sair" id="btn-sair">Sair</button>
+  </div>
+
+  <main>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab ativo" data-tab="seletor">Seletor de Materiais</button>
+      <button class="tab" data-tab="simulador">Simulador</button>
+      <button class="tab" data-tab="presencial">Presencial</button>
+      <button class="tab" data-tab="domiciliar">Domiciliar</button>
+      <button class="tab" data-tab="deslocamento">Deslocamento</button>
+      <button class="tab" data-tab="pacotes">Pacotes</button>
+    </div>
+
+    <!-- SELETOR DE MATERIAIS -->
+    <div class="tab-content ativo" id="tab-seletor">
+      <div class="painel-total">
+        <div class="topo2"></div>
+        <div class="corpo">
+          <div>
+            <p class="label-t">Total de materiais selecionados</p>
+            <p class="valor-t" id="total-valor">R$ 0,00</p>
+            <p class="count-t" id="total-count">0 itens selecionados</p>
+          </div>
+          <button class="btn-limpar" id="btn-limpar">Limpar seleção</button>
+        </div>
+      </div>
+      <p class="instrucao">Marque os materiais utilizados, ajuste o custo unitário e a quantidade.<br>O total atualiza automaticamente.</p>
+      <div id="lista-materiais"></div>
+    </div>
+
+    <!-- SIMULADOR -->
+    <div class="tab-content" id="tab-simulador">
+      <div class="secao-label"><div class="tr"></div><span>Curativo especial</span></div>
+      <p class="secao-titulo">Simulador de Valor</p>
+      <div class="sim-wrap">
+        <p style="font-size:13px;color:var(--medio);margin-bottom:36px;line-height:1.7">
+          Fórmula: Honorário + (Material × Multiplicador) + Deslocamento + Laser
+        </p>
+        <div id="sim-campos"></div>
+        <div style="height:.5px;background:var(--cipestre);opacity:.1;margin:8px 0 36px"></div>
+        <div class="sim-resultado">
+          <div class="topo3"></div>
+          <div class="corpo3">
+            <p class="label-r">Valor final calculado</p>
+            <p class="valor-r" id="sim-total">R$ 486,00</p>
+            <p class="formula-r" id="sim-formula"></p>
+          </div>
+        </div>
+        <button class="btn-restaurar" id="btn-restaurar">Restaurar valores padrão</button>
+      </div>
+    </div>
+
+    <!-- PRESENCIAL -->
+    <div class="tab-content" id="tab-presencial">
+      <div class="secao-label"><div class="tr"></div><span>Consultório</span></div>
+      <p class="secao-titulo">Tabela Presencial</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Código</th><th>Serviço</th><th>Material incluído</th><th>Valor</th><th>Observações</th></tr></thead>
+          <tbody id="tbody-presencial"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DOMICILIAR -->
+    <div class="tab-content" id="tab-domiciliar">
+      <div class="secao-label"><div class="tr"></div><span>Visita domiciliar</span></div>
+      <p class="secao-titulo">Tabela Domiciliar</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Código</th><th>Serviço</th><th>Material incluído</th><th>Valor</th><th>Observações</th></tr></thead>
+          <tbody id="tbody-domiciliar"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DESLOCAMENTO -->
+    <div class="tab-content" id="tab-deslocamento">
+      <div class="secao-label"><div class="tr"></div><span>Logística</span></div>
+      <p class="secao-titulo">Taxas de Deslocamento</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Região</th><th>Taxa</th><th>Tipo</th></tr></thead>
+          <tbody id="tbody-deslocamento"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PACOTES -->
+    <div class="tab-content" id="tab-pacotes">
+      <div class="secao-label"><div class="tr"></div><span>Tratamento contínuo</span></div>
+      <p class="secao-titulo">Pacotes</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Tipo</th><th>Código</th><th>Pacote</th><th>Inclui</th><th>Valor</th></tr></thead>
+          <tbody id="tbody-pacotes"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Bruna Arguelles · Enfermagem Especializada · CNPJ 66.913.603/0001-92</p>
+      <p>@cuidarpelabruna</p>
+    </div>
+  </main>
+</div>
+
+<script>
+// ── Dados ────────────────────────────────────────────────────────────────────
+const SENHA = 'bruna2024'
+
+const MATERIAIS = [
+  { id:'m1',  cat:'EPIs e biossegurança',                   item:'Luva de procedimento',                       custo:0.30  },
+  { id:'m2',  cat:'EPIs e biossegurança',                   item:'Luva estéril',                               custo:2.89  },
+  { id:'m3',  cat:'EPIs e biossegurança',                   item:'Máscara cirúrgica',                          custo:0.64  },
+  { id:'m4',  cat:'EPIs e biossegurança',                   item:'Máscara PFF2/N95',                           custo:8.00  },
+  { id:'m5',  cat:'EPIs e biossegurança',                   item:'Avental descartável',                        custo:7.20  },
+  { id:'m6',  cat:'EPIs e biossegurança',                   item:'Touca descartável',                          custo:0.20  },
+  { id:'m7',  cat:'EPIs e biossegurança',                   item:'Propé descartável',                          custo:0.25  },
+  { id:'m8',  cat:'EPIs e biossegurança',                   item:'Óculos ou protetor facial',                  custo:null  },
+  { id:'m9',  cat:'EPIs e biossegurança',                   item:'Campo estéril',                              custo:6.21  },
+  { id:'m10', cat:'EPIs e biossegurança',                   item:'Saco para descarte',                         custo:0.21  },
+  { id:'m11', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 100 ml',               custo:7.01  },
+  { id:'m12', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 250 ml',               custo:7.52  },
+  { id:'m13', cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 500 ml',               custo:12.12 },
+  { id:'m14', cat:'Limpeza, irrigação e antissepsia',       item:'Clorexidina aquosa',                         custo:null  },
+  { id:'m15', cat:'Limpeza, irrigação e antissepsia',       item:'Clorexidina alcoólica 0,5%',                 custo:9.03  },
+  { id:'m16', cat:'Limpeza, irrigação e antissepsia',       item:'PVPI, se aplicável',                         custo:null  },
+  { id:'m17', cat:'Limpeza, irrigação e antissepsia',       item:'Água destilada / solução de limpeza',        custo:null  },
+  { id:'m18', cat:'Limpeza, irrigação e antissepsia',       item:'Seringa para irrigação 20 ml',               custo:0.59  },
+  { id:'m19', cat:'Limpeza, irrigação e antissepsia',       item:'Agulha para aspiração/irrigação',            custo:null  },
+  { id:'m20', cat:'Limpeza, irrigação e antissepsia',       item:'Cuba rim descartável ou bandeja',            custo:null  },
+  { id:'m21', cat:'Limpeza, irrigação e antissepsia',       item:'Compressa para limpeza (gaze não estéril)',  custo:0.18  },
+  { id:'m22', cat:'Materiais básicos de curativo',          item:'Gaze estéril',                               custo:null  },
+  { id:'m23', cat:'Materiais básicos de curativo',          item:'Compressa estéril',                          custo:null  },
+  { id:'m24', cat:'Materiais básicos de curativo',          item:'Compressa não aderente',                     custo:null  },
+  { id:'m25', cat:'Materiais básicos de curativo',          item:'Atadura de crepe',                           custo:1.75  },
+  { id:'m26', cat:'Materiais básicos de curativo',          item:'Atadura de rayon 7,5 cm x 5 m estéril',     custo:13.00 },
+  { id:'m27', cat:'Materiais básicos de curativo',          item:'Algodão ortopédico, se aplicável',           custo:null  },
+  { id:'m28', cat:'Materiais básicos de curativo',          item:'Esparadrapo',                                custo:null  },
+  { id:'m29', cat:'Materiais básicos de curativo',          item:'Micropore 25 mm x 10 m',                    custo:7.43  },
+  { id:'m30', cat:'Materiais básicos de curativo',          item:'Filme transparente',                         custo:95.90 },
+  { id:'m31', cat:'Materiais básicos de curativo',          item:'Fixador adesivo',                            custo:null  },
+  { id:'m32', cat:'Materiais básicos de curativo',          item:'Faixa tubular',                              custo:null  },
+  { id:'m33', cat:'Materiais básicos de curativo',          item:'Malha tubular',                              custo:null  },
+  { id:'m34', cat:'Materiais básicos de curativo',          item:'Tesoura (depreciação)',                      custo:null  },
+  { id:'m35', cat:'Materiais básicos de curativo',          item:'Pinça (depreciação)',                        custo:null  },
+  { id:'m36', cat:'Coberturas primárias e especiais',       item:'Hidrogel (tubo 30 g)',                       custo:54.10 },
+  { id:'m37', cat:'Coberturas primárias e especiais',       item:'Hidrocoloide (placa 10x10)',                 custo:32.60 },
+  { id:'m38', cat:'Coberturas primárias e especiais',       item:'Alginato de cálcio (placa 10x10)',           custo:38.60 },
+  { id:'m39', cat:'Coberturas primárias e especiais',       item:'Alginato com prata',                         custo:null  },
+  { id:'m40', cat:'Coberturas primárias e especiais',       item:'Espuma de poliuretano (10x10)',              custo:40.00 },
+  { id:'m41', cat:'Coberturas primárias e especiais',       item:'Espuma com prata (10x10)',                   custo:47.00 },
+  { id:'m42', cat:'Coberturas primárias e especiais',       item:'Carvão ativado (sem prata)',                 custo:null  },
+  { id:'m43', cat:'Coberturas primárias e especiais',       item:'Carvão ativado com prata (10x10)',           custo:53.57 },
+  { id:'m44', cat:'Coberturas primárias e especiais',       item:'Tela não aderente',                         custo:null  },
+  { id:'m45', cat:'Coberturas primárias e especiais',       item:'Tela com petrolatum 7,6x7,6 cm',            custo:11.70 },
+  { id:'m46', cat:'Coberturas primárias e especiais',       item:'Tela com silicone',                         custo:null  },
+  { id:'m47', cat:'Coberturas primárias e especiais',       item:'Cobertura antimicrobiana',                  custo:null  },
+  { id:'m48', cat:'Coberturas primárias e especiais',       item:'Cobertura com PHMB (10,2x10,2 cm)',         custo:41.90 },
+  { id:'m49', cat:'Coberturas primárias e especiais',       item:'Cobertura com prata nanocristalina',        custo:null  },
+  { id:'m50', cat:'Coberturas primárias e especiais',       item:'Cobertura absorvente',                      custo:null  },
+  { id:'m51', cat:'Coberturas primárias e especiais',       item:'Cobertura superabsorvente',                 custo:null  },
+  { id:'m52', cat:'Coberturas primárias e especiais',       item:'Placa de colágeno',                         custo:null  },
+  { id:'m53', cat:'Coberturas primárias e especiais',       item:'Barreira protetora de pele (spray 28 ml)', custo:135.22},
+  { id:'m54', cat:'Coberturas primárias e especiais',       item:'Creme barreira (tubo 92-100 g)',            custo:100.72},
+  { id:'m55', cat:'Coberturas primárias e especiais',       item:'Protetor cutâneo spray (28 ml)',            custo:135.22},
+  { id:'m56', cat:'Materiais para desbridamento',           item:'Lâmina de bisturi',                         custo:null  },
+  { id:'m57', cat:'Materiais para desbridamento',           item:'Cabo de bisturi (depreciação)',              custo:null  },
+]
+
+const PRESENCIAL = [
+  { cod:'C01',  srv:'Consulta inicial de feridas',         mat:'—',              val:350,  obs:'Avaliação completa, plano terapêutico e orientação' },
+  { cod:'C02',  srv:'Consulta de retorno',                 mat:'—',              val:220,  obs:'Reavaliação e ajuste de conduta' },
+  { cod:'CU01', srv:'Curativo simples',                    mat:'Até R$ 25',      val:150,  obs:'Ferida pequena ou baixa complexidade' },
+  { cod:'CU02', srv:'Curativo intermediário',              mat:'Até R$ 70',      val:260,  obs:'Ferida moderada ou maior consumo de material' },
+  { cod:'CU03', srv:'Curativo complexo',                   mat:'Até R$ 150',     val:450,  obs:'Ferida extensa ou maior complexidade técnica' },
+  { cod:'CU04', srv:'Curativo especial',                   mat:'Acima do limite',val:null, obs:'Coberturas especiais cobradas à parte' },
+  { cod:'L01',  srv:'Laserterapia avulsa',                 mat:'—',              val:140,  obs:'Sessão isolada' },
+  { cod:'L02',  srv:'Laser associada ao curativo',         mat:'—',              val:90,   obs:'Adicional ao curativo' },
+]
+
+const DOMICILIAR = [
+  { cod:'D01',   srv:'Consulta inicial domiciliar',              mat:'—',              val:500,  obs:'Inclui deslocamento em região próxima' },
+  { cod:'D02',   srv:'Retorno domiciliar',                       mat:'—',              val:350,  obs:'Reavaliação domiciliar' },
+  { cod:'DCU01', srv:'Curativo simples domiciliar',              mat:'Até R$ 25',      val:250,  obs:'Com deslocamento e estrutura fora do consultório' },
+  { cod:'DCU02', srv:'Curativo intermediário domiciliar',        mat:'Até R$ 70',      val:390,  obs:'Com deslocamento e maior tempo reservado' },
+  { cod:'DCU03', srv:'Curativo complexo domiciliar',             mat:'Até R$ 150',     val:620,  obs:'Com deslocamento e maior complexidade' },
+  { cod:'DCU04', srv:'Curativo especial domiciliar',             mat:'Acima do limite',val:null, obs:'Coberturas especiais cobradas à parte' },
+  { cod:'DL01',  srv:'Laserterapia domiciliar avulsa',           mat:'—',              val:220,  obs:'Sessão isolada em domicílio' },
+  { cod:'DL02',  srv:'Laser associada ao curativo domiciliar',   mat:'—',              val:120,  obs:'Adicional ao curativo domiciliar' },
+]
+
+const DESLOCAMENTO = [
+  { reg:'Bom Pastor, São Mateus, Alto dos Passos, Centro, Santa Helena, Granbery', taxa:'Incluso ou + R$ 50',  tipo:'Região próxima'       },
+  { reg:'Cascatinha, Estrela Sul, Teixeiras, Manoel Honório, Mariano Procópio',    taxa:'+ R$ 70 a R$ 100',    tipo:'Região intermediária'  },
+  { reg:'Benfica, Santa Cruz, Linhares, Grama, Retiro, São Pedro, Nova Era',       taxa:'+ R$ 120 a R$ 180',   tipo:'Região distante'       },
+  { reg:'Distritos ou cidades próximas',                                            taxa:'Sob consulta',        tipo:'Avaliar caso a caso'   },
+]
+
+const PACOTES = [
+  { tipo:'Presencial', cod:'P01',  nome:'Pacote Básico',               inclui:'Consulta inicial + 4 curativos simples + 1 reavaliação',                                        val:850  },
+  { tipo:'Presencial', cod:'P02',  nome:'Pacote Intermediário',        inclui:'Consulta inicial + 4 curativos intermediários + 1 reavaliação + 2 laserterapias',              val:1450 },
+  { tipo:'Presencial', cod:'P03',  nome:'Pacote Avançado',             inclui:'Consulta inicial + 4 curativos complexos + 1 reavaliação + 4 laserterapias',                   val:2400 },
+  { tipo:'Domiciliar', cod:'PD01', nome:'Pacote Domiciliar Básico',     inclui:'Consulta inicial + 4 curativos simples + 1 reavaliação',                                        val:1400 },
+  { tipo:'Domiciliar', cod:'PD02', nome:'Pacote Domiciliar Intermediário', inclui:'Consulta inicial + 4 curativos intermediários + 1 reavaliação + 2 laserterapias',          val:2300 },
+  { tipo:'Domiciliar', cod:'PD03', nome:'Pacote Domiciliar Avançado',  inclui:'Consulta inicial + 4 curativos complexos + 1 reavaliação + 4 laserterapias',                   val:3600 },
+]
+
+const SIM_DEFAULT = { honorario:220, material:110, multiplicador:1.6, deslocamento:0, laser:90 }
+const SIM_CAMPOS = [
+  { key:'honorario',     label:'Honorário técnico',          hint:'Valor do procedimento / ato técnico',          prefix:true,  step:10   },
+  { key:'material',      label:'Custo do material especial', hint:'Custo real do material utilizado',             prefix:true,  step:5    },
+  { key:'multiplicador', label:'Multiplicador do material',  hint:'Sugestão: 1,3 a 2,0 conforme logística',      prefix:false, step:0.1  },
+  { key:'deslocamento',  label:'Taxa de deslocamento',       hint:'Preencher 0 se presencial / região incluída', prefix:true,  step:10   },
+  { key:'laser',         label:'Laser associado',            hint:'Preencher 0 quando não houver laser',         prefix:true,  step:10   },
+]
+
+// ── Estado ───────────────────────────────────────────────────────────────────
+function carregarSelecao() {
+  try { return JSON.parse(localStorage.getItem('prec_selecao') || '{}') } catch { return {} }
+}
+function carregarCustos() {
+  const base = {}
+  MATERIAIS.forEach(m => { if (m.custo !== null) base[m.id] = m.custo })
+  try { return Object.assign(base, JSON.parse(localStorage.getItem('prec_custos') || '{}')) } catch { return base }
+}
+function carregarSim() {
+  try { return Object.assign({}, SIM_DEFAULT, JSON.parse(localStorage.getItem('prec_sim') || '{}')) } catch { return Object.assign({}, SIM_DEFAULT) }
+}
+
+let selecao = carregarSelecao()
+let custos  = carregarCustos()
+let simVals = carregarSim()
+
+function salvar() {
+  localStorage.setItem('prec_selecao', JSON.stringify(selecao))
+  localStorage.setItem('prec_custos',  JSON.stringify(custos))
+}
+function salvarSim() {
+  localStorage.setItem('prec_sim', JSON.stringify(simVals))
+}
+
+// ── Formatação ───────────────────────────────────────────────────────────────
+function fmt(v) {
+  return v.toLocaleString('pt-BR', { style:'currency', currency:'BRL' })
+}
+
+// ── Login ────────────────────────────────────────────────────────────────────
+function tentarLogin() {
+  const input = document.getElementById('senha-input')
+  if (input.value === SENHA) {
+    localStorage.setItem('prec_auth', '1')
+    document.getElementById('login').style.display = 'none'
+    document.getElementById('app').style.display = 'block'
+    renderizarTudo()
+  } else {
+    input.classList.add('erro')
+    document.getElementById('msg-erro').style.display = 'block'
+    input.value = ''
+    input.focus()
+  }
+}
+
+document.getElementById('btn-entrar').addEventListener('click', tentarLogin)
+document.getElementById('senha-input').addEventListener('keydown', e => { if (e.key === 'Enter') tentarLogin() })
+document.getElementById('btn-sair').addEventListener('click', () => {
+  localStorage.removeItem('prec_auth')
+  document.getElementById('app').style.display = 'none'
+  document.getElementById('login').style.display = 'flex'
+  document.getElementById('senha-input').value = ''
+})
+
+if (localStorage.getItem('prec_auth') === '1') {
+  document.getElementById('login').style.display = 'none'
+  document.getElementById('app').style.display = 'block'
+}
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('ativo'))
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'))
+    btn.classList.add('ativo')
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('ativo')
+  })
+})
+
+// ── Seletor de Materiais ─────────────────────────────────────────────────────
+function atualizarTotal() {
+  let total = 0, count = 0
+  MATERIAIS.forEach(m => {
+    const s = selecao[m.id]
+    if (s && s.ativo) {
+      total += (custos[m.id] || 0) * (s.qtd || 1)
+      count++
+    }
+  })
+  document.getElementById('total-valor').textContent = fmt(total)
+  document.getElementById('total-count').textContent = count + (count === 1 ? ' item selecionado' : ' itens selecionados')
+}
+
+function renderizarMateriais() {
+  const cats = [...new Set(MATERIAIS.map(m => m.cat))]
+  const lista = document.getElementById('lista-materiais')
+  lista.innerHTML = ''
+
+  cats.forEach(cat => {
+    const header = document.createElement('div')
+    header.className = 'cat-header'
+    header.innerHTML = `<div class="tr"></div><span>${cat}</span><div class="linha"></div>`
+    lista.appendChild(header)
+
+    MATERIAIS.filter(m => m.cat === cat).forEach((m, idx) => {
+      const s = selecao[m.id] || { ativo:false, qtd:1 }
+      const custo = custos[m.id]
+      const subtotal = s.ativo && custo != null ? custo * (s.qtd||1) : null
+
+      const div = document.createElement('div')
+      div.className = 'item ' + (s.ativo ? 'ativo' : (idx % 2 === 0 ? 'par' : 'impar'))
+      div.innerHTML = `
+        <input type="checkbox" ${s.ativo ? 'checked' : ''} data-id="${m.id}" />
+        <span class="nome">${m.item}</span>
+        <div class="input-custo">
+          <span class="prefix">R$</span>
+          <input type="number" value="${custo != null ? custo : ''}" placeholder="—" min="0" step="0.01" data-custo="${m.id}" />
+        </div>
+        <input type="number" class="input-qtd" value="${s.qtd||1}" min="0.01" step="0.5" data-qtd="${m.id}" ${!s.ativo ? 'disabled' : ''} />
+        <span class="subtotal ${s.ativo ? 'ativo' : ''}">${subtotal !== null ? fmt(subtotal) : '—'}</span>
+      `
+      lista.appendChild(div)
+
+      div.querySelector('[data-id]').addEventListener('change', e => {
+        selecao[m.id] = { ativo: e.target.checked, qtd: (selecao[m.id] || {}).qtd || 1 }
+        salvar()
+        renderizarMateriais()
+        atualizarTotal()
+      })
+      div.querySelector('[data-custo]').addEventListener('input', e => {
+        custos[m.id] = parseFloat(e.target.value) || 0
+        salvar()
+        atualizarTotal()
+        const sub = div.querySelector('.subtotal')
+        const s2 = selecao[m.id]
+        if (s2 && s2.ativo && custos[m.id] != null) {
+          sub.textContent = fmt(custos[m.id] * (s2.qtd||1))
+          sub.className = 'subtotal ativo'
+        }
+      })
+      div.querySelector('[data-qtd]').addEventListener('input', e => {
+        if (!selecao[m.id]) selecao[m.id] = { ativo:false, qtd:1 }
+        selecao[m.id].qtd = parseFloat(e.target.value) || 1
+        salvar()
+        atualizarTotal()
+        const sub = div.querySelector('.subtotal')
+        const s2 = selecao[m.id]
+        if (s2 && s2.ativo && custos[m.id] != null) {
+          sub.textContent = fmt(custos[m.id] * (s2.qtd||1))
+        }
+      })
+    })
+  })
+  atualizarTotal()
+}
+
+document.getElementById('btn-limpar').addEventListener('click', () => {
+  selecao = {}
+  salvar()
+  renderizarMateriais()
+  atualizarTotal()
+})
+
+// ── Simulador ────────────────────────────────────────────────────────────────
+function calcularSim() {
+  return simVals.honorario + simVals.material * simVals.multiplicador + simVals.deslocamento + simVals.laser
+}
+
+function atualizarSim() {
+  const total = calcularSim()
+  document.getElementById('sim-total').textContent = fmt(total)
+  document.getElementById('sim-formula').textContent =
+    `${fmt(simVals.honorario)} + (${fmt(simVals.material)} × ${simVals.multiplicador.toFixed(1)}) + ${fmt(simVals.deslocamento)} + ${fmt(simVals.laser)}`
+}
+
+function renderizarSim() {
+  const wrap = document.getElementById('sim-campos')
+  wrap.innerHTML = ''
+  SIM_CAMPOS.forEach((c, i) => {
+    if (i > 0) { const sep = document.createElement('div'); sep.className = 'sim-sep'; wrap.appendChild(sep) }
+    const div = document.createElement('div')
+    div.className = 'sim-campo'
+    div.innerHTML = `
+      <label>${c.label}</label>
+      <p class="hint">${c.hint}</p>
+      <div class="sim-input-wrap ${c.prefix ? 'com-prefix' : ''}">
+        ${c.prefix ? '<span class="prefix">R$</span>' : ''}
+        <input type="number" value="${simVals[c.key]}" min="0" step="${c.step}" data-sim="${c.key}" />
+      </div>
+    `
+    wrap.appendChild(div)
+    div.querySelector('[data-sim]').addEventListener('input', e => {
+      simVals[c.key] = parseFloat(e.target.value) || 0
+      salvarSim()
+      atualizarSim()
+    })
+  })
+  atualizarSim()
+}
+
+document.getElementById('btn-restaurar').addEventListener('click', () => {
+  simVals = Object.assign({}, SIM_DEFAULT)
+  salvarSim()
+  renderizarSim()
+})
+
+// ── Tabelas ──────────────────────────────────────────────────────────────────
+function renderizarTabelas() {
+  // Presencial
+  const tbP = document.getElementById('tbody-presencial')
+  PRESENCIAL.forEach(r => {
+    const tr = document.createElement('tr')
+    tr.innerHTML = `<td class="cod">${r.cod}</td><td style="font-weight:500">${r.srv}</td><td class="muted">${r.mat}</td><td class="val">${r.val ? fmt(r.val) : 'Sob cálculo'}</td><td class="obs">${r.obs}</td>`
+    tbP.appendChild(tr)
+  })
+
+  // Domiciliar
+  const tbD = document.getElementById('tbody-domiciliar')
+  DOMICILIAR.forEach(r => {
+    const tr = document.createElement('tr')
+    tr.innerHTML = `<td class="cod">${r.cod}</td><td style="font-weight:500">${r.srv}</td><td class="muted">${r.mat}</td><td class="val">${r.val ? fmt(r.val) : 'Sob cálculo'}</td><td class="obs">${r.obs}</td>`
+    tbD.appendChild(tr)
+  })
+
+  // Deslocamento
+  const tbDe = document.getElementById('tbody-deslocamento')
+  DESLOCAMENTO.forEach(r => {
+    const tr = document.createElement('tr')
+    tr.innerHTML = `<td>${r.reg}</td><td class="val">${r.taxa}</td><td class="obs">${r.tipo}</td>`
+    tbDe.appendChild(tr)
+  })
+
+  // Pacotes
+  const tbPac = document.getElementById('tbody-pacotes')
+  PACOTES.forEach(r => {
+    const tr = document.createElement('tr')
+    tr.innerHTML = `<td class="obs">${r.tipo}</td><td class="cod">${r.cod}</td><td style="font-weight:500">${r.nome}</td><td class="obs">${r.inclui}</td><td class="val">${fmt(r.val)}</td>`
+    tbPac.appendChild(tr)
+  })
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+function renderizarTudo() {
+  renderizarMateriais()
+  renderizarSim()
+  renderizarTabelas()
+}
+
+if (localStorage.getItem('prec_auth') === '1') {
+  renderizarTudo()
+}
+</script>
+</body>
+</html>
