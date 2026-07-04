@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -108,6 +110,12 @@
     .painel-total .count-t { font-size: 12px; color: var(--claro); margin-top: 8px; }
     .btn-limpar { background: none; border: .5px solid var(--borda); padding: 9px 20px; font-size: 12px; color: var(--medio); font-family: inherit; letter-spacing: .06em; cursor: pointer; }
 
+    .exportar-barra { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+    .exportar-campo { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+    .exportar-campo label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--claro); }
+    .exportar-campo input { padding: 9px 12px; border: .5px solid var(--borda); background: var(--amarelo); font-family: inherit; font-size: 13px; color: var(--cipestre); outline: none; }
+    .btn-exportar { background: var(--cipestre); color: #fff; border: none; padding: 10px 22px; font-family: inherit; font-size: 12px; letter-spacing: .08em; cursor: pointer; white-space: nowrap; }
+    .btn-exportar:hover { opacity: .85; }
     .instrucao { font-size: 13px; color: var(--medio); line-height: 1.7; margin-bottom: 36px; }
 
     /* Categoria */
@@ -268,6 +276,13 @@
           </div>
           <button class="btn-limpar" id="btn-limpar">Limpar seleção</button>
         </div>
+      </div>
+      <div class="exportar-barra">
+        <div class="exportar-campo">
+          <label for="nome-paciente">Nome do paciente</label>
+          <input type="text" id="nome-paciente" placeholder="Ex: Maria da Silva" />
+        </div>
+        <button class="btn-exportar" id="btn-exportar">↓ Exportar orçamento PDF</button>
       </div>
       <p class="instrucao">Marque os materiais utilizados, ajuste o custo unitário e a quantidade.<br>O total atualiza automaticamente.</p>
       <div id="lista-materiais"></div>
@@ -732,6 +747,174 @@ function renderizarTabelas() {
   })
 }
 
+// ── Exportar PDF ─────────────────────────────────────────────────────────────
+function exportarPDF() {
+  const { jsPDF } = window.jspdf
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+
+  const CIP = [42, 58, 51]       // #2A3A33
+  const SAL = [90, 122, 107]     // #5A7A6B
+  const TER = [201, 120, 98]     // #C97862
+  const PERG = [247, 242, 232]   // #F7F2E8
+  const BORDA = [212, 205, 184]  // #D4CDB8
+  const W = 210
+  const M = 18  // margem lateral
+
+  // Faixa cipestre no topo
+  doc.setFillColor(...CIP)
+  doc.rect(0, 0, W, 4, 'F')
+
+  // Cabeçalho
+  doc.setFillColor(...PERG)
+  doc.rect(0, 4, W, 38, 'F')
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...SAL)
+  doc.setCharSpace(1.5)
+  doc.text('ENFERMAGEM ESPECIALIZADA', M, 16)
+  doc.setCharSpace(0)
+
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(18)
+  doc.setTextColor(...CIP)
+  doc.text('Bruna Arguelles', M, 24)
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8)
+  doc.setTextColor(...SAL)
+  doc.text('CNPJ 66.913.603/0001-92', M, 30)
+
+  // Data e paciente (lado direito)
+  const data = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
+  const paciente = document.getElementById('nome-paciente').value.trim()
+
+  doc.setFontSize(8)
+  doc.setTextColor(...CIP)
+  doc.text(data, W - M, 16, { align: 'right' })
+  if (paciente) {
+    doc.setFontSize(7.5)
+    doc.setTextColor(...SAL)
+    doc.text('PACIENTE', W - M, 22, { align: 'right' })
+    doc.setFontSize(10)
+    doc.setFont('helvetica', 'bold')
+    doc.setTextColor(...CIP)
+    doc.text(paciente, W - M, 28, { align: 'right' })
+  }
+
+  // Linha separadora
+  doc.setDrawColor(...BORDA)
+  doc.setLineWidth(0.3)
+  doc.line(M, 42, W - M, 42)
+
+  // Título da seção
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(...TER)
+  doc.setCharSpace(1.5)
+  doc.text('ORÇAMENTO DE MATERIAIS', M, 49)
+  doc.setCharSpace(0)
+
+  // Coletar materiais selecionados
+  const itens = []
+  MATERIAIS.forEach(m => {
+    const s = selecao[m.id]
+    if (!s || !s.ativo) return
+    const custo = custos[m.id]
+    const sub = calcSubtotal(m, s)
+    let descQtd = ''
+    if (m.embalagem) {
+      descQtd = `${s.uso || 0} ${m.unidade} de ${m.embalagem}${m.unidade}`
+    } else {
+      descQtd = `${s.qtd || 1} un.`
+    }
+    itens.push([
+      m.item,
+      descQtd,
+      custo != null ? fmt(custo) : '—',
+      sub != null ? fmt(sub) : '—'
+    ])
+  })
+
+  if (itens.length === 0) {
+    alert('Nenhum material selecionado.')
+    return
+  }
+
+  // Tabela de materiais
+  doc.autoTable({
+    startY: 53,
+    head: [['Material', 'Quantidade usada', 'Custo da embalagem', 'Subtotal']],
+    body: itens,
+    margin: { left: M, right: M },
+    styles: {
+      font: 'helvetica',
+      fontSize: 8.5,
+      cellPadding: { top: 4, bottom: 4, left: 5, right: 5 },
+      textColor: CIP,
+      lineColor: BORDA,
+      lineWidth: 0.2,
+    },
+    headStyles: {
+      fillColor: CIP,
+      textColor: [255, 255, 255],
+      fontStyle: 'normal',
+      fontSize: 7,
+      letterSpacing: 1,
+    },
+    alternateRowStyles: { fillColor: PERG },
+    columnStyles: {
+      0: { cellWidth: 'auto' },
+      1: { cellWidth: 42, halign: 'center' },
+      2: { cellWidth: 38, halign: 'right' },
+      3: { cellWidth: 28, halign: 'right', fontStyle: 'bold' },
+    },
+  })
+
+  // Total
+  const finalY = doc.lastAutoTable.finalY + 6
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(0.5)
+  doc.line(W - M - 66, finalY, W - M, finalY)
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...SAL)
+  doc.setCharSpace(1)
+  doc.text('TOTAL DE MATERIAIS', W - M - 66, finalY + 7)
+  doc.setCharSpace(0)
+
+  let totalGeral = 0
+  MATERIAIS.forEach(m => {
+    const sub = calcSubtotal(m, selecao[m.id])
+    if (sub != null) totalGeral += sub
+  })
+
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(16)
+  doc.setTextColor(...CIP)
+  doc.text(fmt(totalGeral), W - M, finalY + 7, { align: 'right' })
+
+  // Rodapé
+  doc.setDrawColor(...BORDA)
+  doc.setLineWidth(0.2)
+  doc.line(M, 277, W - M, 277)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(...SAL)
+  doc.text('Bruna Arguelles · Enfermagem Especializada · CNPJ 66.913.603/0001-92', M, 282)
+  doc.text('Este orçamento refere-se apenas ao custo de materiais utilizados no procedimento.', M, 287)
+  doc.setTextColor(...BORDA)
+  doc.text('@cuidarpelabruna', W - M, 282, { align: 'right' })
+
+  // Nome do arquivo
+  const nomeArq = paciente
+    ? `orcamento_${paciente.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`
+    : `orcamento_materiais_${new Date().toISOString().slice(0,10)}.pdf`
+
+  doc.save(nomeArq)
+}
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 function renderizarTudo() {
   renderizarMateriais()
@@ -741,6 +924,7 @@ function renderizarTudo() {
 
 if (localStorage.getItem('prec_auth') === '1') {
   renderizarTudo()
+  document.getElementById('btn-exportar').addEventListener('click', exportarPDF)
 }
 </script>
 </body>
