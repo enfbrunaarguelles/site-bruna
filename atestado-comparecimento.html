@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atestado de Comparecimento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B66; --line-strong:#2A3A3340;
+    --field:#2A3A33; --field-line:#2A3A3366;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:#e7ded0; font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; padding:30px 0 64px; }
+
+  /* ---------- A4 PAGE ---------- */
+  .page{
+    width:210mm; min-height:297mm; margin:0 auto; background:#fff;
+    background-image:linear-gradient(180deg,#ffffff 0%, #fffdf9 100%);
+    box-shadow:0 18px 50px rgba(42,58,51,.22);
+    padding:13mm 15mm 9mm; position:relative; display:flex; flex-direction:column;
+  }
+  .page::after{ content:""; position:absolute; left:0; right:0; top:0; height:5mm; background:var(--cipreste); }
+  .inner{ position:relative; z-index:1; padding:4mm 4mm 0; display:flex; flex-direction:column; flex:1; }
+
+  /* ---------- HEADER ---------- */
+  header{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; padding-bottom:9px; border-bottom:1.5px solid var(--cipreste); }
+  header .logo{ height:46px; width:auto; display:block; }
+  header .org{ text-align:right; }
+  header .org .nm{ font-family:var(--serif-display); font-size:16px; font-weight:600; color:var(--cipreste); line-height:1.05; }
+  header .org .role{ font-size:7.6px; letter-spacing:.22em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin:3px 0 5px; }
+  header .org .det{ font-size:8.2px; letter-spacing:.02em; color:var(--ink-soft); line-height:1.55; }
+  header .org .det b{ color:var(--cipreste); font-weight:600; }
+
+  /* ---------- TITLE ---------- */
+  .doc-title{ text-align:center; margin:24px 0 6px; }
+  .doc-title h1{ font-family:var(--serif-display); font-weight:600; font-size:26px; letter-spacing:.015em; color:var(--cipreste); margin:0; line-height:1.1; }
+  .doc-title .sub{ font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--terracota); margin-top:5px; font-weight:600; }
+  .rule-orn{ display:flex; align-items:center; justify-content:center; gap:8px; margin:10px auto 0; max-width:200px; }
+  .rule-orn .l{ height:1px; flex:1; background:var(--line); }
+  .rule-orn .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); }
+
+  main{ display:flex; flex-direction:column; flex:1; margin-top:30px; }
+
+  /* ---------- TEXTO CORRIDO EDITÁVEL ---------- */
+  .texto-area{
+    width:100%; min-height:70mm; resize:vertical; border:none; outline:none;
+    font-family:var(--serif-body); font-size:14px; line-height:2; color:var(--field);
+    padding:2px 4px 0; text-align:justify;
+  }
+  .texto-area::placeholder{ color:#5A7A6B66; font-style:italic; }
+
+  /* ---------- CAMPOS AUXILIARES ---------- */
+  .fields{ display:grid; grid-template-columns:1fr 1fr; gap:9px 20px; margin-top:20px; }
+  .fields3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:9px 20px; margin-top:12px; }
+  .f{ display:flex; flex-direction:column; }
+  .f .lab{ font-size:8.4px; letter-spacing:.12em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin-bottom:6px; }
+  .fld{
+    border:none; border-bottom:1px solid var(--field-line);
+    background:transparent; font-family:var(--serif-body); font-size:11px; color:var(--field);
+    padding:0 2px 4px; line-height:1.5; outline:none; width:100%; min-height:16px;
+  }
+  .fld:focus{ border-bottom-color:var(--terracota); background:#C978620d; }
+  .fld::placeholder{ color:#5A7A6B66; font-style:italic; }
+
+  /* ---------- SIGNATURE ---------- */
+  .sign-wrap{ margin-top:auto; padding-top:20mm; }
+  .place-date{ font-size:10.5px; margin-bottom:14px; display:flex; align-items:flex-end; gap:5px; flex-wrap:wrap; justify-content:center; }
+  .place-date .fld{ width:auto; }
+  .place-date .fld.cidade{ flex:0 1 150px; }
+  .place-date .fld.sm{ flex:0 0 46px; text-align:center; }
+  .place-date .fld.md{ flex:0 0 92px; text-align:center; }
+  .signs{ display:flex; justify-content:center; margin-top:22mm; }
+  .sig{ text-align:center; width:260px; }
+  .sig .line{ border-top:1px solid var(--cipreste); margin-bottom:4px; }
+  .sig .role{ font-size:9.6px; color:var(--cipreste); font-weight:600; letter-spacing:.02em; }
+  .sig .hint{ font-size:8px; color:var(--salvia); margin-top:2px; letter-spacing:.04em; font-style:italic; }
+
+  /* ---------- LEGAL / FOOTER ---------- */
+  .legal-ref{ font-size:7.6px; font-style:italic; color:var(--salvia); line-height:1.5; margin-top:16px; padding-top:7px; border-top:1px dotted var(--line); text-align:center; }
+  footer{ margin-top:8px; padding-top:7px; border-top:1px solid var(--cipreste); display:flex; justify-content:space-between; align-items:center; font-size:8px; color:var(--ink-soft); letter-spacing:.03em; }
+  footer .d{ width:4px; height:4px; background:var(--terracota); transform:rotate(45deg); display:inline-block; margin:0 6px; }
+  footer b{ color:var(--cipreste); font-weight:600; }
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{ position:fixed; left:0; right:0; bottom:0; z-index:9999; background:var(--cipreste); display:flex; align-items:center; justify-content:center; gap:14px; padding:11px 16px; box-shadow:0 -6px 20px rgba(42,58,51,.22); }
+  .toolbar .msg{ color:#F7F2E8cc; font-size:12px; }
+  .toolbar .msg b{ color:#fff; }
+  .toolbar button{ font-family:var(--serif-body); font-size:13.5px; font-weight:600; cursor:pointer; border-radius:7px; padding:9px 18px; border:1px solid transparent; display:inline-flex; align-items:center; gap:8px; }
+  .btn-pdf{ background:var(--terracota); color:#fff; }
+  .btn-pdf:hover{ background:#b96954; }
+  .btn-clear{ background:transparent; color:#F7F2E8; border-color:#F7F2E866; }
+  .btn-clear:hover{ background:#ffffff1a; }
+
+  @page{ size:A4; margin:0; }
+  @media print{
+    body{ background:#fff; padding:0; }
+    .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
+    .toolbar{ display:none !important; }
+    .fld, .texto-area{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
+    .fld::placeholder, .texto-area::placeholder{ color:transparent !important; }
+  }
+  @media screen and (max-width:760px){
+    body{ padding:12px 12px 70px; }
+    .page{ width:100%; min-height:0; padding:8mm 6mm; }
+    .fields, .fields3{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page" data-screen-label="Atestado de Comparecimento">
+    <div class="inner">
+
+      <header>
+        <img class="logo" src="assets/logo.png" alt="Bruna Arguelles — Enfermeira">
+        <div class="org">
+          <div class="nm">Bruna Arguelles</div>
+          <div class="role">Enfermagem Especializada</div>
+          <div class="det">
+            <b>COREN/MG</b> 761268-ENF · <b>CPF</b> 157.466.837-44<br>
+            <b>CNPJ</b> 66.913.603/0001-92<br>
+            Rua da Bahia, 1148 · Sala 1208 · Centro<br>
+            Belo Horizonte/MG · 30.160-906<br>
+            Tel. (32) 99102-7249 · contato@brunaarguelles.com.br
+          </div>
+        </div>
+      </header>
+
+      <div class="doc-title">
+        <h1>Atestado de Comparecimento</h1>
+        <div class="sub">Enfermagem Especializada</div>
+        <div class="rule-orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+      </div>
+
+      <main>
+        <textarea class="texto-area" data-k="texto">Atesto, para os devidos fins que se fizerem necessários, que o(a) Sr(a). ______________________________________________, portador(a) do CPF ________________________, compareceu a esta clínica de enfermagem especializada no dia ____/____/________, no período das _______ às _______ horas, para consulta / atendimento de enfermagem.</textarea>
+
+        <div class="fields3">
+          <div class="f"><span class="lab">Nome do paciente</span><input class="fld" type="text" data-k="nome"></div>
+          <div class="f"><span class="lab">CPF</span><input class="fld" type="text" data-k="cpf"></div>
+          <div class="f"><span class="lab">Data do atendimento</span><input class="fld" type="text" data-k="data_atend" placeholder="__/__/____"></div>
+        </div>
+        <div class="fields">
+          <div class="f"><span class="lab">Horário de entrada</span><input class="fld" type="text" data-k="hora_ini" placeholder="__:__"></div>
+          <div class="f"><span class="lab">Horário de saída</span><input class="fld" type="text" data-k="hora_fim" placeholder="__:__"></div>
+        </div>
+
+        <div class="sign-wrap">
+          <div class="place-date">
+            <input class="fld cidade" type="text" data-k="cidade_ass" value="Juiz de Fora/MG">
+            <span>,</span>
+            <input class="fld sm" type="text" data-k="dia" placeholder="dia">
+            <span>de</span>
+            <input class="fld md" type="text" data-k="mes" placeholder="mês">
+            <span>de</span>
+            <input class="fld sm" type="text" data-k="ano" placeholder="ano">
+            <span>.</span>
+          </div>
+          <div class="signs">
+            <div class="sig">
+              <div class="line"></div>
+              <div class="role">Bruna Arguelles — Enfermeira</div>
+              <div class="hint">COREN/MG nº 761268-ENF · Assinatura e carimbo</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="legal-ref">Documento emitido exclusivamente para fins de comprovação de comparecimento à consulta / atendimento de enfermagem, sem caráter de atestado médico ou de afastamento do trabalho.</p>
+      </main>
+
+      <footer>
+        <span><b>Bruna Arguelles</b> · Enfermagem Especializada em Feridas</span>
+        <span>CNPJ 66.913.603/0001-92 <span class="d"></span> Juiz de Fora/MG</span>
+      </footer>
+
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="msg">Preencha os campos e clique em <b>Baixar PDF</b> para assinar digitalmente.</span>
+    <button class="btn-pdf" id="btnPdf">⤓ Baixar PDF</button>
+    <button class="btn-clear" id="btnClear">Limpar campos</button>
+  </div>
+
+  <script>
+    (function(){
+      var KEY = 'atestado-comparecimento-v1';
+      var DEFAULT_TEXTO = "Atesto, para os devidos fins que se fizerem necessários, que o(a) Sr(a). ______________________________________________, portador(a) do CPF ________________________, compareceu a esta clínica de enfermagem especializada no dia ____/____/________, no período das _______ às _______ horas, para consulta / atendimento de enfermagem.";
+      var fields = Array.prototype.slice.call(document.querySelectorAll('[data-k]'));
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ saved = {}; }
+      fields.forEach(function(el){
+        var k = el.dataset.k;
+        if (!(k in saved)) return;
+        if (el.type === 'checkbox') el.checked = !!saved[k];
+        else el.value = saved[k];
+      });
+      function persist(){
+        var data = {};
+        fields.forEach(function(el){
+          if (el.type === 'checkbox'){ data[el.dataset.k] = el.checked; el.toggleAttribute('checked', el.checked); }
+          else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
+        });
+        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+      }
+      fields.forEach(function(el){
+        el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', persist);
+      });
+      persist();
+
+      document.getElementById('btnPdf').addEventListener('click', function(){ persist(); window.print(); });
+      document.getElementById('btnClear').addEventListener('click', function(){
+        if (!confirm('Limpar todos os campos preenchidos?')) return;
+        fields.forEach(function(el){
+          if (el.type === 'checkbox'){ el.checked = false; el.removeAttribute('checked'); }
+          else if (el.dataset.k === 'cidade_ass'){ el.value = 'Juiz de Fora/MG'; }
+          else if (el.dataset.k === 'texto'){ el.value = DEFAULT_TEXTO; }
+          else { el.value = ''; }
+          el.setAttribute('value', el.value || '');
+        });
+        persist();
+      });
+    })();
+  </script>
+
+</body></html>
