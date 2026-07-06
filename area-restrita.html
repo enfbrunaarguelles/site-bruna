@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentos & Termos — Bruna Arguelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B66; --bg:#e7ded0;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:var(--bg); font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; min-height:100vh; }
+
+  /* ---------- LOGIN ---------- */
+  #login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .login-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:400px; max-width:100%; overflow:hidden; }
+  .login-card .topo{ height:3px; background:var(--cipreste); }
+  .login-inner{ padding:44px 40px 40px; text-align:center; }
+  .login-inner img{ height:64px; width:auto; margin:0 auto 24px; display:block; }
+  .login-label{ display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; }
+  .login-label span{ font-size:10px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .login-label .l{ width:24px; height:.5px; background:var(--terracota); opacity:.7; }
+  .login-inner h1{ font-family:var(--serif-display); font-size:24px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 6px; }
+  .login-inner p{ font-size:12px; color:var(--ink-soft); margin:0; }
+  .divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:26px 0; }
+  .login-inner input[type=password]{
+    width:100%; padding:12px 14px; font-size:14px; font-family:inherit;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    outline:none; margin-bottom:10px;
+  }
+  .login-inner input[type=password].erro{ border-color:var(--terracota); }
+  .login-inner .msg-erro{ font-size:12px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .login-inner button{
+    width:100%; padding:13px; background:var(--cipreste); color:#fff; border:none;
+    font-size:13px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
+  }
+  .login-inner button:hover{ background:#3d5247; }
+
+  /* ---------- APP ---------- */
+  #app{ display:none; min-height:100vh; }
+  .faixa-topo{ height:4px; background:var(--cipreste); }
+  .header{ display:flex; align-items:center; justify-content:space-between; padding:20px 32px; border-bottom:.5px solid var(--line); flex-wrap:wrap; gap:12px; }
+  .header-esq{ display:flex; align-items:center; gap:18px; }
+  .header-esq img{ height:44px; width:auto; }
+  .header-info p.label-h{ font-size:9.5px; letter-spacing:.2em; color:var(--terracota); text-transform:uppercase; margin:0 0 3px; font-weight:600; }
+  .header-info h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); margin:0; }
+  .btn-sair{ background:none; border:1px solid var(--line); padding:9px 18px; font-size:11.5px; color:var(--ink-soft); font-family:inherit; letter-spacing:.06em; cursor:pointer; }
+  .btn-sair:hover{ border-color:var(--terracota); color:var(--terracota); }
+
+  main{ max-width:980px; margin:0 auto; padding:40px 32px 80px; }
+  .grupo{ margin-bottom:40px; }
+  .grupo-label{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .grupo-label .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); flex:none; }
+  .grupo-label span{ font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--salvia); font-weight:600; }
+
+  .cards{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:14px; }
+  .card{
+    display:block; background:#fff; border:1px solid var(--line); padding:20px 22px;
+    text-decoration:none; color:inherit; position:relative; transition:border-color .15s, box-shadow .15s;
+  }
+  .card:hover{ border-color:var(--terracota); box-shadow:0 8px 24px rgba(42,58,51,.1); }
+  .card h2{ font-family:var(--serif-display); font-size:17px; font-weight:600; color:var(--cipreste); margin:0 0 6px; line-height:1.25; }
+  .card p{ font-size:12px; color:var(--ink-soft); margin:0; line-height:1.5; }
+  .card .abrir{ display:inline-flex; align-items:center; gap:5px; margin-top:12px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--terracota); font-weight:600; }
+
+  footer.foot{ text-align:center; font-size:11px; color:var(--salvia); margin-top:8px; }
+
+  @media (max-width:600px){
+    .login-card{ width:100%; }
+    .header{ padding:16px 20px; }
+    main{ padding:28px 18px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-card">
+    <div class="topo"></div>
+    <div class="login-inner">
+      <img src="logo-termo.png" alt="Bruna Arguelles">
+      <div class="login-label"><span class="l"></span><span>Acesso restrito</span><span class="l"></span></div>
+      <h1>Documentos & Termos</h1>
+      <p>Bruna Arguelles · Enfermagem Especializada</p>
+      <div class="divisor"></div>
+      <input type="password" id="senha-input" placeholder="Senha">
+      <p class="msg-erro" id="msg-erro">Senha incorreta.</p>
+      <button id="btn-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="faixa-topo"></div>
+  <div class="header">
+    <div class="header-esq">
+      <img src="logo-termo.png" alt="Bruna Arguelles">
+      <div class="header-info">
+        <p class="label-h">Área restrita</p>
+        <h1>Documentos & Termos</h1>
+      </div>
+    </div>
+    <button class="btn-sair" id="btn-sair">Sair</button>
+  </div>
+
+  <main>
+    <div class="grupo">
+      <div class="grupo-label"><span class="d"></span><span>Avaliação</span></div>
+      <div class="cards">
+        <a class="card" href="anamnese.html" target="_blank" rel="noopener">
+          <h2>Ficha de Anamnese</h2>
+          <p>Avaliação inicial de enfermagem em cuidados com feridas.</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="grupo">
+      <div class="grupo-label"><span class="d"></span><span>Termos de Consentimento</span></div>
+      <div class="cards">
+        <a class="card" href="termo-uso-imagem.html" target="_blank" rel="noopener">
+          <h2>Uso de Imagem</h2>
+          <p>Autorização para captação e uso de imagem (LGPD).</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+        <a class="card" href="termo-laserterapia.html" target="_blank" rel="noopener">
+          <h2>Laserterapia</h2>
+          <p>Consentimento para tratamento com RECOVER/LASER DUO.</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="grupo">
+      <div class="grupo-label"><span class="d"></span><span>Receituários</span></div>
+      <div class="cards">
+        <a class="card" href="receituario-simples.html" target="_blank" rel="noopener">
+          <h2>Receituário Simples</h2>
+          <p>Prescrição de enfermagem de uso geral.</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+        <a class="card" href="receituario-antimicrobiano.html" target="_blank" rel="noopener">
+          <h2>Sujeito à Retenção</h2>
+          <p>Prescrição para medicamentos com retenção de receita (antimicrobianos).</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+      </div>
+    </div>
+
+    <footer class="foot">Preencha os campos na página do documento e clique em "Baixar PDF" para imprimir.</footer>
+  </main>
+</div>
+
+<script>
+  const SENHA = 'bruna2024';
+
+  function tentarLogin(){
+    const input = document.getElementById('senha-input');
+    if (input.value === SENHA){
+      localStorage.setItem('docs_auth', '1');
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    } else {
+      input.classList.add('erro');
+      document.getElementById('msg-erro').style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  document.getElementById('btn-entrar').addEventListener('click', tentarLogin);
+  document.getElementById('senha-input').addEventListener('keydown', e => { if (e.key === 'Enter') tentarLogin(); });
+  document.getElementById('btn-sair').addEventListener('click', () => {
+    localStorage.removeItem('docs_auth');
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('login').style.display = 'flex';
+    document.getElementById('senha-input').value = '';
+  });
+
+  if (localStorage.getItem('docs_auth') === '1'){
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+</script>
+
+</body></html>
