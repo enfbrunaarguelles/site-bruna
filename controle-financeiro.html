@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Controle Financeiro — Bruna Arguelles</title>
+<meta name="theme-color" content="#2A3A33">
+<link rel="manifest" href="manifest-controle-financeiro.json">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B66; --bg:#e7ded0;
+    --verde:#2E7D32; --vermelho:#C62828;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:var(--bg); font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; min-height:100vh; }
+
+  #login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .login-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:400px; max-width:100%; overflow:hidden; }
+  .login-card .topo{ height:3px; background:var(--cipreste); }
+  .login-inner{ padding:44px 40px 40px; text-align:center; }
+  .login-inner img{ height:64px; width:auto; margin:0 auto 24px; display:block; }
+  .login-label{ display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; }
+  .login-label span{ font-size:10px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .login-label .l{ width:24px; height:.5px; background:var(--terracota); opacity:.7; }
+  .login-inner h1{ font-family:var(--serif-display); font-size:24px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 6px; }
+  .login-inner p{ font-size:12px; color:var(--ink-soft); margin:0; }
+  .divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:26px 0; }
+  #g_id_signin_container{ display:flex; justify-content:center; min-height:44px; }
+  .login-erro{ font-size:12px; color:var(--terracota); margin-top:14px; display:none; }
+  .setup-aviso{ text-align:left; background:var(--pergaminho); border:1px solid var(--line); padding:16px 18px; font-size:12px; color:var(--ink-soft); line-height:1.6; margin-top:20px; }
+  .setup-aviso code{ background:#fff; padding:1px 5px; border:1px solid var(--line); font-size:11px; }
+
+  #app{ display:none; min-height:100vh; }
+  .faixa-topo{ height:4px; background:var(--cipreste); }
+  .header{ display:flex; align-items:center; justify-content:space-between; padding:20px 32px; border-bottom:.5px solid var(--line); flex-wrap:wrap; gap:12px; }
+  .header-esq{ display:flex; align-items:center; gap:18px; }
+  .header-esq img{ height:44px; width:auto; }
+  .header-info p.label-h{ font-size:9.5px; letter-spacing:.2em; color:var(--terracota); text-transform:uppercase; margin:0 0 3px; font-weight:600; }
+  .header-info h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); margin:0; }
+  .btn-sair{ background:none; border:1px solid var(--line); padding:9px 18px; font-size:11.5px; color:var(--ink-soft); font-family:inherit; letter-spacing:.06em; cursor:pointer; }
+  .btn-sair:hover{ border-color:var(--terracota); color:var(--terracota); }
+
+  main{ max-width:820px; margin:0 auto; padding:32px 24px 90px; }
+  .grupo{ margin-bottom:36px; }
+  .grupo-label{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .grupo-label .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); flex:none; }
+  .grupo-label span{ font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--salvia); font-weight:600; }
+
+  .kpis{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; }
+  .kpi{ background:#fff; border:1px solid var(--line); padding:16px 18px; }
+  .kpi .rotulo{ font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); margin:0 0 6px; }
+  .kpi .valor{ font-family:var(--serif-display); font-size:24px; font-weight:600; color:var(--cipreste); margin:0; }
+  .kpi .valor.pos{ color:var(--verde); }
+  .kpi .valor.neg{ color:var(--vermelho); }
+  .kpi.destaque{ grid-column:1 / -1; background:var(--cipreste); }
+  .kpi.destaque .rotulo{ color:#c9d6ce; }
+  .kpi.destaque .valor{ color:#fff; font-size:19px; line-height:1.4; }
+  .barra{ height:8px; background:var(--line); margin-top:10px; overflow:hidden; }
+  .barra-fill{ height:100%; background:var(--terracota); transition:width .4s; }
+
+  .abas{ display:flex; gap:8px; margin-bottom:18px; }
+  .aba-btn{ flex:1; padding:11px; border:1px solid var(--line); background:#fff; font-family:inherit; font-size:12px; letter-spacing:.06em; color:var(--ink-soft); cursor:pointer; text-transform:uppercase; }
+  .aba-btn.ativa{ background:var(--cipreste); color:#fff; border-color:var(--cipreste); }
+
+  form.lancamento{ background:#fff; border:1px solid var(--line); padding:20px; display:none; }
+  form.lancamento.ativa{ display:block; }
+  form.lancamento label{ display:block; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); margin:14px 0 6px; }
+  form.lancamento label:first-of-type{ margin-top:0; }
+  form.lancamento input, form.lancamento select{
+    width:100%; padding:11px 12px; font-size:14px; font-family:inherit;
+    border:1px solid var(--line); background:#fff; color:var(--ink); outline:none;
+  }
+  form.lancamento button{
+    width:100%; margin-top:20px; padding:13px; background:var(--cipreste); color:#fff; border:none;
+    font-size:13px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
+  }
+  form.lancamento button:hover{ background:#3d5247; }
+  form.lancamento button:disabled{ opacity:.6; cursor:default; }
+  .form-msg{ font-size:12px; margin-top:10px; display:none; }
+  .form-msg.ok{ color:var(--verde); display:block; }
+  .form-msg.erro{ color:var(--vermelho); display:block; }
+
+  .lista{ background:#fff; border:1px solid var(--line); }
+  .lista .item{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:13px 18px; border-bottom:.5px solid var(--line); }
+  .lista .item:last-child{ border-bottom:none; }
+  .lista .item .desc{ font-size:13px; color:var(--ink); }
+  .lista .item .data{ font-size:10.5px; color:var(--salvia); display:block; margin-top:2px; }
+  .lista .item .valor{ font-size:13.5px; font-weight:600; white-space:nowrap; }
+  .lista .item .valor.pos{ color:var(--verde); }
+  .lista .item .valor.neg{ color:var(--vermelho); }
+  .vazio{ padding:24px 18px; text-align:center; font-size:12.5px; color:var(--salvia); }
+
+  .link-planilha{ display:inline-block; margin-top:10px; font-size:11px; color:var(--salvia); text-decoration:underline; }
+  .carregando{ text-align:center; padding:60px 20px; color:var(--salvia); font-size:13px; }
+
+  @media (max-width:600px){
+    .login-card{ width:100%; }
+    .header{ padding:16px 20px; }
+    main{ padding:24px 16px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="login-card">
+    <div class="topo"></div>
+    <div class="login-inner">
+      <img src="assets/logo.png" alt="Bruna Arguelles">
+      <div class="login-label"><span class="l"></span><span>Controle financeiro</span><span class="l"></span></div>
+      <h1>Entradas, Saídas &amp; Lucro</h1>
+      <p>Bruna Arguelles · Enfermagem Especializada</p>
+      <div class="divisor"></div>
+      <div id="g_id_signin_container"></div>
+      <p class="login-erro" id="login-erro">Não foi possível entrar. Tente novamente.</p>
+      <div class="setup-aviso" id="setup-aviso" style="display:none">
+        Configuração pendente: cole seu <code>GOOGLE_CLIENT_ID</code> na constante no topo do script deste arquivo
+        (<code>controle-financeiro.html</code>) para habilitar o login com Google.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="faixa-topo"></div>
+  <div class="header">
+    <div class="header-esq">
+      <img src="assets/logo.png" alt="Bruna Arguelles">
+      <div class="header-info">
+        <p class="label-h">Controle financeiro</p>
+        <h1>Entradas, Saídas &amp; Lucro</h1>
+      </div>
+    </div>
+    <button class="btn-sair" id="btn-sair">Sair</button>
+  </div>
+
+  <main>
+    <div id="carregando" class="carregando">Carregando seus dados…</div>
+
+    <div id="conteudo" style="display:none">
+      <div class="grupo">
+        <div class="grupo-label"><span class="d"></span><span>Painel</span></div>
+        <div class="kpis">
+          <div class="kpi destaque"><p class="rotulo">Status da recuperação</p><p class="valor" id="kpi-status">—</p></div>
+          <div class="kpi"><p class="rotulo">Investimento total</p><p class="valor" id="kpi-investimento">—</p></div>
+          <div class="kpi"><p class="rotulo">Entradas (total)</p><p class="valor" id="kpi-entradas">—</p></div>
+          <div class="kpi"><p class="rotulo">Saídas operacionais</p><p class="valor" id="kpi-saidas">—</p></div>
+          <div class="kpi"><p class="rotulo">Lucro acumulado</p><p class="valor" id="kpi-lucro">—</p></div>
+          <div class="kpi"><p class="rotulo">Falta recuperar</p><p class="valor" id="kpi-falta">—</p></div>
+          <div class="kpi" style="grid-column:1/-1">
+            <p class="rotulo">% do investimento recuperado</p>
+            <p class="valor" id="kpi-percentual">—</p>
+            <div class="barra"><div class="barra-fill" id="barra-percentual" style="width:0%"></div></div>
+          </div>
+          <div class="kpi"><p class="rotulo">Ticket médio</p><p class="valor" id="kpi-ticket">—</p></div>
+          <div class="kpi"><p class="rotulo">Lucro médio mensal</p><p class="valor" id="kpi-lucromedio">—</p></div>
+          <div class="kpi"><p class="rotulo">Projeção p/ recuperar</p><p class="valor" id="kpi-projecao">—</p></div>
+        </div>
+        <a class="link-planilha" id="link-planilha" href="#" target="_blank" rel="noopener">Abrir planilha no Google Sheets ↗</a>
+      </div>
+
+      <div class="grupo">
+        <div class="grupo-label"><span class="d"></span><span>Novo lançamento</span></div>
+        <div class="abas">
+          <button class="aba-btn ativa" data-aba="entrada">+ Entrada</button>
+          <button class="aba-btn" data-aba="saida">− Saída</button>
+        </div>
+
+        <form class="lancamento ativa" id="form-entrada">
+          <label>Data</label>
+          <input type="date" id="ent-data" required>
+          <label>Cliente / Descrição</label>
+          <input type="text" id="ent-desc" placeholder="Ex: Retorno (André)" required>
+          <label>Categoria</label>
+          <select id="ent-categoria">
+            <option>Consulta</option>
+            <option>Retorno</option>
+            <option>Procedimento</option>
+            <option>Pacote de Sessões</option>
+            <option>Produto/Curso</option>
+            <option>Outro</option>
+          </select>
+          <label>Valor recebido (R$)</label>
+          <input type="number" id="ent-valor" step="0.01" min="0" placeholder="0,00" required>
+          <button type="submit">Adicionar entrada</button>
+          <p class="form-msg" id="ent-msg"></p>
+        </form>
+
+        <form class="lancamento" id="form-saida">
+          <label>Data</label>
+          <input type="date" id="sai-data" required>
+          <label>Descrição</label>
+          <input type="text" id="sai-desc" placeholder="Ex: Descartáveis" required>
+          <label>Categoria</label>
+          <select id="sai-categoria">
+            <option>Despesa Fixa</option>
+            <option>Despesa Variável</option>
+            <option>Investimento Inicial</option>
+          </select>
+          <label>Valor pago (R$)</label>
+          <input type="number" id="sai-valor" step="0.01" min="0" placeholder="0,00" required>
+          <button type="submit">Adicionar saída</button>
+          <p class="form-msg" id="sai-msg"></p>
+        </form>
+      </div>
+
+      <div class="grupo">
+        <div class="grupo-label"><span class="d"></span><span>Lançamentos recentes</span></div>
+        <div class="lista" id="lista-recentes"><div class="vazio">Nenhum lançamento ainda.</div></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const GOOGLE_CLIENT_ID = 'COLE_AQUI_SEU_CLIENT_ID.apps.googleusercontent.com';
+const SHEETS_SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
+const STORAGE_KEY = 'gestaoSpreadsheetId';
+const SHEET_ENTRADAS = 'Entradas';
+const SHEET_SAIDAS = 'Saídas';
+
+let accessToken = null;
+let spreadsheetId = localStorage.getItem(STORAGE_KEY) || null;
+let tokenClient = null;
+let entradas = [];
+let saidas = [];
+
+const fmtBRL = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+const hoje = () => new Date().toISOString().slice(0, 10);
+
+function initGoogle() {
+  if (GOOGLE_CLIENT_ID.startsWith('COLE_AQUI')) {
+    document.getElementById('setup-aviso').style.display = 'block';
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: () => {},
+  });
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: SHEETS_SCOPE,
+    callback: async (resp) => {
+      if (resp.error) { mostrarErroLogin(); return; }
+      accessToken = resp.access_token;
+      await entrarNoApp();
+    },
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('g_id_signin_container'),
+    { theme: 'filled_blue', size: 'large', text: 'signin_with', shape: 'pill' }
+  );
+  document.getElementById('g_id_signin_container').addEventListener('click', () => {
+    tokenClient.requestAccessToken();
+  }, true);
+}
+
+function mostrarErroLogin() {
+  document.getElementById('login-erro').style.display = 'block';
+}
+
+async function sheetsFetch(path, options = {}) {
+  const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${path}`, {
+    ...options,
+    headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json', ...(options.headers || {}) },
+  });
+  if (!res.ok) throw new Error(`Sheets API ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
+async function garantirPlanilha() {
+  if (spreadsheetId) return;
+  const created = await sheetsFetch('', {
+    method: 'POST',
+    body: JSON.stringify({
+      properties: { title: 'Gestão Financeira — Cuidar pela Bruna' },
+      sheets: [
+        { properties: { title: SHEET_ENTRADAS } },
+        { properties: { title: SHEET_SAIDAS } },
+      ],
+    }),
+  });
+  spreadsheetId = created.spreadsheetId;
+  localStorage.setItem(STORAGE_KEY, spreadsheetId);
+  await sheetsFetch(`${spreadsheetId}/values:batchUpdate`, {
+    method: 'POST',
+    body: JSON.stringify({
+      valueInputOption: 'USER_ENTERED',
+      data: [
+        { range: `'${SHEET_ENTRADAS}'!A1:D1`, values: [['Data', 'Cliente / Descrição', 'Categoria', 'Valor Recebido']] },
+        { range: `'${SHEET_SAIDAS}'!A1:D1`, values: [['Data', 'Descrição', 'Categoria', 'Valor Pago']] },
+      ],
+    }),
+  });
+}
+
+function parseLinhas(rows) {
+  return (rows || []).filter(r => r && r[0]).map(r => ({
+    data: r[0], desc: r[1] || '', categoria: r[2] || '', valor: parseFloat(String(r[3]).replace(',', '.')) || 0,
+  }));
+}
+
+async function carregarDados() {
+  const ranges = [`'${SHEET_ENTRADAS}'!A2:D`, `'${SHEET_SAIDAS}'!A2:D`].map(r => `ranges=${encodeURIComponent(r)}`).join('&');
+  const data = await sheetsFetch(`${spreadsheetId}/values:batchGet?${ranges}`);
+  entradas = parseLinhas(data.valueRanges[0].values);
+  saidas = parseLinhas(data.valueRanges[1].values);
+}
+
+function calcularKPIs() {
+  const investimentoTotal = saidas.filter(s => s.categoria === 'Investimento Inicial').reduce((a, s) => a + s.valor, 0);
+  const despesasOperacionais = saidas.filter(s => s.categoria !== 'Investimento Inicial').reduce((a, s) => a + s.valor, 0);
+  const totalEntradas = entradas.reduce((a, e) => a + e.valor, 0);
+  const lucroAcumulado = totalEntradas - despesasOperacionais;
+  const percentual = investimentoTotal > 0 ? Math.min(lucroAcumulado / investimentoTotal, 1) : 0;
+  const faltaRecuperar = Math.max(investimentoTotal - lucroAcumulado, 0);
+  const ticketMedio = entradas.length ? totalEntradas / entradas.length : 0;
+  const datas = entradas.map(e => new Date(e.data)).filter(d => !isNaN(d));
+  let mesesAtivos = 1;
+  if (datas.length) {
+    const min = new Date(Math.min(...datas));
+    const diffMeses = (new Date().getFullYear() - min.getFullYear()) * 12 + (new Date().getMonth() - min.getMonth());
+    mesesAtivos = Math.max(diffMeses, 1);
+  }
+  const lucroMedioMensal = lucroAcumulado / mesesAtivos;
+  const projecao = lucroMedioMensal > 0 ? `${(faltaRecuperar / lucroMedioMensal).toFixed(1).replace('.', ',')} meses` : 'aguardando lucro positivo';
+  const status = lucroAcumulado >= investimentoTotal && investimentoTotal > 0
+    ? `Investimento recuperado! Lucro líquido de ${fmtBRL(lucroAcumulado - investimentoTotal)}`
+    : `Faltam ${fmtBRL(faltaRecuperar)} para recuperar o investimento`;
+  return { investimentoTotal, despesasOperacionais, totalEntradas, lucroAcumulado, percentual, faltaRecuperar, ticketMedio, lucroMedioMensal, projecao, status };
+}
+
+function renderKPIs() {
+  const k = calcularKPIs();
+  document.getElementById('kpi-status').textContent = k.status;
+  document.getElementById('kpi-investimento').textContent = fmtBRL(k.investimentoTotal);
+  document.getElementById('kpi-entradas').textContent = fmtBRL(k.totalEntradas);
+  document.getElementById('kpi-saidas').textContent = fmtBRL(k.despesasOperacionais);
+  const lucroEl = document.getElementById('kpi-lucro');
+  lucroEl.textContent = fmtBRL(k.lucroAcumulado);
+  lucroEl.className = 'valor ' + (k.lucroAcumulado >= 0 ? 'pos' : 'neg');
+  document.getElementById('kpi-falta').textContent = fmtBRL(k.faltaRecuperar);
+  document.getElementById('kpi-percentual').textContent = `${(k.percentual * 100).toFixed(1)}%`;
+  document.getElementById('barra-percentual').style.width = `${(k.percentual * 100).toFixed(1)}%`;
+  document.getElementById('kpi-ticket').textContent = fmtBRL(k.ticketMedio);
+  document.getElementById('kpi-lucromedio').textContent = fmtBRL(k.lucroMedioMensal);
+  document.getElementById('kpi-projecao').textContent = k.projecao;
+  document.getElementById('link-planilha').href = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
+}
+
+function parseDataSegura(str) {
+  const d = new Date(str);
+  return isNaN(d) ? null : d;
+}
+
+function renderRecentes() {
+  const todos = [
+    ...entradas.map(e => ({ ...e, tipo: 'entrada' })),
+    ...saidas.map(s => ({ ...s, tipo: 'saida' })),
+  ].sort((a, b) => (parseDataSegura(b.data)?.getTime() ?? 0) - (parseDataSegura(a.data)?.getTime() ?? 0)).slice(0, 12);
+
+  const lista = document.getElementById('lista-recentes');
+  if (!todos.length) { lista.innerHTML = '<div class="vazio">Nenhum lançamento ainda.</div>'; return; }
+  lista.innerHTML = todos.map(t => {
+    const d = parseDataSegura(t.data);
+    return `
+    <div class="item">
+      <div class="desc">${t.desc}<span class="data">${d ? d.toLocaleDateString('pt-BR') : 'sem data'} · ${t.categoria}</span></div>
+      <div class="valor ${t.tipo === 'entrada' ? 'pos' : 'neg'}">${t.tipo === 'entrada' ? '+' : '−'} ${fmtBRL(t.valor)}</div>
+    </div>
+  `;
+  }).join('');
+}
+
+async function entrarNoApp() {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('carregando').style.display = 'block';
+  document.getElementById('conteudo').style.display = 'none';
+  try {
+    await garantirPlanilha();
+    await carregarDados();
+    renderKPIs();
+    renderRecentes();
+    document.getElementById('carregando').style.display = 'none';
+    document.getElementById('conteudo').style.display = 'block';
+  } catch (e) {
+    document.getElementById('carregando').textContent = 'Erro ao carregar dados: ' + e.message;
+  }
+}
+
+document.querySelectorAll('.aba-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.aba-btn').forEach(b => b.classList.remove('ativa'));
+    document.querySelectorAll('form.lancamento').forEach(f => f.classList.remove('ativa'));
+    btn.classList.add('ativa');
+    document.getElementById(`form-${btn.dataset.aba === 'entrada' ? 'entrada' : 'saida'}`).classList.add('ativa');
+  });
+});
+
+document.getElementById('ent-data').value = hoje();
+document.getElementById('sai-data').value = hoje();
+
+document.getElementById('form-entrada').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  const msg = document.getElementById('ent-msg');
+  btn.disabled = true; msg.className = 'form-msg';
+  try {
+    const valores = [[document.getElementById('ent-data').value, document.getElementById('ent-desc').value, document.getElementById('ent-categoria').value, parseFloat(document.getElementById('ent-valor').value)]];
+    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ENTRADAS}'!A:D`)}:append?valueInputOption=USER_ENTERED`, { method: 'POST', body: JSON.stringify({ values: valores }) });
+    await carregarDados(); renderKPIs(); renderRecentes();
+    e.target.reset(); document.getElementById('ent-data').value = hoje();
+    msg.textContent = 'Entrada adicionada!'; msg.className = 'form-msg ok';
+  } catch (err) {
+    msg.textContent = 'Erro: ' + err.message; msg.className = 'form-msg erro';
+  } finally { btn.disabled = false; }
+});
+
+document.getElementById('form-saida').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  const msg = document.getElementById('sai-msg');
+  btn.disabled = true; msg.className = 'form-msg';
+  try {
+    const valores = [[document.getElementById('sai-data').value, document.getElementById('sai-desc').value, document.getElementById('sai-categoria').value, parseFloat(document.getElementById('sai-valor').value)]];
+    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_SAIDAS}'!A:D`)}:append?valueInputOption=USER_ENTERED`, { method: 'POST', body: JSON.stringify({ values: valores }) });
+    await carregarDados(); renderKPIs(); renderRecentes();
+    e.target.reset(); document.getElementById('sai-data').value = hoje();
+    msg.textContent = 'Saída adicionada!'; msg.className = 'form-msg ok';
+  } catch (err) {
+    msg.textContent = 'Erro: ' + err.message; msg.className = 'form-msg erro';
+  } finally { btn.disabled = false; }
+});
+
+document.getElementById('btn-sair').addEventListener('click', () => {
+  if (accessToken) google.accounts.oauth2.revoke(accessToken, () => {});
+  accessToken = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login').style.display = 'flex';
+});
+
+window.addEventListener('load', () => {
+  initGoogle();
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw-controle-financeiro.js').catch(() => {});
+  }
+});
+</script>
+
+</body></html>
