@@ -34,7 +34,11 @@
   .login-inner h1{ font-family:var(--serif-display); font-size:24px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 6px; }
   .login-inner p{ font-size:12px; color:var(--ink-soft); margin:0; }
   .divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:26px 0; }
-  #g_id_signin_container{ display:flex; justify-content:center; min-height:44px; }
+  .btn-google{
+    width:100%; padding:13px; background:var(--cipreste); color:#fff; border:none;
+    font-size:13px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
+  }
+  .btn-google:hover{ background:#3d5247; }
   .login-erro{ font-size:12px; color:var(--terracota); margin-top:14px; display:none; }
   .setup-aviso{ text-align:left; background:var(--pergaminho); border:1px solid var(--line); padding:16px 18px; font-size:12px; color:var(--ink-soft); line-height:1.6; margin-top:20px; }
   .setup-aviso code{ background:#fff; padding:1px 5px; border:1px solid var(--line); font-size:11px; }
@@ -120,7 +124,7 @@
       <h1>Entradas, Saídas &amp; Lucro</h1>
       <p>Bruna Arguelles · Enfermagem Especializada</p>
       <div class="divisor"></div>
-      <div id="g_id_signin_container"></div>
+      <button type="button" id="btn-google-login" class="btn-google">Entrar com Google</button>
       <p class="login-erro" id="login-erro">Não foi possível entrar. Tente novamente.</p>
       <div class="setup-aviso" id="setup-aviso" style="display:none">
         Configuração pendente: cole seu <code>GOOGLE_CLIENT_ID</code> na constante no topo do script deste arquivo
@@ -222,7 +226,7 @@
 </div>
 
 <script>
-const GOOGLE_CLIENT_ID = '966341556247-oe50rpocptuaksll2lqea694v5tracnr.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = 'COLE_AQUI_SEU_CLIENT_ID.apps.googleusercontent.com';
 const SHEETS_SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 const STORAGE_KEY = 'gestaoSpreadsheetId';
 const SHEET_ENTRADAS = 'Entradas';
@@ -242,10 +246,6 @@ function initGoogle() {
     document.getElementById('setup-aviso').style.display = 'block';
     return;
   }
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: () => {},
-  });
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: GOOGLE_CLIENT_ID,
     scope: SHEETS_SCOPE,
@@ -255,13 +255,10 @@ function initGoogle() {
       await entrarNoApp();
     },
   });
-  google.accounts.id.renderButton(
-    document.getElementById('g_id_signin_container'),
-    { theme: 'filled_blue', size: 'large', text: 'signin_with', shape: 'pill' }
-  );
-  document.getElementById('g_id_signin_container').addEventListener('click', () => {
+  document.getElementById('btn-google-login').addEventListener('click', () => {
+    document.getElementById('login-erro').style.display = 'none';
     tokenClient.requestAccessToken();
-  }, true);
+  });
 }
 
 function mostrarErroLogin() {
