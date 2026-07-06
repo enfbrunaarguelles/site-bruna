@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termo de Consentimento — Laserterapia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B66; --line-strong:#2A3A3340;
+    --field:#2A3A33; --field-line:#2A3A3366;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:#e7ded0; font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; padding:30px 0 64px; }
+
+  /* ---------- A4 PAGE ---------- */
+  .page{
+    width:210mm; min-height:297mm; margin:0 auto; background:#fff;
+    box-shadow:0 18px 50px rgba(42,58,51,.22);
+    padding:13mm 15mm 11mm; position:relative; display:flex; flex-direction:column; overflow:hidden;
+  }
+  .page::after{ content:""; position:absolute; left:0; top:0; bottom:0; width:4mm; background:var(--cipreste); }
+  .watermark{ position:absolute; z-index:0; left:50%; top:54%; transform:translate(-50%,-50%); width:120mm; opacity:.045; pointer-events:none; }
+  .inner{ position:relative; z-index:2; display:flex; flex-direction:column; flex:1; }
+
+  /* ---------- HEADER ---------- */
+  header{ display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  header .logo{ height:46px; width:auto; display:block; }
+  header .who{ flex:none; width:74mm; text-align:right; font-size:8.4px; color:var(--ink-soft); line-height:1.5; }
+  header .who .nm{ font-family:var(--serif-display); font-size:17px; font-weight:600; color:var(--cipreste); line-height:1.05; }
+  header .who .role{ font-size:7.8px; letter-spacing:.2em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin:3px 0 4px; }
+  header .who b{ color:var(--cipreste); font-weight:600; }
+  .head-rule{ display:flex; align-items:center; gap:9px; margin-top:9px; }
+  .head-rule .l{ height:1.5px; flex:1; background:var(--cipreste); }
+  .head-rule .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); flex:none; }
+  .head-rule .l.thin{ height:1px; background:var(--line); }
+
+  /* ---------- TITLE ---------- */
+  .doc-title{ text-align:center; margin:12px 0 3px; }
+  .doc-title h1{ font-family:var(--serif-display); font-weight:600; font-size:21px; letter-spacing:.015em; color:var(--cipreste); margin:0; line-height:1.1; }
+  .doc-title .sub{ font-size:8.4px; letter-spacing:.12em; text-transform:uppercase; color:var(--terracota); margin-top:5px; font-weight:600; line-height:1.4; max-width:150mm; margin-left:auto; margin-right:auto; }
+
+  main{ font-size:10px; line-height:1.55; color:var(--ink-soft); margin-top:11px; flex:1; }
+
+  /* ---------- FORM ROWS ---------- */
+  .frow{ display:flex; align-items:flex-end; flex-wrap:wrap; gap:3px 6px; margin-bottom:7px; }
+  .frow .lbl{ color:var(--cipreste); font-weight:600; white-space:nowrap; }
+  .fld{
+    flex:1 1 auto; min-width:40px; border:none; border-bottom:1px solid var(--field-line);
+    background:transparent; font-family:var(--serif-body); font-size:10px; color:var(--field);
+    padding:0 3px 1px; line-height:1.5; outline:none; min-height:14px;
+  }
+  .fld:focus{ border-bottom-color:var(--terracota); background:#C978620d; }
+  .fld::placeholder{ color:#5A7A6B66; font-style:italic; }
+
+  /* checkbox option */
+  .optset{ display:inline-flex; align-items:center; gap:5px 14px; flex-wrap:wrap; }
+  .chk{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+  .chk input{ appearance:none; -webkit-appearance:none; width:12px; height:12px; border:1.3px solid var(--salvia); border-radius:2px; margin:0; cursor:pointer; position:relative; flex:none; background:#fff; }
+  .chk input:checked{ background:var(--terracota); border-color:var(--terracota); }
+  .chk input:checked::after{ content:"✓"; position:absolute; inset:0; color:#fff; font-size:9px; line-height:12px; text-align:center; }
+
+  /* ---------- SECTION ---------- */
+  .sec-h{ font-family:var(--serif-display); font-size:12px; font-weight:600; color:var(--cipreste); margin:11px 0 5px; display:flex; align-items:center; gap:7px; }
+  .sec-h .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); flex:none; }
+  p.txt{ margin:0 0 8px; text-align:justify; text-wrap:pretty; }
+  p.txt .k{ color:var(--cipreste); font-weight:600; }
+
+  .protocol-line{ display:flex; align-items:center; gap:7px 18px; flex-wrap:wrap; margin:4px 0 8px; }
+
+  /* declaration with inline fields */
+  .decl{ margin-top:4px; }
+  .decl .fld{ min-width:90px; }
+  .fld.short{ flex:0 1 130px; }
+  .fld.tiny{ flex:0 1 70px; }
+
+  /* ---------- SIGNATURES ---------- */
+  .signs{ display:grid; grid-template-columns:1fr 1fr; gap:16px 28px; margin-top:16px; }
+  .sigblock .row{ display:flex; align-items:flex-end; gap:6px; }
+  .sigblock .row .lbl{ color:var(--cipreste); font-weight:600; white-space:nowrap; font-size:9.6px; }
+  .sigblock .cap{ font-size:7.6px; color:var(--salvia); margin-top:3px; letter-spacing:.03em; }
+  .sigblock.full{ grid-column:1 / -1; }
+  .place{ display:flex; align-items:flex-end; gap:6px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+  .place .lbl{ color:var(--cipreste); }
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{ position:fixed; left:0; right:0; bottom:0; z-index:9999; background:var(--cipreste); display:flex; align-items:center; justify-content:center; gap:14px; padding:11px 16px; box-shadow:0 -6px 20px rgba(42,58,51,.22); }
+  .toolbar .msg{ color:#F7F2E8cc; font-size:12px; }
+  .toolbar .msg b{ color:#fff; }
+  .toolbar button{ font-family:var(--serif-body); font-size:13.5px; font-weight:600; cursor:pointer; border-radius:7px; padding:9px 18px; border:1px solid transparent; display:inline-flex; align-items:center; gap:8px; }
+  .btn-pdf{ background:var(--terracota); color:#fff; }
+  .btn-pdf:hover{ background:#b96954; }
+  .btn-clear{ background:transparent; color:#F7F2E8; border-color:#F7F2E866; }
+  .btn-clear:hover{ background:#ffffff1a; }
+
+  @page{ size:A4; margin:0; }
+  @media print{
+    body{ background:#fff; padding:0; }
+    .page{ box-shadow:none; margin:0; }
+    .toolbar{ display:none !important; }
+    .fld{ border-bottom-color:var(--field-line) !important; background:transparent !important; }
+    .fld::placeholder{ color:transparent !important; }
+    .chk input{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+  @media screen and (max-width:760px){
+    body{ padding:12px 12px 70px; }
+    .page{ width:100%; min-height:0; padding:9mm 7mm; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page" data-screen-label="Termo Laserterapia">
+    <img class="watermark" src="logo-termo.png" alt="">
+    <div class="inner">
+
+      <header>
+        <img class="logo" src="logo-termo.png" alt="Bruna Arguelles — Enfermeira">
+        <div class="who">
+          <div class="nm">Bruna Arguelles</div>
+          <div class="role">Enfermagem Especializada</div>
+          <b>COREN/MG</b> 761268-ENF
+        </div>
+      </header>
+      <div class="head-rule"><span class="l"></span><span class="d"></span><span class="l thin"></span></div>
+
+      <div class="doc-title">
+        <h1>Termo de Consentimento Livre e Esclarecido</h1>
+        <div class="sub">Autorização para receber o tratamento com o equipamento RECOVER/LASER DUO</div>
+      </div>
+
+      <main>
+        <div class="frow"><span class="lbl">Nome:</span><input class="fld" type="text" data-k="nome"></div>
+        <div class="frow"><span class="lbl">Endereço:</span><input class="fld" type="text" data-k="endereco"></div>
+        <div class="frow">
+          <span class="lbl">CEP:</span><input class="fld short" type="text" data-k="cep">
+          <span class="lbl">Cidade:</span><input class="fld" type="text" data-k="cidade">
+          <span class="lbl">Estado:</span><input class="fld tiny" type="text" data-k="estado">
+          <span class="lbl">Brasil.</span>
+        </div>
+        <div class="frow">
+          <span class="lbl">Telefone/Celular:</span><input class="fld short" type="text" data-k="tel">
+          <span class="lbl">E-mail:</span><input class="fld" type="text" data-k="email">
+        </div>
+        <div class="frow">
+          <span class="lbl">Data de Nascimento:</span><input class="fld tiny" type="text" data-k="nasc" placeholder="__/__/____">
+          <span class="lbl">Idade:</span><input class="fld tiny" type="text" data-k="idade">
+          <span class="lbl">Sexo:</span>
+          <span class="optset">
+            <label class="chk"><input type="checkbox" data-k="sexo_f">Feminino</label>
+            <label class="chk"><input type="checkbox" data-k="sexo_m">Masculino</label>
+          </span>
+        </div>
+        <div class="frow">
+          <span class="lbl">Profissão:</span><input class="fld" type="text" data-k="profissao">
+          <span class="lbl">Indicação:</span><input class="fld" type="text" data-k="indicacao">
+        </div>
+        <div class="frow">
+          <span class="lbl">RG:</span><input class="fld" type="text" data-k="rg">
+          <span class="lbl">CPF:</span><input class="fld" type="text" data-k="cpf">
+        </div>
+        <div class="frow"><span class="lbl">Diagnóstico Clínico:</span><input class="fld" type="text" data-k="diagnostico"></div>
+        <div class="frow"><span class="lbl">Queixa:</span><input class="fld" type="text" data-k="queixa"></div>
+
+        <div class="sec-h"><span class="d"></span>Protocolo Utilizado</div>
+        <div class="protocol-line">
+          <span class="lbl" style="color:var(--cipreste);font-weight:600;">Laser:</span>
+          <span class="optset">
+            <label class="chk"><input type="checkbox" data-k="l_660">Vermelho 660&nbsp;nm</label>
+            <label class="chk"><input type="checkbox" data-k="l_808">Infravermelho 808&nbsp;nm</label>
+            <label class="chk"><input type="checkbox" data-k="l_sim">Simultâneo 660&nbsp;nm e 808&nbsp;nm</label>
+          </span>
+        </div>
+        <div class="frow"><span class="lbl">Tempo de aplicação:</span><input class="fld" type="text" data-k="tempo"></div>
+
+        <div class="sec-h"><span class="d"></span>Tratamento com o equipamento RECOVER/LASER DUO</div>
+        <p class="txt">O RECOVER/LASER DUO consiste na aplicação de laserterapia de baixa intensidade, com efeitos anti-inflamatórios, analgésicos e trófico-regenerativos, além da produção de ATP, favorecendo o aumento da regeneração tecidual e estimulando a microcirculação. O laser desencadeia a liberação de endorfinas, substâncias que ajudam a inibir a dor.</p>
+        <p class="txt"><span class="k">Riscos:</span> desde que todas as normas de segurança e as contraindicações sejam aplicadas e respeitadas, não existe risco ao paciente nem ao profissional durante e após o procedimento clínico.</p>
+        <p class="txt"><span class="k">Benefícios:</span> promover maior equilíbrio do organismo e das partes afetadas, controlando, por exemplo, a dor.</p>
+
+        <div class="decl">
+          <p class="txt" style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:3px 6px;">
+            <span class="lbl">Eu,</span><input class="fld" type="text" data-k="decl_nome" style="min-width:150px;">
+            <span class="lbl">RG</span><input class="fld short" type="text" data-k="decl_rg">
+            <span class="lbl">CPF</span><input class="fld short" type="text" data-k="decl_cpf">, autorizo o tratamento de
+            <input class="fld" type="text" data-k="decl_paciente" style="min-width:140px;">
+            a receber o tratamento com o equipamento RECOVER/LASER DUO.
+          </p>
+          <p class="txt">Fui informado(a) sobre todos os riscos e contraindicações e tive todas as minhas dúvidas esclarecidas sobre o meu tratamento. Não me foram feitas promessas ou garantias em relação ao procedimento, nem quanto à obtenção de resultados milagrosos; existem hipóteses, e os resultados clínicos e experimentais têm sido bem-sucedidos. Sendo assim, dou total permissão para que o meu tratamento seja documentado em fotografias e vídeos, com finalidade acadêmica e profissional. Eu autorizo o tratamento com o equipamento RECOVER/LASER DUO.</p>
+        </div>
+
+        <div class="signs">
+          <div class="sigblock">
+            <div class="row"><span class="lbl">Responsável:</span><input class="fld" type="text" data-k="resp_nome"></div>
+            <div class="cap">Nome legível</div>
+          </div>
+          <div class="sigblock">
+            <div class="row"><span class="lbl">Assinatura:</span><input class="fld" type="text" data-k="resp_ass"></div>
+            <div class="cap">&nbsp;</div>
+          </div>
+          <div class="sigblock">
+            <div class="row"><span class="lbl">Profissional:</span><input class="fld" type="text" data-k="prof_nome" value="Bruna Arguelles"></div>
+            <div class="cap">Enfermeira · COREN/MG 761268-ENF</div>
+          </div>
+          <div class="sigblock">
+            <div class="row"><span class="lbl">Assinatura:</span><input class="fld" type="text" data-k="prof_ass"></div>
+            <div class="cap">&nbsp;</div>
+          </div>
+          <div class="sigblock full">
+            <div class="row" style="max-width:60%;"><span class="lbl">Registro profissional/número:</span><input class="fld" type="text" data-k="registro" value="COREN/MG 761268-ENF"></div>
+          </div>
+        </div>
+
+        <div class="place">
+          <input class="fld" type="text" data-k="cidade_ass" style="flex:0 1 150px;text-align:center;" value="Juiz de Fora/MG" placeholder="cidade">
+          <span class="lbl">,</span>
+          <input class="fld tiny" type="text" data-k="dia" style="text-align:center;" placeholder="dia">
+          <span class="lbl">de</span>
+          <input class="fld short" type="text" data-k="mes" style="text-align:center;" placeholder="mês">
+          <span class="lbl">de</span>
+          <input class="fld tiny" type="text" data-k="ano" style="text-align:center;" placeholder="ano">
+          <span class="lbl">.</span>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="msg">Preencha os campos e clique em <b>Baixar PDF</b> para assinar digitalmente.</span>
+    <button class="btn-pdf" id="btnPdf">⤓ Baixar PDF</button>
+    <button class="btn-clear" id="btnClear">Limpar campos</button>
+  </div>
+
+  <script>
+    (function(){
+      var KEY = 'termo-recover-laser-v1';
+      var fields = Array.prototype.slice.call(document.querySelectorAll('[data-k]'));
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ saved = {}; }
+      fields.forEach(function(el){
+        var k = el.dataset.k;
+        if (!(k in saved)) return;
+        if (el.type === 'checkbox') el.checked = !!saved[k];
+        else el.value = saved[k];
+      });
+      function persist(){
+        var data = {};
+        fields.forEach(function(el){
+          if (el.type === 'checkbox'){ data[el.dataset.k] = el.checked; el.toggleAttribute('checked', el.checked); }
+          else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
+        });
+        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+      }
+      fields.forEach(function(el){
+        el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', persist);
+      });
+      persist();
+
+      document.getElementById('btnPdf').addEventListener('click', function(){
+        persist();
+        window.print();
+      });
+      document.getElementById('btnClear').addEventListener('click', function(){
+        if (!confirm('Limpar todos os campos preenchidos?')) return;
+        fields.forEach(function(el){
+          if (el.type === 'checkbox'){ el.checked = false; el.removeAttribute('checked'); }
+          else if (el.dataset.k === 'prof_nome'){ el.value = 'Bruna Arguelles'; }
+          else if (el.dataset.k === 'registro'){ el.value = 'COREN/MG 761268-ENF'; }
+          else if (el.dataset.k === 'cidade_ass'){ el.value = 'Juiz de Fora/MG'; }
+          else { el.value = ''; }
+          el.setAttribute('value', el.value || '');
+        });
+        persist();
+      });
+    })();
+  </script>
+
+</body></html>

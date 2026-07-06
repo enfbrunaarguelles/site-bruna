@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termo de Consentimento — Uso de Imagem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33;
+    --salvia:#5A7A6B;
+    --salvia-soft:#5A7A6B26;
+    --terracota:#C97862;
+    --pergaminho:#F7F2E8;
+    --ink:#2A3A33;
+    --ink-soft:#43544c;
+    --line:#5A7A6B66;
+    --line-strong:#2A3A3333;
+    --field:#2A3A33;
+    --field-line:#2A3A3366;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:#e7ded0;
+    font-family:var(--serif-body);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    padding:32px 0 64px;
+  }
+
+  /* ---------- A4 PAGE ---------- */
+  .page{
+    width:210mm;
+    min-height:297mm;
+    margin:0 auto;
+    background:#fff;
+    background-image:linear-gradient(180deg,#ffffff 0%, #fffdf9 100%);
+    box-shadow:0 18px 50px rgba(42,58,51,.22);
+    padding:14mm 15mm 9mm;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  .page::before{
+    content:"";
+    position:absolute; inset:6mm;
+    border:1px solid var(--line);
+    pointer-events:none;
+  }
+  .page::after{
+    content:"";
+    position:absolute; left:0; right:0; top:0; height:5mm;
+    background:var(--cipreste);
+  }
+  .inner{ position:relative; z-index:1; padding:4mm 4mm 0; display:flex; flex-direction:column; flex:1; }
+
+  /* ---------- HEADER ---------- */
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:18px;
+    padding-bottom:9px;
+    border-bottom:1.5px solid var(--cipreste);
+  }
+  header .logo{ height:46px; width:auto; display:block; }
+  header .org{
+    text-align:right;
+    font-size:8.8px;
+    letter-spacing:.04em;
+    color:var(--ink-soft);
+    line-height:1.45;
+  }
+  header .org strong{ color:var(--cipreste); font-weight:600; }
+
+  .doc-title{
+    text-align:center;
+    margin:14px 0 4px;
+  }
+  .doc-title h1{
+    font-family:var(--serif-display);
+    font-weight:600;
+    font-size:21px;
+    letter-spacing:.015em;
+    color:var(--cipreste);
+    margin:0;
+    line-height:1.12;
+  }
+  .doc-title .sub{
+    font-size:9px;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--terracota);
+    margin-top:5px;
+    font-weight:600;
+  }
+  .rule-orn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin:7px auto 0; max-width:200px;
+  }
+  .rule-orn .l{ height:1px; flex:1; background:var(--line); }
+  .rule-orn .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); }
+
+  /* ---------- BODY ---------- */
+  main{ font-size:11px; line-height:1.55; color:var(--ink-soft); margin-top:9px; }
+  p{ margin:0 0 7px; text-align:justify; text-wrap:pretty; }
+  .lead{ margin-bottom:9px; }
+  .lead b{ color:var(--cipreste); }
+
+  section.block{ margin-top:10px; }
+  h2.sec{
+    font-family:var(--serif-display);
+    font-size:14px;
+    font-weight:600;
+    color:var(--cipreste);
+    margin:0 0 5px;
+    display:flex; align-items:center; gap:7px;
+    letter-spacing:.01em;
+  }
+  h2.sec .n{
+    font-family:var(--serif-body);
+    font-size:8.5px; font-weight:600;
+    color:#fff; background:var(--salvia);
+    width:15px; height:15px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center;
+    flex:none;
+  }
+
+  /* identification fields */
+  .fields{ display:grid; grid-template-columns:1fr 1fr; gap:9px 20px; margin-top:6px; }
+  .f{ display:flex; flex-direction:column; }
+  .f.wide{ grid-column:1 / -1; }
+  .f .lab{ font-size:8.4px; letter-spacing:.12em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin-bottom:6px; }
+  .fld{
+    border:none; border-bottom:1px solid var(--field-line);
+    background:transparent; font-family:var(--serif-body); font-size:11px; color:var(--field);
+    padding:0 2px 2px; line-height:1.5; outline:none; width:100%; min-height:15px;
+  }
+  .fld:focus{ border-bottom-color:var(--terracota); background:#C978620d; }
+  .fld::placeholder{ color:#5A7A6B66; font-style:italic; }
+
+  /* authorization purposes */
+  .purposes{ display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; margin:6px 0 2px; align-items:start; }
+  .opt{ display:grid; grid-template-columns:14px 1fr; column-gap:8px; align-items:start; font-size:10.5px; line-height:1.38; }
+  .opt > label.boxwrap{ display:inline-flex; margin-top:1px; cursor:pointer; }
+  .pbox{ appearance:none; -webkit-appearance:none; width:12px; height:12px; border:1.3px solid var(--salvia); border-radius:2px; margin:0; cursor:pointer; position:relative; background:#fff; flex:none; }
+  .pbox:checked{ background:var(--terracota); border-color:var(--terracota); }
+  .pbox:checked::after{ content:"✓"; position:absolute; inset:0; color:#fff; font-size:9px; line-height:12px; text-align:center; }
+  .opt .lbltext{ cursor:pointer; }
+  .opt b{ color:var(--cipreste); font-weight:600; }
+  .note-inline{ font-size:9px; font-style:italic; color:var(--salvia); margin-top:8px; }
+
+  /* LGPD list */
+  ol.clauses{ margin:2px 0 0; padding-left:0; list-style:none; counter-reset:cl; }
+  ol.clauses li{
+    position:relative; padding-left:20px; margin-bottom:5px;
+    font-size:10.3px; line-height:1.45; text-align:justify;
+  }
+  ol.clauses li::before{
+    counter-increment:cl; content:counter(cl,decimal-leading-zero);
+    position:absolute; left:0; top:0;
+    font-family:var(--serif-display); font-weight:700; font-size:10px;
+    color:var(--terracota);
+  }
+  ol.clauses li b{ color:var(--cipreste); font-weight:600; }
+
+  .legal-ref{
+    font-size:9px; font-style:italic; color:var(--salvia);
+    margin-top:7px; padding-top:6px; border-top:1px dotted var(--line);
+  }
+
+  /* ---------- SIGNATURES ---------- */
+  .sign-wrap{ margin-top:9px; }
+  .place-date{ font-size:10.5px; margin-bottom:12px; display:flex; align-items:flex-end; gap:5px; flex-wrap:wrap; }
+  .place-date .fld{ width:auto; }
+  .place-date .fld.cidade{ flex:0 1 150px; }
+  .place-date .fld.sm{ flex:0 0 46px; text-align:center; }
+  .place-date .fld.md{ flex:0 0 92px; text-align:center; }
+  .signs{ display:flex; flex-wrap:wrap; gap:0px 30px; margin-top:6px; }
+  .sig{ text-align:center; flex:1 1 44%; }
+  .sig .line{ border-top:1px solid var(--cipreste); margin-bottom:4px; }
+  .sig .sig-stamp{ display:block; width:122px; height:auto; margin:0 auto -20px; position:relative; z-index:1; pointer-events:none; mix-blend-mode:multiply; }
+  .sig .role{ font-size:9.4px; color:var(--cipreste); font-weight:600; letter-spacing:.02em; }
+  .sig .hint{ font-size:8px; color:var(--salvia); margin-top:2px; letter-spacing:.04em; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin-top:auto;
+    padding-top:8px;
+    border-top:1px solid var(--cipreste);
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:8px; color:var(--ink-soft); letter-spacing:.03em;
+  }
+  footer .d{ width:4px; height:4px; background:var(--terracota); transform:rotate(45deg); display:inline-block; margin:0 6px; }
+  footer b{ color:var(--cipreste); font-weight:600; }
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{ position:fixed; left:0; right:0; bottom:0; z-index:9999; background:var(--cipreste); display:flex; align-items:center; justify-content:center; gap:14px; padding:11px 16px; box-shadow:0 -6px 20px rgba(42,58,51,.22); }
+  .toolbar .msg{ color:#F7F2E8cc; font-size:12px; }
+  .toolbar .msg b{ color:#fff; }
+  .toolbar button{ font-family:var(--serif-body); font-size:13.5px; font-weight:600; cursor:pointer; border-radius:7px; padding:9px 18px; border:1px solid transparent; display:inline-flex; align-items:center; gap:8px; }
+  .btn-pdf{ background:var(--terracota); color:#fff; }
+  .btn-pdf:hover{ background:#b96954; }
+  .btn-clear{ background:transparent; color:#F7F2E8; border-color:#F7F2E866; }
+  .btn-clear:hover{ background:#ffffff1a; }
+
+  /* ---------- PRINT ---------- */
+  @page{ size:A4; margin:0; }
+  @media print{
+    body{ background:#fff; padding:0; }
+    .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
+    .toolbar{ display:none !important; }
+    .fld{ border-bottom-color:var(--field-line) !important; background:transparent !important; }
+    .fld::placeholder{ color:transparent !important; }
+    .pbox{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+  @media screen and (max-width:760px){
+    body{ padding:14px 14px 70px; }
+    .page{ width:100%; min-height:0; padding:7mm 6mm; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page" data-screen-label="Termo de Uso de Imagem">
+    <div class="inner">
+
+      <header>
+        <img class="logo" src="logo-termo.png" alt="Bruna Arguelles — Enfermeira">
+        <div class="org"><strong>BRUNA ARGUELLES — ENFERMAGEM ESPECIALIZADA</strong><br>CNPJ 66.913.603/0001-92</div>
+      </header>
+
+      <div class="doc-title">
+        <h1>Termo de Consentimento Livre e Esclarecido</h1>
+        <div class="sub">Captação e Uso de Imagem</div>
+        <div class="rule-orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+      </div>
+
+      <main>
+        <p class="lead">Pelo presente instrumento, eu, titular abaixo identificado(a), de forma <b>livre, expressa, informada e gratuita</b>, autorizo <b>BRUNA ARGUELLES — ENFERMAGEM ESPECIALIZADA</b>, inscrita no CNPJ sob o nº 66.913.603/0001-92 (doravante "Profissional"), a captar, armazenar, editar e reproduzir minha imagem, voz e os dados a ela associados, captados por meio de <b>fotografias, vídeos e registros de procedimentos</b> (incluindo imagens de "antes e depois"), exclusivamente para as finalidades adiante assinaladas e nos termos da legislação vigente.</p>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">1</span>Identificação do(a) Titular / Paciente</h2>
+          <div class="fields">
+            <div class="f wide"><span class="lab">Nome completo</span><input class="fld" type="text" data-k="nome"></div>
+            <div class="f"><span class="lab">CPF</span><input class="fld" type="text" data-k="cpf"></div>
+            <div class="f"><span class="lab">Data de nascimento</span><input class="fld" type="text" data-k="nasc" placeholder="__/__/____"></div>
+            <div class="f wide"><span class="lab">Endereço</span><input class="fld" type="text" data-k="endereco"></div>
+            <div class="f"><span class="lab">Telefone</span><input class="fld" type="text" data-k="tel"></div>
+            <div class="f"><span class="lab">E-mail</span><input class="fld" type="text" data-k="email"></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">2</span>Finalidades Autorizadas</h2>
+          <p style="margin-bottom:4px;">Autorizo o uso da minha imagem para as seguintes finalidades (assinale as autorizadas):</p>
+          <div class="purposes">
+            <div class="opt"><label class="boxwrap"><input type="checkbox" class="pbox" data-k="fim_clinico"></label><span class="lbltext"><b>Acompanhamento clínico</b> e uso interno para controle da evolução do tratamento</span></div>
+            <div class="opt"><label class="boxwrap"><input type="checkbox" class="pbox" data-k="fim_redes"></label><span class="lbltext"><b>Redes sociais</b> (Instagram, Facebook e plataformas similares)</span></div>
+            <div class="opt"><label class="boxwrap"><input type="checkbox" class="pbox" data-k="fim_site"></label><span class="lbltext"><b>Site e portfólio</b> profissional</span></div>
+            <div class="opt"><label class="boxwrap"><input type="checkbox" class="pbox" data-k="fim_impresso"></label><span class="lbltext"><b>Material impresso</b> de divulgação (folders, banners, cartões)</span></div>
+            <div class="opt"><label class="boxwrap"><input type="checkbox" class="pbox" data-k="fim_didatico"></label><span class="lbltext"><b>Fins didáticos e educacionais</b> (aulas, palestras, conteúdo informativo)</span></div>
+            <div class="opt"><label class="boxwrap"><input type="checkbox" class="pbox" data-k="fim_whats"></label><span class="lbltext"><b>WhatsApp Business</b> e catálogo de serviços</span></div>
+          </div>
+          <div class="note-inline">As finalidades não assinaladas não estão autorizadas. A autorização não inclui usos diversos dos aqui descritos.</div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">3</span>Proteção de Dados (LGPD — Lei nº 13.709/2018)</h2>
+          <ol class="clauses">
+            <li><b>Controladora dos dados.</b> A Profissional figura como controladora das imagens e dados pessoais coletados, responsabilizando-se por seu tratamento conforme a Lei Geral de Proteção de Dados Pessoais.</li>
+            <li><b>Base legal e finalidade.</b> O tratamento fundamenta-se no consentimento do titular (art. 7º, I, da LGPD) e limita-se estritamente às finalidades assinaladas no item 2, sendo vedado uso diverso, comercialização ou cessão a terceiros sem nova autorização.</li>
+            <li><b>Direitos do titular.</b> É assegurado ao titular, a qualquer tempo e mediante requisição, o direito de confirmação, acesso, correção, anonimização, portabilidade e eliminação dos dados, bem como informação sobre o seu tratamento (art. 18 da LGPD).</li>
+            <li><b>Revogação do consentimento.</b> Este consentimento pode ser revogado a qualquer momento, por manifestação escrita dirigida à Profissional, de forma gratuita e facilitada, ressalvados os usos legítimos já realizados durante sua vigência.</li>
+            <li><b>Segurança e armazenamento.</b> A Profissional adota medidas técnicas e administrativas aptas a proteger os dados contra acessos não autorizados, perda ou divulgação indevida, mantendo-os apenas pelo período necessário ao cumprimento das finalidades autorizadas.</li>
+            <li><b>Gratuidade.</b> A presente autorização é concedida em caráter gratuito, não gerando ao titular qualquer direito a remuneração, contraprestação ou indenização pelo uso autorizado (Código Civil, arts. 20 e 21; CF/88, art. 5º, X).</li>
+            <li><b>Vigência.</b> Este termo vigora por prazo indeterminado a partir da assinatura, perdurando até eventual revogação expressa pelo titular.</li>
+          </ol>
+          <p class="legal-ref">Declaro que li, compreendi e tive a oportunidade de esclarecer todas as dúvidas sobre o conteúdo deste termo antes de assiná-lo, manifestando minha concordância de forma plena e consciente.</p>
+        </section>
+      </main>
+
+      <div class="sign-wrap">
+        <div class="place-date">
+          <input class="fld cidade" type="text" data-k="cidade_ass" value="Juiz de Fora/MG">
+          <span>,</span>
+          <input class="fld sm" type="text" data-k="dia" placeholder="dia">
+          <span>de</span>
+          <input class="fld md" type="text" data-k="mes" placeholder="mês">
+          <span>de</span>
+          <input class="fld sm" type="text" data-k="ano" placeholder="ano">
+          <span>.</span>
+        </div>
+        <div class="signs">
+          <div class="sig" style="border-width: 0px; border-style: solid; text-align: center; width: 0px; padding: 0px;">
+            <div class="line" style="border-width: 1px 0px 0px; margin: 30px 0px 4px;"></div>
+            <div class="role">Assinatura do(a) Titular / Paciente</div>
+            <div class="hint" style="margin: 2px 0px 0px;">Nome e CPF conforme item 1</div>
+          </div>
+          <div class="sig">
+            <div class="line" style="margin: 30px 0px 4px;"></div>
+            <div class="role">Responsável Legal <span style="font-weight:400;">(se menor ou incapaz)</span></div>
+            <div class="hint" style="text-align: left; margin: 2px 30px 0px 0px;">Nome __________________________________________________________________<br>CPF ___________________________________________________________________<br> Grau de parentesco _______________________________________________________</div>
+          </div>
+          <div class="sig" style="flex:1 1 100%; max-width:280px; margin: -28px 185px 0px 3px; text-align: center; padding: 0px;">
+            <img class="sig-stamp" src="assinatura-bruna.png" alt="Assinatura de Bruna Arguelles">
+            <div class="line"></div>
+            <div class="role">Bruna Arguelles — Enfermeira</div>
+            <div class="hint">COREN/MG nº 761268-ENF</div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <span><b>Bruna Arguelles</b> · Enfermagem Especializada</span>
+        <span>CNPJ 66.913.603/0001-92 <span class="d"></span> Juiz de Fora/MG</span>
+      </footer>
+
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="msg">Preencha os campos e clique em <b>Baixar PDF</b> para assinar digitalmente.</span>
+    <button class="btn-pdf" id="btnPdf">⤓ Baixar PDF</button>
+    <button class="btn-clear" id="btnClear">Limpar campos</button>
+  </div>
+
+  <script>
+    (function(){
+      var KEY = 'termo-uso-imagem-v1';
+      var fields = Array.prototype.slice.call(document.querySelectorAll('[data-k]'));
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ saved = {}; }
+      fields.forEach(function(el){
+        var k = el.dataset.k;
+        if (!(k in saved)) return;
+        if (el.type === 'checkbox') el.checked = !!saved[k];
+        else el.value = saved[k];
+      });
+      function persist(){
+        var data = {};
+        fields.forEach(function(el){
+          if (el.type === 'checkbox'){ data[el.dataset.k] = el.checked; el.toggleAttribute('checked', el.checked); }
+          else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
+        });
+        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+      }
+      fields.forEach(function(el){
+        el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', persist);
+      });
+      persist();
+
+      document.getElementById('btnPdf').addEventListener('click', function(){ persist(); window.print(); });
+      document.getElementById('btnClear').addEventListener('click', function(){
+        if (!confirm('Limpar todos os campos preenchidos?')) return;
+        fields.forEach(function(el){
+          if (el.type === 'checkbox'){ el.checked = false; el.removeAttribute('checked'); }
+          else if (el.dataset.k === 'cidade_ass'){ el.value = 'Juiz de Fora/MG'; }
+          else { el.value = ''; }
+          el.setAttribute('value', el.value || '');
+        });
+        persist();
+      });
+    })();
+  </script>
+
+</body></html>
