@@ -155,6 +155,17 @@
       </div>
     </div>
 
+    <div class="grupo">
+      <div class="grupo-label"><span class="d"></span><span>Ferramentas</span></div>
+      <div class="cards">
+        <a class="card" href="precificacao.html" target="_blank" rel="noopener">
+          <h2>Tabela de Precificação</h2>
+          <p>Seletor de materiais, simulador de custos e tabela de preços.</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+      </div>
+    </div>
+
     <footer class="foot">Preencha os campos na página do documento e clique em "Baixar PDF" para imprimir.</footer>
   </main>
 </div>
@@ -165,7 +176,6 @@
   function tentarLogin(){
     const input = document.getElementById('senha-input');
     if (input.value === SENHA){
-      localStorage.setItem('docs_auth', '1');
       document.getElementById('login').style.display = 'none';
       document.getElementById('app').style.display = 'block';
     } else {
@@ -179,16 +189,10 @@
   document.getElementById('btn-entrar').addEventListener('click', tentarLogin);
   document.getElementById('senha-input').addEventListener('keydown', e => { if (e.key === 'Enter') tentarLogin(); });
   document.getElementById('btn-sair').addEventListener('click', () => {
-    localStorage.removeItem('docs_auth');
     document.getElementById('app').style.display = 'none';
     document.getElementById('login').style.display = 'flex';
     document.getElementById('senha-input').value = '';
   });
-
-  if (localStorage.getItem('docs_auth') === '1'){
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-  }
 </script>
 
 </body></html>
