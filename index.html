@@ -1,610 +1,194 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Bruna Arguelles — Enfermagem Especializada | Tratamento de Feridas e Laserterapia · Juiz de Fora/MG</title>
-<meta name="description" content="Enfermeira especialista em tratamento de feridas agudas e de difícil cicatrização, laserterapia e PRP/PRF. Atendimento em consultório e domiciliar em Juiz de Fora/MG e teleconsulta para todo o Brasil." />
-<link rel="icon" type="image/png" href="assets/favicon.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentos & Termos — Bruna Arguelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root{
     --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
-    --ink:#2A3A33; --ink-soft:#43544c;
-    --salvia-soft:#5A7A6B22; --line:#5A7A6B44; --line-strong:#2A3A3326;
-    --cream-2:#efe7d6;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B66; --bg:#e7ded0;
     --serif-display:"Cormorant Garamond", Georgia, serif;
     --serif-body:"EB Garamond", Georgia, serif;
-    --nav-h:74px;
   }
   *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; scroll-padding-top:var(--nav-h); }
   html,body{ margin:0; padding:0; }
-  body{
-    background:var(--pergaminho); font-family:var(--serif-body); color:var(--ink);
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    font-size:18px; line-height:1.6; overflow-x:hidden;
+  body{ background:var(--bg); font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; min-height:100vh; }
+
+  /* ---------- LOGIN ---------- */
+  #login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .login-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:400px; max-width:100%; overflow:hidden; }
+  .login-card .topo{ height:3px; background:var(--cipreste); }
+  .login-inner{ padding:44px 40px 40px; text-align:center; }
+  .login-inner img{ height:64px; width:auto; margin:0 auto 24px; display:block; }
+  .login-label{ display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; }
+  .login-label span{ font-size:10px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .login-label .l{ width:24px; height:.5px; background:var(--terracota); opacity:.7; }
+  .login-inner h1{ font-family:var(--serif-display); font-size:24px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 6px; }
+  .login-inner p{ font-size:12px; color:var(--ink-soft); margin:0; }
+  .divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:26px 0; }
+  .login-inner input[type=password]{
+    width:100%; padding:12px 14px; font-size:14px; font-family:inherit;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    outline:none; margin-bottom:10px;
   }
-  img{ max-width:100%; display:block; }
-  a{ color:inherit; text-decoration:none; }
-
-  .wrap{ width:min(1180px, 92vw); margin:0 auto; }
-
-  /* ---------- shared motifs ---------- */
-  .diamond{ width:7px; height:7px; background:var(--terracota); transform:rotate(45deg); flex:none; display:inline-block; }
-  .kicker{ font-size:13px; letter-spacing:.26em; text-transform:uppercase; color:var(--terracota); font-weight:600; display:flex; align-items:center; gap:11px; }
-  .kicker.center{ justify-content:center; }
-  .kicker .d{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); }
-  h1,h2,h3{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); margin:0; line-height:1.05; letter-spacing:.005em; }
-  .sec-title{ font-size:clamp(34px, 5vw, 54px); margin:16px 0 0; }
-  .sec-intro{ font-size:19px; color:var(--ink-soft); max-width:62ch; margin:18px 0 0; text-wrap:pretty; }
-
-  /* image placeholder */
-  .ph{
-    position:relative; border:1px solid var(--line); border-radius:4px;
-    background-color:var(--cream-2);
-    background-image:repeating-linear-gradient(45deg, #5A7A6B16 0 11px, transparent 11px 22px);
-    display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
+  .login-inner input[type=password].erro{ border-color:var(--terracota); }
+  .login-inner .msg-erro{ font-size:12px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .login-inner button{
+    width:100%; padding:13px; background:var(--cipreste); color:#fff; border:none;
+    font-size:13px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
   }
-  .ph .cap{
-    font-family:"Courier New", monospace; font-size:11px; letter-spacing:.02em; line-height:1.45;
-    color:var(--salvia); background:#F7F2E8d9; padding:6px 10px; margin:11px; border-radius:3px; max-width:90%;
+  .login-inner button:hover{ background:#3d5247; }
+
+  /* ---------- APP ---------- */
+  #app{ display:none; min-height:100vh; }
+  .faixa-topo{ height:4px; background:var(--cipreste); }
+  .header{ display:flex; align-items:center; justify-content:space-between; padding:20px 32px; border-bottom:.5px solid var(--line); flex-wrap:wrap; gap:12px; }
+  .header-esq{ display:flex; align-items:center; gap:18px; }
+  .header-esq img{ height:44px; width:auto; }
+  .header-info p.label-h{ font-size:9.5px; letter-spacing:.2em; color:var(--terracota); text-transform:uppercase; margin:0 0 3px; font-weight:600; }
+  .header-info h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); margin:0; }
+  .btn-sair{ background:none; border:1px solid var(--line); padding:9px 18px; font-size:11.5px; color:var(--ink-soft); font-family:inherit; letter-spacing:.06em; cursor:pointer; }
+  .btn-sair:hover{ border-color:var(--terracota); color:var(--terracota); }
+
+  main{ max-width:980px; margin:0 auto; padding:40px 32px 80px; }
+  .grupo{ margin-bottom:40px; }
+  .grupo-label{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .grupo-label .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); flex:none; }
+  .grupo-label span{ font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--salvia); font-weight:600; }
+
+  .cards{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:14px; }
+  .card{
+    display:block; background:#fff; border:1px solid var(--line); padding:20px 22px;
+    text-decoration:none; color:inherit; position:relative; transition:border-color .15s, box-shadow .15s;
   }
+  .card:hover{ border-color:var(--terracota); box-shadow:0 8px 24px rgba(42,58,51,.1); }
+  .card h2{ font-family:var(--serif-display); font-size:17px; font-weight:600; color:var(--cipreste); margin:0 0 6px; line-height:1.25; }
+  .card p{ font-size:12px; color:var(--ink-soft); margin:0; line-height:1.5; }
+  .card .abrir{ display:inline-flex; align-items:center; gap:5px; margin-top:12px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--terracota); font-weight:600; }
 
-  /* ---------- NAV ---------- */
-  header.nav{
-    position:fixed; top:0; left:0; right:0; height:var(--nav-h); z-index:100;
-    display:flex; align-items:center; background:#F7F2E8f2; backdrop-filter:blur(8px);
-    border-bottom:1px solid transparent; transition:border-color .3s, box-shadow .3s;
-  }
-  header.nav.scrolled{ border-bottom-color:var(--line); box-shadow:0 8px 30px rgba(42,58,51,.07); }
-  .nav .wrap{ display:flex; align-items:center; justify-content:space-between; gap:20px; }
-  .brand{ display:flex; align-items:center; gap:12px; }
-  .brand img{ height:38px; width:auto; }
-  .brand .bt{ line-height:1; }
-  .brand .bt .nm{ font-family:var(--serif-display); font-size:21px; font-weight:600; color:var(--cipreste); }
-  .brand .bt .rl{ font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin-top:3px; }
-  .nav-links{ display:flex; align-items:center; gap:30px; }
-  .nav-links a{ font-size:15px; letter-spacing:.04em; color:var(--ink-soft); position:relative; transition:color .2s; }
-  .nav-links a:hover{ color:var(--cipreste); }
-  .nav-links a::after{ content:""; position:absolute; left:0; right:100%; bottom:-5px; height:1.5px; background:var(--terracota); transition:right .25s; }
-  .nav-links a:hover::after{ right:0; }
-  .nav-right{ display:flex; align-items:center; gap:16px; }
-  .lang{ display:flex; align-items:center; gap:2px; font-size:12px; letter-spacing:.08em; font-weight:600; border:1px solid var(--line); border-radius:30px; overflow:hidden; }
-  .lang button{ font-family:inherit; font-weight:600; font-size:12px; letter-spacing:.06em; background:none; border:none; padding:6px 11px; cursor:pointer; color:var(--ink-soft); transition:background .2s,color .2s; }
-  .lang button.on{ background:var(--salvia); color:#fff; }
-  .btn{
-    display:inline-flex; align-items:center; gap:9px; font-family:var(--serif-body); font-weight:600;
-    font-size:16px; letter-spacing:.02em; padding:12px 24px; border-radius:34px; cursor:pointer;
-    border:1.5px solid var(--cipreste); background:var(--cipreste); color:var(--pergaminho);
-    transition:transform .15s, box-shadow .2s, background .2s; white-space:nowrap;
-  }
-  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(42,58,51,.22); }
-  .btn.terra{ background:var(--terracota); border-color:var(--terracota); }
-  .btn.ghost{ background:transparent; color:var(--cipreste); }
-  .btn.ghost:hover{ background:var(--salvia-soft); }
-  .btn svg{ width:18px; height:18px; }
-  .nav .btn{ padding:9px 18px; font-size:14px; }
-  .menu-toggle{ display:none; background:none; border:none; cursor:pointer; padding:6px; }
-  .menu-toggle svg{ width:26px; height:26px; stroke:var(--cipreste); }
+  footer.foot{ text-align:center; font-size:11px; color:var(--salvia); margin-top:8px; }
 
-  /* ---------- HERO ---------- */
-  .hero{ padding:calc(var(--nav-h) + 64px) 0 80px; position:relative; overflow:hidden; }
-  .hero::before{
-    content:""; position:absolute; right:-180px; top:-120px; width:520px; height:520px; border-radius:50%;
-    background:radial-gradient(circle, #5A7A6B14, transparent 68%); pointer-events:none;
-  }
-  .hero .wrap{ display:grid; grid-template-columns:1.15fr .85fr; gap:64px; align-items:center; }
-  .hero h1{ font-size:clamp(44px, 6.4vw, 82px); margin-top:20px; }
-  .hero h1 em{ font-style:italic; color:var(--salvia); font-weight:500; }
-  .hero .lede{ font-size:20px; color:var(--ink-soft); margin:26px 0 0; max-width:50ch; text-wrap:pretty; }
-  .hero .creds{ display:flex; flex-wrap:wrap; gap:8px; margin:30px 0 0; }
-  .hero .creds .tag{ font-size:13px; letter-spacing:.04em; color:var(--salvia); border:1px solid var(--salvia); border-radius:30px; padding:5px 14px; }
-  .hero .cta-row{ display:flex; flex-wrap:wrap; gap:14px; margin:36px 0 0; }
-  .hero-figure{ position:relative; }
-  .hero-figure .shot{ width:100%; aspect-ratio:4/5; object-fit:cover; object-position:center 18%; border-radius:6px; border:1px solid var(--line); box-shadow:0 22px 55px rgba(42,58,51,.2); }
-  .hero-figure .stamp{
-    position:absolute; bottom:-22px; left:-22px; background:var(--pergaminho); border:1px solid var(--line);
-    border-radius:6px; padding:14px 18px; box-shadow:0 14px 34px rgba(42,58,51,.14); display:flex; gap:13px; align-items:center;
-  }
-  .hero-figure .stamp .ic{ width:38px; height:38px; flex:none; border-radius:50%; background:var(--salvia-soft); display:flex; align-items:center; justify-content:center; }
-  .hero-figure .stamp .ic svg{ width:21px; height:21px; stroke:var(--cipreste); fill:none; stroke-width:1.6; }
-  .hero-figure .stamp .tx .a{ font-family:var(--serif-display); font-size:17px; font-weight:600; color:var(--cipreste); line-height:1.1; }
-  .hero-figure .stamp .tx .b{ font-size:11px; letter-spacing:.06em; color:var(--ink-soft); text-transform:uppercase; }
-
-  /* ---------- SECTION base ---------- */
-  section.block{ padding:86px 0; position:relative; }
-  .block.cream{ background:var(--cream-2); }
-  .block.dark{ background:var(--cipreste); color:var(--pergaminho); }
-  .block.dark h1,.block.dark h2,.block.dark h3{ color:var(--pergaminho); }
-  .sec-head{ max-width:760px; }
-  .sec-head.center{ margin:0 auto; text-align:center; }
-
-  /* ---------- SOBRE ---------- */
-  .about-grid{ display:grid; grid-template-columns:.85fr 1.15fr; gap:60px; align-items:center; margin-top:8px; }
-  .about-figure{ position:relative; margin-bottom:10px; }
-  .about-figure .shot-main{ display:block; width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:6px; border:1px solid var(--line); box-shadow:0 20px 50px rgba(42,58,51,.16); }
-  .about-figure .shot-inset{ position:absolute; width:44%; aspect-ratio:3/4; right:-16px; bottom:-26px; object-fit:cover; border-radius:6px; border:6px solid var(--cream-2); box-shadow:0 16px 40px rgba(42,58,51,.22); }
-  .about-body .kicker{ margin-bottom:0; }
-  .about-body p{ margin:18px 0 0; color:var(--ink-soft); font-size:18.5px; text-wrap:pretty; }
-  .about-body p .k{ color:var(--cipreste); font-weight:600; }
-  .cred-list{ list-style:none; margin:30px 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:14px 28px; }
-  .cred-list li{ display:flex; gap:11px; align-items:flex-start; font-size:16px; line-height:1.4; }
-  .cred-list li .d{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); flex:none; margin-top:8px; }
-  .cred-list li b{ color:var(--cipreste); font-weight:600; }
-
-  /* ---------- SERVIÇOS ---------- */
-  .svc-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:54px; }
-  .svc{
-    background:var(--pergaminho); border:1px solid var(--line); border-radius:8px; padding:34px 30px 32px;
-    display:flex; flex-direction:column; position:relative; overflow:hidden; transition:transform .2s, box-shadow .2s, border-color .2s;
-  }
-  .block.cream .svc{ background:#F7F2E8; }
-  .svc:hover{ transform:translateY(-5px); box-shadow:0 18px 40px rgba(42,58,51,.12); border-color:var(--salvia); }
-  .svc .num{ font-family:var(--serif-display); font-size:15px; color:var(--terracota); font-weight:600; letter-spacing:.1em; }
-  .svc .ic{ width:54px; height:54px; border-radius:50%; background:var(--salvia-soft); display:flex; align-items:center; justify-content:center; margin:6px 0 20px; }
-  .svc .ic svg{ width:28px; height:28px; stroke:var(--cipreste); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
-  .svc h3{ font-size:27px; }
-  .svc p{ margin:13px 0 0; font-size:16.5px; color:var(--ink-soft); text-wrap:pretty; }
-  .svc ul{ list-style:none; margin:18px 0 0; padding:0; display:flex; flex-direction:column; gap:9px; }
-  .svc ul li{ font-size:15px; display:flex; gap:9px; align-items:flex-start; color:var(--ink-soft); }
-  .svc ul li .d{ width:5px; height:5px; background:var(--salvia); transform:rotate(45deg); flex:none; margin-top:8px; }
-
-  /* ---------- DICAS ---------- */
-  .dicas-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:52px; }
-  .dica{ display:flex; flex-direction:column; background:var(--pergaminho); border-radius:8px; overflow:hidden; border:1px solid var(--line); transition:transform .2s, box-shadow .2s; }
-  .dica:hover{ transform:translateY(-5px); box-shadow:0 18px 40px rgba(42,58,51,.12); }
-  .dica .ph{ aspect-ratio:16/10; border:none; border-radius:0; }
-  .dica .body{ padding:24px 24px 28px; display:flex; flex-direction:column; flex:1; }
-  .dica .meta{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--terracota); font-weight:600; }
-  .dica h3{ font-size:23px; margin-top:11px; }
-  .dica p{ margin:11px 0 0; font-size:15.5px; color:var(--ink-soft); flex:1; text-wrap:pretty; }
-  .dica .more{ margin-top:18px; font-size:14px; font-weight:600; color:var(--salvia); letter-spacing:.04em; display:inline-flex; align-items:center; gap:7px; }
-  .dicas-note{ text-align:center; margin-top:40px; font-size:16px; color:var(--ink-soft); font-style:italic; }
-  .dica img.dcard-img{ width:100%; aspect-ratio:16/10; object-fit:cover; display:block; }
-  .dicas-empty{ grid-column:1/-1; text-align:center; color:var(--ink-soft); font-style:italic; }
-
-  /* ---------- CONTATO ---------- */
-  .block.dark::before{
-    content:""; position:absolute; left:-150px; bottom:-150px; width:480px; height:480px; border-radius:50%;
-    background:radial-gradient(circle, #ffffff0d, transparent 68%); pointer-events:none;
-  }
-  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:48px; align-items:start; position:relative; z-index:2; }
-  .contact-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px; }
-  .contact-list li a, .contact-list li .ci{ display:flex; gap:18px; align-items:center; padding:18px 4px; border-bottom:1px solid #F7F2E822; transition:padding-left .2s; }
-  .contact-list li a:hover{ padding-left:12px; }
-  .contact-list .ic{ width:46px; height:46px; flex:none; border-radius:50%; border:1px solid #F7F2E833; display:flex; align-items:center; justify-content:center; }
-  .contact-list .ic svg{ width:22px; height:22px; stroke:var(--terracota); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
-  .contact-list .lab{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#F7F2E899; }
-  .contact-list .val{ font-family:var(--serif-display); font-size:22px; font-weight:600; color:var(--pergaminho); line-height:1.15; margin-top:2px; }
-  .contact-side{ background:#ffffff0a; border:1px solid #F7F2E822; border-radius:10px; padding:36px 34px; }
-  .contact-side h3{ font-size:28px; color:var(--pergaminho); }
-  .contact-side p{ color:#F7F2E8cc; margin:14px 0 0; font-size:17px; }
-  .contact-side .btn{ margin-top:26px; width:100%; justify-content:center; }
-  .booking-opts{ display:flex; flex-direction:column; gap:13px; margin-top:24px; }
-  .bopt{ display:block; padding:21px 23px; border-radius:11px; border:1px solid #F7F2E826; background:#ffffff09; transition:transform .18s, background .2s, border-color .2s; }
-  .bopt:hover{ transform:translateY(-3px); background:#ffffff14; border-color:var(--salvia); }
-  .bopt.primary{ background:var(--terracota); border-color:var(--terracota); }
-  .bopt.primary:hover{ background:#d2856f; border-color:#d2856f; }
-  .bopt-k{ display:block; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--terracota); font-weight:700; }
-  .bopt.primary .bopt-k{ color:#F7F2E8d9; }
-  .bopt-t{ display:block; font-family:var(--serif-display); font-size:23px; font-weight:600; color:var(--pergaminho); line-height:1.12; margin-top:5px; }
-  .bopt-d{ display:block; font-size:14.5px; line-height:1.5; color:#F7F2E8b3; margin-top:8px; }
-  .bopt.primary .bopt-d{ color:#fff; opacity:.92; }
-  .bopt-cta{ display:inline-block; margin-top:13px; font-size:14px; font-weight:700; letter-spacing:.03em; color:var(--salvia); }
-  .bopt.primary .bopt-cta{ color:#fff; }
-  .bopt:hover .bopt-cta{ color:var(--pergaminho); }
-  .contact-side .hours{ margin-top:28px; padding-top:24px; border-top:1px solid #F7F2E822; }
-  .contact-side .hours .row{ display:flex; justify-content:space-between; font-size:15px; color:#F7F2E8cc; padding:6px 0; }
-  .contact-side .hours .row b{ color:var(--pergaminho); font-weight:600; }
-
-  /* ---------- FOOTER ---------- */
-  footer.site{ background:#212e28; color:#F7F2E8aa; padding:50px 0 38px; font-size:14px; }
-  footer.site .wrap{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px; align-items:flex-end; }
-  footer.site .fbrand{ display:flex; align-items:center; gap:13px; }
-  footer.site .fbrand img{ height:42px; width:auto; filter:brightness(0) invert(1) opacity(.85); }
-  footer.site .fbrand .nm{ font-family:var(--serif-display); font-size:20px; color:var(--pergaminho); font-weight:600; }
-  footer.site .fbrand .rl{ font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--terracota); margin-top:3px; }
-  footer.site .legal{ text-align:right; line-height:1.7; font-size:13px; }
-  footer.site .legal .sep{ display:inline-block; width:4px; height:4px; background:var(--salvia); transform:rotate(45deg); margin:0 8px; vertical-align:middle; }
-
-  /* ---------- reveal animation ---------- */
-  @media (prefers-reduced-motion: no-preference){
-    .reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
-    .reveal.in{ opacity:1; transform:none; }
-  }
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width:980px){
-    .hero .wrap{ grid-template-columns:1fr; gap:48px; }
-    .hero-figure{ max-width:440px; }
-    .about-grid{ grid-template-columns:1fr; gap:40px; }
-    .svc-grid{ grid-template-columns:1fr 1fr; }
-    .dicas-grid{ grid-template-columns:1fr 1fr; }
-    .contact-grid{ grid-template-columns:1fr; gap:40px; }
-  }
-  @media (max-width:760px){
-    body{ font-size:17px; }
-    .nav-links, .nav .btn{ display:none; }
-    .menu-toggle{ display:block; }
-    .nav-links.open{
-      display:flex; position:absolute; top:var(--nav-h); left:0; right:0; flex-direction:column; gap:0;
-      background:#F7F2E8f7; backdrop-filter:blur(8px); border-bottom:1px solid var(--line); padding:8px 0; box-shadow:0 14px 30px rgba(42,58,51,.1);
-    }
-    .nav-links.open a{ padding:14px 7vw; width:100%; }
-    .nav-links.open a::after{ display:none; }
-    section.block{ padding:64px 0; }
-    .svc-grid, .dicas-grid{ grid-template-columns:1fr; }
-    .cred-list{ grid-template-columns:1fr; }
-    footer.site .wrap{ flex-direction:column; align-items:flex-start; }
-    footer.site .legal{ text-align:left; }
-    .hero-figure .stamp{ left:0; }
+  @media (max-width:600px){
+    .login-card{ width:100%; }
+    .header{ padding:16px 20px; }
+    main{ padding:28px 18px 60px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ============ NAV ============ -->
-<header class="nav" id="nav">
-  <div class="wrap">
-    <a class="brand" href="#top" aria-label="Bruna Arguelles">
-      <img src="assets/monogram.png" alt="" />
-      <div class="bt">
-        <div class="nm">Bruna Arguelles</div>
-        <div class="rl" data-i="role">Enfermagem Especializada</div>
-      </div>
-    </a>
-    <nav class="nav-links" id="navlinks">
-      <a href="#sobre" data-i="nav_about">Sobre</a>
-      <a href="#servicos" data-i="nav_services">Serviços</a>
-      <a href="#dicas" data-i="nav_tips">Dicas</a>
-      <a href="#contato" data-i="nav_contact">Contato</a>
-    </nav>
-    <div class="nav-right">
-      <div class="lang" role="group" aria-label="Idioma">
-        <button id="lang-pt" class="on" onclick="setLang('pt')">PT</button>
-        <button id="lang-en" onclick="setLang('en')">EN</button>
-      </div>
-      <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener" data-i="nav_cta">Agendar</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
-      </button>
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-card">
+    <div class="topo"></div>
+    <div class="login-inner">
+      <img src="logo-termo.png" alt="Bruna Arguelles">
+      <div class="login-label"><span class="l"></span><span>Acesso restrito</span><span class="l"></span></div>
+      <h1>Documentos & Termos</h1>
+      <p>Bruna Arguelles · Enfermagem Especializada</p>
+      <div class="divisor"></div>
+      <input type="password" id="senha-input" placeholder="Senha">
+      <p class="msg-erro" id="msg-erro">Senha incorreta.</p>
+      <button id="btn-entrar">Entrar</button>
     </div>
   </div>
-</header>
+</div>
 
-<a id="top"></a>
-
-<!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="wrap">
-    <div class="hero-copy">
-      <div class="kicker"><span class="d"></span><span data-i="hero_kicker">Enfermagem especializada · Juiz de Fora/MG</span></div>
-      <h1><span data-i="hero_h1a">Cuidado que</span> <em data-i="hero_h1b">cicatriza</em><span data-i="hero_h1c"> — com técnica, ciência e presença.</span></h1>
-      <p class="lede" data-i="hero_lede">Tratamento de feridas agudas e de difícil cicatrização, laserterapia e terapias regenerativas. Atendimento humanizado em teleconsulta, consultório e domiciliar.</p>
-      <div class="creds">
-        <span class="tag" data-i="hero_t1">Tratamento de Feridas</span>
-        <span class="tag" data-i="hero_t2">Laserterapia</span>
-        <span class="tag" data-i="hero_t3">PRP & PRF</span>
-        <span class="tag" data-i="hero_t4">Mestranda UFJF</span>
+<!-- APP -->
+<div id="app">
+  <div class="faixa-topo"></div>
+  <div class="header">
+    <div class="header-esq">
+      <img src="logo-termo.png" alt="Bruna Arguelles">
+      <div class="header-info">
+        <p class="label-h">Área restrita</p>
+        <h1>Documentos & Termos</h1>
       </div>
-      <div class="cta-row">
-        <a class="btn terra" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.737-.98a9.913 9.913 0 0 0 .241.273z"/></svg>
-          <span data-i="hero_cta1">Agendar pelo WhatsApp</span>
+    </div>
+    <button class="btn-sair" id="btn-sair">Sair</button>
+  </div>
+
+  <main>
+    <div class="grupo">
+      <div class="grupo-label"><span class="d"></span><span>Avaliação</span></div>
+      <div class="cards">
+        <a class="card" href="anamnese.html" target="_blank" rel="noopener">
+          <h2>Ficha de Anamnese</h2>
+          <p>Avaliação inicial de enfermagem em cuidados com feridas.</p>
+          <span class="abrir">Abrir →</span>
         </a>
-        <a class="btn ghost" href="#servicos" data-i="hero_cta2">Ver serviços</a>
       </div>
     </div>
-    <div class="hero-figure">
-      <img class="shot" src="assets/bruna-retrato.jpg" alt="Bruna Arguelles, enfermeira especializada" />
-      <div class="stamp">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 4.5 6.5 4.5c2 0 3.2 1 4.5 2.5C12.3 5.5 13.5 4.5 15.5 4.5c4 0 5.5 4.5 4 7.5C19 16.5 12 21 12 21z"/></svg></div>
-        <div class="tx">
-          <div class="a">COREN/MG 761268</div>
-          <div class="b" data-i="stamp">Enfermeira habilitada</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ============ SOBRE ============ -->
-<section class="block cream" id="sobre">
-  <div class="wrap">
-    <div class="about-grid">
-      <div class="about-figure reveal">
-        <img class="shot-main" src="assets/tratamento-feridas.jpg" alt="Bruna realizando tratamento de ferida" />
-        <img class="shot-inset" src="assets/laserterapia.jpg" alt="Bruna aplicando laserterapia" />
-      </div>
-      <div class="about-body reveal">
-        <div class="kicker"><span class="d"></span><span data-i="about_kicker">Sobre mim</span></div>
-        <h2 class="sec-title" data-i="about_title">Enfermagem que une evidência e acolhimento</h2>
-        <p data-i="about_p1">Sou <span class="k">Bruna Arguelles</span>, enfermeira com atuação dedicada ao tratamento de feridas agudas e de difícil cicatrização. Minha formação em terapia intensiva neonatal e adulto me ensinou a cuidar nos cenários mais delicados — e a olhar para cada paciente como uma história única.</p>
-        <p data-i="about_p2">Hoje associo essa experiência a técnicas avançadas como <span class="k">laserterapia</span> e terapias regenerativas (<span class="k">PRP e PRF</span>), sempre fundamentada em ciência. Como mestranda em Enfermagem pela UFJF, mantenho meu cuidado atualizado com a melhor evidência disponível.</p>
-        <ul class="cred-list">
-          <li><span class="d"></span><span data-i="cred1">Especialista em <b>Intensivismo, Urgência e Emergência</b> adulto e neonatal</span></li>
-          <li><span class="d"></span><span data-i="cred2">Pós-graduada em <b>Terapia Intensiva</b> Neonatal e Adulto</span></li>
-          <li><span class="d"></span><span data-i="cred3"><b>Mestranda em Enfermagem</b> — UFJF</span></li>
-          <li><span class="d"></span><span data-i="cred4">Habilitada em <b>Laserterapia</b></span></li>
-          <li><span class="d"></span><span data-i="cred5">Habilitada em <b>PRP e PRF</b></span></li>
-          <li><span class="d"></span><span data-i="cred6">Atendimento em <b>consultório, domiciliar e teleconsulta</b></span></li>
-        </ul>
+    <div class="grupo">
+      <div class="grupo-label"><span class="d"></span><span>Termos de Consentimento</span></div>
+      <div class="cards">
+        <a class="card" href="termo-uso-imagem.html" target="_blank" rel="noopener">
+          <h2>Uso de Imagem</h2>
+          <p>Autorização para captação e uso de imagem (LGPD).</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+        <a class="card" href="termo-laserterapia.html" target="_blank" rel="noopener">
+          <h2>Laserterapia</h2>
+          <p>Consentimento para tratamento com RECOVER/LASER DUO.</p>
+          <span class="abrir">Abrir →</span>
+        </a>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ============ SERVIÇOS ============ -->
-<section class="block" id="servicos">
-  <div class="wrap">
-    <div class="sec-head center reveal">
-      <div class="kicker center"><span class="d"></span><span data-i="svc_kicker">Serviços</span><span class="d"></span></div>
-      <h2 class="sec-title" data-i="svc_title">Como posso cuidar de você</h2>
-      <p class="sec-intro" style="margin-left:auto;margin-right:auto;" data-i="svc_intro">Avaliação individualizada, plano de cuidado baseado em evidência e acompanhamento próximo em cada etapa da cicatrização.</p>
-    </div>
-    <div class="svc-grid">
-      <div class="svc reveal">
-        <span class="num">01</span>
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 4.5 6.5 4.5c2 0 3.2 1 4.5 2.5C12.3 5.5 13.5 4.5 15.5 4.5c4 0 5.5 4.5 4 7.5C19 16.5 12 21 12 21z"/></svg></div>
-        <h3 data-i="svc1_t">Tratamento de Feridas</h3>
-        <p data-i="svc1_p">Cuidado especializado para feridas agudas e crônicas de difícil cicatrização, com técnica, curativos avançados e acompanhamento contínuo.</p>
-        <ul>
-          <li><span class="d"></span><span data-i="svc1_l1">Feridas agudas e cirúrgicas</span></li>
-          <li><span class="d"></span><span data-i="svc1_l2">Lesões por pressão e venosas</span></li>
-          <li><span class="d"></span><span data-i="svc1_l3">Pé diabético e queimaduras</span></li>
-          <li><span class="d"></span><span data-i="svc1_l4">Curativos avançados</span></li>
-        </ul>
-      </div>
-      <div class="svc reveal">
-        <span class="num">02</span>
-        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div>
-        <h3 data-i="svc2_t">Laserterapia</h3>
-        <p data-i="svc2_p">Fotobiomodulação para acelerar a cicatrização, reduzir dor e inflamação e estimular a regeneração dos tecidos de forma segura e indolor.</p>
-        <ul>
-          <li><span class="d"></span><span data-i="svc2_l1">Estímulo à cicatrização</span></li>
-          <li><span class="d"></span><span data-i="svc2_l2">Controle de dor e inflamação</span></li>
-          <li><span class="d"></span><span data-i="svc2_l3">Procedimento indolor</span></li>
-          <li><span class="d"></span><span data-i="svc2_l4">Aplicável a diversas lesões</span></li>
-        </ul>
-      </div>
-      <div class="svc reveal">
-        <span class="num">03</span>
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 2h10M9 2v5.5L5 16a3 3 0 0 0 2.7 4.3h8.6A3 3 0 0 0 19 16l-4-8.5V2"/><path d="M7.5 13.5h9"/></svg></div>
-        <h3 data-i="svc3_t">PRP &amp; PRF</h3>
-        <p data-i="svc3_p">Terapias regenerativas com plasma rico em plaquetas e fibrina, potencializando a recuperação dos tecidos a partir dos próprios fatores de cura.</p>
-        <ul>
-          <li><span class="d"></span><span data-i="svc3_l1">Regeneração tecidual</span></li>
-          <li><span class="d"></span><span data-i="svc3_l2">Feridas de difícil cicatrização</span></li>
-          <li><span class="d"></span><span data-i="svc3_l3">Tecnologia autóloga</span></li>
-          <li><span class="d"></span><span data-i="svc3_l4">Protocolo individualizado</span></li>
-        </ul>
+    <div class="grupo">
+      <div class="grupo-label"><span class="d"></span><span>Receituários</span></div>
+      <div class="cards">
+        <a class="card" href="receituario-simples.html" target="_blank" rel="noopener">
+          <h2>Receituário Simples</h2>
+          <p>Prescrição de enfermagem de uso geral.</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+        <a class="card" href="receituario-antimicrobiano.html" target="_blank" rel="noopener">
+          <h2>Sujeito à Retenção</h2>
+          <p>Prescrição para medicamentos com retenção de receita (antimicrobianos).</p>
+          <span class="abrir">Abrir →</span>
+        </a>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ============ DICAS ============ -->
-<section class="block cream" id="dicas">
-  <div class="wrap">
-    <div class="sec-head center reveal">
-      <div class="kicker center"><span class="d"></span><span data-i="tips_kicker">Dicas & Conteúdo</span><span class="d"></span></div>
-      <h2 class="sec-title" data-i="tips_title">Cuidar também é informar</h2>
-      <p class="sec-intro" style="margin-left:auto;margin-right:auto;" data-i="tips_intro">Conteúdo confiável sobre cicatrização e cuidado com feridas, em linguagem acessível para você e sua família.</p>
-    </div>
-    <div class="dicas-grid" id="dicas-grid">
-      <p class="dicas-empty">Carregando dicas…</p>
-    </div>
-    <p class="dicas-note" data-i="tips_note">Acompanhe conteúdos novos no Instagram <a href="https://instagram.com/cuidarpelabruna" target="_blank" rel="noopener" style="color:var(--terracota);font-weight:600;">@cuidarpelabruna</a></p>
-  </div>
-</section>
-
-<!-- ============ CONTATO ============ -->
-<section class="block dark" id="contato">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker"><span class="d"></span><span data-i="ct_kicker">Contato & Agendamento</span></div>
-      <h2 class="sec-title" data-i="ct_title">Vamos cuidar disso juntos</h2>
-      <p class="sec-intro" style="color:#F7F2E8cc;" data-i="ct_intro">Agende sua avaliação por WhatsApp. Atendimento em consultório e domiciliar em Juiz de Fora e região e teleconsulta para todo o Brasil.</p>
-    </div>
-    <div class="contact-grid">
-      <ul class="contact-list reveal">
-        <li><a href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
-          <span class="ic"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-          <span><span class="lab">WhatsApp</span><span class="val">(32) 99102-7249</span></span>
-        </a></li>
-        <li><a href="https://instagram.com/cuidarpelabruna" target="_blank" rel="noopener">
-          <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></span>
-          <span><span class="lab">Instagram</span><span class="val">@cuidarpelabruna</span></span>
-        </a></li>
-        <li><a href="mailto:contato@brunaarguelles.com.br">
-          <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
-          <span><span class="lab">E-mail</span><span class="val">contato@brunaarguelles.com.br</span></span>
-        </a></li>
-        <li><div class="ci">
-          <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
-          <span><span class="lab" data-i="ct_addr_lab">Endereço · Juiz de Fora/MG</span><span class="val" style="font-size:19px;">Rua Renato Dias, 322 — Bom Pastor</span></span>
-        </div></li>
-      </ul>
-      <div class="contact-side reveal">
-        <h3 data-i="ct_side_t">Como agendar</h3>
-        <p data-i="ct_side_p">Escolha o caminho que combina com o seu momento — eu cuido do resto.</p>
-        <div class="booking-opts">
-          <a class="bopt" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20o%20atendimento." target="_blank" rel="noopener">
-            <span class="bopt-k" data-i="bopt1_k">Ainda com dúvidas</span>
-            <span class="bopt-t" data-i="bopt1_t">Quero mais informações</span>
-            <span class="bopt-d" data-i="bopt1_d">Converse comigo no WhatsApp, tire suas dúvidas e entenda como funciona o atendimento — sem compromisso.</span>
-            <span class="bopt-cta" data-i="bopt1_cta">Falar no WhatsApp →</span>
-          </a>
-          <a class="bopt primary" href="pre-consulta.html">
-            <span class="bopt-k" data-i="bopt2_k">Pronto para começar</span>
-            <span class="bopt-t" data-i="bopt2_t">Quero o cuidado da Bruna</span>
-            <span class="bopt-d" data-i="bopt2_d">Preencha o formulário de pré-consulta e me envie. Assim, chego à nossa avaliação já conhecendo a sua história.</span>
-            <span class="bopt-cta" data-i="bopt2_cta">Preencher pré-consulta →</span>
-          </a>
-        </div>
-        <div class="hours">
-          <div class="row"><span data-i="h1">Segunda a Sexta</span><b>08h — 18h</b></div>
-          <div class="row"><span data-i="h2">Sábado</span><b data-i="h2v">Sob agendamento</b></div>
-          <div class="row"><span data-i="h3">Domicílio</span><b data-i="h3v">Juiz de Fora e região</b></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer class="site">
-  <div class="wrap">
-    <div class="fbrand">
-      <img src="assets/monogram.png" alt="" />
-      <div>
-        <div class="nm">Bruna Arguelles</div>
-        <div class="rl" data-i="role2">Enfermagem Especializada</div>
-      </div>
-    </div>
-    <div class="legal">
-      <div>Bruna Arguelles — Enfermagem Especializada</div>
-      <div>COREN/MG 761268-ENF <span class="sep"></span> CNPJ 66.913.603/0001-92</div>
-      <div style="margin-top:8px;opacity:.7;">© <span id="year"></span> · <span data-i="rights">Todos os direitos reservados</span></div>
-    </div>
-  </div>
-</footer>
+    <footer class="foot">Preencha os campos na página do documento e clique em "Baixar PDF" para imprimir.</footer>
+  </main>
+</div>
 
 <script>
-  // ----- year -----
-  document.getElementById('year').textContent = new Date().getFullYear();
-  let currentLang = 'pt';
+  const SENHA = 'bruna2024';
 
-  // ----- nav scroll state -----
-  const nav = document.getElementById('nav');
-  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
-  onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
-
-  // ----- mobile menu -----
-  const navlinks = document.getElementById('navlinks');
-  document.getElementById('menuToggle').addEventListener('click', () => navlinks.classList.toggle('open'));
-  navlinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navlinks.classList.remove('open')));
-
-  // ----- reveal on scroll -----
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold:0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-  // ----- i18n -----
-  const I18N = {
-    en: {
-      role:"Specialized Nursing", role2:"Specialized Nursing",
-      nav_about:"About", nav_services:"Services", nav_tips:"Tips", nav_contact:"Contact", nav_cta:"Book",
-      hero_kicker:"Specialized nursing · Juiz de Fora/MG, Brazil",
-      hero_h1a:"Care that", hero_h1b:"heals", hero_h1c:" — through skill, science and presence.",
-      hero_lede:"Treatment of acute and hard-to-heal wounds, laser therapy and regenerative therapies. Humanized care at the clinic and at home.",
-      hero_t1:"Wound Care", hero_t2:"Laser Therapy", hero_t3:"PRP & PRF", hero_t4:"MSc Candidate, UFJF",
-      hero_cta1:"Book via WhatsApp", hero_cta2:"See services",
-      ph_hero:"professional photo — vertical portrait of Bruna at work",
-      stamp:"Licensed nurse",
-      ph_about:"photo — Bruna in a clinical setting or institutional portrait",
-      about_kicker:"About me", about_title:"Nursing that unites evidence and warmth",
-      about_p1:"I'm <span class='k'>Bruna Arguelles</span>, a nurse dedicated to the treatment of acute and hard-to-heal wounds. My training in neonatal and adult intensive care taught me to provide care in the most delicate scenarios — and to see every patient as a unique story.",
-      about_p2:"Today I combine that experience with advanced techniques such as <span class='k'>laser therapy</span> and regenerative therapies (<span class='k'>PRP and PRF</span>), always grounded in science. As a Nursing MSc candidate at UFJF, I keep my practice aligned with the best available evidence.",
-      cred1:"Specialist in <b>Intensive, Urgent & Emergency Care</b>, adult and neonatal",
-      cred2:"Postgraduate in <b>Intensive Care</b>, Neonatal & Adult",
-      cred3:"<b>Nursing MSc candidate</b> — UFJF",
-      cred4:"Certified in <b>Laser Therapy</b>",
-      cred5:"Certified in <b>PRP and PRF</b>",
-      cred6:"Care at the <b>clinic and at home</b>",
-      svc_kicker:"Services", svc_title:"How I can care for you",
-      svc_intro:"Individualized assessment, evidence-based care plan and close follow-up at every stage of healing.",
-      svc1_t:"Wound Care", svc1_p:"Specialized care for acute and chronic hard-to-heal wounds, with technique, advanced dressings and continuous follow-up.",
-      svc1_l1:"Acute and surgical wounds", svc1_l2:"Pressure and venous ulcers", svc1_l3:"Diabetic foot and burns", svc1_l4:"Advanced dressings",
-      svc2_t:"Laser Therapy", svc2_p:"Photobiomodulation to speed up healing, reduce pain and inflammation and stimulate tissue regeneration — safely and painlessly.",
-      svc2_l1:"Healing stimulation", svc2_l2:"Pain and inflammation control", svc2_l3:"Painless procedure", svc2_l4:"For various lesions",
-      svc3_t:"PRP & PRF", svc3_p:"Regenerative therapies with platelet-rich plasma and fibrin, boosting tissue recovery from the body's own healing factors.",
-      svc3_l1:"Tissue regeneration", svc3_l2:"Hard-to-heal wounds", svc3_l3:"Autologous technology", svc3_l4:"Individualized protocol",
-      tips_kicker:"Tips & Content", tips_title:"Caring also means informing",
-      tips_intro:"Trustworthy content about healing and wound care, in accessible language for you and your family.",
-      d1_meta:"Home care", d1_t:"When does a wound need assessment?", d1_p:"Signs like spreading redness, increasing pain, odor or discharge deserve professional attention. Learn when to seek help.",
-      d2_meta:"Healing", d2_t:"The role of nutrition in healing", d2_p:"Protein, vitamin C and zinc are allies of the skin. Learn how diet directly influences wound closure.",
-      d3_meta:"Laser Therapy", d3_t:"Laser therapy: myths and facts", d3_p:"Is it safe? Does it hurt? Who is it for? I answer the main questions about this recovery-boosting technology.",
-      more:"Coming soon →", more2:"Coming soon →", more3:"Coming soon →",
-      tips_note:"Follow new content on Instagram <a href='https://instagram.com/cuidarpelabruna' target='_blank' rel='noopener' style='color:var(--terracota);font-weight:600;'>@cuidarpelabruna</a>",
-      ct_kicker:"Contact & Booking", ct_title:"Let's take care of this together",
-      ct_intro:"Book your assessment via WhatsApp. Care at the clinic and at home in Juiz de Fora and surroundings.",
-      ct_addr_lab:"Address · Juiz de Fora/MG",
-      ct_side_t:"How to book", ct_side_p:"Choose the path that fits your moment — I'll take care of the rest.",
-      bopt1_k:"Still have questions", bopt1_t:"I'd like more information", bopt1_d:"Chat with me on WhatsApp, ask your questions and understand how the care works — no commitment.", bopt1_cta:"Message on WhatsApp →",
-      bopt2_k:"Ready to start", bopt2_t:"I want Bruna's care", bopt2_d:"Fill out the pre-consultation form and send it to me. That way I arrive at our assessment already knowing your story.", bopt2_cta:"Fill the pre-consultation →",
-      h1:"Monday to Friday", h2:"Saturday", h2v:"By appointment", h3:"Home visits", h3v:"Juiz de Fora & region",
-      rights:"All rights reserved"
+  function tentarLogin(){
+    const input = document.getElementById('senha-input');
+    if (input.value === SENHA){
+      localStorage.setItem('docs_auth', '1');
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    } else {
+      input.classList.add('erro');
+      document.getElementById('msg-erro').style.display = 'block';
+      input.value = '';
+      input.focus();
     }
-  };
-  // capture PT defaults
-  const PT = {};
-  document.querySelectorAll('[data-i]').forEach(el => { PT[el.getAttribute('data-i')] = el.innerHTML; });
-
-  function setLang(lang){
-    const dict = lang === 'en' ? I18N.en : PT;
-    document.querySelectorAll('[data-i]').forEach(el => {
-      const key = el.getAttribute('data-i');
-      const val = (lang === 'en') ? (I18N.en[key] ?? PT[key]) : PT[key];
-      if (val != null) el.innerHTML = val;
-    });
-    document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
-    document.getElementById('lang-pt').classList.toggle('on', lang === 'pt');
-    document.getElementById('lang-en').classList.toggle('on', lang === 'en');
-    currentLang = (lang === 'en') ? 'en' : 'pt';
-    if (window.renderDicasLang) window.renderDicasLang();
-    try { localStorage.setItem('ba_lang', lang); } catch(e){}
   }
-  // restore saved lang
-  try { const saved = localStorage.getItem('ba_lang'); if (saved === 'en') setLang('en'); } catch(e){}
 
-  // ----- dicas (carregadas do painel /admin) -----
-  function relImg(p){ return p ? String(p).replace(/^\//,'') : ''; }
-  function escHtml(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-  function dicaCard(p){
-    const img = p.imagem
-      ? '<img class="dcard-img" src="'+escHtml(relImg(p.imagem))+'" alt="">'
-      : '<div class="ph dcard-img"><span class="cap">imagem da dica</span></div>';
-    return '<a class="dica reveal" href="dica.html?slug='+encodeURIComponent(p.slug||'')+'">'
-      + img
-      + '<div class="body">'
-      + '<span class="meta">'+escHtml(p.categoria||'')+'</span>'
-      + '<h3>'+escHtml(p.titulo||'')+'</h3>'
-      + '<p>'+escHtml(p.resumo||'')+'</p>'
-      + '<span class="more" data-more>Ler mais →</span>'
-      + '</div></a>';
-  }
-  window.renderDicasLang = function(){
-    document.querySelectorAll('#dicas-grid [data-more]').forEach(e => e.textContent = (currentLang==='en'?'Read more →':'Ler mais →'));
-  };
-  fetch('content/dicas.json', { cache:'no-store' })
-    .then(r => r.ok ? r.json() : Promise.reject())
-    .then(data => {
-      const posts = (data.posts||[]).filter(p => p.publicado !== false);
-      const grid = document.getElementById('dicas-grid');
-      if (!posts.length){ grid.innerHTML = '<p class="dicas-empty">Em breve, novas dicas por aqui.</p>'; return; }
-      grid.innerHTML = posts.map(dicaCard).join('');
-      grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
-      window.renderDicasLang();
-    })
-    .catch(() => {
-      const grid = document.getElementById('dicas-grid');
-      if (grid) grid.innerHTML = '<p class="dicas-empty">Em breve, novas dicas por aqui.</p>';
-    });
-</script>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => { document.location.href = "/admin/"; });
-      }
-    });
+  document.getElementById('btn-entrar').addEventListener('click', tentarLogin);
+  document.getElementById('senha-input').addEventListener('keydown', e => { if (e.key === 'Enter') tentarLogin(); });
+  document.getElementById('btn-sair').addEventListener('click', () => {
+    localStorage.removeItem('docs_auth');
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('login').style.display = 'flex';
+    document.getElementById('senha-input').value = '';
+  });
+
+  if (localStorage.getItem('docs_auth') === '1'){
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
   }
 </script>
-</body>
-</html>
+
+</body></html>
