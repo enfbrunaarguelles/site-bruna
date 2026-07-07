@@ -10,7 +10,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
   :root{
     --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
@@ -234,30 +233,42 @@ const SHEET_SAIDAS = 'Saídas';
 
 let accessToken = null;
 let spreadsheetId = localStorage.getItem(STORAGE_KEY) || null;
-let tokenClient = null;
 let entradas = [];
 let saidas = [];
 
 const fmtBRL = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
 const hoje = () => new Date().toISOString().slice(0, 10);
+const REDIRECT_URI = window.location.origin + decodeURIComponent(window.location.pathname);
+
+function iniciarLoginRedirect() {
+  const params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: REDIRECT_URI,
+    response_type: 'token',
+    scope: SHEETS_SCOPE,
+    prompt: 'select_account',
+  });
+  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+}
+
+function recuperarTokenDaURL() {
+  if (!window.location.hash.includes('access_token')) return false;
+  const hashParams = new URLSearchParams(window.location.hash.slice(1));
+  history.replaceState(null, '', window.location.pathname);
+  const erro = hashParams.get('error');
+  if (erro) { mostrarErroLogin(); return false; }
+  accessToken = hashParams.get('access_token');
+  return !!accessToken;
+}
 
 function initGoogle() {
   if (GOOGLE_CLIENT_ID.startsWith('COLE_AQUI')) {
     document.getElementById('setup-aviso').style.display = 'block';
     return;
   }
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: GOOGLE_CLIENT_ID,
-    scope: SHEETS_SCOPE,
-    callback: async (resp) => {
-      if (resp.error) { mostrarErroLogin(); return; }
-      accessToken = resp.access_token;
-      await entrarNoApp();
-    },
-  });
   document.getElementById('btn-google-login').addEventListener('click', () => {
     document.getElementById('login-erro').style.display = 'none';
-    tokenClient.requestAccessToken();
+    iniciarLoginRedirect();
   });
 }
 
@@ -440,14 +451,17 @@ document.getElementById('form-saida').addEventListener('submit', async (e) => {
 });
 
 document.getElementById('btn-sair').addEventListener('click', () => {
-  if (accessToken) google.accounts.oauth2.revoke(accessToken, () => {});
+  if (accessToken) fetch(`https://oauth2.googleapis.com/revoke?token=${accessToken}`, { method: 'POST' }).catch(() => {});
   accessToken = null;
   document.getElementById('app').style.display = 'none';
   document.getElementById('login').style.display = 'flex';
 });
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
   initGoogle();
+  if (recuperarTokenDaURL()) {
+    await entrarNoApp();
+  }
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw-controle-financeiro.js').catch(() => {});
   }
