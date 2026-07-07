@@ -359,7 +359,11 @@ function parseLinhas(rows) {
 }
 
 async function carregarDados() {
-  const ranges = [`'${SHEET_ENTRADAS}'!A2:D10000`, `'${SHEET_SAIDAS}'!A2:D10000`].map(r => `ranges=${encodeURIComponent(r)}`).join('&');
+  const meta = await sheetsFetch(`${spreadsheetId}?fields=sheets.properties.title`);
+  const titulos = meta.sheets.map(s => s.properties.title);
+  const tituloEntradas = titulos.find(t => t === SHEET_ENTRADAS) || titulos[0];
+  const tituloSaidas = titulos.find(t => t === SHEET_SAIDAS) || titulos[1];
+  const ranges = [`'${tituloEntradas}'!A2:D10000`, `'${tituloSaidas}'!A2:D10000`].map(r => `ranges=${encodeURIComponent(r)}`).join('&');
   const data = await sheetsFetch(`${spreadsheetId}/values:batchGet?${ranges}`);
   entradas = parseLinhas(data.valueRanges[0].values);
   saidas = parseLinhas(data.valueRanges[1].values);
