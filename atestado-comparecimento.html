@@ -49,11 +49,11 @@
 
   /* ---------- TEXTO CORRIDO EDITÁVEL ---------- */
   .texto-area{
-    width:100%; min-height:70mm; resize:vertical; border:none; outline:none;
+    width:100%; min-height:70mm; border:none; outline:none;
     font-family:var(--serif-body); font-size:14px; line-height:2; color:var(--field);
-    padding:2px 4px 0; text-align:justify;
+    padding:2px 4px 0; text-align:justify; white-space:pre-wrap;
   }
-  .texto-area::placeholder{ color:#5A7A6B66; font-style:italic; }
+  .texto-area:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; font-style:italic; }
 
   /* ---------- CAMPOS AUXILIARES ---------- */
   .fields{ display:grid; grid-template-columns:1fr 1fr; gap:9px 20px; margin-top:20px; }
@@ -103,7 +103,8 @@
     .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
     .toolbar{ display:none !important; }
     .fld, .texto-area{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
-    .fld::placeholder, .texto-area::placeholder{ color:transparent !important; }
+    .fld::placeholder{ color:transparent !important; }
+    .texto-area:empty::before{ content:none !important; }
   }
   @media screen and (max-width:760px){
     body{ padding:12px 12px 70px; }
@@ -139,7 +140,7 @@
       </div>
 
       <main>
-        <textarea class="texto-area" data-k="texto">Atesto, para os devidos fins que se fizerem necessários, que o(a) Sr(a). ______________________________________________, portador(a) do CPF ________________________, compareceu a esta clínica de enfermagem especializada no dia ____/____/________, no período das _______ às _______ horas, para consulta / atendimento de enfermagem.</textarea>
+        <div class="texto-area" contenteditable="true" data-k="texto">Atesto, para os devidos fins que se fizerem necessários, que o(a) Sr(a). ______________________________________________, portador(a) do CPF ________________________, compareceu a esta clínica de enfermagem especializada no dia ____/____/________, no período das _______ às _______ horas, para consulta / atendimento de enfermagem.</div>
 
         <div class="fields3">
           <div class="f"><span class="lab">Nome do paciente</span><input class="fld" type="text" data-k="nome"></div>
@@ -199,12 +200,14 @@
         var k = el.dataset.k;
         if (!(k in saved)) return;
         if (el.type === 'checkbox') el.checked = !!saved[k];
+        else if (el.isContentEditable) el.textContent = saved[k];
         else el.value = saved[k];
       });
       function persist(){
         var data = {};
         fields.forEach(function(el){
           if (el.type === 'checkbox'){ data[el.dataset.k] = el.checked; el.toggleAttribute('checked', el.checked); }
+          else if (el.isContentEditable){ data[el.dataset.k] = el.textContent; }
           else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
         });
         try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
@@ -219,10 +222,11 @@
         if (!confirm('Limpar todos os campos preenchidos?')) return;
         fields.forEach(function(el){
           if (el.type === 'checkbox'){ el.checked = false; el.removeAttribute('checked'); }
+          else if (el.dataset.k === 'texto'){ el.textContent = DEFAULT_TEXTO; }
           else if (el.dataset.k === 'cidade_ass'){ el.value = 'Juiz de Fora/MG'; }
-          else if (el.dataset.k === 'texto'){ el.value = DEFAULT_TEXTO; }
+          else if (el.isContentEditable){ el.textContent = ''; }
           else { el.value = ''; }
-          el.setAttribute('value', el.value || '');
+          if (!el.isContentEditable) el.setAttribute('value', el.value || '');
         });
         persist();
       });

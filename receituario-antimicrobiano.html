@@ -75,12 +75,12 @@
     font-size:13px; letter-spacing:.32em; text-transform:uppercase; color:var(--cipreste);
   }
   .rx-area{
-    flex:1; width:100%; min-height:66mm; resize:none; border:none; outline:none;
+    flex:1; width:100%; min-height:66mm; border:none; outline:none;
     background-image:repeating-linear-gradient(to bottom, transparent, transparent 23px, var(--line) 24px);
     background-position:0 6px; font-family:var(--serif-body); font-size:12px; line-height:24px;
-    color:var(--field); padding:2px 4px 0;
+    color:var(--field); padding:2px 4px 0; white-space:pre-wrap;
   }
-  .rx-area::placeholder{ color:#5A7A6B66; font-style:italic; }
+  .rx-area:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; font-style:italic; }
 
   /* ---------- PROTOCOL / DISPENSING ---------- */
   .fields2{ display:grid; grid-template-columns:1fr 1fr; gap:9px 20px; margin-top:14px; }
@@ -125,7 +125,8 @@
     .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
     .toolbar{ display:none !important; }
     .fld, .rx-area{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
-    .fld::placeholder, .rx-area::placeholder{ color:transparent !important; }
+    .fld::placeholder{ color:transparent !important; }
+    .rx-area:empty::before{ content:none !important; }
   }
   @media screen and (max-width:760px){
     body{ padding:12px 12px 70px; }
@@ -181,7 +182,7 @@
         </div>
 
         <div class="rx-label">Prescrição</div>
-        <textarea class="rx-area" data-k="prescricao" placeholder="Nome do medicamento, concentração, forma de apresentação e posologia..."></textarea>
+        <div class="rx-area" contenteditable="true" data-k="prescricao" data-placeholder="Nome do medicamento, concentração, forma de apresentação e posologia..."></div>
 
         <div class="fields2">
           <div class="f"><span class="lab">Protocolo utilizado / ano de aprovação</span><input class="fld" type="text" data-k="protocolo"></div>
@@ -250,12 +251,14 @@
         var k = el.dataset.k;
         if (!(k in saved)) return;
         if (el.type === 'checkbox') el.checked = !!saved[k];
+        else if (el.isContentEditable) el.textContent = saved[k];
         else el.value = saved[k];
       });
       function persist(){
         var data = {};
         fields.forEach(function(el){
           if (el.type === 'checkbox'){ data[el.dataset.k] = el.checked; el.toggleAttribute('checked', el.checked); }
+          else if (el.isContentEditable){ data[el.dataset.k] = el.textContent; }
           else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
         });
         try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
@@ -270,9 +273,10 @@
         if (!confirm('Limpar todos os campos preenchidos?')) return;
         fields.forEach(function(el){
           if (el.type === 'checkbox'){ el.checked = false; el.removeAttribute('checked'); }
+          else if (el.isContentEditable){ el.textContent = ''; }
           else if (el.dataset.k === 'cidade_ass'){ el.value = 'Juiz de Fora/MG'; }
           else { el.value = ''; }
-          el.setAttribute('value', el.value || '');
+          if (!el.isContentEditable) el.setAttribute('value', el.value || '');
         });
         persist();
       });

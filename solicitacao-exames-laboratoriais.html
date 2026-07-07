@@ -76,12 +76,12 @@
   }
   .rx-hint{ text-align:center; font-size:9px; color:var(--salvia); font-style:italic; margin-bottom:8px; }
   .rx-area{
-    flex:1; width:100%; min-height:66mm; resize:none; border:none; outline:none;
+    flex:1; width:100%; min-height:66mm; border:none; outline:none;
     background-image:repeating-linear-gradient(to bottom, transparent, transparent 23px, var(--line) 24px);
     background-position:0 6px; font-family:var(--serif-body); font-size:12px; line-height:24px;
-    color:var(--field); padding:2px 4px 0;
+    color:var(--field); padding:2px 4px 0; white-space:pre-wrap;
   }
-  .rx-area::placeholder{ color:#5A7A6B66; font-style:italic; }
+  .rx-area:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; font-style:italic; }
 
   /* ---------- INDICAÇÃO / MATERIAL ---------- */
   .fields2{ display:grid; grid-template-columns:1fr 1fr; gap:9px 20px; margin-top:18px; }
@@ -121,7 +121,8 @@
     .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
     .toolbar{ display:none !important; }
     .fld, .rx-area{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
-    .fld::placeholder, .rx-area::placeholder{ color:transparent !important; }
+    .fld::placeholder{ color:transparent !important; }
+    .rx-area:empty::before{ content:none !important; }
     .rx-hint{ display:none; }
   }
   @media screen and (max-width:760px){
@@ -179,13 +180,13 @@
 
         <div class="rx-label">Solicito</div>
         <div class="rx-hint">Edite livremente esta lista — acrescente ou apague exames conforme a necessidade do caso.</div>
-        <textarea class="rx-area" data-k="exames" placeholder="Liste aqui os exames solicitados...">Hemograma completo
+        <div class="rx-area" contenteditable="true" data-k="exames" data-placeholder="Liste aqui os exames solicitados...">Hemograma completo
 Glicemia de jejum
 Hemoglobina glicada
 Ureia, creatinina
 PCR, VHS
 Coagulograma
-Albumina sérica</textarea>
+Albumina sérica</div>
 
         <div class="fields2">
           <div class="f"><span class="lab">Indicação clínica</span><input class="fld" type="text" data-k="indicacao" value="Ferida crônica"></div>
@@ -240,12 +241,14 @@ Albumina sérica</textarea>
         var k = el.dataset.k;
         if (!(k in saved)) return;
         if (el.type === 'checkbox') el.checked = !!saved[k];
+        else if (el.isContentEditable) el.textContent = saved[k];
         else el.value = saved[k];
       });
       function persist(){
         var data = {};
         fields.forEach(function(el){
           if (el.type === 'checkbox'){ data[el.dataset.k] = el.checked; el.toggleAttribute('checked', el.checked); }
+          else if (el.isContentEditable){ data[el.dataset.k] = el.textContent; }
           else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
         });
         try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
@@ -260,12 +263,13 @@ Albumina sérica</textarea>
         if (!confirm('Limpar todos os campos preenchidos?')) return;
         fields.forEach(function(el){
           if (el.type === 'checkbox'){ el.checked = false; el.removeAttribute('checked'); }
+          else if (el.dataset.k === 'exames'){ el.textContent = DEFAULT_EXAMES; }
           else if (el.dataset.k === 'cidade_ass'){ el.value = 'Juiz de Fora/MG'; }
-          else if (el.dataset.k === 'exames'){ el.value = DEFAULT_EXAMES; }
           else if (el.dataset.k === 'indicacao'){ el.value = 'Ferida crônica'; }
           else if (el.dataset.k === 'material'){ el.value = 'Sangue'; }
+          else if (el.isContentEditable){ el.textContent = ''; }
           else { el.value = ''; }
-          el.setAttribute('value', el.value || '');
+          if (!el.isContentEditable) el.setAttribute('value', el.value || '');
         });
         persist();
       });
