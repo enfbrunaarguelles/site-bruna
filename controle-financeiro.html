@@ -285,6 +285,45 @@ async function sheetsFetch(path, options = {}) {
   return res.json();
 }
 
+const ENTRADAS_HISTORICO = [
+  ['2026-06-10', 'Avaliação e curativo a domicílio (André)', 'Consulta', 250],
+  ['2026-06-15', 'Retorno 1 (André)', 'Retorno', 80],
+  ['2026-06-15', 'E-Books', 'Produto/Curso', 100],
+  ['2026-06-15', 'Administração de medicamento SC', 'Procedimento', 60],
+  ['2026-06-17', 'Retorno 2 (André)', 'Retorno', 80],
+  ['2026-06-19', 'Retorno 3 (André)', 'Retorno', 80],
+  ['2026-06-23', 'Retorno 4 (André)', 'Retorno', 80],
+  ['2026-06-30', 'Fernando (10 Sessões)', 'Pacote de Sessões', 850],
+  ['2026-06-30', 'Retorno 5 (André)', 'Retorno', 80],
+  ['2026-07-06', 'Luiza Maria (1ª consulta + 1º curativo)', 'Consulta', 200],
+];
+
+const SAIDAS_HISTORICO = [
+  ['2026-06-01', 'Curso Dra Bianca', 'Investimento Inicial', 5000],
+  ['2026-06-02', 'Laser', 'Investimento Inicial', 5192.1],
+  ['2026-06-03', 'Certificado digital', 'Investimento Inicial', 155],
+  ['2026-06-04', 'Contador', 'Despesa Fixa', 128],
+  ['2026-06-05', 'Número corporativo', 'Despesa Fixa', 45],
+  ['2026-06-06', 'Taxa da Prefeitura pra CNPJ', 'Investimento Inicial', 281.08],
+  ['2026-06-07', 'Materiais básicos', 'Despesa Variável', 552.79],
+  ['2026-06-08', 'Curso Letícias das Vendas', 'Investimento Inicial', 47],
+  ['2026-06-09', 'Meu 1º paciente particular', 'Investimento Inicial', 97],
+  ['2026-06-10', 'Destravando bordas', 'Investimento Inicial', 48.5],
+  ['2026-06-11', 'Capcut', 'Despesa Fixa', 33],
+  ['2026-06-12', 'Dominando feridas de pé diabético', 'Investimento Inicial', 47],
+  ['2026-06-13', 'Certificado digital - A1 PJ', 'Investimento Inicial', 168],
+  ['2026-06-14', 'Uber ida cliente', 'Despesa Variável', 11.1],
+  ['2026-06-15', 'Azul + Violeta', 'Despesa Variável', 45],
+  ['2026-06-16', 'Descartáveis', 'Despesa Variável', 114.8],
+  ['2026-06-17', 'Registro de Responsável Técnica', 'Investimento Inicial', 202.43],
+  ['2026-06-18', 'Uber volta cliente', 'Despesa Variável', 9.04],
+  ['2026-06-19', 'Gaze Pyelsana', 'Despesa Variável', 24],
+  ['2026-06-20', 'Cirurgica Santa Rita', 'Despesa Variável', 116],
+  ['2026-06-21', 'Anúncio Instagram', 'Despesa Variável', 62.61],
+  ['2026-07-06', 'Cirúrgica Equilíbrio', 'Despesa Variável', 316],
+  ['2026-07-06', 'Azul + frasco', 'Despesa Variável', 37],
+];
+
 async function garantirPlanilha() {
   if (spreadsheetId) return;
   const created = await sheetsFetch('', {
@@ -306,6 +345,8 @@ async function garantirPlanilha() {
       data: [
         { range: `'${SHEET_ENTRADAS}'!A1:D1`, values: [['Data', 'Cliente / Descrição', 'Categoria', 'Valor Recebido']] },
         { range: `'${SHEET_SAIDAS}'!A1:D1`, values: [['Data', 'Descrição', 'Categoria', 'Valor Pago']] },
+        { range: `'${SHEET_ENTRADAS}'!A2:D${1 + ENTRADAS_HISTORICO.length}`, values: ENTRADAS_HISTORICO },
+        { range: `'${SHEET_SAIDAS}'!A2:D${1 + SAIDAS_HISTORICO.length}`, values: SAIDAS_HISTORICO },
       ],
     }),
   });
