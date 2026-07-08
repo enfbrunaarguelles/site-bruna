@@ -485,7 +485,7 @@ const SIM_DEFAULT = { honorario:220, material:110, multiplicador:1.6, deslocamen
 const SIM_CAMPOS = [
   { key:'honorario',     label:'Honorário técnico',          hint:'Valor do procedimento / ato técnico',          prefix:true,  step:10   },
   { key:'material',      label:'Custo do material especial', hint:'Custo real do material utilizado',             prefix:true,  step:5    },
-  { key:'multiplicador', label:'Multiplicador do material',  hint:'Sugestão: 1,3 a 2,0 conforme logística',      prefix:false, step:0.1  },
+  { key:'multiplicador', label:'Multiplicador do material',  hint:'1,3 a 1,5: material simples, já disponível no consultório · 1,6 (padrão): cobertura especial comum · 1,7 a 2,0: material caro/difícil de repor ou domiciliar com transporte', prefix:false, step:0.1  },
   { key:'deslocamento',  label:'Taxa de deslocamento',       hint:'Preencher 0 se presencial / região incluída', prefix:true,  step:10   },
   { key:'laser',         label:'Laser associado',            hint:'Preencher 0 quando não houver laser',         prefix:true,  step:10   },
 ]
