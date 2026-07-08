@@ -122,6 +122,11 @@
     .sim-sep { height: .5px; background: var(--cipestre); opacity: .07; margin: 0 0 20px; }
     .sim-campo label { display: block; font-size: 13px; font-weight: 500; color: var(--cipestre); margin-bottom: 3px; }
     .sim-campo .hint { font-size: 11px; color: var(--claro); margin-bottom: 10px; }
+    .sim-select {
+      width: 100%; padding: 10px 14px; font-size: 13px; font-family: inherit;
+      border: .5px solid var(--borda); background: var(--branco); color: var(--cipestre);
+      outline: none; margin-bottom: 8px;
+    }
     .sim-input-wrap { position: relative; }
     .sim-input-wrap .prefix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--medio); pointer-events: none; }
     .sim-input-wrap input {
@@ -671,9 +676,14 @@ const PACOTES_SEGUIMENTO = [
   { cod:'PS03', nome:'4 Curativos Complexos',      inclui:'4 sessões de curativo complexo',       val:1320 },
 ]
 
-const SIM_DEFAULT = { honorario:220, material:110, multiplicador:1.6, deslocamento:0, laser:90 }
+const HONORARIO_OPCOES = [
+  ...PRESENCIAL.filter(r => !r.cod.startsWith('L')).map(r => ({ label: r.srv, val: r.val })),
+  ...DOMICILIAR.filter(r => !r.cod.startsWith('DL')).map(r => ({ label: r.srv, val: r.val })),
+]
+
+const SIM_DEFAULT = { honorario:250, material:110, multiplicador:1.6, deslocamento:0, laser:90 }
 const SIM_CAMPOS = [
-  { key:'honorario',     label:'Honorário técnico',          hint:'Valor do procedimento / ato técnico',          prefix:true,  step:10   },
+  { key:'honorario',     label:'Honorário técnico',          hint:'Escolha o tipo de atendimento na lista — o valor vem direto das tabelas. Pode ajustar manualmente depois, se precisar.', prefix:true,  step:10   },
   { key:'material',      label:'Custo do material especial', hint:'Custo real do material utilizado',             prefix:true,  step:5    },
   { key:'multiplicador', label:'Multiplicador do material',  hint:'1,3 a 1,5: material simples, já disponível no consultório · 1,6 (padrão): cobertura especial comum · 1,7 a 2,0: material caro/difícil de repor ou domiciliar com transporte', prefix:false, step:0.1  },
   { key:'deslocamento',  label:'Taxa de deslocamento',       hint:'Preencher 0 se presencial / região incluída', prefix:true,  step:10   },
@@ -862,9 +872,18 @@ function renderizarSim() {
     if (i > 0) { const sep = document.createElement('div'); sep.className = 'sim-sep'; wrap.appendChild(sep) }
     const div = document.createElement('div')
     div.className = 'sim-campo'
+
+    const selectHtml = c.key === 'honorario'
+      ? `<select class="sim-select" id="sim-honorario-tipo">
+           <option value="">Tipo de atendimento (opcional — preenche o valor abaixo)</option>
+           ${HONORARIO_OPCOES.map(o => `<option value="${o.val ?? 0}">${o.label}${o.val == null ? ' — sob avaliação' : ''}</option>`).join('')}
+         </select>`
+      : ''
+
     div.innerHTML = `
       <label>${c.label}</label>
       <p class="hint">${c.hint}</p>
+      ${selectHtml}
       <div class="sim-input-wrap ${c.prefix ? 'com-prefix' : ''}">
         ${c.prefix ? '<span class="prefix">R$</span>' : ''}
         <input type="number" value="${simVals[c.key]}" min="0" step="${c.step}" data-sim="${c.key}" />
@@ -876,6 +895,17 @@ function renderizarSim() {
       salvarSim()
       atualizarSim()
     })
+
+    if (c.key === 'honorario') {
+      div.querySelector('#sim-honorario-tipo').addEventListener('change', e => {
+        if (e.target.value === '') return
+        const val = parseFloat(e.target.value)
+        simVals.honorario = val
+        div.querySelector('[data-sim="honorario"]').value = val
+        salvarSim()
+        atualizarSim()
+      })
+    }
   })
   atualizarSim()
 }
