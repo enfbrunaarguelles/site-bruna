@@ -167,10 +167,50 @@
     .tab-content { display: none; }
     .tab-content.ativo { display: block; }
 
+    /* Conteúdo explicativo (apresentação de serviços) */
+    .intro-texto { font-size: 14px; color: var(--medio); line-height: 1.8; max-width: 720px; margin-bottom: 32px; }
+    .subtitulo-secao {
+      font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-style: italic; font-weight: 500;
+      color: var(--cipestre); margin: 40px 0 12px;
+    }
+    .destaque-box {
+      background: var(--pergaminho); border: 1px solid var(--borda); overflow: hidden; margin-bottom: 20px;
+    }
+    .destaque-box .topo-d { height: 2px; background: var(--cipestre); opacity: .8; }
+    .destaque-box .corpo-d { padding: 28px 32px; }
+    .destaque-box .cabecalho-d { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
+    .destaque-box h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; font-style: italic; font-weight: 500; color: var(--cipestre); margin: 0; }
+    .destaque-box .valor-d { font-family: 'Playfair Display', Georgia, serif; font-size: 32px; font-style: italic; font-weight: 500; color: var(--terracota); white-space: nowrap; }
+    .destaque-box p { font-size: 13.5px; color: var(--medio); line-height: 1.75; margin: 0 0 16px; }
+    .lista-inclui { list-style: none; margin: 0 0 14px; padding: 0; }
+    .lista-inclui li { font-size: 13px; color: var(--cipestre); padding: 5px 0 5px 20px; position: relative; }
+    .lista-inclui li::before { content: '+'; position: absolute; left: 0; color: var(--terracota); font-weight: 600; }
+    .label-inclui { font-size: 10px; letter-spacing: .18em; color: var(--salvia); text-transform: uppercase; font-weight: 600; margin-bottom: 8px; display: block; }
+    .obs-nota { font-size: 12px; color: var(--claro); font-style: italic; line-height: 1.6; border-left: 2px solid var(--terracota); padding-left: 12px; margin-top: 4px; }
+
+    .criterios-lista { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+    .criterios-lista li { font-size: 13px; color: var(--cipestre); padding: 6px 0 6px 20px; position: relative; border-bottom: .5px solid var(--borda); }
+    .criterios-lista li::before { content: '◆'; position: absolute; left: 0; top: 6px; color: var(--terracota); font-size: 8px; }
+
+    .cards-curativo { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin: 20px 0 8px; }
+    .card-curativo { background: var(--branco); border: 1px solid var(--borda); display: flex; flex-direction: column; }
+    .card-curativo .topo-c { height: 2px; background: var(--salvia); }
+    .card-curativo .corpo-c { padding: 22px 24px; flex: 1; display: flex; flex-direction: column; }
+    .card-curativo h4 { font-family: 'Playfair Display', Georgia, serif; font-size: 18px; font-style: italic; font-weight: 500; color: var(--cipestre); margin: 0 0 4px; }
+    .card-curativo .valor-c { font-size: 20px; font-weight: 600; color: var(--terracota); margin: 0 0 12px; }
+    .card-curativo p.desc-c { font-size: 12.5px; color: var(--medio); line-height: 1.65; margin: 0 0 14px; }
+    .card-curativo .lista-inclui { margin-bottom: 12px; }
+    .card-curativo .lista-inclui li { font-size: 12px; }
+    .card-curativo .obs-nota { margin-top: auto; padding-top: 14px; border-top: .5px solid var(--borda); border-left: none; padding-left: 0; }
+
+    .nota-geral { background: var(--pergaminho); border-left: 2.5px solid var(--terracota); padding: 14px 20px; margin-bottom: 14px; font-size: 13px; color: var(--medio); line-height: 1.7; }
+    .nota-geral b { color: var(--cipestre); }
+
     @media (max-width: 640px) {
       main { padding: 32px 20px 60px; }
       .header { padding: 16px 20px; }
       .item { grid-template-columns: 22px 1fr 100px 70px 90px; gap: 8px; }
+      .criterios-lista { grid-template-columns: 1fr; }
     }
 
     /* ---------- ACCESS GATE ---------- */
@@ -299,25 +339,162 @@
     <!-- PRESENCIAL -->
     <div class="tab-content" id="tab-presencial">
       <div class="secao-label"><div class="tr"></div><span>Consultório</span></div>
-      <p class="secao-titulo">Tabela Presencial</p>
+      <p class="secao-titulo">Atendimento Especializado em Feridas</p>
+      <p class="intro-texto">Cuidado técnico, individualizado e acompanhado de perto — do primeiro contato até a alta. A avaliação inicial já inclui o plano de cuidado e o primeiro curativo básico, e o valor de cada curativo considera o tipo de material utilizado, a complexidade do cuidado e o tempo técnico necessário, não apenas o tamanho da ferida.</p>
+
+      <div class="destaque-box">
+        <div class="topo-d"></div>
+        <div class="corpo-d">
+          <div class="cabecalho-d">
+            <h3>Avaliação inicial + primeiro curativo básico</h3>
+            <div class="valor-d">R$ 250</div>
+          </div>
+          <p>A primeira avaliação é o momento mais importante do tratamento. Nela, são analisados o tipo de ferida, tempo de evolução, características do leito da ferida, pele ao redor, presença de exsudato, sinais locais, histórico de saúde, cuidados já realizados e materiais mais indicados para cada caso.</p>
+          <span class="label-inclui">Inclui</span>
+          <ul class="lista-inclui">
+            <li>Avaliação inicial da ferida</li>
+            <li>Orientação sobre o cuidado</li>
+            <li>Definição do plano terapêutico</li>
+            <li>Primeiro curativo básico</li>
+            <li>Materiais básicos incluídos</li>
+          </ul>
+          <div class="obs-nota">Caso seja necessário uso de coberturas especiais, materiais de alto custo ou laserterapia, o valor será informado antes da realização.</div>
+        </div>
+      </div>
+
+      <p class="subtitulo-secao">Valores dos Atendimentos Presenciais</p>
       <div style="overflow-x:auto">
         <table>
           <thead><tr><th>Código</th><th>Serviço</th><th>Material incluído</th><th>Valor</th><th>Observações</th></tr></thead>
           <tbody id="tbody-presencial"></tbody>
         </table>
       </div>
+
+      <p class="subtitulo-secao">Como definimos o tipo de curativo?</p>
+      <p class="intro-texto" style="margin-bottom:8px;">O valor do curativo não é definido apenas pelo tamanho da ferida. Uma ferida pequena pode exigir materiais especiais, coberturas antimicrobianas ou maior complexidade técnica. Da mesma forma, uma ferida maior pode ter um cuidado mais simples, dependendo das suas características.</p>
+      <p class="intro-texto" style="margin-bottom:0;">Por isso, a classificação considera:</p>
+      <ul class="criterios-lista">
+        <li>Tipo de material utilizado</li>
+        <li>Cobertura necessária</li>
+        <li>Complexidade do cuidado</li>
+        <li>Tempo técnico do atendimento</li>
+        <li>Quantidade de material utilizado</li>
+        <li>Necessidade de laserterapia</li>
+        <li>Frequência de troca e acompanhamento</li>
+      </ul>
+
+      <p class="subtitulo-secao">Tipos de Curativo</p>
+      <div class="cards-curativo">
+        <div class="card-curativo">
+          <div class="topo-c"></div>
+          <div class="corpo-c">
+            <h4>Curativo simples</h4>
+            <div class="valor-c">R$ 150</div>
+            <p class="desc-c">Indicado quando o cuidado exige materiais básicos e menor complexidade técnica.</p>
+            <span class="label-inclui">Pode incluir, conforme avaliação</span>
+            <ul class="lista-inclui">
+              <li>Soro fisiológico</li>
+              <li>Gaze ou compressa estéril</li>
+              <li>Cobertura simples</li>
+              <li>Fixação com micropore, esparadrapo ou atadura</li>
+              <li>Proteção básica da pele ao redor</li>
+            </ul>
+            <div class="obs-nota">Indicado para casos em que não há necessidade de coberturas especiais ou materiais de alto custo.</div>
+          </div>
+        </div>
+
+        <div class="card-curativo">
+          <div class="topo-c"></div>
+          <div class="corpo-c">
+            <h4>Curativo intermediário</h4>
+            <div class="valor-c">R$ 230</div>
+            <p class="desc-c">Indicado quando há necessidade de maior tempo de atendimento, maior quantidade de material ou uso de coberturas específicas de custo moderado.</p>
+            <span class="label-inclui">Pode incluir, conforme avaliação</span>
+            <ul class="lista-inclui">
+              <li>Compressas especiais</li>
+              <li>Coberturas não aderentes</li>
+              <li>Hidrogel</li>
+              <li>Alginato simples</li>
+              <li>Espuma simples</li>
+              <li>Barreira protetora de pele</li>
+              <li>Materiais para melhor controle de exsudato</li>
+              <li>Fixações mais elaboradas</li>
+            </ul>
+            <div class="obs-nota">Pode ser indicado mesmo em feridas pequenas, caso o cuidado exija materiais ou técnica mais específicos.</div>
+          </div>
+        </div>
+
+        <div class="card-curativo">
+          <div class="topo-c"></div>
+          <div class="corpo-c">
+            <h4>Curativo complexo</h4>
+            <div class="valor-c">R$ 350</div>
+            <p class="desc-c">Indicado quando o cuidado exige maior complexidade técnica, maior tempo de atendimento ou uso de materiais mais específicos.</p>
+            <span class="label-inclui">Pode incluir, conforme avaliação</span>
+            <ul class="lista-inclui">
+              <li>Coberturas antimicrobianas</li>
+              <li>Coberturas com prata</li>
+              <li>Coberturas com PHMB</li>
+              <li>Espumas especiais</li>
+              <li>Alginatos especiais</li>
+              <li>Materiais para maior controle de exsudato</li>
+              <li>Proteção avançada da pele ao redor</li>
+              <li>Combinação de diferentes coberturas</li>
+            </ul>
+            <div class="obs-nota">A classificação como curativo complexo não depende apenas do tamanho da ferida, mas principalmente da necessidade de materiais mais específicos e da complexidade do cuidado.</div>
+          </div>
+        </div>
+
+        <div class="card-curativo">
+          <div class="topo-c"></div>
+          <div class="corpo-c">
+            <h4>Curativo especial</h4>
+            <div class="valor-c">Sob avaliação</div>
+            <p class="desc-c">Indicado quando há necessidade de materiais de alto custo, coberturas avançadas ou combinações específicas de produtos.</p>
+            <span class="label-inclui">Pode incluir, conforme avaliação</span>
+            <ul class="lista-inclui">
+              <li>Coberturas com prata de maior custo</li>
+              <li>Carvão ativado</li>
+              <li>Carvão ativado com prata</li>
+              <li>Espumas premium</li>
+              <li>Superabsorventes</li>
+              <li>Coberturas importadas</li>
+              <li>Coberturas antimicrobianas específicas</li>
+              <li>Alginatos especiais</li>
+              <li>Hidrogel em maior quantidade</li>
+              <li>Produtos para controle de odor</li>
+              <li>Produtos para proteção avançada da pele</li>
+              <li>Combinação de múltiplas coberturas</li>
+            </ul>
+            <div class="obs-nota">Nestes casos, o valor é calculado individualmente conforme o material utilizado, quantidade necessária, complexidade do cuidado e frequência dos atendimentos.</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="subtitulo-secao">Laserterapia</p>
+      <p class="intro-texto" style="margin-bottom:16px;">A laserterapia pode ser associada ao tratamento quando houver indicação profissional. A indicação é avaliada individualmente durante o atendimento.</p>
+      <div class="nota-geral">A laserterapia não está inclusa no valor do curativo básico, intermediário ou complexo. Quando indicada, será informada antes da realização.</div>
+
+      <p class="subtitulo-secao">Observações Importantes</p>
+      <div class="nota-geral"><b>Materiais básicos.</b> Os valores dos curativos incluem materiais básicos até o limite de cada categoria.</div>
+      <div class="nota-geral"><b>Classificação.</b> A classificação do curativo não depende somente do tamanho da ferida. Ela considera principalmente o tipo de material utilizado, complexidade técnica, quantidade de insumos, tempo de atendimento e necessidade de tecnologias associadas.</div>
+      <div class="nota-geral"><b>Materiais de alto custo.</b> Coberturas especiais, materiais com prata, carvão ativado, espumas premium, alginatos especiais, hidrogel, PHMB, superabsorventes ou outros insumos de alto custo poderão ser cobrados à parte, sempre com orientação prévia.</div>
+      <div class="nota-geral"><b>Variações.</b> Os valores podem variar conforme a avaliação da ferida, complexidade do caso, materiais necessários e frequência dos atendimentos.</div>
+      <div class="nota-geral" style="margin-bottom:0;"><b>Acompanhamento.</b> O tratamento de feridas exige acompanhamento, constância e escolha adequada dos materiais. Por isso, cada plano é definido de forma individualizada.</div>
     </div>
 
     <!-- DOMICILIAR -->
     <div class="tab-content" id="tab-domiciliar">
       <div class="secao-label"><div class="tr"></div><span>Visita domiciliar</span></div>
-      <p class="secao-titulo">Tabela Domiciliar</p>
+      <p class="secao-titulo">Atendimento Domiciliar</p>
+      <p class="intro-texto">O atendimento domiciliar está disponível mediante agendamento e avaliação da região. Por envolver deslocamento, transporte de materiais, tempo reservado de agenda e estrutura técnica fora do consultório, os valores são diferentes do atendimento presencial.</p>
       <div style="overflow-x:auto">
         <table>
           <thead><tr><th>Código</th><th>Serviço</th><th>Material incluído</th><th>Valor</th><th>Observações</th></tr></thead>
           <tbody id="tbody-domiciliar"></tbody>
         </table>
       </div>
+      <div class="nota-geral" style="margin-top:20px;margin-bottom:0;">Taxa de deslocamento pode ser aplicada conforme o bairro — veja a aba <b>Deslocamento</b>.</div>
     </div>
 
     <!-- DESLOCAMENTO -->
@@ -335,11 +512,23 @@
     <!-- PACOTES -->
     <div class="tab-content" id="tab-pacotes">
       <div class="secao-label"><div class="tr"></div><span>Tratamento contínuo</span></div>
-      <p class="secao-titulo">Pacotes</p>
+      <p class="secao-titulo">Pacotes de Acompanhamento</p>
+      <p class="intro-texto">Os pacotes são indicados para pacientes que precisam de continuidade no tratamento e desejam organizar melhor os cuidados.</p>
+      <div class="nota-geral"><b>Importante.</b> A categoria do pacote será definida após avaliação da ferida e dos materiais necessários. Caso durante o tratamento haja necessidade de coberturas especiais ou materiais de alto custo, o valor poderá ser ajustado mediante orientação prévia.</div>
+
+      <p class="subtitulo-secao">Pacotes com Avaliação Inicial</p>
       <div style="overflow-x:auto">
         <table>
-          <thead><tr><th>Tipo</th><th>Código</th><th>Pacote</th><th>Inclui</th><th>Valor</th></tr></thead>
-          <tbody id="tbody-pacotes"></tbody>
+          <thead><tr><th>Pacote</th><th>Inclui</th><th>Valor</th></tr></thead>
+          <tbody id="tbody-pacotes-inicio"></tbody>
+        </table>
+      </div>
+
+      <p class="subtitulo-secao">Pacotes de Curativos de Seguimento</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Pacote</th><th>Inclui</th><th>Valor</th></tr></thead>
+          <tbody id="tbody-pacotes-seguimento"></tbody>
         </table>
       </div>
     </div>
@@ -444,25 +633,23 @@ const MATERIAIS = MATERIAIS_BASE.map((m, i) => {
 })
 
 const PRESENCIAL = [
-  { cod:'C01',  srv:'Consulta inicial de feridas',         mat:'—',              val:350,  obs:'Avaliação completa, plano terapêutico e orientação' },
-  { cod:'C02',  srv:'Consulta de retorno',                 mat:'—',              val:220,  obs:'Reavaliação e ajuste de conduta' },
-  { cod:'CU01', srv:'Curativo simples',                    mat:'Até R$ 25',      val:150,  obs:'Ferida pequena ou baixa complexidade' },
-  { cod:'CU02', srv:'Curativo intermediário',              mat:'Até R$ 70',      val:260,  obs:'Ferida moderada ou maior consumo de material' },
-  { cod:'CU03', srv:'Curativo complexo',                   mat:'Até R$ 150',     val:450,  obs:'Ferida extensa ou maior complexidade técnica' },
-  { cod:'CU04', srv:'Curativo especial',                   mat:'Acima do limite',val:null, obs:'Coberturas especiais cobradas à parte' },
-  { cod:'L01',  srv:'Laserterapia avulsa',                 mat:'—',              val:140,  obs:'Sessão isolada' },
-  { cod:'L02',  srv:'Laser associada ao curativo',         mat:'—',              val:90,   obs:'Adicional ao curativo' },
+  { cod:'C01',  srv:'Avaliação inicial + primeiro curativo básico', mat:'Incluso',        val:250,  obs:'Avaliação completa, plano terapêutico e primeiro curativo básico' },
+  { cod:'C02',  srv:'Reavaliação sem curativo',            mat:'—',              val:180,  obs:'Reavaliação e ajuste de conduta' },
+  { cod:'CU01', srv:'Curativo simples',                    mat:'Incluso',        val:150,  obs:'Materiais básicos, menor complexidade técnica' },
+  { cod:'CU02', srv:'Curativo intermediário',              mat:'Incluso',        val:230,  obs:'Coberturas específicas de custo moderado' },
+  { cod:'CU03', srv:'Curativo complexo',                   mat:'Incluso',        val:350,  obs:'Maior complexidade técnica e materiais mais específicos' },
+  { cod:'CU04', srv:'Curativo especial',                   mat:'Sob avaliação',  val:null, obs:'Materiais de alto custo cobrados conforme utilização' },
+  { cod:'L01',  srv:'Laserterapia avulsa',                 mat:'—',              val:120,  obs:'Sessão isolada' },
+  { cod:'L02',  srv:'Laser associada ao curativo',         mat:'—',              val:70,   obs:'Adicional ao curativo' },
 ]
 
 const DOMICILIAR = [
-  { cod:'D01',   srv:'Consulta inicial domiciliar',              mat:'—',              val:500,  obs:'Inclui deslocamento em região próxima' },
-  { cod:'D02',   srv:'Retorno domiciliar',                       mat:'—',              val:350,  obs:'Reavaliação domiciliar' },
-  { cod:'DCU01', srv:'Curativo simples domiciliar',              mat:'Até R$ 25',      val:250,  obs:'Com deslocamento e estrutura fora do consultório' },
-  { cod:'DCU02', srv:'Curativo intermediário domiciliar',        mat:'Até R$ 70',      val:390,  obs:'Com deslocamento e maior tempo reservado' },
-  { cod:'DCU03', srv:'Curativo complexo domiciliar',             mat:'Até R$ 150',     val:620,  obs:'Com deslocamento e maior complexidade' },
-  { cod:'DCU04', srv:'Curativo especial domiciliar',             mat:'Acima do limite',val:null, obs:'Coberturas especiais cobradas à parte' },
-  { cod:'DL01',  srv:'Laserterapia domiciliar avulsa',           mat:'—',              val:220,  obs:'Sessão isolada em domicílio' },
-  { cod:'DL02',  srv:'Laser associada ao curativo domiciliar',   mat:'—',              val:120,  obs:'Adicional ao curativo domiciliar' },
+  { cod:'D01',   srv:'Avaliação inicial domiciliar + primeiro curativo básico', mat:'Incluso', val:350,  obs:'Inclui deslocamento em região próxima' },
+  { cod:'DCU01', srv:'Curativo simples domiciliar',              mat:'Incluso',        val:180,  obs:'Com deslocamento e estrutura fora do consultório' },
+  { cod:'DCU02', srv:'Curativo intermediário domiciliar',        mat:'Incluso',        val:260,  obs:'Com deslocamento e maior tempo reservado' },
+  { cod:'DCU03', srv:'Curativo complexo domiciliar',             mat:'Incluso',        val:380,  obs:'Com deslocamento e maior complexidade' },
+  { cod:'DCU04', srv:'Curativo especial domiciliar',             mat:'Sob avaliação',  val:null, obs:'Materiais de alto custo cobrados conforme utilização' },
+  { cod:'DL01',  srv:'Laserterapia associada no domicílio',      mat:'—',              val:80,   obs:'Adicional ao curativo domiciliar' },
 ]
 
 const DESLOCAMENTO = [
@@ -472,13 +659,16 @@ const DESLOCAMENTO = [
   { reg:'Distritos ou cidades próximas',                                            taxa:'Sob consulta',        tipo:'Avaliar caso a caso'   },
 ]
 
-const PACOTES = [
-  { tipo:'Presencial', cod:'P01',  nome:'Pacote Básico',               inclui:'Consulta inicial + 4 curativos simples + 1 reavaliação',                                        val:850  },
-  { tipo:'Presencial', cod:'P02',  nome:'Pacote Intermediário',        inclui:'Consulta inicial + 4 curativos intermediários + 1 reavaliação + 2 laserterapias',              val:1450 },
-  { tipo:'Presencial', cod:'P03',  nome:'Pacote Avançado',             inclui:'Consulta inicial + 4 curativos complexos + 1 reavaliação + 4 laserterapias',                   val:2400 },
-  { tipo:'Domiciliar', cod:'PD01', nome:'Pacote Domiciliar Básico',     inclui:'Consulta inicial + 4 curativos simples + 1 reavaliação',                                        val:1400 },
-  { tipo:'Domiciliar', cod:'PD02', nome:'Pacote Domiciliar Intermediário', inclui:'Consulta inicial + 4 curativos intermediários + 1 reavaliação + 2 laserterapias',          val:2300 },
-  { tipo:'Domiciliar', cod:'PD03', nome:'Pacote Domiciliar Avançado',  inclui:'Consulta inicial + 4 curativos complexos + 1 reavaliação + 4 laserterapias',                   val:3600 },
+const PACOTES_INICIO = [
+  { cod:'PI01', nome:'Início Simples',        inclui:'Avaliação inicial + primeiro curativo básico + 3 curativos simples',        val:660  },
+  { cod:'PI02', nome:'Início Intermediário',  inclui:'Avaliação inicial + primeiro curativo básico + 3 curativos intermediários', val:890  },
+  { cod:'PI03', nome:'Início Complexo',       inclui:'Avaliação inicial + primeiro curativo básico + 3 curativos complexos',      val:1230 },
+]
+
+const PACOTES_SEGUIMENTO = [
+  { cod:'PS01', nome:'4 Curativos Simples',        inclui:'4 sessões de curativo simples',        val:560  },
+  { cod:'PS02', nome:'4 Curativos Intermediários', inclui:'4 sessões de curativo intermediário',  val:860  },
+  { cod:'PS03', nome:'4 Curativos Complexos',      inclui:'4 sessões de curativo complexo',       val:1320 },
 ]
 
 const SIM_DEFAULT = { honorario:220, material:110, multiplicador:1.6, deslocamento:0, laser:90 }
@@ -702,7 +892,7 @@ function renderizarTabelas() {
   const tbP = document.getElementById('tbody-presencial')
   PRESENCIAL.forEach(r => {
     const tr = document.createElement('tr')
-    tr.innerHTML = `<td class="cod">${r.cod}</td><td style="font-weight:500">${r.srv}</td><td class="muted">${r.mat}</td><td class="val">${r.val ? fmt(r.val) : 'Sob cálculo'}</td><td class="obs">${r.obs}</td>`
+    tr.innerHTML = `<td class="cod">${r.cod}</td><td style="font-weight:500">${r.srv}</td><td class="muted">${r.mat}</td><td class="val">${r.val ? fmt(r.val) : 'Sob avaliação'}</td><td class="obs">${r.obs}</td>`
     tbP.appendChild(tr)
   })
 
@@ -710,7 +900,7 @@ function renderizarTabelas() {
   const tbD = document.getElementById('tbody-domiciliar')
   DOMICILIAR.forEach(r => {
     const tr = document.createElement('tr')
-    tr.innerHTML = `<td class="cod">${r.cod}</td><td style="font-weight:500">${r.srv}</td><td class="muted">${r.mat}</td><td class="val">${r.val ? fmt(r.val) : 'Sob cálculo'}</td><td class="obs">${r.obs}</td>`
+    tr.innerHTML = `<td class="cod">${r.cod}</td><td style="font-weight:500">${r.srv}</td><td class="muted">${r.mat}</td><td class="val">${r.val ? fmt(r.val) : 'Sob avaliação'}</td><td class="obs">${r.obs}</td>`
     tbD.appendChild(tr)
   })
 
@@ -723,11 +913,18 @@ function renderizarTabelas() {
   })
 
   // Pacotes
-  const tbPac = document.getElementById('tbody-pacotes')
-  PACOTES.forEach(r => {
+  const tbPacI = document.getElementById('tbody-pacotes-inicio')
+  PACOTES_INICIO.forEach(r => {
     const tr = document.createElement('tr')
-    tr.innerHTML = `<td class="obs">${r.tipo}</td><td class="cod">${r.cod}</td><td style="font-weight:500">${r.nome}</td><td class="obs">${r.inclui}</td><td class="val">${fmt(r.val)}</td>`
-    tbPac.appendChild(tr)
+    tr.innerHTML = `<td style="font-weight:500">${r.nome}</td><td class="obs">${r.inclui}</td><td class="val">${fmt(r.val)}</td>`
+    tbPacI.appendChild(tr)
+  })
+
+  const tbPacS = document.getElementById('tbody-pacotes-seguimento')
+  PACOTES_SEGUIMENTO.forEach(r => {
+    const tr = document.createElement('tr')
+    tr.innerHTML = `<td style="font-weight:500">${r.nome}</td><td class="obs">${r.inclui}</td><td class="val">${fmt(r.val)}</td>`
+    tbPacS.appendChild(tr)
   })
 }
 
@@ -762,15 +959,15 @@ function exportarPDF() {
   doc.text('ENFERMAGEM ESPECIALIZADA', M, 16)
   doc.setCharSpace(0)
 
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(18)
+  doc.setFont('times', 'bolditalic')
+  doc.setFontSize(21)
   doc.setTextColor(...CIP)
-  doc.text('Bruna Arguelles', M, 24)
+  doc.text('Bruna Arguelles', M, 26)
 
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(8)
   doc.setTextColor(...SAL)
-  doc.text('CNPJ 66.913.603/0001-92', M, 30)
+  doc.text('CNPJ 66.913.603/0001-92', M, 32)
 
   // Data + paciente (direita)
   doc.setFontSize(8)
@@ -782,23 +979,29 @@ function exportarPDF() {
     doc.setCharSpace(1)
     doc.text('PACIENTE', W - M, 22, { align: 'right' })
     doc.setCharSpace(0)
-    doc.setFontSize(11)
-    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(13)
+    doc.setFont('times', 'bolditalic')
     doc.setTextColor(...CIP)
-    doc.text(paciente, W - M, 29, { align: 'right' })
+    doc.text(paciente, W - M, 30, { align: 'right' })
   }
 
   // ── Separador
-  doc.setDrawColor(...BORDA)
-  doc.setLineWidth(0.3)
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(0.5)
   doc.line(M, 42, W - M, 42)
+
+  // ── Introdução do orçamento
+  doc.setFont('times', 'italic')
+  doc.setFontSize(9)
+  doc.setTextColor(...SAL)
+  doc.text('Orçamento personalizado — valores calculados conforme as características individuais do seu caso.', M, 47.5)
 
   // ── Composição do valor (tabela do simulador)
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(7)
   doc.setTextColor(...TER)
   doc.setCharSpace(1.5)
-  doc.text('COMPOSIÇÃO DO ATENDIMENTO', M, 50)
+  doc.text('COMPOSIÇÃO DO ATENDIMENTO', M, 57)
   doc.setCharSpace(0)
 
   const linhasSim = [
@@ -810,7 +1013,7 @@ function exportarPDF() {
   ]
 
   doc.autoTable({
-    startY: 54,
+    startY: 61,
     head: [['Item', 'Valor']],
     body: linhasSim,
     margin: { left: M, right: M },
@@ -838,9 +1041,9 @@ function exportarPDF() {
   doc.setCharSpace(1)
   doc.text('VALOR TOTAL DO ATENDIMENTO', M + 5, afterSim + 6)
   doc.setCharSpace(0)
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(13)
-  doc.text(fmt(totalSim), M + 95, afterSim + 10, { align: 'right' })
+  doc.setFont('times', 'bolditalic')
+  doc.setFontSize(16)
+  doc.text(fmt(totalSim), M + 95, afterSim + 10.5, { align: 'right' })
 
   // ── Fórmula explicativa
   doc.setFont('helvetica', 'normal')
@@ -901,13 +1104,14 @@ function exportarPDF() {
   }
 
   // ── Rodapé
-  doc.setDrawColor(...BORDA)
-  doc.setLineWidth(0.2)
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(0.4)
   doc.line(M, 277, W - M, 277)
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(7)
   doc.setTextColor(...SAL)
   doc.text('Bruna Arguelles · Enfermagem Especializada · CNPJ 66.913.603/0001-92', M, 282)
+  doc.setFont('times', 'italic')
   doc.text('Orçamento válido por 15 dias. Valores sujeitos a alteração conforme avaliação clínica.', M, 287)
   doc.setTextColor(...BORDA)
   doc.text('@cuidarpelabruna', W - M, 282, { align: 'right' })
