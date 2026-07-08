@@ -135,9 +135,52 @@
     body{ padding:12px 12px 70px; }
     .page{ width:100%; min-height:0; padding:8mm 6mm; }
   }
+
+  /* ---------- ACCESS GATE ---------- */
+  #gate-login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:#e7ded0; }
+  .gate-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:380px; max-width:100%; overflow:hidden; }
+  .gate-card .topo{ height:3px; background:var(--cipreste); }
+  .gate-inner{ padding:40px 36px 36px; text-align:center; }
+  .gate-inner img{ height:56px; width:auto; margin:0 auto 20px; display:block; }
+  .gate-label{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; }
+  .gate-label span{ font-size:9.5px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .gate-label .l{ width:20px; height:.5px; background:var(--terracota); opacity:.7; }
+  .gate-inner h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 5px; }
+  .gate-inner p{ font-size:11px; color:var(--ink-soft); margin:0; }
+  .gate-divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:22px 0; }
+  .gate-inner input[type=password]{
+    width:100%; padding:11px 13px; font-size:13px; font-family:inherit;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    outline:none; margin-bottom:9px;
+  }
+  .gate-inner input[type=password].erro{ border-color:var(--terracota); }
+  .gate-inner .gate-erro{ font-size:11px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .gate-inner button{
+    width:100%; padding:12px; background:var(--cipreste); color:#fff; border:none;
+    font-size:12.5px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
+  }
+  .gate-inner button:hover{ background:#3d5247; }
+  @media print{ #gate-login{ display:none !important; } }
 </style>
 </head>
 <body>
+<div id="gate-login">
+  <div class="gate-card">
+    <div class="topo"></div>
+    <div class="gate-inner">
+      <img src="assets/logo.png" alt="Bruna Arguelles">
+      <div class="gate-label"><span class="l"></span><span>Acesso restrito</span><span class="l"></span></div>
+      <h1>Bruna Arguelles</h1>
+      <p>Enfermagem Especializada</p>
+      <div class="gate-divisor"></div>
+      <input type="password" id="gate-senha" placeholder="Senha">
+      <p class="gate-erro" id="gate-erro">Senha incorreta.</p>
+      <button id="gate-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="app-content" style="display:none;">
 
   <div class="page" data-screen-label="Solicitação de Cultura + Antibiograma">
     <div class="inner">
@@ -277,4 +320,35 @@
     })();
   </script>
 
+
+</div>
+
+<script>
+(function(){
+  var SENHA = 'bruna2024';
+  var authed = false;
+  try { authed = sessionStorage.getItem('docs_auth') === '1'; } catch(e){}
+  var gate = document.getElementById('gate-login');
+  var app = document.getElementById('app-content');
+  if (authed){
+    gate.style.display = 'none';
+    app.style.display = 'block';
+  }
+  function tentar(){
+    var input = document.getElementById('gate-senha');
+    if (input.value === SENHA){
+      try { sessionStorage.setItem('docs_auth', '1'); } catch(e){}
+      gate.style.display = 'none';
+      app.style.display = 'block';
+    } else {
+      input.classList.add('erro');
+      document.getElementById('gate-erro').style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+  document.getElementById('gate-entrar').addEventListener('click', tentar);
+  document.getElementById('gate-senha').addEventListener('keydown', function(e){ if (e.key === 'Enter') tentar(); });
+})();
+</script>
 </body></html>

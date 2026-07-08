@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrato de Prestação de Serviços — Bruna Arguelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B66; --line-strong:#2A3A3340;
+    --field:#2A3A33; --field-line:#2A3A3366;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:#e7ded0; font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; padding:30px 0 64px; }
+
+  /* ---------- A4 PAGE ---------- */
+  .page{
+    width:210mm; min-height:297mm; margin:0 auto; background:#fff;
+    background-image:linear-gradient(180deg,#ffffff 0%, #fffdf9 100%);
+    box-shadow:0 18px 50px rgba(42,58,51,.22);
+    padding:14mm 15mm 9mm; position:relative; display:flex; flex-direction:column;
+  }
+  .page::before{ content:""; position:absolute; inset:6mm; border:1px solid var(--line); pointer-events:none; }
+  .page::after{ content:""; position:absolute; left:0; right:0; top:0; height:5mm; background:var(--cipreste); }
+  .inner{ position:relative; z-index:1; padding:4mm 4mm 0; display:flex; flex-direction:column; flex:1; }
+
+  /* ---------- HEADER ---------- */
+  header{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; padding-bottom:9px; border-bottom:1.5px solid var(--cipreste); }
+  header .logo{ height:46px; width:auto; display:block; }
+  header .org{ text-align:right; font-size:8.8px; letter-spacing:.04em; color:var(--ink-soft); line-height:1.45; }
+  header .org strong{ color:var(--cipreste); font-weight:600; }
+
+  .doc-title{ text-align:center; margin:14px 0 4px; }
+  .doc-title h1{ font-family:var(--serif-display); font-weight:600; font-size:21px; letter-spacing:.015em; color:var(--cipreste); margin:0; line-height:1.12; }
+  .doc-title .sub{ font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--terracota); margin-top:5px; font-weight:600; }
+  .rule-orn{ display:flex; align-items:center; justify-content:center; gap:8px; margin:7px auto 0; max-width:200px; }
+  .rule-orn .l{ height:1px; flex:1; background:var(--line); }
+  .rule-orn .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); }
+
+  /* ---------- BODY ---------- */
+  main{ font-size:10.6px; line-height:1.55; color:var(--ink-soft); margin-top:9px; }
+  p{ margin:0 0 7px; text-align:justify; text-wrap:pretty; }
+  .lead{ margin-bottom:9px; }
+  .lead b{ color:var(--cipreste); }
+
+  section.block{ margin-top:11px; }
+  h2.sec{
+    font-family:var(--serif-display); font-size:13.5px; font-weight:600; color:var(--cipreste);
+    margin:0 0 6px; display:flex; align-items:center; gap:7px; letter-spacing:.01em;
+  }
+  h2.sec .n{
+    font-family:var(--serif-body); font-size:8.5px; font-weight:600; color:#fff; background:var(--salvia);
+    width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex:none;
+  }
+
+  /* fields */
+  .fields{ display:grid; grid-template-columns:1fr 1fr; gap:9px 20px; margin-top:6px; }
+  .f{ display:flex; flex-direction:column; }
+  .f.wide{ grid-column:1 / -1; }
+  .f .lab{ font-size:8.2px; letter-spacing:.12em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin-bottom:6px; }
+  .fld{
+    border:none; border-bottom:1px solid var(--field-line);
+    background:transparent; font-family:var(--serif-body); font-size:10.6px; color:var(--field);
+    padding:0 2px 2px; line-height:1.5; outline:none; width:100%; min-height:15px;
+  }
+  .fld:focus{ border-bottom-color:var(--terracota); background:#C978620d; }
+  .fld::placeholder{ color:#5A7A6B66; font-style:italic; }
+
+  .contratada-box{
+    background:var(--pergaminho); border-left:2.5px solid var(--terracota);
+    padding:9px 12px; font-size:9.6px; line-height:1.7; margin-top:6px;
+  }
+  .contratada-box b{ color:var(--cipreste); }
+
+  /* editable free-text blocks */
+  .edit-area{
+    width:100%; min-height:20mm; border:1px solid var(--field-line); outline:none;
+    font-family:var(--serif-body); font-size:10.6px; line-height:1.7; color:var(--field);
+    padding:7px 9px; margin-top:6px; white-space:pre-wrap; border-radius:2px;
+  }
+  .edit-area:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; font-style:italic; }
+  .edit-area:focus{ border-color:var(--terracota); background:#C978620d; }
+
+  /* checkbox option */
+  .optset{ display:inline-flex; align-items:center; gap:5px 16px; flex-wrap:wrap; margin-top:6px; }
+  .chk{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-size:10.6px; }
+  .chk input{ appearance:none; -webkit-appearance:none; width:12px; height:12px; border:1.3px solid var(--salvia); border-radius:2px; margin:0; cursor:pointer; position:relative; flex:none; background:#fff; }
+  .chk input:checked{ background:var(--terracota); border-color:var(--terracota); }
+  .chk input:checked::after{ content:"✓"; position:absolute; inset:0; color:#fff; font-size:9px; line-height:12px; text-align:center; }
+
+  /* LGPD-style numbered clauses */
+  ol.clauses{ margin:4px 0 0; padding-left:0; list-style:none; counter-reset:cl; }
+  ol.clauses li{ position:relative; padding-left:20px; margin-bottom:6px; font-size:10.2px; line-height:1.5; text-align:justify; }
+  ol.clauses li::before{
+    counter-increment:cl; content:counter(cl,decimal-leading-zero);
+    position:absolute; left:0; top:0; font-family:var(--serif-display); font-weight:700; font-size:10px; color:var(--terracota);
+  }
+  ol.clauses li b{ color:var(--cipreste); font-weight:600; }
+
+  .legal-ref{ font-size:8.6px; font-style:italic; color:var(--salvia); margin-top:9px; padding-top:7px; border-top:1px dotted var(--line); text-align:justify; }
+
+  /* ---------- SIGNATURES ---------- */
+  .sign-wrap{ margin-top:14px; }
+  .place-date{ font-size:10.5px; margin-bottom:14px; display:flex; align-items:flex-end; gap:5px; flex-wrap:wrap; }
+  .place-date .fld{ width:auto; }
+  .place-date .fld.cidade{ flex:0 1 150px; }
+  .place-date .fld.sm{ flex:0 0 46px; text-align:center; }
+  .place-date .fld.md{ flex:0 0 92px; text-align:center; }
+  .signs{ display:flex; flex-wrap:wrap; gap:16px 30px; margin-top:22mm; }
+  .sig{ text-align:center; flex:1 1 44%; }
+  .sig .line{ border-top:1px solid var(--cipreste); margin-bottom:4px; }
+  .sig .role{ font-size:9.4px; color:var(--cipreste); font-weight:600; letter-spacing:.02em; }
+  .sig .hint{ font-size:8px; color:var(--salvia); margin-top:2px; letter-spacing:.04em; font-style:italic; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin-top:auto; padding-top:8px; border-top:1px solid var(--cipreste);
+    display:flex; justify-content:space-between; align-items:center; font-size:8px; color:var(--ink-soft); letter-spacing:.03em;
+  }
+  footer .d{ width:4px; height:4px; background:var(--terracota); transform:rotate(45deg); display:inline-block; margin:0 6px; }
+  footer b{ color:var(--cipreste); font-weight:600; }
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{ position:fixed; left:0; right:0; bottom:0; z-index:9999; background:var(--cipreste); display:flex; align-items:center; justify-content:center; gap:14px; padding:11px 16px; box-shadow:0 -6px 20px rgba(42,58,51,.22); }
+  .toolbar .msg{ color:#F7F2E8cc; font-size:12px; }
+  .toolbar .msg b{ color:#fff; }
+  .toolbar button{ font-family:var(--serif-body); font-size:13.5px; font-weight:600; cursor:pointer; border-radius:7px; padding:9px 18px; border:1px solid transparent; display:inline-flex; align-items:center; gap:8px; }
+  .btn-pdf{ background:var(--terracota); color:#fff; }
+  .btn-pdf:hover{ background:#b96954; }
+  .btn-clear{ background:transparent; color:#F7F2E8; border-color:#F7F2E866; }
+  .btn-clear:hover{ background:#ffffff1a; }
+
+  @page{ size:A4; margin:0; }
+  @media print{
+    body{ background:#fff; padding:0; }
+    .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
+    .toolbar{ display:none !important; }
+    .fld, .edit-area{ border-color:var(--field-line) !important; background-color:transparent !important; }
+    .fld::placeholder{ color:transparent !important; }
+    .edit-area:empty::before{ content:none !important; }
+    .chk input{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+  @media screen and (max-width:760px){
+    body{ padding:14px 14px 70px; }
+    .page{ width:100%; min-height:0; padding:7mm 6mm; }
+    .fields{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- ACCESS GATE ---------- */
+  #gate-login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:#e7ded0; }
+  .gate-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:380px; max-width:100%; overflow:hidden; }
+  .gate-card .topo{ height:3px; background:var(--cipreste); }
+  .gate-inner{ padding:40px 36px 36px; text-align:center; }
+  .gate-inner img{ height:56px; width:auto; margin:0 auto 20px; display:block; }
+  .gate-label{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; }
+  .gate-label span{ font-size:9.5px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .gate-label .l{ width:20px; height:.5px; background:var(--terracota); opacity:.7; }
+  .gate-inner h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 5px; }
+  .gate-inner p{ font-size:11px; color:var(--ink-soft); margin:0; }
+  .gate-divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:22px 0; }
+  .gate-inner input[type=password]{
+    width:100%; padding:11px 13px; font-size:13px; font-family:inherit;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    outline:none; margin-bottom:9px;
+  }
+  .gate-inner input[type=password].erro{ border-color:var(--terracota); }
+  .gate-inner .gate-erro{ font-size:11px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .gate-inner button{
+    width:100%; padding:12px; background:var(--cipreste); color:#fff; border:none;
+    font-size:12.5px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
+  }
+  .gate-inner button:hover{ background:#3d5247; }
+  @media print{ #gate-login{ display:none !important; } }
+</style>
+</head>
+<body>
+<div id="gate-login">
+  <div class="gate-card">
+    <div class="topo"></div>
+    <div class="gate-inner">
+      <img src="assets/logo.png" alt="Bruna Arguelles">
+      <div class="gate-label"><span class="l"></span><span>Acesso restrito</span><span class="l"></span></div>
+      <h1>Bruna Arguelles</h1>
+      <p>Enfermagem Especializada</p>
+      <div class="gate-divisor"></div>
+      <input type="password" id="gate-senha" placeholder="Senha">
+      <p class="gate-erro" id="gate-erro">Senha incorreta.</p>
+      <button id="gate-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="app-content" style="display:none;">
+
+  <div class="page" data-screen-label="Contrato de Prestação de Serviços">
+    <div class="inner">
+
+      <header>
+        <img class="logo" src="assets/logo.png" alt="Bruna Arguelles — Enfermeira">
+        <div class="org"><strong>BRUNA ARGUELLES — ENFERMAGEM ESPECIALIZADA</strong><br>COREN/MG 761268-ENF · CNPJ 66.913.603/0001-92</div>
+      </header>
+
+      <div class="doc-title">
+        <h1>Contrato de Prestação de Serviços de Enfermagem</h1>
+        <div class="sub">Cuidados Especializados em Feridas</div>
+        <div class="rule-orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+      </div>
+
+      <main>
+        <p class="lead">Pelo presente instrumento particular, de um lado <b>BRUNA ARGUELLES — ENFERMAGEM ESPECIALIZADA</b>, inscrita no CNPJ sob o nº 66.913.603/0001-92, COREN/MG nº 761268-ENF, com endereço na Rua da Bahia, 1148, Sala 1208, Centro, Belo Horizonte/MG (doravante "CONTRATADA"), e de outro lado o(a) CONTRATANTE abaixo qualificado(a), têm entre si justo e contratado o presente instrumento, que se regerá pelas cláusulas seguintes.</p>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">1</span>Qualificação do(a) Contratante</h2>
+          <div class="fields">
+            <div class="f wide"><span class="lab">Nome completo</span><input class="fld" type="text" data-k="nome"></div>
+            <div class="f"><span class="lab">CPF</span><input class="fld" type="text" data-k="cpf"></div>
+            <div class="f"><span class="lab">RG</span><input class="fld" type="text" data-k="rg"></div>
+            <div class="f wide"><span class="lab">Endereço</span><input class="fld" type="text" data-k="endereco"></div>
+            <div class="f"><span class="lab">Telefone</span><input class="fld" type="text" data-k="tel"></div>
+            <div class="f"><span class="lab">E-mail</span><input class="fld" type="text" data-k="email"></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">2</span>Objeto do Contrato</h2>
+          <p style="margin-bottom:4px;">A CONTRATADA prestará ao CONTRATANTE os seguintes serviços de enfermagem especializada (edite conforme o plano de cuidado combinado):</p>
+          <div class="edit-area" contenteditable="true" data-k="objeto" data-placeholder="Descreva aqui o serviço contratado: avaliação e tratamento de feridas, curativos especializados, laserterapia, terapias regenerativas (PRP/PRF), acompanhamento da evolução clínica, entre outros.">Avaliação e tratamento de feridas agudas ou de difícil cicatrização, incluindo curativos especializados, laserterapia e/ou terapias regenerativas, com acompanhamento periódico da evolução clínica, conforme plano de cuidado individualizado estabelecido na consulta inicial.</div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">3</span>Local e Modalidade de Atendimento</h2>
+          <div class="optset">
+            <label class="chk"><input type="checkbox" data-k="mod_consultorio">Consultório</label>
+            <label class="chk"><input type="checkbox" data-k="mod_domiciliar">Domiciliar</label>
+            <label class="chk"><input type="checkbox" data-k="mod_teleconsulta">Teleconsulta</label>
+          </div>
+          <div class="fields" style="margin-top:10px;">
+            <div class="f"><span class="lab">Frequência prevista</span><input class="fld" type="text" data-k="frequencia" placeholder="ex.: 2x por semana, conforme evolução"></div>
+            <div class="f"><span class="lab">Prazo / vigência</span><input class="fld" type="text" data-k="prazo" placeholder="ex.: 4 semanas, por tempo indeterminado"></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">4</span>Valor e Forma de Pagamento</h2>
+          <div class="fields">
+            <div class="f"><span class="lab">Valor combinado (R$)</span><input class="fld" type="text" data-k="valor"></div>
+            <div class="f"><span class="lab">Forma de pagamento</span><input class="fld" type="text" data-k="pagamento" placeholder="ex.: Pix, cartão, parcelado"></div>
+          </div>
+          <p class="legal-ref" style="margin-top:8px;padding-top:0;border-top:none;">Materiais e coberturas especiais eventualmente necessários e não previstos no valor acima serão informados e cobrados à parte, conforme tabela de preços vigente da CONTRATADA.</p>
+        </section>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">5</span>Cláusulas Gerais</h2>
+          <ol class="clauses">
+            <li><b>Da natureza do serviço.</b> Os serviços ora contratados são de natureza assistencial de enfermagem e não substituem atendimento médico de urgência/emergência; sinais de agravamento serão prontamente encaminhados à rede de saúde competente.</li>
+            <li><b>Das obrigações da CONTRATADA.</b> Prestar os serviços com técnica, zelo e sigilo profissional, observado o Código de Ética dos Profissionais de Enfermagem (Res. COFEN nº 564/2017) e as demais normas do exercício profissional (Lei nº 7.498/1986).</li>
+            <li><b>Das obrigações do CONTRATANTE.</b> Fornecer informações verídicas sobre seu estado de saúde, seguir as orientações fornecidas, comparecer nos horários agendados e comunicar cancelamentos com antecedência mínima de 24 (vinte e quatro) horas.</li>
+            <li><b>Do cancelamento e reagendamento.</b> Cancelamentos sem aviso prévio na forma do item anterior poderão ensejar cobrança integral ou parcial da sessão agendada, a critério da CONTRATADA.</li>
+            <li><b>Da rescisão.</b> O presente contrato poderá ser rescindido por qualquer das partes, mediante comunicação prévia, ressalvados os valores já devidos por serviços efetivamente prestados.</li>
+            <li><b>Da proteção de dados (LGPD).</b> Os dados pessoais e de saúde do CONTRATANTE serão tratados exclusivamente para a finalidade da prestação do serviço, nos termos da Lei nº 13.709/2018, assegurados os direitos de acesso, correção e eliminação previstos em lei.</li>
+            <li><b>Do uso de imagem.</b> Eventual captação e uso de imagens do tratamento será regido por termo de consentimento específico, assinado em separado, quando aplicável.</li>
+            <li><b>Do foro.</b> Fica eleito o foro da Comarca de Juiz de Fora/MG para dirimir quaisquer questões oriundas do presente contrato, com renúncia a qualquer outro, por mais privilegiado que seja.</li>
+          </ol>
+          <p class="legal-ref">Declaro que li e compreendi integralmente as cláusulas deste contrato, manifestando minha concordância de forma livre e consciente.</p>
+        </section>
+
+        <div class="sign-wrap">
+          <div class="place-date">
+            <input class="fld cidade" type="text" data-k="cidade_ass" value="Juiz de Fora/MG">
+            <span>,</span>
+            <input class="fld sm" type="text" data-k="dia" placeholder="dia">
+            <span>de</span>
+            <input class="fld md" type="text" data-k="mes" placeholder="mês">
+            <span>de</span>
+            <input class="fld sm" type="text" data-k="ano" placeholder="ano">
+            <span>.</span>
+          </div>
+          <div class="signs">
+            <div class="sig">
+              <div class="line"></div>
+              <div class="role">CONTRATANTE</div>
+              <div class="hint">Nome e CPF conforme item 1</div>
+            </div>
+            <div class="sig">
+              <div class="line"></div>
+              <div class="role">Bruna Arguelles — CONTRATADA</div>
+              <div class="hint">Enfermeira · COREN/MG nº 761268-ENF</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <span><b>Bruna Arguelles</b> · Enfermagem Especializada em Feridas</span>
+        <span>CNPJ 66.913.603/0001-92 <span class="d"></span> Juiz de Fora/MG</span>
+      </footer>
+
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="msg">Preencha os campos e clique em <b>Baixar PDF</b> para assinar digitalmente.</span>
+    <button class="btn-pdf" id="btnPdf">⤓ Baixar PDF</button>
+    <button class="btn-clear" id="btnClear">Limpar campos</button>
+  </div>
+
+  <script>
+    (function(){
+      var KEY = 'contrato-prestacao-servicos-v1';
+      var DEFAULT_OBJETO = "Avaliação e tratamento de feridas agudas ou de difícil cicatrização, incluindo curativos especializados, laserterapia e/ou terapias regenerativas, com acompanhamento periódico da evolução clínica, conforme plano de cuidado individualizado estabelecido na consulta inicial.";
+      var fields = Array.prototype.slice.call(document.querySelectorAll('[data-k]'));
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ saved = {}; }
+      fields.forEach(function(el){
+        var k = el.dataset.k;
+        if (!(k in saved)) return;
+        if (el.type === 'checkbox') el.checked = !!saved[k];
+        else if (el.isContentEditable) el.textContent = saved[k];
+        else el.value = saved[k];
+      });
+      function persist(){
+        var data = {};
+        fields.forEach(function(el){
+          if (el.type === 'checkbox'){ data[el.dataset.k] = el.checked; el.toggleAttribute('checked', el.checked); }
+          else if (el.isContentEditable){ data[el.dataset.k] = el.textContent; }
+          else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
+        });
+        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+      }
+      fields.forEach(function(el){
+        el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', persist);
+      });
+      persist();
+
+      document.getElementById('btnPdf').addEventListener('click', function(){ persist(); window.print(); });
+      document.getElementById('btnClear').addEventListener('click', function(){
+        if (!confirm('Limpar todos os campos preenchidos?')) return;
+        fields.forEach(function(el){
+          if (el.type === 'checkbox'){ el.checked = false; el.removeAttribute('checked'); }
+          else if (el.dataset.k === 'objeto'){ el.textContent = DEFAULT_OBJETO; }
+          else if (el.dataset.k === 'cidade_ass'){ el.value = 'Juiz de Fora/MG'; }
+          else if (el.isContentEditable){ el.textContent = ''; }
+          else { el.value = ''; }
+          if (!el.isContentEditable) el.setAttribute('value', el.value || '');
+        });
+        persist();
+      });
+    })();
+  </script>
+
+
+</div>
+
+<script>
+(function(){
+  var SENHA = 'bruna2024';
+  var authed = false;
+  try { authed = sessionStorage.getItem('docs_auth') === '1'; } catch(e){}
+  var gate = document.getElementById('gate-login');
+  var app = document.getElementById('app-content');
+  if (authed){
+    gate.style.display = 'none';
+    app.style.display = 'block';
+  }
+  function tentar(){
+    var input = document.getElementById('gate-senha');
+    if (input.value === SENHA){
+      try { sessionStorage.setItem('docs_auth', '1'); } catch(e){}
+      gate.style.display = 'none';
+      app.style.display = 'block';
+    } else {
+      input.classList.add('erro');
+      document.getElementById('gate-erro').style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+  document.getElementById('gate-entrar').addEventListener('click', tentar);
+  document.getElementById('gate-senha').addEventListener('keydown', function(e){ if (e.key === 'Enter') tentar(); });
+})();
+</script>
+</body></html>
