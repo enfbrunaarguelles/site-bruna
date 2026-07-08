@@ -681,7 +681,22 @@ const HONORARIO_OPCOES = [
   ...DOMICILIAR.filter(r => !r.cod.startsWith('DL')).map(r => ({ label: r.srv, val: r.val })),
 ]
 
-const SIM_DEFAULT = { honorario:250, material:110, multiplicador:1.6, deslocamento:0, laser:90 }
+const NOTA_DOMICILIAR = ' Atendimento realizado no domicílio, com deslocamento incluso conforme a região.'
+const DESCRICAO_TIPO = {
+  'Avaliação inicial + primeiro curativo básico': 'A primeira avaliação é o momento mais importante do tratamento. Nela, são analisados o tipo de ferida, tempo de evolução, características do leito da ferida, pele ao redor, presença de exsudato, sinais locais, histórico de saúde, cuidados já realizados e materiais mais indicados para cada caso.',
+  'Avaliação inicial domiciliar + primeiro curativo básico': 'A primeira avaliação é o momento mais importante do tratamento. Nela, são analisados o tipo de ferida, tempo de evolução, características do leito da ferida, pele ao redor, presença de exsudato, sinais locais, histórico de saúde, cuidados já realizados e materiais mais indicados para cada caso.' + NOTA_DOMICILIAR,
+  'Reavaliação sem curativo': 'Reavaliação da evolução da ferida e ajuste do plano de cuidado, sem necessidade de troca de curativo nesta visita.',
+  'Curativo simples': 'Indicado quando o cuidado exige materiais básicos e menor complexidade técnica.',
+  'Curativo simples domiciliar': 'Indicado quando o cuidado exige materiais básicos e menor complexidade técnica.' + NOTA_DOMICILIAR,
+  'Curativo intermediário': 'Indicado quando há necessidade de maior tempo de atendimento, maior quantidade de material ou uso de coberturas específicas de custo moderado.',
+  'Curativo intermediário domiciliar': 'Indicado quando há necessidade de maior tempo de atendimento, maior quantidade de material ou uso de coberturas específicas de custo moderado.' + NOTA_DOMICILIAR,
+  'Curativo complexo': 'Indicado quando o cuidado exige maior complexidade técnica, maior tempo de atendimento ou uso de materiais mais específicos.',
+  'Curativo complexo domiciliar': 'Indicado quando o cuidado exige maior complexidade técnica, maior tempo de atendimento ou uso de materiais mais específicos.' + NOTA_DOMICILIAR,
+  'Curativo especial': 'Indicado quando há necessidade de materiais de alto custo, coberturas avançadas ou combinações específicas de produtos. O valor é calculado individualmente conforme o material utilizado, quantidade necessária, complexidade do cuidado e frequência dos atendimentos.',
+  'Curativo especial domiciliar': 'Indicado quando há necessidade de materiais de alto custo, coberturas avançadas ou combinações específicas de produtos. O valor é calculado individualmente conforme o material utilizado, quantidade necessária, complexidade do cuidado e frequência dos atendimentos.' + NOTA_DOMICILIAR,
+}
+
+const SIM_DEFAULT = { honorario:250, material:110, multiplicador:1.6, deslocamento:0, laser:90, tipoLabel:'Avaliação inicial + primeiro curativo básico' }
 const SIM_CAMPOS = [
   { key:'honorario',     label:'Honorário técnico',          hint:'Escolha o tipo de atendimento na lista — o valor vem direto das tabelas. Pode ajustar manualmente depois, se precisar.', prefix:true,  step:10   },
   { key:'material',      label:'Custo do material especial', hint:'Custo real do material utilizado',             prefix:true,  step:5    },
@@ -876,7 +891,7 @@ function renderizarSim() {
     const selectHtml = c.key === 'honorario'
       ? `<select class="sim-select" id="sim-honorario-tipo">
            <option value="">Tipo de atendimento (opcional — preenche o valor abaixo)</option>
-           ${HONORARIO_OPCOES.map(o => `<option value="${o.val ?? 0}">${o.label}${o.val == null ? ' — sob avaliação' : ''}</option>`).join('')}
+           ${HONORARIO_OPCOES.map((o, oi) => `<option value="${oi}">${o.label}${o.val == null ? ' — sob avaliação' : ''}</option>`).join('')}
          </select>`
       : ''
 
@@ -897,11 +912,15 @@ function renderizarSim() {
     })
 
     if (c.key === 'honorario') {
-      div.querySelector('#sim-honorario-tipo').addEventListener('change', e => {
+      const selectEl = div.querySelector('#sim-honorario-tipo')
+      const idxAtual = HONORARIO_OPCOES.findIndex(o => o.label === simVals.tipoLabel)
+      if (idxAtual > -1) selectEl.value = idxAtual
+      selectEl.addEventListener('change', e => {
         if (e.target.value === '') return
-        const val = parseFloat(e.target.value)
-        simVals.honorario = val
-        div.querySelector('[data-sim="honorario"]').value = val
+        const opt = HONORARIO_OPCOES[parseInt(e.target.value, 10)]
+        simVals.honorario = opt.val ?? 0
+        simVals.tipoLabel = opt.label
+        div.querySelector('[data-sim="honorario"]').value = simVals.honorario
         salvarSim()
         atualizarSim()
       })
@@ -1025,13 +1044,15 @@ function exportarPDF() {
   doc.setFontSize(9)
   doc.setTextColor(...SAL)
   doc.text('Orçamento personalizado — valores calculados conforme as características individuais do seu caso.', M, 47.5)
+  doc.setFontSize(8)
+  doc.text('Este é um valor estimado e pode ser ajustado após avaliação presencial da ferida.', M, 52.5)
 
   // ── Composição do valor (tabela do simulador)
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(7)
   doc.setTextColor(...TER)
   doc.setCharSpace(1.5)
-  doc.text('COMPOSIÇÃO DO ATENDIMENTO', M, 57)
+  doc.text('COMPOSIÇÃO DO ATENDIMENTO', M, 60)
   doc.setCharSpace(0)
 
   const linhasSim = [
@@ -1043,7 +1064,7 @@ function exportarPDF() {
   ]
 
   doc.autoTable({
-    startY: 61,
+    startY: 64,
     head: [['Item', 'Valor']],
     body: linhasSim,
     margin: { left: M, right: M },
@@ -1133,6 +1154,120 @@ function exportarPDF() {
     })
   }
 
+  // ── Página 2: sobre o atendimento (conteúdo educativo para o paciente)
+  doc.addPage()
+
+  doc.setFillColor(...CIP)
+  doc.rect(0, 0, W, 4, 'F')
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...SAL)
+  doc.setCharSpace(1.5)
+  doc.text('BRUNA ARGUELLES · ENFERMAGEM ESPECIALIZADA', M, 16)
+  doc.setCharSpace(0)
+
+  doc.setFont('times', 'bolditalic')
+  doc.setFontSize(17)
+  doc.setTextColor(...CIP)
+  doc.text('Sobre o seu atendimento', M, 25)
+
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(0.5)
+  doc.line(M, 30, W - M, 30)
+
+  let y2 = 40
+
+  const descTipo = DESCRICAO_TIPO[simVals.tipoLabel]
+  if (descTipo) {
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(7)
+    doc.setTextColor(...TER)
+    doc.setCharSpace(1.5)
+    doc.text(simVals.tipoLabel.toUpperCase(), M, y2)
+    doc.setCharSpace(0)
+    y2 += 6
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(9.5)
+    doc.setTextColor(...CIP)
+    const linhasDesc = doc.splitTextToSize(descTipo, W - 2*M)
+    doc.text(linhasDesc, M, y2)
+    y2 += linhasDesc.length * 4.6 + 10
+  }
+
+  if (simVals.laser > 0) {
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(7)
+    doc.setTextColor(...TER)
+    doc.setCharSpace(1.5)
+    doc.text('LASERTERAPIA', M, y2)
+    doc.setCharSpace(0)
+    y2 += 6
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(9.5)
+    doc.setTextColor(...CIP)
+    const linhasLaser = doc.splitTextToSize(
+      'A laserterapia pode ser associada ao tratamento quando houver indicação profissional, com efeitos anti-inflamatórios, analgésicos e de estímulo à regeneração tecidual. Está incluída no valor deste atendimento.',
+      W - 2*M
+    )
+    doc.text(linhasLaser, M, y2)
+    y2 += linhasLaser.length * 4.6 + 10
+  }
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(...TER)
+  doc.setCharSpace(1.5)
+  doc.text('COMO DEFINIMOS O VALOR DO SEU ATENDIMENTO', M, y2)
+  doc.setCharSpace(0)
+  y2 += 6
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(9.5)
+  doc.setTextColor(...CIP)
+  const linhasCriterio = doc.splitTextToSize(
+    'O valor de um curativo não é definido apenas pelo tamanho da ferida. Uma ferida pequena pode exigir materiais especiais e maior complexidade técnica, assim como uma ferida maior pode ter um cuidado mais simples. Por isso, a classificação considera:',
+    W - 2*M
+  )
+  doc.text(linhasCriterio, M, y2)
+  y2 += linhasCriterio.length * 4.6 + 6
+
+  const criterios = [
+    'Tipo de material utilizado',
+    'Cobertura necessária',
+    'Complexidade do cuidado',
+    'Tempo técnico do atendimento',
+    'Quantidade de material utilizado',
+    'Necessidade de laserterapia',
+    'Frequência de troca e acompanhamento',
+  ]
+  doc.setFontSize(9)
+  criterios.forEach((item, i) => {
+    const col = i % 2, row = Math.floor(i / 2)
+    const x = M + col * 90
+    const yy = y2 + row * 7
+    doc.setTextColor(...TER)
+    doc.text('•', x, yy)
+    doc.setTextColor(...CIP)
+    doc.text(item, x + 4, yy)
+  })
+  y2 += Math.ceil(criterios.length / 2) * 7 + 12
+
+  doc.setFillColor(...PERG)
+  const notaAltura = 24
+  doc.rect(M, y2, W - 2*M, notaAltura, 'F')
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(1)
+  doc.line(M, y2, M, y2 + notaAltura)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8.5)
+  doc.setTextColor(...CIP)
+  const linhasNota = doc.splitTextToSize(
+    'Os valores incluem materiais básicos até o limite de cada categoria. Coberturas especiais, materiais com prata, carvão ativado, espumas premium, alginatos especiais, hidrogel, PHMB, superabsorventes ou outros insumos de alto custo poderão ser cobrados à parte, sempre com orientação prévia.',
+    W - 2*M - 10
+  )
+  doc.text(linhasNota, M + 6, y2 + 8)
+
   // ── Rodapé
   doc.setDrawColor(...TER)
   doc.setLineWidth(0.4)
@@ -1142,7 +1277,7 @@ function exportarPDF() {
   doc.setTextColor(...SAL)
   doc.text('Bruna Arguelles · Enfermagem Especializada · CNPJ 66.913.603/0001-92', M, 282)
   doc.setFont('times', 'italic')
-  doc.text('Orçamento válido por 15 dias. Valores sujeitos a alteração conforme avaliação clínica.', M, 287)
+  doc.text('Orçamento válido por 15 dias. Valores sujeitos a alteração conforme avaliação presencial da ferida.', M, 287)
   doc.setTextColor(...BORDA)
   doc.text('@cuidarpelabruna', W - M, 282, { align: 'right' })
 
