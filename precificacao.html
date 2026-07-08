@@ -269,8 +269,11 @@
       <div class="secao-label"><div class="tr"></div><span>Curativo especial</span></div>
       <p class="secao-titulo">Simulador de Valor</p>
       <div class="sim-wrap">
-        <p style="font-size:13px;color:var(--medio);margin-bottom:36px;line-height:1.7">
+        <p style="font-size:13px;color:var(--medio);margin-bottom:8px;line-height:1.7">
           Fórmula: Honorário + (Material × Multiplicador) + Deslocamento + Laser
+        </p>
+        <p style="font-size:11.5px;color:var(--claro);font-style:italic;margin-bottom:36px;line-height:1.6;max-width:560px">
+          O multiplicador cobre despesas de aquisição, transporte e armazenamento do material especial — não é lucro sobre o produto. Esta observação também aparece no orçamento em PDF exportado para o paciente.
         </p>
         <div id="sim-campos"></div>
         <div style="height:.5px;background:var(--cipestre);opacity:.1;margin:8px 0 36px"></div>
@@ -848,6 +851,16 @@ function exportarPDF() {
     M, afterSim + 22
   )
 
+  // ── Observação sobre o multiplicador
+  doc.setFont('helvetica', 'italic')
+  doc.setFontSize(7)
+  doc.setTextColor(...SAL)
+  const obsMultiplicador = doc.splitTextToSize(
+    'Observação: o multiplicador aplicado ao material cobre despesas de aquisição, transporte e armazenamento do insumo utilizado — não representa lucro sobre o produto.',
+    100
+  )
+  doc.text(obsMultiplicador, M, afterSim + 28)
+
   // ── Materiais selecionados (se houver)
   const itensMat = []
   MATERIAIS.forEach(m => {
@@ -859,7 +872,7 @@ function exportarPDF() {
   })
 
   if (itensMat.length > 0) {
-    const startMat = afterSim + 30
+    const startMat = afterSim + 42
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(7)
     doc.setTextColor(...TER)
@@ -903,7 +916,8 @@ function exportarPDF() {
     ? `orcamento_${paciente.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`
     : `orcamento_${new Date().toISOString().slice(0,10)}.pdf`
 
-  doc.save(nomeArq)
+  doc.setProperties({ title: nomeArq })
+  window.open(doc.output('bloburl'), '_blank')
 }
 
 // ── Init ─────────────────────────────────────────────────────────────────────
