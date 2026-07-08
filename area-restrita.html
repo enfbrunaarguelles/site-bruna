@@ -124,6 +124,17 @@
     </div>
 
     <div class="grupo">
+      <div class="grupo-label"><span class="d"></span><span>Contratos</span></div>
+      <div class="cards">
+        <a class="card" href="contrato-prestacao-servicos.html" target="_blank" rel="noopener">
+          <h2>Prestação de Serviços</h2>
+          <p>Contrato de prestação de serviços de enfermagem especializada.</p>
+          <span class="abrir">Abrir →</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="grupo">
       <div class="grupo-label"><span class="d"></span><span>Termos de Consentimento</span></div>
       <div class="cards">
         <a class="card" href="termo-uso-imagem.html" target="_blank" rel="noopener">
@@ -195,11 +206,6 @@
           <p>Seletor de materiais, simulador de custos e tabela de preços.</p>
           <span class="abrir">Abrir →</span>
         </a>
-        <a class="card" href="controle-financeiro.html" target="_blank" rel="noopener">
-          <h2>Controle Financeiro</h2>
-          <p>Entradas, saídas, lucro e recuperação do investimento — sincronizado com o Google Sheets.</p>
-          <span class="abrir">Abrir →</span>
-        </a>
       </div>
     </div>
 
@@ -208,11 +214,12 @@
 </div>
 
 <script>
-  const SENHA = 'Nightingale@1853';
+  const SENHA = 'bruna2024';
 
   function tentarLogin(){
     const input = document.getElementById('senha-input');
     if (input.value === SENHA){
+      try { sessionStorage.setItem('docs_auth', '1'); } catch(e){}
       document.getElementById('login').style.display = 'none';
       document.getElementById('app').style.display = 'block';
     } else {
@@ -226,10 +233,18 @@
   document.getElementById('btn-entrar').addEventListener('click', tentarLogin);
   document.getElementById('senha-input').addEventListener('keydown', e => { if (e.key === 'Enter') tentarLogin(); });
   document.getElementById('btn-sair').addEventListener('click', () => {
+    try { sessionStorage.removeItem('docs_auth'); } catch(e){}
     document.getElementById('app').style.display = 'none';
     document.getElementById('login').style.display = 'flex';
     document.getElementById('senha-input').value = '';
   });
+
+  var jaAutenticado = false;
+  try { jaAutenticado = sessionStorage.getItem('docs_auth') === '1'; } catch(e){}
+  if (jaAutenticado){
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
 </script>
 
 </body></html>
