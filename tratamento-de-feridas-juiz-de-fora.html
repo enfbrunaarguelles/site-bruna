@@ -2,8 +2,9 @@
 <html lang="pt-BR"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agendar Avaliação — Bruna Arguelles | Enfermagem Especializada em Feridas</title>
-<meta name="description" content="Tratamento especializado de feridas agudas e de difícil cicatrização. Agende sua avaliação pelo WhatsApp.">
+<title>Tratamento de Feridas em Juiz de Fora — Bruna Arguelles | Enfermagem Especializada</title>
+<meta name="description" content="Tratamento especializado de feridas agudas e de difícil cicatrização em Juiz de Fora/MG. Avaliação completa, curativos avançados e acompanhamento até a alta.">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -50,7 +51,6 @@
   .topo .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
   .brand{ display:flex; align-items:center; gap:10px; }
   .brand img{ height:32px; width:auto; }
-  .brand .nm{ font-family:var(--serif-display); font-size:17px; font-weight:600; color:var(--cipreste); }
   .btn-topo{
     display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600;
     padding:9px 16px; border-radius:30px; border:1.3px solid var(--cipreste); color:var(--cipreste);
@@ -65,7 +65,7 @@
   }
   .hero .wrap{ position:relative; }
   .hero .kicker{ margin-bottom:18px; }
-  .hero h1{ font-size:clamp(32px, 6.4vw, 50px); margin-bottom:18px; }
+  .hero h1{ font-size:clamp(30px, 6vw, 46px); margin-bottom:18px; }
   .hero h1 em{ font-style:italic; color:var(--terracota); }
   .hero .lede{ font-size:18px; color:var(--ink-soft); max-width:56ch; margin:0 auto 32px; text-wrap:pretty; }
 
@@ -73,18 +73,12 @@
   .trust-item{ display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-soft); letter-spacing:.02em; }
   .trust-item svg{ width:15px; height:15px; stroke:var(--salvia); flex:none; }
 
-  .ph-hero{
-    margin:36px auto 0; max-width:320px; border-radius:12px; overflow:hidden;
-    border:1px solid var(--line); box-shadow:0 18px 40px rgba(42,58,51,.16);
-  }
-  .ph-hero img{ width:100%; height:auto; display:block; }
-
   /* ---------- SECTIONS ---------- */
   section{ padding:52px 0; }
   section.alt{ background:#fff; }
   .sec-titulo{ text-align:center; font-size:clamp(26px, 4.4vw, 36px); margin-bottom:8px; }
   .sec-titulo em{ font-style:italic; color:var(--terracota); }
-  .sec-sub{ text-align:center; font-size:15px; color:var(--ink-soft); max-width:52ch; margin:0 auto 36px; }
+  .sec-sub{ text-align:center; font-size:15px; color:var(--ink-soft); max-width:56ch; margin:0 auto 36px; }
 
   /* Pra quem é */
   .lista-check{ list-style:none; margin:0; padding:0; max-width:600px; margin-left:auto; margin-right:auto; }
@@ -95,16 +89,12 @@
     display:flex; align-items:center; justify-content:center; font-size:13px; margin-top:1px;
   }
 
-  /* Como funciona */
-  .passos{ display:grid; grid-template-columns:repeat(3, 1fr); gap:28px; margin-top:12px; }
-  .passo{ text-align:center; }
-  .passo .num{
-    width:46px; height:46px; border-radius:50%; background:var(--cipreste); color:#fff;
-    font-family:var(--serif-display); font-size:19px; font-style:italic; font-weight:600;
-    display:flex; align-items:center; justify-content:center; margin:0 auto 16px;
-  }
-  .passo h3{ font-family:var(--serif-display); font-size:19px; font-style:italic; font-weight:600; color:var(--cipreste); margin:0 0 8px; }
-  .passo p{ font-size:14px; color:var(--ink-soft); margin:0; line-height:1.6; }
+  /* Alerta / educativo */
+  .alerta-grid{ display:grid; gap:14px; max-width:640px; margin:0 auto; }
+  .alerta{ display:flex; gap:14px; align-items:flex-start; padding:16px 18px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+  .alerta .ico{ width:26px; height:26px; border-radius:50%; background:var(--terracota); color:#fff; flex:none; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+  .alerta p{ margin:0; font-size:15px; color:var(--ink-soft); line-height:1.55; }
+  .alerta b{ color:var(--cipreste); }
 
   /* Credenciais */
   .cred-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px 24px; max-width:640px; margin:0 auto; }
@@ -124,15 +114,22 @@
   .faq details[open] summary::after{ transform:rotate(45deg); }
   .faq p{ font-size:14.5px; color:var(--ink-soft); margin:12px 0 0; line-height:1.7; }
 
+  /* Links relacionados */
+  .rel-links{ display:flex; flex-wrap:wrap; gap:10px 14px; justify-content:center; margin-top:8px; }
+  .rel-links a{ font-size:13.5px; font-weight:600; color:var(--cipreste); border:1px solid var(--line); border-radius:30px; padding:9px 17px; transition:background .2s, border-color .2s; }
+  .rel-links a:hover{ background:var(--salvia-soft); border-color:var(--salvia); }
+
   /* CTA final */
   .cta-final{ background:var(--cipreste); color:var(--pergaminho); text-align:center; padding:60px 0; }
   .cta-final h2{ color:#fff; font-size:clamp(26px, 4.6vw, 38px); margin-bottom:14px; }
   .cta-final p{ font-size:16px; color:#F7F2E8cc; max-width:48ch; margin:0 auto 30px; }
   .cta-final .btn{ background:var(--terracota); border-color:var(--terracota); }
+  .cta-final .btn.ghost{ background:transparent; color:#fff; border-color:#F7F2E855; }
 
   /* Footer */
   footer{ padding:32px 0 100px; text-align:center; }
   footer p{ font-size:12px; color:var(--ink-soft); opacity:.75; line-height:1.7; margin:0; }
+  footer a.home{ display:inline-block; margin-top:10px; font-size:12px; color:var(--salvia); font-weight:600; }
 
   /* Sticky mobile CTA */
   .sticky-cta{
@@ -144,7 +141,6 @@
 
   @media (max-width:640px){
     .hero{ padding:40px 0 32px; }
-    .passos{ grid-template-columns:1fr; gap:32px; }
     .cred-grid{ grid-template-columns:1fr; }
     section{ padding:40px 0; }
     footer{ padding-bottom:110px; }
@@ -159,7 +155,7 @@
       <div class="brand">
         <img src="assets/logo.png" alt="Bruna Arguelles">
       </div>
-      <a class="btn-topo" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20Instagram%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+      <a class="btn-topo" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20Google%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
         Agendar
       </a>
@@ -169,28 +165,24 @@
   <section class="hero">
     <div class="wrap">
       <div class="kicker"><span class="d"></span><span>Enfermagem especializada · Juiz de Fora/MG</span><span class="d"></span></div>
-      <h1>Sua ferida merece um cuidado que <em>realmente</em> cicatriza.</h1>
-      <p class="lede">Tratamento especializado de feridas agudas e de difícil cicatrização — com avaliação completa, plano de cuidado individual e acompanhamento até o fim do tratamento.</p>
+      <h1>Tratamento de feridas em Juiz de Fora, com quem entende <em>do assunto</em>.</h1>
+      <p class="lede">Feridas agudas e de difícil cicatrização — pé diabético, lesão por pressão, feridas pós-cirúrgicas e venosas — com avaliação completa, curativos avançados e acompanhamento até a cicatrização.</p>
 
       <div class="btn-wrap">
         <div class="btn-row">
-          <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20Instagram%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+          <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20Google%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
-            Agendar avaliação pelo WhatsApp
+            Agendar pelo WhatsApp
           </a>
           <a class="btn ghost" href="pre-consulta.html">Preencher pré-consulta</a>
         </div>
-        <div class="btn-sub">Resposta rápida · Atendimento em consultório, domicílio ou teleconsulta</div>
+        <div class="btn-sub">Resposta rápida · Consultório, domicílio ou teleconsulta para todo o Brasil</div>
       </div>
 
       <div class="trust-row">
         <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>COREN/MG 761268-ENF</div>
         <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Mestranda em Enfermagem — UFJF</div>
         <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Habilitada em Laserterapia e PRP/PRF</div>
-      </div>
-
-      <div class="ph-hero">
-        <img src="assets/laserterapia-hero.jpg" alt="Bruna Arguelles aplicando laserterapia em ferida operatória">
       </div>
     </div>
   </section>
@@ -200,9 +192,10 @@
       <p class="sec-titulo">Esse cuidado é <em>pra você</em> se...</p>
       <ul class="lista-check">
         <li><span class="ico">✓</span>Sua ferida não fecha há semanas (ou meses), apesar dos curativos.</li>
-        <li><span class="ico">✓</span>Você tem uma ferida diabética, pós-cirúrgica ou por pressão que te preocupa.</li>
+        <li><span class="ico">✓</span>Você tem uma ferida diabética, pós-cirúrgica, venosa ou por pressão que te preocupa.</li>
         <li><span class="ico">✓</span>Já trocou de curativo várias vezes e não viu evolução real.</li>
         <li><span class="ico">✓</span>Cuida de alguém acamado ou com mobilidade reduzida e precisa de atendimento em casa.</li>
+        <li><span class="ico">✓</span>Mora fora de Juiz de Fora e quer acompanhamento especializado por teleconsulta.</li>
         <li><span class="ico">✓</span>Quer acompanhamento de perto — não só uma troca de curativo isolada.</li>
       </ul>
     </div>
@@ -210,24 +203,13 @@
 
   <section>
     <div class="wrap">
-      <p class="sec-titulo">Como <em>funciona</em></p>
-      <p class="sec-sub">Do primeiro contato até a alta, um processo simples e acompanhado de perto.</p>
-      <div class="passos">
-        <div class="passo">
-          <div class="num">1</div>
-          <h3>Agende</h3>
-          <p>Chama no WhatsApp e conta rapidamente o que está acontecendo com a ferida.</p>
-        </div>
-        <div class="passo">
-          <div class="num">2</div>
-          <h3>Avaliação</h3>
-          <p>Avaliação completa da ferida, histórico de saúde e definição do plano de cuidado — já com o primeiro curativo feito.</p>
-        </div>
-        <div class="passo">
-          <div class="num">3</div>
-          <h3>Acompanhamento</h3>
-          <p>Retornos definidos conforme a evolução, até a cicatrização completa.</p>
-        </div>
+      <p class="sec-titulo">Cuidamos de <em>cada tipo</em> de ferida</p>
+      <p class="sec-sub">Cada ferida tem uma causa e um estágio de cicatrização diferente. Veja o cuidado específico para o seu caso:</p>
+      <div class="rel-links">
+        <a href="pe-diabetico.html">Pé diabético</a>
+        <a href="lesao-por-pressao.html">Lesão por pressão</a>
+        <a href="feridas-pos-cirurgicas.html">Feridas pós-cirúrgicas</a>
+        <a href="curativo-domiciliar.html">Curativo domiciliar</a>
       </div>
     </div>
   </section>
@@ -259,6 +241,10 @@
           <p>Sim, atendimento domiciliar disponível mediante agendamento e avaliação da região, além de consultório e teleconsulta.</p>
         </details>
         <details>
+          <summary>E se eu não moro em Juiz de Fora?</summary>
+          <p>A teleconsulta atende todo o Brasil: avaliamos a ferida por vídeo, defino o plano de cuidado e oriento você (ou quem cuida do paciente) na troca do curativo, com acompanhamento à distância.</p>
+        </details>
+        <details>
           <summary>Dói fazer o curativo?</summary>
           <p>O manejo é feito com técnica para minimizar o desconforto, e a dor é avaliada e conduzida durante todo o atendimento.</p>
         </details>
@@ -277,13 +263,13 @@
   <section class="cta-final">
     <div class="wrap">
       <h2>Vamos cuidar dessa ferida?</h2>
-      <p>Agenda por semana com vagas limitadas. Fala comigo agora pelo WhatsApp e vamos definir o melhor cuidado para o seu caso.</p>
+      <p>Agenda por semana com vagas limitadas. Fala comigo agora e vamos definir o melhor cuidado para o seu caso.</p>
       <div class="btn-row">
-        <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20Instagram%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+        <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20Google%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
           Agendar avaliação
         </a>
-        <a class="btn ghost" style="border-color:#F7F2E855;color:#fff;" href="pre-consulta.html">Preencher pré-consulta</a>
+        <a class="btn ghost" href="pre-consulta.html">Preencher pré-consulta</a>
       </div>
     </div>
   </section>
@@ -294,11 +280,12 @@
         Bruna Arguelles — Enfermagem Especializada · COREN/MG 761268-ENF · CNPJ 66.913.603/0001-92<br>
         Juiz de Fora/MG · @cuidarpelabruna
       </p>
+      <a class="home" href="index.html">← Voltar para o site</a>
     </div>
   </footer>
 
   <div class="sticky-cta">
-    <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20Instagram%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+    <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vim%20pelo%20Google%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
       Agendar pelo WhatsApp
     </a>

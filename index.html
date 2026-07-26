@@ -216,12 +216,60 @@
     .reveal.in{ opacity:1; transform:none; }
   }
 
+  /* ---------- PARA QUEM ---------- */
+  .forwhom-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:52px; }
+  .forwhom-card{ background:var(--pergaminho); border:1px solid var(--line); border-radius:8px; padding:34px 32px; }
+  .block.cream .forwhom-card{ background:#F7F2E8; }
+  .forwhom-card .tag{ display:inline-block; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--terracota); font-weight:600; }
+  .forwhom-card h3{ font-size:25px; margin-top:9px; }
+  .forwhom-card ul{ list-style:none; margin:19px 0 0; padding:0; display:flex; flex-direction:column; gap:13px; }
+  .forwhom-card ul li{ display:flex; gap:12px; align-items:flex-start; font-size:15.5px; color:var(--ink-soft); line-height:1.5; }
+  .forwhom-card ul li .ico{ flex:none; width:22px; height:22px; border-radius:50%; background:var(--salvia); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+
+  /* ---------- COMO FUNCIONA (jornada) ---------- */
+  .jornada-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:38px 26px; margin-top:56px; }
+  .jornada-step{ text-align:center; }
+  .jornada-step .num{
+    width:48px; height:48px; border-radius:50%; background:var(--cipreste); color:var(--pergaminho);
+    font-family:var(--serif-display); font-size:19px; font-weight:600; display:flex; align-items:center; justify-content:center;
+    margin:0 auto 16px;
+  }
+  .jornada-step h3{ font-size:21px; }
+  .jornada-step p{ margin:9px 0 0; font-size:15px; color:var(--ink-soft); line-height:1.55; }
+
+  /* ---------- FAQ ---------- */
+  .faq-wrap{ max-width:760px; margin:44px auto 0; }
+  .faq-wrap details{ border-bottom:1px solid var(--line); padding:20px 0; }
+  .faq-wrap summary{
+    cursor:pointer; font-family:var(--serif-display); font-size:20px; font-weight:600; color:var(--cipreste);
+    list-style:none; display:flex; align-items:center; justify-content:space-between; gap:14px;
+  }
+  .faq-wrap summary::-webkit-details-marker{ display:none; }
+  .faq-wrap summary::after{ content:"+"; font-size:24px; color:var(--terracota); flex:none; transition:transform .2s; }
+  .faq-wrap details[open] summary::after{ transform:rotate(45deg); }
+  .faq-wrap p{ font-size:15.5px; color:var(--ink-soft); margin:13px 0 0; line-height:1.7; }
+
+  /* ---------- svc links row ---------- */
+  .svc-links{ margin-top:44px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:11px 14px; text-align:center; }
+  .svc-links span{ font-size:14px; color:var(--ink-soft); font-style:italic; }
+  .svc-links a{ font-size:13.5px; font-weight:600; color:var(--cipreste); border:1px solid var(--line); border-radius:30px; padding:8px 16px; transition:background .2s, border-color .2s; }
+  .svc-links a:hover{ background:var(--salvia-soft); border-color:var(--salvia); }
+
+  /* ---------- footer areas column ---------- */
+  footer.site .wrap{ align-items:flex-start; }
+  footer.site .fcol .ft{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#F7F2E899; margin-bottom:14px; }
+  footer.site .fcol ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+  footer.site .fcol ul a{ font-size:13.5px; color:#F7F2E8cc; transition:color .2s; }
+  footer.site .fcol ul a:hover{ color:var(--terracota); }
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:980px){
     .hero .wrap{ grid-template-columns:1fr; gap:48px; }
     .hero-figure{ max-width:440px; }
     .about-grid{ grid-template-columns:1fr; gap:40px; }
     .svc-grid{ grid-template-columns:1fr 1fr; }
+    .forwhom-grid{ grid-template-columns:1fr; }
+    .jornada-grid{ grid-template-columns:1fr 1fr; }
     .dicas-grid{ grid-template-columns:1fr 1fr; }
     .contact-grid{ grid-template-columns:1fr; gap:40px; }
   }
@@ -236,7 +284,7 @@
     .nav-links.open a{ padding:14px 7vw; width:100%; }
     .nav-links.open a::after{ display:none; }
     section.block{ padding:64px 0; }
-    .svc-grid, .dicas-grid{ grid-template-columns:1fr; }
+    .svc-grid, .dicas-grid, .jornada-grid{ grid-template-columns:1fr; }
     .cred-list{ grid-template-columns:1fr; }
     footer.site .wrap{ flex-direction:column; align-items:flex-start; }
     footer.site .legal{ text-align:left; }
@@ -259,6 +307,7 @@
     <nav class="nav-links" id="navlinks">
       <a href="#sobre" data-i="nav_about">Sobre</a>
       <a href="#servicos" data-i="nav_services">Serviços</a>
+      <a href="#como-funciona" data-i="nav_how">Como funciona</a>
       <a href="#dicas" data-i="nav_tips">Dicas</a>
       <a href="#contato" data-i="nav_contact">Contato</a>
     </nav>
@@ -337,8 +386,41 @@
   </div>
 </section>
 
+<!-- ============ PARA QUEM ============ -->
+<section class="block" id="para-quem">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="kicker center"><span class="d"></span><span data-i="fw_kicker">Para quem é</span><span class="d"></span></div>
+      <h2 class="sec-title" data-i="fw_title">Cuidado para você — e para quem você ama</h2>
+      <p class="sec-intro" style="margin-left:auto;margin-right:auto;" data-i="fw_intro">Muitas vezes, quem entra em contato não é quem tem a ferida — é um filho, um cônjuge, um cuidador. Se você se reconhece em uma das situações abaixo, esse cuidado é para você.</p>
+    </div>
+    <div class="forwhom-grid">
+      <div class="forwhom-card reveal">
+        <span class="tag" data-i="fw1_tag">Se a ferida é sua</span>
+        <h3 data-i="fw1_title">Você quer ver essa ferida fechar de verdade</h3>
+        <ul>
+          <li><span class="ico">✓</span><span data-i="fw1_l1">A ferida não fecha há semanas (ou meses), apesar dos curativos</span></li>
+          <li><span class="ico">✓</span><span data-i="fw1_l2">É uma ferida diabética, pós-cirúrgica ou por pressão que te preocupa</span></li>
+          <li><span class="ico">✓</span><span data-i="fw1_l3">Já trocou de curativo várias vezes e não viu evolução real</span></li>
+          <li><span class="ico">✓</span><span data-i="fw1_l4">Quer acompanhamento de perto, não só uma troca isolada</span></li>
+        </ul>
+      </div>
+      <div class="forwhom-card reveal">
+        <span class="tag" data-i="fw2_tag">Se você cuida de alguém</span>
+        <h3 data-i="fw2_title">Você busca um cuidado de confiança para quem ama</h3>
+        <ul>
+          <li><span class="ico">✓</span><span data-i="fw2_l1">Cuida de alguém acamado ou com mobilidade reduzida</span></li>
+          <li><span class="ico">✓</span><span data-i="fw2_l2">Precisa de atendimento em casa, sem deslocar quem está fragilizado</span></li>
+          <li><span class="ico">✓</span><span data-i="fw2_l3">Quer orientação clara sobre o que fazer entre uma visita e outra</span></li>
+          <li><span class="ico">✓</span><span data-i="fw2_l4">Busca alguém que acompanhe a evolução e converse abertamente com a família</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ SERVIÇOS ============ -->
-<section class="block" id="servicos">
+<section class="block cream" id="servicos">
   <div class="wrap">
     <div class="sec-head center reveal">
       <div class="kicker center"><span class="d"></span><span data-i="svc_kicker">Serviços</span><span class="d"></span></div>
@@ -362,7 +444,7 @@
         <span class="num">02</span>
         <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div>
         <h3 data-i="svc2_t">Laserterapia</h3>
-        <p data-i="svc2_p">Fotobiomodulação para acelerar a cicatrização, reduzir dor e inflamação e estimular a regeneração dos tecidos de forma segura e indolor.</p>
+        <p data-i="svc2_p">Um recurso que acelera a cicatrização, reduz dor e inflamação e estimula a regeneração dos tecidos — de forma segura e indolor. Na prática, é a fotobiomodulação: luz de baixa intensidade aplicada direto na ferida.</p>
         <ul>
           <li><span class="d"></span><span data-i="svc2_l1">Estímulo à cicatrização</span></li>
           <li><span class="d"></span><span data-i="svc2_l2">Controle de dor e inflamação</span></li>
@@ -374,13 +456,64 @@
         <span class="num">03</span>
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 2h10M9 2v5.5L5 16a3 3 0 0 0 2.7 4.3h8.6A3 3 0 0 0 19 16l-4-8.5V2"/><path d="M7.5 13.5h9"/></svg></div>
         <h3 data-i="svc3_t">PRP &amp; PRF</h3>
-        <p data-i="svc3_p">Terapias regenerativas com plasma rico em plaquetas e fibrina, potencializando a recuperação dos tecidos a partir dos próprios fatores de cura.</p>
+        <p data-i="svc3_p">Recursos regenerativos para casos selecionados de difícil cicatrização, que usam os próprios fatores de cura do seu sangue para potencializar a recuperação dos tecidos. Na prática, são as terapias PRP e PRF (plasma rico em plaquetas e fibrina).</p>
         <ul>
           <li><span class="d"></span><span data-i="svc3_l1">Regeneração tecidual</span></li>
           <li><span class="d"></span><span data-i="svc3_l2">Feridas de difícil cicatrização</span></li>
           <li><span class="d"></span><span data-i="svc3_l3">Tecnologia autóloga</span></li>
           <li><span class="d"></span><span data-i="svc3_l4">Protocolo individualizado</span></li>
         </ul>
+      </div>
+    </div>
+    <div class="svc-links reveal">
+      <span data-i="svc_links_label">Buscando algo específico?</span>
+      <a href="tratamento-de-feridas-juiz-de-fora.html" data-i="svc_links_1">Tratamento de feridas em Juiz de Fora</a>
+      <a href="pe-diabetico.html" data-i="svc_links_2">Pé diabético</a>
+      <a href="lesao-por-pressao.html" data-i="svc_links_3">Lesão por pressão</a>
+      <a href="feridas-pos-cirurgicas.html" data-i="svc_links_4">Feridas pós-cirúrgicas</a>
+      <a href="curativo-domiciliar.html" data-i="svc_links_5">Curativo domiciliar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMO FUNCIONA ============ -->
+<section class="block" id="como-funciona">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="kicker center"><span class="d"></span><span data-i="hw_kicker">Como funciona</span><span class="d"></span></div>
+      <h2 class="sec-title" data-i="hw_title">Da primeira mensagem até a alta</h2>
+      <p class="sec-intro" style="margin-left:auto;margin-right:auto;" data-i="hw_intro">Um processo simples, transparente e acompanhado de perto em cada etapa.</p>
+    </div>
+    <div class="jornada-grid">
+      <div class="jornada-step reveal">
+        <div class="num">1</div>
+        <h3 data-i="hw1_t">Contato</h3>
+        <p data-i="hw1_p">Chama no WhatsApp ou preenche a pré-consulta e conta rapidamente o que está acontecendo.</p>
+      </div>
+      <div class="jornada-step reveal">
+        <div class="num">2</div>
+        <h3 data-i="hw2_t">Pré-avaliação</h3>
+        <p data-i="hw2_p">Suas respostas chegam prontas antes da consulta: histórico, características da ferida e contexto de vida.</p>
+      </div>
+      <div class="jornada-step reveal">
+        <div class="num">3</div>
+        <h3 data-i="hw3_t">Consulta</h3>
+        <p data-i="hw3_p">Avaliação completa em consultório, domicílio ou teleconsulta, já com o primeiro plano de cuidado definido.</p>
+      </div>
+      <div class="jornada-step reveal">
+        <div class="num">4</div>
+        <h3 data-i="hw4_t">Plano de cuidado</h3>
+        <p data-i="hw4_p">Defino curativo, tecnologias complementares quando indicadas e frequência de retorno — tudo explicado.</p>
+      </div>
+      <div class="jornada-step reveal">
+        <div class="num">5</div>
+        <h3 data-i="hw5_t">Acompanhamento</h3>
+        <p data-i="hw5_p">Retornos definidos conforme a evolução da cicatrização, com ajustes no plano quando necessário.</p>
+      </div>
+      <div class="jornada-step reveal">
+        <div class="num">6</div>
+        <h3 data-i="hw6_t">Alta e prevenção</h3>
+        <p data-i="hw6_p">Com a ferida cicatrizada, oriento sobre prevenção de recidiva e cuidados de manutenção.</p>
       </div>
     </div>
   </div>
@@ -398,6 +531,42 @@
       <p class="dicas-empty">Carregando dicas…</p>
     </div>
     <p class="dicas-note" data-i="tips_note">Acompanhe conteúdos novos no Instagram <a href="https://instagram.com/cuidarpelabruna" target="_blank" rel="noopener" style="color:var(--terracota);font-weight:600;">@cuidarpelabruna</a></p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="block" id="faq">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="kicker center"><span class="d"></span><span data-i="faq_kicker">Perguntas frequentes</span><span class="d"></span></div>
+      <h2 class="sec-title" data-i="faq_title">Tire suas dúvidas antes de agendar</h2>
+    </div>
+    <div class="faq-wrap reveal">
+      <details open>
+        <summary data-i="faq1_q">Como é definido o valor do atendimento?</summary>
+        <p data-i="faq1_a">O valor considera o tipo de curativo, a complexidade do cuidado e os materiais necessários — sempre informado antes da realização. Me chama no WhatsApp que te explico certinho.</p>
+      </details>
+      <details>
+        <summary data-i="faq2_q">Vocês atendem em domicílio?</summary>
+        <p data-i="faq2_a">Sim, atendimento domiciliar disponível mediante agendamento e avaliação da região, além de consultório e teleconsulta.</p>
+      </details>
+      <details>
+        <summary data-i="faq3_q">E se eu não moro em Juiz de Fora?</summary>
+        <p data-i="faq3_a">A teleconsulta atende todo o Brasil: avaliamos a ferida por vídeo, defino o plano de cuidado e oriento você (ou quem cuida do paciente) na troca do curativo, com acompanhamento à distância.</p>
+      </details>
+      <details>
+        <summary data-i="faq4_q">Dói fazer o curativo?</summary>
+        <p data-i="faq4_a">O manejo é feito com técnica para minimizar o desconforto, e a dor é avaliada e conduzida durante todo o atendimento.</p>
+      </details>
+      <details>
+        <summary data-i="faq5_q">Em quanto tempo a ferida cicatriza?</summary>
+        <p data-i="faq5_a">Depende do tipo de ferida, das condições de saúde e da adesão ao cuidado — por isso o plano é sempre individualizado, com prazos definidos após a avaliação inicial.</p>
+      </details>
+      <details>
+        <summary data-i="faq6_q">Atende convênio?</summary>
+        <p data-i="faq6_a">O atendimento é particular. Consulte a possibilidade de reembolso diretamente com o seu convênio.</p>
+      </details>
+    </div>
   </div>
 </section>
 
@@ -464,6 +633,16 @@
         <div class="nm">Bruna Arguelles</div>
         <div class="rl" data-i="role2">Enfermagem Especializada</div>
       </div>
+    </div>
+    <div class="fcol">
+      <div class="ft" data-i="footer_areas_title">Áreas de atuação</div>
+      <ul>
+        <li><a href="tratamento-de-feridas-juiz-de-fora.html" data-i="svc_links_1">Tratamento de feridas em Juiz de Fora</a></li>
+        <li><a href="pe-diabetico.html" data-i="svc_links_2">Pé diabético</a></li>
+        <li><a href="lesao-por-pressao.html" data-i="svc_links_3">Lesão por pressão</a></li>
+        <li><a href="feridas-pos-cirurgicas.html" data-i="svc_links_4">Feridas pós-cirúrgicas</a></li>
+        <li><a href="curativo-domiciliar.html" data-i="svc_links_5">Curativo domiciliar</a></li>
+      </ul>
     </div>
     <div class="legal">
       <div>Bruna Arguelles — Enfermagem Especializada</div>
@@ -539,7 +718,48 @@
       bopt1_k:"Still have questions", bopt1_t:"I'd like more information", bopt1_d:"Chat with me on WhatsApp, ask your questions and understand how the care works — no commitment.", bopt1_cta:"Message on WhatsApp →",
       bopt2_k:"Ready to start", bopt2_t:"I want Bruna's care", bopt2_d:"Fill out the pre-consultation form and send it to me. That way I arrive at our assessment already knowing your story.", bopt2_cta:"Fill the pre-consultation →",
       h1:"Monday to Friday", h2:"Saturday", h2v:"By appointment", h3:"Home visits", h3v:"Juiz de Fora & region",
-      rights:"All rights reserved"
+      rights:"All rights reserved",
+
+      nav_how:"How it works",
+
+      svc2_p:"A resource that speeds up healing, reduces pain and inflammation and stimulates tissue regeneration — safely and painlessly. In practice, it's photobiomodulation: low-intensity light applied directly to the wound.",
+      svc3_p:"Regenerative resources for selected cases of hard-to-heal wounds, using your own blood's healing factors to boost tissue recovery. In practice, these are PRP and PRF therapies (platelet-rich plasma and fibrin).",
+
+      svc_links_label:"Looking for something specific?",
+      svc_links_1:"Wound care in Juiz de Fora", svc_links_2:"Diabetic foot", svc_links_3:"Pressure injury",
+      svc_links_4:"Post-surgical wounds", svc_links_5:"Home dressing care",
+
+      fw_kicker:"Who this is for", fw_title:"Care for you — and for who you love",
+      fw_intro:"Often, the person who reaches out isn't the one with the wound — it's a child, a spouse, a caregiver. If you recognize yourself in one of the situations below, this care is for you.",
+      fw1_tag:"If the wound is yours", fw1_title:"You want to see this wound truly close",
+      fw1_l1:"The wound hasn't closed in weeks (or months), despite dressing changes",
+      fw1_l2:"It's a diabetic, post-surgical or pressure wound that worries you",
+      fw1_l3:"You've changed dressings several times without real progress",
+      fw1_l4:"You want close follow-up, not just an isolated dressing change",
+      fw2_tag:"If you care for someone", fw2_title:"You're looking for trustworthy care for someone you love",
+      fw2_l1:"You care for someone bedridden or with reduced mobility",
+      fw2_l2:"You need care at home, without moving someone who's fragile",
+      fw2_l3:"You want clear guidance on what to do between visits",
+      fw2_l4:"You're looking for someone who tracks progress and talks openly with the family",
+
+      hw_kicker:"How it works", hw_title:"From the first message to discharge",
+      hw_intro:"A simple, transparent process, followed closely at every stage.",
+      hw1_t:"Contact", hw1_p:"Message on WhatsApp or fill out the pre-consultation form and briefly tell us what's happening.",
+      hw2_t:"Pre-assessment", hw2_p:"Your answers arrive ready before the appointment: history, wound characteristics and life context.",
+      hw3_t:"Consultation", hw3_p:"Full assessment at the clinic, at home or via telehealth, already with a first care plan defined.",
+      hw4_t:"Care plan", hw4_p:"I define the dressing, complementary technologies when indicated, and follow-up frequency — all explained.",
+      hw5_t:"Follow-up", hw5_p:"Return visits defined according to healing progress, with plan adjustments when needed.",
+      hw6_t:"Discharge & prevention", hw6_p:"Once the wound has healed, I guide you on preventing recurrence and maintenance care.",
+
+      faq_kicker:"Frequently asked questions", faq_title:"Get your questions answered before booking",
+      faq1_q:"How is the cost of care defined?", faq1_a:"The cost considers the type of dressing, complexity of care and materials needed — always informed before the procedure. Message me on WhatsApp for details.",
+      faq2_q:"Do you provide home visits?", faq2_a:"Yes, home care is available by appointment and subject to area assessment, in addition to clinic visits and telehealth.",
+      faq3_q:"What if I don't live in Juiz de Fora?", faq3_a:"Telehealth serves all of Brazil: we assess the wound by video, I define the care plan and guide you (or the patient's caregiver) through dressing changes, with remote follow-up.",
+      faq4_q:"Does the dressing change hurt?", faq4_a:"Care is provided with technique to minimize discomfort, and pain is assessed and managed throughout the visit.",
+      faq5_q:"How long does a wound take to heal?", faq5_a:"It depends on the wound type, health conditions and adherence to care — so the plan is always individualized, with timelines defined after the initial assessment.",
+      faq6_q:"Do you accept health insurance?", faq6_a:"Care is private-pay. Check reimbursement possibilities directly with your health insurance provider.",
+
+      footer_areas_title:"Areas of care"
     }
   };
   // capture PT defaults
