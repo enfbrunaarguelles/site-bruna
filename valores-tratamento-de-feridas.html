@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valores para Tratamento de Feridas em Juiz de Fora — Bruna Arguelles</title>
+<meta name="description" content="Entenda o investimento no tratamento de feridas com Bruna Arguelles em Juiz de Fora/MG: o que está incluído em cada atendimento e por que o valor varia conforme o caso.">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c;
+    --salvia-soft:#5A7A6B1a; --line:#5A7A6B44; --line-strong:#2A3A3326;
+    --cream-2:#efe7d6;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--pergaminho); font-family:var(--serif-body); color:var(--ink);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    font-size:17px; line-height:1.6; overflow-x:hidden;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ width:min(780px, 92vw); margin:0 auto; }
+
+  .kicker{ font-size:12.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--terracota); font-weight:600; display:flex; align-items:center; justify-content:center; gap:10px; }
+  .kicker .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); flex:none; }
+  h1,h2,h3{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); margin:0; line-height:1.08; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px; font-family:var(--serif-body); font-weight:600;
+    font-size:16px; letter-spacing:.01em; padding:15px 28px; border-radius:36px; cursor:pointer;
+    border:1.5px solid var(--terracota); background:var(--terracota); color:#fff;
+    transition:transform .15s, box-shadow .2s; white-space:nowrap;
+  }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(201,120,98,.35); }
+  .btn.ghost{ background:transparent; color:var(--cipreste); border-color:var(--cipreste); }
+  .btn svg{ width:18px; height:18px; flex:none; }
+
+  .topo{ padding:16px 0; border-bottom:1px solid var(--line); }
+  .topo .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand img{ height:32px; width:auto; }
+  .btn-topo{
+    display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600;
+    padding:9px 16px; border-radius:30px; border:1.3px solid var(--cipreste); color:var(--cipreste);
+  }
+  .btn-topo svg{ width:14px; height:14px; }
+
+  .hero{ padding:56px 0 44px; text-align:center; position:relative; overflow:hidden; }
+  .hero::before{
+    content:""; position:absolute; right:-160px; top:-140px; width:440px; height:440px; border-radius:50%;
+    background:radial-gradient(circle, #5A7A6B1f, transparent 68%); pointer-events:none;
+  }
+  .hero .wrap{ position:relative; }
+  .hero .kicker{ margin-bottom:18px; }
+  .hero h1{ font-size:clamp(30px, 6vw, 46px); margin-bottom:18px; }
+  .hero h1 em{ font-style:italic; color:var(--terracota); }
+  .hero .lede{ font-size:18px; color:var(--ink-soft); max-width:60ch; margin:0 auto; text-wrap:pretty; }
+
+  section{ padding:44px 0; }
+  section.alt{ background:#fff; }
+  .sec-titulo{ text-align:center; font-size:clamp(24px, 4vw, 32px); margin-bottom:8px; }
+  .sec-titulo em{ font-style:italic; color:var(--terracota); }
+  .sec-sub{ text-align:center; font-size:15px; color:var(--ink-soft); max-width:56ch; margin:0 auto 40px; }
+
+  /* ---------- PREÇOS ---------- */
+  .precos{ display:flex; flex-direction:column; gap:18px; max-width:680px; margin:0 auto; }
+  .preco-card{ border:1px solid var(--line); border-radius:12px; padding:26px 28px; background:#fff; }
+  .preco-card .ph{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:8px 20px; }
+  .preco-card h3{ font-size:21px; }
+  .preco-card .val{ font-family:var(--serif-display); font-size:23px; font-weight:600; color:var(--terracota); white-space:nowrap; }
+  .preco-card .pref{ display:block; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); text-align:right; margin-bottom:2px; }
+  .preco-card p{ margin:12px 0 0; font-size:15px; color:var(--ink-soft); line-height:1.6; }
+  .preco-card ul{ margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px; }
+  .preco-card ul li{ font-size:14.5px; color:var(--ink-soft); display:flex; gap:9px; align-items:flex-start; }
+  .preco-card ul li .d{ width:5px; height:5px; background:var(--salvia); transform:rotate(45deg); flex:none; margin-top:8px; }
+  .preco-card .extra{ margin-top:16px; padding-top:14px; border-top:1px dashed var(--line); font-size:13.5px; color:var(--ink-soft); display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .preco-card .extra b{ color:var(--cipreste); }
+  .precos-note{ text-align:center; font-size:13.5px; color:var(--ink-soft); font-style:italic; margin:28px auto 0; max-width:56ch; }
+
+  /* ---------- CAMINHOS ---------- */
+  .paths{ display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:760px; margin:0 auto; }
+  .path-card{ background:var(--pergaminho); border:1px solid var(--line); border-radius:12px; padding:30px 26px; text-align:center; display:flex; flex-direction:column; }
+  .path-card h3{ font-size:20px; }
+  .path-card p{ font-size:14.5px; color:var(--ink-soft); margin:10px 0 22px; line-height:1.6; flex:1; }
+
+  footer{ padding:32px 0 60px; text-align:center; }
+  footer p{ font-size:12px; color:var(--ink-soft); opacity:.75; line-height:1.7; margin:0; }
+  footer a.home{ display:inline-block; margin-top:10px; font-size:12px; color:var(--salvia); font-weight:600; }
+
+  @media (max-width:640px){
+    .hero{ padding:40px 0 32px; }
+    section{ padding:36px 0; }
+    .paths{ grid-template-columns:1fr; }
+    .preco-card .ph{ flex-direction:column; align-items:flex-start; }
+    .preco-card .val{ font-size:21px; }
+    .preco-card .pref{ text-align:left; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="topo">
+    <div class="wrap">
+      <div class="brand">
+        <img src="assets/logo.png" alt="Bruna Arguelles">
+      </div>
+      <a class="btn-topo" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vi%20os%20valores%20no%20site%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+        Agendar
+      </a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="kicker"><span class="d"></span><span>Enfermagem especializada · Juiz de Fora/MG</span><span class="d"></span></div>
+      <h1>Investimento no <em>cuidado</em></h1>
+      <p class="lede">Aqui você entende o que está incluído em cada atendimento e por que o valor varia conforme o caso — para chegar até mim já sabendo o que esperar, sem surpresas.</p>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="precos">
+
+        <div class="preco-card">
+          <div class="ph">
+            <h3>Avaliação inicial em consultório</h3>
+            <span class="val">R$ 250</span>
+          </div>
+          <p>Inclui avaliação especializada da ferida, análise do histórico, definição do plano de cuidado, orientações e primeiro curativo básico.</p>
+          <div class="extra"><span>Reavaliação sem curativo (ajuste de conduta)</span><b>R$ 180</b></div>
+        </div>
+
+        <div class="preco-card">
+          <div class="ph">
+            <h3>Atendimento domiciliar</h3>
+            <span class="val"><span class="pref">a partir de</span>R$ 350</span>
+          </div>
+          <p>O valor considera a avaliação, o atendimento fora do consultório, o transporte da estrutura técnica e o deslocamento dentro da região contemplada.</p>
+        </div>
+
+        <div class="preco-card">
+          <div class="ph">
+            <h3>Curativos de acompanhamento</h3>
+            <span class="val"><span class="pref">a partir de</span>R$ 150</span>
+          </div>
+          <p>O investimento varia conforme:</p>
+          <ul>
+            <li><span class="d"></span><span>Complexidade do cuidado</span></li>
+            <li><span class="d"></span><span>Tempo necessário</span></li>
+            <li><span class="d"></span><span>Materiais e coberturas utilizados</span></li>
+            <li><span class="d"></span><span>Quantidade de feridas</span></li>
+            <li><span class="d"></span><span>Necessidade de tecnologias associadas</span></li>
+            <li><span class="d"></span><span>Atendimento em consultório ou domicílio</span></li>
+          </ul>
+        </div>
+
+        <div class="preco-card">
+          <div class="ph">
+            <h3>Laserterapia associada</h3>
+            <span class="val"><span class="pref">a partir de</span>R$ 70</span>
+          </div>
+          <p>Disponível quando houver indicação profissional, como complemento ao plano de cuidado.</p>
+          <div class="extra"><span>Sessão avulsa de laserterapia (sem curativo associado)</span><b>R$ 120</b></div>
+        </div>
+
+        <div class="preco-card">
+          <div class="ph">
+            <h3>Curativos especiais</h3>
+            <span class="val">Orçamento individualizado</span>
+          </div>
+          <p>Casos que exigem coberturas avançadas, materiais de alto custo ou combinações específicas são calculados após a avaliação.</p>
+        </div>
+
+      </div>
+      <p class="precos-note">Atendimento particular. Consulte a possibilidade de reembolso diretamente com o seu convênio.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-titulo">Qual é o <em>próximo passo</em>?</p>
+      <p class="sec-sub">Escolha o caminho que combina com o seu momento.</p>
+      <div class="paths">
+        <div class="path-card">
+          <h3>Não sabe qual atendimento é indicado?</h3>
+          <p>Preencha a pré-consulta para que eu conheça melhor o caso.</p>
+          <a class="btn ghost" href="pre-consulta.html">Preencher pré-consulta</a>
+        </div>
+        <div class="path-card">
+          <h3>Já recebeu uma indicação ou tem informações sobre a ferida?</h3>
+          <p>Entre em contato pelo WhatsApp e vamos conversar sobre o seu caso.</p>
+          <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20vi%20os%20valores%20no%20site%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+            Falar no WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p>
+        Bruna Arguelles — Enfermagem Especializada · COREN/MG 761268-ENF · CNPJ 66.913.603/0001-92<br>
+        Juiz de Fora/MG · @cuidarpelabruna
+      </p>
+      <a class="home" href="index.html">← Voltar para o site</a>
+    </div>
+  </footer>
+
+</body></html>
