@@ -302,7 +302,10 @@
             <p class="valor-t" id="total-valor">R$ 0,00</p>
             <p class="count-t" id="total-count">0 itens selecionados</p>
           </div>
-          <button class="btn-limpar" id="btn-limpar">Limpar seleção</button>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-limpar" id="btn-restaurar-custos">Restaurar custos padrão</button>
+            <button class="btn-limpar" id="btn-limpar">Limpar seleção</button>
+          </div>
         </div>
       </div>
       <p class="instrucao">Marque os materiais utilizados, ajuste o custo unitário e a quantidade.<br>O total atualiza automaticamente.</p>
@@ -570,26 +573,26 @@ const MATERIAIS_BASE = [
   { cat:'EPIs e biossegurança',                   item:'Óculos ou protetor facial',                  custo:null  },
   { cat:'EPIs e biossegurança',                   item:'Campo estéril',                              custo:6.21  },
   { cat:'EPIs e biossegurança',                   item:'Saco para descarte',                         custo:0.21  },
-  { cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 100 ml',               custo:7.01,  embalagem:100, unidade:'ml' },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 100 ml',               custo:8.90,  embalagem:100, unidade:'ml' },
   { cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 250 ml',               custo:7.52,  embalagem:250, unidade:'ml' },
   { cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 500 ml',               custo:12.12, embalagem:500, unidade:'ml' },
   { cat:'Limpeza, irrigação e antissepsia',       item:'Clorexidina aquosa',                         custo:null  },
-  { cat:'Limpeza, irrigação e antissepsia',       item:'Clorexidina alcoólica 0,5%',                 custo:9.03  },
   { cat:'Limpeza, irrigação e antissepsia',       item:'PVPI, se aplicável',                         custo:null  },
   { cat:'Limpeza, irrigação e antissepsia',       item:'Água destilada / solução de limpeza',        custo:null  },
-  { cat:'Limpeza, irrigação e antissepsia',       item:'Seringa para irrigação 20 ml',               custo:0.59  },
-  { cat:'Limpeza, irrigação e antissepsia',       item:'Agulha para aspiração/irrigação',            custo:null  },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Seringa para irrigação 20 ml',               custo:0.79  },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Agulha para aspiração/irrigação',            custo:0.20  },
   { cat:'Limpeza, irrigação e antissepsia',       item:'Cuba rim descartável ou bandeja',            custo:null  },
-  { cat:'Limpeza, irrigação e antissepsia',       item:'Compressa para limpeza (gaze não estéril)',  custo:0.18  },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Compressa para limpeza (gaze não estéril)',  custo:0.07  },
   { cat:'Materiais básicos de curativo',          item:'Gaze estéril',                               custo:null  },
   { cat:'Materiais básicos de curativo',          item:'Compressa estéril',                          custo:null  },
   { cat:'Materiais básicos de curativo',          item:'Compressa não aderente',                     custo:null  },
-  { cat:'Materiais básicos de curativo',          item:'Atadura de crepe',                           custo:1.75  },
-  { cat:'Materiais básicos de curativo',          item:'Atadura de rayon 7,5 cm x 5 m estéril',     custo:13.00 },
+  { cat:'Materiais básicos de curativo',          item:'Atadura de crepe (rolo 12 cm x 1,80 m)',    custo:1.90,  embalagem:180,  unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Atadura de rayon 7,5 cm x 5 m estéril',     custo:13.00, embalagem:500,  unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Curativo Kerlix rolo 11,4 cm x 3,7 m',      custo:39.00, embalagem:370,  unidade:'cm' },
   { cat:'Materiais básicos de curativo',          item:'Algodão ortopédico, se aplicável',           custo:null  },
   { cat:'Materiais básicos de curativo',          item:'Esparadrapo',                                custo:null  },
-  { cat:'Materiais básicos de curativo',          item:'Micropore 25 mm x 10 m',                    custo:7.43  },
-  { cat:'Materiais básicos de curativo',          item:'Filme transparente',                         custo:95.90 },
+  { cat:'Materiais básicos de curativo',          item:'Micropore 25 mm x 10 m',                    custo:7.43,  embalagem:1000, unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Filme transparente (rolo 10 cm x 10 m)',    custo:95.90, embalagem:1000, unidade:'cm' },
   { cat:'Materiais básicos de curativo',          item:'Fixador adesivo',                            custo:null  },
   { cat:'Materiais básicos de curativo',          item:'Faixa tubular',                              custo:null  },
   { cat:'Materiais básicos de curativo',          item:'Malha tubular',                              custo:null  },
@@ -615,7 +618,8 @@ const MATERIAIS_BASE = [
   { cat:'Coberturas primárias e especiais',       item:'Barreira protetora de pele (spray 28 ml)', custo:135.22, embalagem:28,  unidade:'ml' },
   { cat:'Coberturas primárias e especiais',       item:'Creme barreira (tubo 92-100 g)',            custo:100.72, embalagem:96,  unidade:'g'  },
   { cat:'Coberturas primárias e especiais',       item:'Protetor cutâneo spray (28 ml)',            custo:135.22, embalagem:28,  unidade:'ml' },
-  { cat:'Materiais para desbridamento',           item:'Lâmina de bisturi',                         custo:null  },
+  { cat:'Coberturas primárias e especiais',       item:'Pielsana sachet 7,5 cm x 15 cm (5 ml)',     custo:14.30 },
+  { cat:'Materiais para desbridamento',           item:'Lâmina de bisturi',                         custo:0.42  },
   { cat:'Materiais para desbridamento',           item:'Cabo de bisturi (depreciação)',              custo:null  },
 ]
 
@@ -863,6 +867,15 @@ function renderizarMateriais() {
 
 document.getElementById('btn-limpar').addEventListener('click', () => {
   selecao = {}
+  salvar()
+  renderizarMateriais()
+  atualizarTotal()
+})
+
+document.getElementById('btn-restaurar-custos').addEventListener('click', () => {
+  const base = {}
+  MATERIAIS.forEach(m => { if (m.custo !== null) base[m.id] = m.custo })
+  custos = base
   salvar()
   renderizarMateriais()
   atualizarTotal()
