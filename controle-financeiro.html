@@ -92,6 +92,16 @@
   .form-msg.ok{ color:var(--verde); display:block; }
   .form-msg.erro{ color:var(--vermelho); display:block; }
 
+  .tabela-mensal{ background:#fff; border:1px solid var(--line); }
+  .tm-row{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; padding:12px 18px; border-bottom:.5px solid var(--line); align-items:center; }
+  .tm-row:last-child{ border-bottom:none; }
+  .tm-row.tm-cab{ background:var(--pergaminho); }
+  .tm-row.tm-cab .tm-mes, .tm-row.tm-cab .tm-num{ font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); font-weight:600; }
+  .tm-mes{ font-size:13px; color:var(--ink); font-weight:600; }
+  .tm-num{ font-size:13px; text-align:right; white-space:nowrap; }
+  .tm-num.pos{ color:var(--verde); }
+  .tm-num.neg{ color:var(--vermelho); }
+
   .lista{ background:#fff; border:1px solid var(--line); }
   .lista .item{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:13px 18px; border-bottom:.5px solid var(--line); }
   .lista .item:last-child{ border-bottom:none; }
@@ -109,6 +119,8 @@
     .login-card{ width:100%; }
     .header{ padding:16px 20px; }
     main{ padding:24px 16px 80px; }
+    .tm-row{ padding:10px 14px; gap:4px; }
+    .tm-mes, .tm-num{ font-size:11.5px; }
   }
 </style>
 </head>
@@ -169,6 +181,11 @@
           <div class="kpi"><p class="rotulo">Projeção p/ recuperar</p><p class="valor" id="kpi-projecao">—</p></div>
         </div>
         <a class="link-planilha" id="link-planilha" href="#" target="_blank" rel="noopener">Abrir planilha no Google Sheets ↗</a>
+      </div>
+
+      <div class="grupo">
+        <div class="grupo-label"><span class="d"></span><span>Resumo mensal</span></div>
+        <div class="tabela-mensal" id="tabela-mensal"><div class="vazio">Nenhum lançamento ainda.</div></div>
       </div>
 
       <div class="grupo">
@@ -310,7 +327,7 @@ function calcularKPIs() {
   const percentual = investimentoTotal > 0 ? Math.min(lucroAcumulado / investimentoTotal, 1) : 0;
   const faltaRecuperar = Math.max(investimentoTotal - lucroAcumulado, 0);
   const ticketMedio = entradas.length ? totalEntradas / entradas.length : 0;
-  const datas = entradas.map(e => new Date(e.data)).filter(d => !isNaN(d));
+  const datas = entradas.map(e => parseDataSegura(e.data)).filter(Boolean);
   let mesesAtivos = 1;
   if (datas.length) {
     const min = new Date(Math.min(...datas));
@@ -344,8 +361,49 @@ function renderKPIs() {
 }
 
 function parseDataSegura(str) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(str || '');
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
   const d = new Date(str);
   return isNaN(d) ? null : d;
+}
+
+const MESES_ABREV = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+function calcularResumoMensal() {
+  const porMes = {};
+  const acumular = (data, campo, valor) => {
+    const d = parseDataSegura(data);
+    if (!d) return;
+    const chave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    if (!porMes[chave]) porMes[chave] = { ano: d.getFullYear(), mes: d.getMonth(), entradas: 0, saidas: 0 };
+    porMes[chave][campo] += valor;
+  };
+  entradas.forEach(e => acumular(e.data, 'entradas', e.valor));
+  saidas.filter(s => s.categoria !== 'Investimento Inicial').forEach(s => acumular(s.data, 'saidas', s.valor));
+  return Object.values(porMes)
+    .map(m => ({ ...m, lucro: m.entradas - m.saidas }))
+    .sort((a, b) => (b.ano - a.ano) || (b.mes - a.mes));
+}
+
+function renderResumoMensal() {
+  const meses = calcularResumoMensal();
+  const tabela = document.getElementById('tabela-mensal');
+  if (!meses.length) { tabela.innerHTML = '<div class="vazio">Nenhum lançamento ainda.</div>'; return; }
+  tabela.innerHTML = `
+    <div class="tm-row tm-cab">
+      <div class="tm-mes">Mês</div>
+      <div class="tm-num">Entradas</div>
+      <div class="tm-num">Saídas</div>
+      <div class="tm-num">Lucro</div>
+    </div>
+  ` + meses.map(m => `
+    <div class="tm-row">
+      <div class="tm-mes">${MESES_ABREV[m.mes]}/${m.ano}</div>
+      <div class="tm-num pos">${fmtBRL(m.entradas)}</div>
+      <div class="tm-num neg">${fmtBRL(m.saidas)}</div>
+      <div class="tm-num ${m.lucro >= 0 ? 'pos' : 'neg'}">${fmtBRL(m.lucro)}</div>
+    </div>
+  `).join('');
 }
 
 function renderRecentes() {
@@ -375,6 +433,7 @@ async function entrarNoApp() {
   try {
     await carregarDados();
     renderKPIs();
+    renderResumoMensal();
     renderRecentes();
     document.getElementById('carregando').style.display = 'none';
     document.getElementById('conteudo').style.display = 'block';
@@ -403,7 +462,7 @@ document.getElementById('form-entrada').addEventListener('submit', async (e) => 
   try {
     const valores = [[document.getElementById('ent-data').value, document.getElementById('ent-desc').value, document.getElementById('ent-categoria').value, parseFloat(document.getElementById('ent-valor').value)]];
     await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ENTRADAS}'!A:D`)}:append?valueInputOption=USER_ENTERED`, { method: 'POST', body: JSON.stringify({ values: valores }) });
-    await carregarDados(); renderKPIs(); renderRecentes();
+    await carregarDados(); renderKPIs(); renderResumoMensal(); renderRecentes();
     e.target.reset(); document.getElementById('ent-data').value = hoje();
     msg.textContent = 'Entrada adicionada!'; msg.className = 'form-msg ok';
   } catch (err) {
@@ -419,7 +478,7 @@ document.getElementById('form-saida').addEventListener('submit', async (e) => {
   try {
     const valores = [[document.getElementById('sai-data').value, document.getElementById('sai-desc').value, document.getElementById('sai-categoria').value, parseFloat(document.getElementById('sai-valor').value)]];
     await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_SAIDAS}'!A:D`)}:append?valueInputOption=USER_ENTERED`, { method: 'POST', body: JSON.stringify({ values: valores }) });
-    await carregarDados(); renderKPIs(); renderRecentes();
+    await carregarDados(); renderKPIs(); renderResumoMensal(); renderRecentes();
     e.target.reset(); document.getElementById('sai-data').value = hoje();
     msg.textContent = 'Saída adicionada!'; msg.className = 'form-msg ok';
   } catch (err) {
