@@ -302,70 +302,76 @@ let consumo = [];
 // Mesmo catálogo de materiais da página de precificação, usado só pra sugerir
 // nome e unidade e evitar digitar tudo de novo aqui.
 const CATALOGO_MATERIAIS = [
-  { item: 'Luva de procedimento', unidade: 'un' },
-  { item: 'Luva estéril', unidade: 'un' },
-  { item: 'Máscara cirúrgica', unidade: 'un' },
-  { item: 'Máscara PFF2/N95', unidade: 'un' },
-  { item: 'Avental descartável', unidade: 'un' },
-  { item: 'Touca descartável', unidade: 'un' },
-  { item: 'Propé descartável', unidade: 'un' },
-  { item: 'Óculos ou protetor facial', unidade: 'un' },
-  { item: 'Campo estéril', unidade: 'un' },
-  { item: 'Saco para descarte', unidade: 'un' },
-  { item: 'Soro fisiológico 0,9% 100 ml', unidade: 'ml' },
-  { item: 'Soro fisiológico 0,9% 250 ml', unidade: 'ml' },
-  { item: 'Soro fisiológico 0,9% 500 ml', unidade: 'ml' },
-  { item: 'Clorexidina aquosa', unidade: 'ml' },
-  { item: 'PVPI, se aplicável', unidade: 'ml' },
-  { item: 'Água destilada / solução de limpeza', unidade: 'ml' },
-  { item: 'Seringa para irrigação 20 ml', unidade: 'un' },
-  { item: 'Agulha para aspiração/irrigação', unidade: 'un' },
-  { item: 'Cuba rim descartável ou bandeja', unidade: 'un' },
-  { item: 'Compressa para limpeza (gaze não estéril)', unidade: 'un' },
-  { item: 'Gaze estéril', unidade: 'un' },
-  { item: 'Compressa estéril', unidade: 'un' },
-  { item: 'Compressa não aderente', unidade: 'un' },
-  { item: 'Atadura de crepe (rolo 12 cm x 1,80 m)', unidade: 'cm' },
-  { item: 'Atadura de rayon 7,5 cm x 5 m estéril', unidade: 'cm' },
-  { item: 'Curativo Kerlix rolo 11,4 cm x 3,7 m', unidade: 'cm' },
-  { item: 'Algodão ortopédico, se aplicável', unidade: 'g' },
-  { item: 'Esparadrapo', unidade: 'cm' },
-  { item: 'Micropore 25 mm x 10 m', unidade: 'cm' },
-  { item: 'Filme transparente (rolo 10 cm x 10 m)', unidade: 'cm' },
-  { item: 'Fixador adesivo', unidade: 'un' },
-  { item: 'Faixa tubular', unidade: 'cm' },
-  { item: 'Malha tubular', unidade: 'cm' },
-  { item: 'Tesoura (depreciação)', unidade: 'un' },
-  { item: 'Pinça (depreciação)', unidade: 'un' },
-  { item: 'Hidrogel (tubo 30 g)', unidade: 'g' },
-  { item: 'Hidrocoloide (placa 10x10)', unidade: 'un' },
-  { item: 'Alginato de cálcio (placa 10x10)', unidade: 'un' },
-  { item: 'Alginato com prata', unidade: 'un' },
-  { item: 'Espuma de poliuretano (10x10)', unidade: 'un' },
-  { item: 'Espuma com prata (10x10)', unidade: 'un' },
-  { item: 'Carvão ativado (sem prata)', unidade: 'un' },
-  { item: 'Carvão ativado com prata (10x10)', unidade: 'un' },
-  { item: 'Tela não aderente', unidade: 'un' },
-  { item: 'Tela com petrolatum 7,6x7,6 cm', unidade: 'un' },
-  { item: 'Tela com silicone', unidade: 'un' },
-  { item: 'Cobertura antimicrobiana', unidade: 'un' },
-  { item: 'Cobertura com PHMB (10,2x10,2 cm)', unidade: 'un' },
-  { item: 'Cobertura com prata nanocristalina', unidade: 'un' },
-  { item: 'Cobertura absorvente', unidade: 'un' },
-  { item: 'Cobertura superabsorvente', unidade: 'un' },
-  { item: 'Placa de colágeno', unidade: 'un' },
-  { item: 'Barreira protetora de pele (spray 28 ml)', unidade: 'ml' },
-  { item: 'Creme barreira (tubo 92-100 g)', unidade: 'g' },
-  { item: 'Protetor cutâneo spray (28 ml)', unidade: 'ml' },
-  { item: 'Pielsana sachet 7,5 cm x 15 cm (5 ml)', unidade: 'un' },
-  { item: 'Lâmina de bisturi', unidade: 'un' },
-  { item: 'Cabo de bisturi (depreciação)', unidade: 'un' },
+  { item: 'Luva de procedimento', unidade: 'un', custo: 0.30 },
+  { item: 'Luva estéril', unidade: 'un', custo: 2.89 },
+  { item: 'Máscara cirúrgica', unidade: 'un', custo: 0.64 },
+  { item: 'Máscara PFF2/N95', unidade: 'un', custo: 8.00 },
+  { item: 'Avental descartável', unidade: 'un', custo: 7.20 },
+  { item: 'Touca descartável', unidade: 'un', custo: 0.20 },
+  { item: 'Propé descartável', unidade: 'un', custo: 0.25 },
+  { item: 'Óculos ou protetor facial', unidade: 'un', custo: 0 },
+  { item: 'Campo estéril', unidade: 'un', custo: 6.21 },
+  { item: 'Saco para descarte', unidade: 'un', custo: 0.21 },
+  { item: 'Soro fisiológico 0,9% 100 ml', unidade: 'ml', custo: 0.089 },
+  { item: 'Soro fisiológico 0,9% 250 ml', unidade: 'ml', custo: 0.030 },
+  { item: 'Soro fisiológico 0,9% 500 ml', unidade: 'ml', custo: 0.024 },
+  { item: 'Clorexidina aquosa', unidade: 'ml', custo: 0 },
+  { item: 'PVPI, se aplicável', unidade: 'ml', custo: 0 },
+  { item: 'Água destilada / solução de limpeza', unidade: 'ml', custo: 0 },
+  { item: 'Seringa para irrigação 20 ml', unidade: 'un', custo: 0.79 },
+  { item: 'Agulha para aspiração/irrigação', unidade: 'un', custo: 0.20 },
+  { item: 'Cuba rim descartável ou bandeja', unidade: 'un', custo: 0 },
+  { item: 'Compressa para limpeza (gaze não estéril)', unidade: 'un', custo: 0.07 },
+  { item: 'Gaze estéril', unidade: 'un', custo: 0 },
+  { item: 'Compressa estéril', unidade: 'un', custo: 0 },
+  { item: 'Compressa não aderente', unidade: 'un', custo: 0 },
+  { item: 'Atadura de crepe (rolo 12 cm x 1,80 m)', unidade: 'cm', custo: 0.0106 },
+  { item: 'Atadura de rayon 7,5 cm x 5 m estéril', unidade: 'cm', custo: 0.026 },
+  { item: 'Curativo Kerlix rolo 11,4 cm x 3,7 m', unidade: 'cm', custo: 0.105 },
+  { item: 'Algodão ortopédico, se aplicável', unidade: 'g', custo: 0 },
+  { item: 'Esparadrapo', unidade: 'cm', custo: 0 },
+  { item: 'Micropore 25 mm x 10 m', unidade: 'cm', custo: 0.0074 },
+  { item: 'Filme transparente (rolo 10 cm x 10 m)', unidade: 'cm', custo: 0.0959 },
+  { item: 'Fixador adesivo', unidade: 'un', custo: 0 },
+  { item: 'Faixa tubular', unidade: 'cm', custo: 0 },
+  { item: 'Malha tubular', unidade: 'cm', custo: 0 },
+  { item: 'Tesoura (depreciação)', unidade: 'un', custo: 0 },
+  { item: 'Pinça (depreciação)', unidade: 'un', custo: 0 },
+  { item: 'Hidrogel (tubo 30 g)', unidade: 'g', custo: 1.803 },
+  { item: 'Hidrocoloide (placa 10x10)', unidade: 'un', custo: 32.60 },
+  { item: 'Alginato de cálcio (placa 10x10)', unidade: 'un', custo: 38.60 },
+  { item: 'Alginato com prata', unidade: 'un', custo: 0 },
+  { item: 'Espuma de poliuretano (10x10)', unidade: 'un', custo: 40.00 },
+  { item: 'Espuma com prata (10x10)', unidade: 'un', custo: 47.00 },
+  { item: 'Carvão ativado (sem prata)', unidade: 'un', custo: 0 },
+  { item: 'Carvão ativado com prata (10x10)', unidade: 'un', custo: 53.57 },
+  { item: 'Tela não aderente', unidade: 'un', custo: 0 },
+  { item: 'Tela com petrolatum 7,6x7,6 cm', unidade: 'un', custo: 11.70 },
+  { item: 'Tela com silicone', unidade: 'un', custo: 0 },
+  { item: 'Cobertura antimicrobiana', unidade: 'un', custo: 0 },
+  { item: 'Cobertura com PHMB (10,2x10,2 cm)', unidade: 'un', custo: 41.90 },
+  { item: 'Cobertura com prata nanocristalina', unidade: 'un', custo: 0 },
+  { item: 'Cobertura absorvente', unidade: 'un', custo: 0 },
+  { item: 'Cobertura superabsorvente', unidade: 'un', custo: 0 },
+  { item: 'Placa de colágeno', unidade: 'un', custo: 0 },
+  { item: 'Barreira protetora de pele (spray 28 ml)', unidade: 'ml', custo: 4.829 },
+  { item: 'Creme barreira (tubo 92-100 g)', unidade: 'g', custo: 1.049 },
+  { item: 'Protetor cutâneo spray (28 ml)', unidade: 'ml', custo: 4.829 },
+  { item: 'Pielsana sachet 7,5 cm x 15 cm (5 ml)', unidade: 'un', custo: 14.30 },
+  { item: 'Lâmina de bisturi', unidade: 'un', custo: 0.42 },
+  { item: 'Cabo de bisturi (depreciação)', unidade: 'un', custo: 0 },
 ];
 
 function buscarUnidadeCatalogo(nome) {
   const alvo = (nome || '').trim().toLowerCase();
   const item = CATALOGO_MATERIAIS.find(m => m.item.toLowerCase() === alvo);
   return item ? item.unidade : null;
+}
+
+function buscarCustoCatalogo(nome) {
+  const alvo = (nome || '').trim().toLowerCase();
+  const item = CATALOGO_MATERIAIS.find(m => m.item.toLowerCase() === alvo);
+  return item ? item.custo : null;
 }
 
 const fmtBRL = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
@@ -508,19 +514,25 @@ async function registrarCompraEstoque(itemNome, unidade, quantidadeComprada, cus
   }
 }
 
-async function baixarEstoque(data, atendimentoId, itemNome, quantidadeConsumida) {
+async function registrarConsumo(data, atendimentoId, itemNome, quantidadeConsumida) {
   const existente = encontrarItemEstoque(itemNome);
-  if (!existente) throw new Error(`Item "${itemNome}" não encontrado no estoque.`);
-  const custoUnitario = existente.custoUnitario;
+  const custoUnitario = existente ? existente.custoUnitario : (buscarCustoCatalogo(itemNome) ?? 0);
   const custoTotal = custoUnitario * quantidadeConsumida;
-  const novaQuantidade = existente.quantidade - quantidadeConsumida;
-  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ESTOQUE}'!D${existente.linha}`)}?valueInputOption=USER_ENTERED`, {
-    method: 'PUT', body: JSON.stringify({ values: [[novaQuantidade]] }),
-  });
+  const nomeFinal = existente ? existente.item : itemNome.trim();
+
+  if (existente) {
+    const novaQuantidade = existente.quantidade - quantidadeConsumida;
+    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ESTOQUE}'!D${existente.linha}`)}?valueInputOption=USER_ENTERED`, {
+      method: 'PUT', body: JSON.stringify({ values: [[novaQuantidade]] }),
+    });
+    existente.quantidade = novaQuantidade;
+  }
+  // Item sem compra registrada: consumo é lançado direto pelo custo do catálogo,
+  // sem criar/baixar estoque (não há quantidade física registrada pra descontar).
+
   await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_CONSUMO}'!A:F`)}:append?valueInputOption=USER_ENTERED`, {
-    method: 'POST', body: JSON.stringify({ values: [[data, atendimentoId, existente.item, quantidadeConsumida, custoUnitario, custoTotal]] }),
+    method: 'POST', body: JSON.stringify({ values: [[data, atendimentoId, nomeFinal, quantidadeConsumida, custoUnitario, custoTotal]] }),
   });
-  existente.quantidade = novaQuantidade;
 }
 
 function calcularKPIs() {
@@ -753,17 +765,13 @@ document.getElementById('form-entrada').addEventListener('submit', async (e) => 
       quantidade: parseFloat(row.querySelector('.mat-qtd').value),
     })).filter(m => m.item && m.quantidade > 0);
 
-    for (const m of materiais) {
-      if (!encontrarItemEstoque(m.item)) throw new Error(`Item "${m.item}" não encontrado no estoque. Registre a compra dele primeiro.`);
-    }
-
     const data = document.getElementById('ent-data').value;
     const atendimentoId = materiais.length ? `A${Date.now()}` : '';
     const valores = [[data, document.getElementById('ent-desc').value, document.getElementById('ent-categoria').value, parseFloat(document.getElementById('ent-valor').value), atendimentoId]];
     await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ENTRADAS}'!A:E`)}:append?valueInputOption=USER_ENTERED`, { method: 'POST', body: JSON.stringify({ values: valores }) });
 
     for (const m of materiais) {
-      await baixarEstoque(data, atendimentoId, m.item, m.quantidade);
+      await registrarConsumo(data, atendimentoId, m.item, m.quantidade);
     }
 
     await atualizarTudo();
