@@ -249,6 +249,21 @@
   .faq-wrap details[open] summary::after{ transform:rotate(45deg); }
   .faq-wrap p{ font-size:15.5px; color:var(--ink-soft); margin:13px 0 0; line-height:1.7; }
 
+  /* ---------- DEPOIMENTOS ---------- */
+  .testim-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:26px; margin-top:52px; }
+  .testim-card{ background:var(--pergaminho); border:1px solid var(--line); border-radius:8px; padding:32px 30px; display:flex; flex-direction:column; gap:18px; }
+  .block.cream .testim-card{ background:#F7F2E8; }
+  .testim-stars{ display:flex; gap:4px; }
+  .testim-stars svg{ width:15px; height:15px; fill:var(--terracota); }
+  .testim-quote{ font-family:var(--serif-display); font-size:21px; font-style:italic; color:var(--cipreste); line-height:1.42; text-wrap:pretty; }
+  .testim-foot{ display:flex; align-items:center; gap:12px; margin-top:auto; }
+  .testim-avatar{ width:40px; height:40px; border-radius:50%; background:var(--salvia-soft); color:var(--cipreste); font-family:var(--serif-display); font-weight:600; font-size:16px; display:flex; align-items:center; justify-content:center; flex:none; }
+  .testim-name{ font-size:15px; font-weight:600; color:var(--cipreste); line-height:1.3; }
+  .testim-source{ font-size:12px; color:var(--ink-soft); }
+  .testim-cta{ text-align:center; margin-top:38px; }
+  .testim-cta a{ font-size:14px; font-weight:600; color:var(--cipreste); border:1px solid var(--line); border-radius:30px; padding:10px 20px; transition:background .2s, border-color .2s; display:inline-flex; align-items:center; gap:8px; }
+  .testim-cta a:hover{ background:var(--salvia-soft); border-color:var(--salvia); }
+
   /* ---------- svc links row ---------- */
   .svc-links{ margin-top:44px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:11px 14px; text-align:center; }
   .svc-links span{ font-size:14px; color:var(--ink-soft); font-style:italic; }
@@ -284,7 +299,7 @@
     .nav-links.open a{ padding:14px 7vw; width:100%; }
     .nav-links.open a::after{ display:none; }
     section.block{ padding:64px 0; }
-    .svc-grid, .dicas-grid, .jornada-grid{ grid-template-columns:1fr; }
+    .svc-grid, .dicas-grid, .jornada-grid, .testim-grid{ grid-template-columns:1fr; }
     .cred-list{ grid-template-columns:1fr; }
     footer.site .wrap{ flex-direction:column; align-items:flex-start; }
     footer.site .legal{ text-align:left; }
@@ -308,8 +323,8 @@
       <a href="#sobre" data-i="nav_about">Sobre</a>
       <a href="#servicos" data-i="nav_services">Serviços</a>
       <a href="#como-funciona" data-i="nav_how">Como funciona</a>
-      <a href="valores-tratamento-de-feridas.html" data-i="nav_values">Valores</a>
       <a href="#dicas" data-i="nav_tips">Dicas</a>
+      <a href="#depoimentos" data-i="nav_testim">Depoimentos</a>
       <a href="#contato" data-i="nav_contact">Contato</a>
     </nav>
     <div class="nav-right">
@@ -545,7 +560,7 @@
     <div class="faq-wrap reveal">
       <details open>
         <summary data-i="faq1_q">Como é definido o valor do atendimento?</summary>
-        <p data-i="faq1_a">O valor considera o tipo de curativo, a complexidade do cuidado e os materiais necessários — sempre informado antes da realização. Veja os <a href="valores-tratamento-de-feridas.html" style="color:var(--terracota);font-weight:600;">valores de cada atendimento</a> ou me chama no WhatsApp que te explico certinho.</p>
+        <p data-i="faq1_a">O valor considera o tipo de curativo, a complexidade do cuidado e os materiais necessários — sempre informado antes da realização. Me chama no WhatsApp que te explico certinho.</p>
       </details>
       <details>
         <summary data-i="faq2_q">Vocês atendem em domicílio?</summary>
@@ -568,6 +583,56 @@
         <p data-i="faq6_a">O atendimento é particular. Consulte a possibilidade de reembolso diretamente com o seu convênio.</p>
       </details>
     </div>
+  </div>
+</section>
+
+<!-- ============ DEPOIMENTOS ============ -->
+<section class="block cream" id="depoimentos">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="kicker center"><span class="d"></span><span data-i="testim_kicker">Depoimentos</span><span class="d"></span></div>
+      <h2 class="sec-title" data-i="testim_title">Quem já passou pelo cuidado</h2>
+      <p class="sec-intro" style="margin-left:auto;margin-right:auto;" data-i="testim_intro">Avaliações reais deixadas no Google por pacientes e familiares.</p>
+    </div>
+    <div class="testim-grid">
+      <div class="testim-card reveal">
+        <div class="testim-stars" aria-hidden="true">
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+        </div>
+        <p class="testim-quote" data-i="testim1_q">"Tivemos a oportunidade de estar com a Bruna, uma enfermeira incrível e uma profissional admirável em seu trabalho. Além de toda a competência e dedicação."</p>
+        <div class="testim-foot">
+          <span class="testim-avatar">S</span>
+          <div>
+            <div class="testim-name">Sheila Alves Lima</div>
+            <div class="testim-source" data-i="testim1_s">Avaliação no Google</div>
+          </div>
+        </div>
+      </div>
+      <div class="testim-card reveal">
+        <div class="testim-stars" aria-hidden="true">
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+        </div>
+        <p class="testim-quote" data-i="testim2_q">"Tratamento da Enfermeira Bruna é excelente!"</p>
+        <div class="testim-foot">
+          <span class="testim-avatar">F</span>
+          <div>
+            <div class="testim-name">Fernando Teixeira</div>
+            <div class="testim-source" data-i="testim2_s">Avaliação no Google</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="testim-cta reveal">
+      <a href="https://www.google.com/maps/place/?q=Enfermeira+Bruna+Arguelles+-+Tratamento+de+Feridas&ftid=0x6609298f98083e87:0x6a38be119f92114d" target="_blank" rel="noopener" data-i="testim_cta">Ver todas as avaliações no Google →</a>
+    </p>
   </div>
 </section>
 
@@ -721,7 +786,7 @@
       h1:"Monday to Friday", h2:"Saturday", h2v:"By appointment", h3:"Home visits", h3v:"Juiz de Fora & region",
       rights:"All rights reserved",
 
-      nav_how:"How it works", nav_values:"Pricing",
+      nav_how:"How it works",
 
       svc2_p:"A resource that speeds up healing, reduces pain and inflammation and stimulates tissue regeneration — safely and painlessly. In practice, it's photobiomodulation: low-intensity light applied directly to the wound.",
       svc3_p:"Regenerative resources for selected cases of hard-to-heal wounds, using your own blood's healing factors to boost tissue recovery. In practice, these are PRP and PRF therapies (platelet-rich plasma and fibrin).",
@@ -753,12 +818,21 @@
       hw6_t:"Discharge & prevention", hw6_p:"Once the wound has healed, I guide you on preventing recurrence and maintenance care.",
 
       faq_kicker:"Frequently asked questions", faq_title:"Get your questions answered before booking",
-      faq1_q:"How is the cost of care defined?", faq1_a:"The cost considers the type of dressing, complexity of care and materials needed — always informed before the procedure. See the <a href='valores-tratamento-de-feridas.html' style='color:var(--terracota);font-weight:600;'>pricing for each service</a> or message me on WhatsApp for details.",
+      faq1_q:"How is the cost of care defined?", faq1_a:"The cost considers the type of dressing, complexity of care and materials needed — always informed before the procedure. Message me on WhatsApp for details.",
       faq2_q:"Do you provide home visits?", faq2_a:"Yes, home care is available by appointment and subject to area assessment, in addition to clinic visits and telehealth.",
       faq3_q:"What if I don't live in Juiz de Fora?", faq3_a:"Telehealth serves all of Brazil: we assess the wound by video, I define the care plan and guide you (or the patient's caregiver) through dressing changes, with remote follow-up.",
       faq4_q:"Does the dressing change hurt?", faq4_a:"Care is provided with technique to minimize discomfort, and pain is assessed and managed throughout the visit.",
       faq5_q:"How long does a wound take to heal?", faq5_a:"It depends on the wound type, health conditions and adherence to care — so the plan is always individualized, with timelines defined after the initial assessment.",
       faq6_q:"Do you accept health insurance?", faq6_a:"Care is private-pay. Check reimbursement possibilities directly with your health insurance provider.",
+
+      nav_testim:"Testimonials",
+      testim_kicker:"Testimonials", testim_title:"Care, in their own words",
+      testim_intro:"Real reviews left on Google by patients and family members.",
+      testim1_q:"\"We had the opportunity to be cared for by Bruna, an incredible nurse and an admirable professional. Beyond all the competence and dedication.\"",
+      testim1_s:"Google review",
+      testim2_q:"\"Nurse Bruna's treatment is excellent!\"",
+      testim2_s:"Google review",
+      testim_cta:"See all reviews on Google →",
 
       footer_areas_title:"Areas of care"
     }

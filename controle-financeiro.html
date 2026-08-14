@@ -112,6 +112,25 @@
   .lista .item .valor.neg{ color:var(--vermelho); }
   .vazio{ padding:24px 18px; text-align:center; font-size:12.5px; color:var(--salvia); }
 
+  .estoque-item{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:13px 18px; border-bottom:.5px solid var(--line); }
+  .estoque-item:last-child{ border-bottom:none; }
+  .estoque-item .nome{ font-size:13px; color:var(--ink); }
+  .estoque-item .unidade{ font-size:10.5px; color:var(--salvia); display:block; margin-top:2px; }
+  .estoque-item .qtd{ font-size:13.5px; font-weight:600; white-space:nowrap; text-align:right; }
+  .estoque-item .qtd.baixo{ color:var(--terracota); }
+  .estoque-item .valor-total{ font-size:10.5px; color:var(--salvia); display:block; text-align:right; margin-top:2px; }
+
+  .campos-compra{ display:none; }
+  .campos-compra.ativa{ display:block; }
+
+  .material-row{ display:grid; grid-template-columns:1fr 90px 28px; gap:8px; margin-bottom:8px; align-items:center; }
+  .material-row input{ width:100%; padding:9px 10px; font-size:13px; font-family:inherit; border:1px solid var(--line); background:#fff; color:var(--ink); outline:none; }
+  .material-row .btn-remover{ background:none; border:1px solid var(--line); color:var(--terracota); cursor:pointer; font-size:14px; line-height:1; height:36px; }
+  .btn-add-material{ width:100%; padding:10px; background:none; border:1px dashed var(--line); color:var(--salvia); font-family:inherit; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; margin-bottom:4px; }
+  .btn-add-material:hover{ border-color:var(--terracota); color:var(--terracota); }
+
+  .tm-row.tm-rentab{ grid-template-columns:1.6fr 1fr 1fr 1fr; }
+
   .link-planilha{ display:inline-block; margin-top:10px; font-size:11px; color:var(--salvia); text-decoration:underline; }
   .carregando{ text-align:center; padding:60px 20px; color:var(--salvia); font-size:13px; }
 
@@ -189,6 +208,16 @@
       </div>
 
       <div class="grupo">
+        <div class="grupo-label"><span class="d"></span><span>Estoque</span></div>
+        <div class="lista" id="lista-estoque"><div class="vazio">Nenhum item cadastrado ainda.</div></div>
+      </div>
+
+      <div class="grupo">
+        <div class="grupo-label"><span class="d"></span><span>Rentabilidade por atendimento</span></div>
+        <div class="tabela-mensal" id="tabela-rentabilidade"><div class="vazio">Nenhum atendimento com materiais registrado ainda.</div></div>
+      </div>
+
+      <div class="grupo">
         <div class="grupo-label"><span class="d"></span><span>Novo lançamento</span></div>
         <div class="abas">
           <button class="aba-btn ativa" data-aba="entrada">+ Entrada</button>
@@ -211,6 +240,9 @@
           </select>
           <label>Valor recebido (R$)</label>
           <input type="number" id="ent-valor" step="0.01" min="0" placeholder="0,00" required>
+          <label>Materiais utilizados (opcional)</label>
+          <div class="materiais-lista" id="ent-materiais-lista"></div>
+          <button type="button" class="btn-add-material" id="ent-add-material">+ adicionar material</button>
           <button type="submit">Adicionar entrada</button>
           <p class="form-msg" id="ent-msg"></p>
         </form>
@@ -222,12 +254,22 @@
           <input type="text" id="sai-desc" placeholder="Ex: Descartáveis" required>
           <label>Categoria</label>
           <select id="sai-categoria">
+            <option>Compra de Material</option>
             <option>Despesa Fixa</option>
             <option>Despesa Variável</option>
             <option>Investimento Inicial</option>
           </select>
           <label>Valor pago (R$)</label>
           <input type="number" id="sai-valor" step="0.01" min="0" placeholder="0,00" required>
+          <div id="sai-campos-compra" class="campos-compra ativa">
+            <label>Item comprado (entra no estoque)</label>
+            <input type="text" id="sai-item" list="lista-itens-estoque" placeholder="Ex: Gaze estéril">
+            <datalist id="lista-itens-estoque"></datalist>
+            <label>Unidade</label>
+            <input type="text" id="sai-unidade" placeholder="Ex: un, cx, ml" value="un">
+            <label>Quantidade comprada</label>
+            <input type="number" id="sai-quantidade" step="0.01" min="0" placeholder="0">
+          </div>
           <button type="submit">Adicionar saída</button>
           <p class="form-msg" id="sai-msg"></p>
         </form>
@@ -247,11 +289,15 @@ const SHEETS_SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 const FIXED_SPREADSHEET_ID = '1AWkeYAuhON1I-jq1ibcX0TWJEvg8woSOAKOKg6PAidk';
 const SHEET_ENTRADAS = 'Entradas';
 const SHEET_SAIDAS = 'Saídas';
+const SHEET_ESTOQUE = 'Estoque';
+const SHEET_CONSUMO = 'ConsumoEstoque';
 
 let accessToken = null;
 let spreadsheetId = FIXED_SPREADSHEET_ID;
 let entradas = [];
 let saidas = [];
+let estoque = [];
+let consumo = [];
 
 const fmtBRL = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
 const hoje = () => new Date().toISOString().slice(0, 10);
@@ -308,15 +354,104 @@ function parseLinhas(rows) {
   }));
 }
 
+function parseEntradas(rows) {
+  return (rows || []).filter(r => r && r[0]).map(r => ({
+    data: r[0], desc: r[1] || '', categoria: r[2] || '', valor: parseFloat(String(r[3]).replace(',', '.')) || 0, id: r[4] || '',
+  }));
+}
+
+function parseEstoque(rows) {
+  return (rows || []).filter(r => r && r[0]).map((r, i) => ({
+    linha: i + 2, item: r[0], unidade: r[1] || 'un',
+    custoUnitario: parseFloat(String(r[2]).replace(',', '.')) || 0,
+    quantidade: parseFloat(String(r[3]).replace(',', '.')) || 0,
+  }));
+}
+
+function parseConsumo(rows) {
+  return (rows || []).filter(r => r && r[0]).map(r => ({
+    data: r[0], atendimentoId: r[1] || '', item: r[2] || '',
+    quantidade: parseFloat(String(r[3]).replace(',', '.')) || 0,
+    custoUnitario: parseFloat(String(r[4]).replace(',', '.')) || 0,
+    custoTotal: parseFloat(String(r[5]).replace(',', '.')) || 0,
+  }));
+}
+
+async function garantirAbasEstoque(titulos) {
+  const faltando = [SHEET_ESTOQUE, SHEET_CONSUMO].filter(t => !titulos.includes(t));
+  if (!faltando.length) return;
+  await sheetsFetch(`${spreadsheetId}:batchUpdate`, {
+    method: 'POST',
+    body: JSON.stringify({ requests: faltando.map(title => ({ addSheet: { properties: { title } } })) }),
+  });
+  if (faltando.includes(SHEET_ESTOQUE)) {
+    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ESTOQUE}'!A1:D1`)}?valueInputOption=USER_ENTERED`, {
+      method: 'PUT', body: JSON.stringify({ values: [['Item', 'Unidade', 'Custo unitário', 'Quantidade atual']] }),
+    });
+  }
+  if (faltando.includes(SHEET_CONSUMO)) {
+    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_CONSUMO}'!A1:F1`)}?valueInputOption=USER_ENTERED`, {
+      method: 'PUT', body: JSON.stringify({ values: [['Data', 'Atendimento (ID)', 'Item', 'Quantidade', 'Custo unitário', 'Custo total']] }),
+    });
+  }
+  titulos.push(...faltando);
+}
+
 async function carregarDados() {
   const meta = await sheetsFetch(`${spreadsheetId}?fields=sheets.properties.title`);
   const titulos = meta.sheets.map(s => s.properties.title);
   const tituloEntradas = titulos.find(t => t === SHEET_ENTRADAS) || titulos[0];
   const tituloSaidas = titulos.find(t => t === SHEET_SAIDAS) || titulos[1];
-  const ranges = [`'${tituloEntradas}'!A2:D10000`, `'${tituloSaidas}'!A2:D10000`].map(r => `ranges=${encodeURIComponent(r)}`).join('&');
+  await garantirAbasEstoque(titulos);
+  const ranges = [
+    `'${tituloEntradas}'!A2:E10000`,
+    `'${tituloSaidas}'!A2:D10000`,
+    `'${SHEET_ESTOQUE}'!A2:D10000`,
+    `'${SHEET_CONSUMO}'!A2:F10000`,
+  ].map(r => `ranges=${encodeURIComponent(r)}`).join('&');
   const data = await sheetsFetch(`${spreadsheetId}/values:batchGet?${ranges}`);
-  entradas = parseLinhas(data.valueRanges[0].values);
+  entradas = parseEntradas(data.valueRanges[0].values);
   saidas = parseLinhas(data.valueRanges[1].values);
+  estoque = parseEstoque(data.valueRanges[2].values);
+  consumo = parseConsumo(data.valueRanges[3].values);
+}
+
+function encontrarItemEstoque(nome) {
+  const alvo = (nome || '').trim().toLowerCase();
+  return estoque.find(it => it.item.trim().toLowerCase() === alvo);
+}
+
+async function registrarCompraEstoque(itemNome, unidade, quantidadeComprada, custoTotalCompra) {
+  const custoUnitarioCompra = quantidadeComprada > 0 ? custoTotalCompra / quantidadeComprada : 0;
+  const existente = encontrarItemEstoque(itemNome);
+  if (existente) {
+    const novaQuantidade = existente.quantidade + quantidadeComprada;
+    const novoCustoUnitario = novaQuantidade > 0
+      ? ((existente.quantidade * existente.custoUnitario) + (quantidadeComprada * custoUnitarioCompra)) / novaQuantidade
+      : existente.custoUnitario;
+    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ESTOQUE}'!A${existente.linha}:D${existente.linha}`)}?valueInputOption=USER_ENTERED`, {
+      method: 'PUT', body: JSON.stringify({ values: [[existente.item, existente.unidade, novoCustoUnitario, novaQuantidade]] }),
+    });
+  } else {
+    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ESTOQUE}'!A:D`)}:append?valueInputOption=USER_ENTERED`, {
+      method: 'POST', body: JSON.stringify({ values: [[itemNome.trim(), unidade || 'un', custoUnitarioCompra, quantidadeComprada]] }),
+    });
+  }
+}
+
+async function baixarEstoque(data, atendimentoId, itemNome, quantidadeConsumida) {
+  const existente = encontrarItemEstoque(itemNome);
+  if (!existente) throw new Error(`Item "${itemNome}" não encontrado no estoque.`);
+  const custoUnitario = existente.custoUnitario;
+  const custoTotal = custoUnitario * quantidadeConsumida;
+  const novaQuantidade = existente.quantidade - quantidadeConsumida;
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ESTOQUE}'!D${existente.linha}`)}?valueInputOption=USER_ENTERED`, {
+    method: 'PUT', body: JSON.stringify({ values: [[novaQuantidade]] }),
+  });
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_CONSUMO}'!A:F`)}:append?valueInputOption=USER_ENTERED`, {
+    method: 'POST', body: JSON.stringify({ values: [[data, atendimentoId, existente.item, quantidadeConsumida, custoUnitario, custoTotal]] }),
+  });
+  existente.quantidade = novaQuantidade;
 }
 
 function calcularKPIs() {
@@ -425,6 +560,61 @@ function renderRecentes() {
   }).join('');
 }
 
+function renderEstoque() {
+  const lista = document.getElementById('lista-estoque');
+  if (!estoque.length) { lista.innerHTML = '<div class="vazio">Nenhum item cadastrado ainda.</div>'; return; }
+  lista.innerHTML = estoque.map(it => `
+    <div class="estoque-item">
+      <div>
+        <div class="nome">${it.item}</div>
+        <span class="unidade">${fmtBRL(it.custoUnitario)} / ${it.unidade}</span>
+      </div>
+      <div>
+        <div class="qtd ${it.quantidade <= 0 ? 'baixo' : ''}">${it.quantidade} ${it.unidade}</div>
+        <span class="valor-total">${fmtBRL(it.custoUnitario * it.quantidade)} em estoque</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function atualizarListaItensEstoque() {
+  const datalist = document.getElementById('lista-itens-estoque');
+  if (datalist) datalist.innerHTML = estoque.map(it => `<option value="${it.item}"></option>`).join('');
+}
+
+function calcularRentabilidadePorAtendimento() {
+  const custosPorId = {};
+  consumo.forEach(c => {
+    if (!c.atendimentoId) return;
+    custosPorId[c.atendimentoId] = (custosPorId[c.atendimentoId] || 0) + c.custoTotal;
+  });
+  return entradas
+    .filter(e => e.id && custosPorId[e.id] !== undefined)
+    .map(e => ({ desc: e.desc, data: e.data, receita: e.valor, custoMaterial: custosPorId[e.id], margem: e.valor - custosPorId[e.id] }))
+    .sort((a, b) => (parseDataSegura(b.data)?.getTime() ?? 0) - (parseDataSegura(a.data)?.getTime() ?? 0));
+}
+
+function renderRentabilidade() {
+  const linhas = calcularRentabilidadePorAtendimento();
+  const tabela = document.getElementById('tabela-rentabilidade');
+  if (!linhas.length) { tabela.innerHTML = '<div class="vazio">Nenhum atendimento com materiais registrado ainda.</div>'; return; }
+  tabela.innerHTML = `
+    <div class="tm-row tm-rentab tm-cab">
+      <div class="tm-mes">Atendimento</div>
+      <div class="tm-num">Receita</div>
+      <div class="tm-num">Custo material</div>
+      <div class="tm-num">Margem</div>
+    </div>
+  ` + linhas.map(l => `
+    <div class="tm-row tm-rentab">
+      <div class="tm-mes">${l.desc}</div>
+      <div class="tm-num pos">${fmtBRL(l.receita)}</div>
+      <div class="tm-num neg">${fmtBRL(l.custoMaterial)}</div>
+      <div class="tm-num ${l.margem >= 0 ? 'pos' : 'neg'}">${fmtBRL(l.margem)}</div>
+    </div>
+  `).join('');
+}
+
 async function entrarNoApp() {
   document.getElementById('login').style.display = 'none';
   document.getElementById('app').style.display = 'block';
@@ -434,12 +624,20 @@ async function entrarNoApp() {
     await carregarDados();
     renderKPIs();
     renderResumoMensal();
+    renderEstoque();
+    renderRentabilidade();
     renderRecentes();
+    atualizarListaItensEstoque();
     document.getElementById('carregando').style.display = 'none';
     document.getElementById('conteudo').style.display = 'block';
   } catch (e) {
     document.getElementById('carregando').textContent = 'Erro ao carregar dados: ' + e.message;
   }
+}
+
+async function atualizarTudo() {
+  await carregarDados();
+  renderKPIs(); renderResumoMensal(); renderEstoque(); renderRentabilidade(); renderRecentes(); atualizarListaItensEstoque();
 }
 
 document.querySelectorAll('.aba-btn').forEach(btn => {
@@ -454,16 +652,54 @@ document.querySelectorAll('.aba-btn').forEach(btn => {
 document.getElementById('ent-data').value = hoje();
 document.getElementById('sai-data').value = hoje();
 
+const saiCategoriaSelect = document.getElementById('sai-categoria');
+const saiCamposCompra = document.getElementById('sai-campos-compra');
+function atualizarCamposCompra() {
+  saiCamposCompra.classList.toggle('ativa', saiCategoriaSelect.value === 'Compra de Material');
+}
+saiCategoriaSelect.addEventListener('change', atualizarCamposCompra);
+atualizarCamposCompra();
+
+function criarLinhaMaterial() {
+  const row = document.createElement('div');
+  row.className = 'material-row';
+  row.innerHTML = `
+    <input type="text" class="mat-item" list="lista-itens-estoque" placeholder="Item usado">
+    <input type="number" class="mat-qtd" step="0.01" min="0" placeholder="Qtd">
+    <button type="button" class="btn-remover">×</button>
+  `;
+  row.querySelector('.btn-remover').addEventListener('click', () => row.remove());
+  document.getElementById('ent-materiais-lista').appendChild(row);
+}
+document.getElementById('ent-add-material').addEventListener('click', criarLinhaMaterial);
+
 document.getElementById('form-entrada').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const btn = e.target.querySelector('button');
+  const btn = e.target.querySelector('button[type="submit"]');
   const msg = document.getElementById('ent-msg');
   btn.disabled = true; msg.className = 'form-msg';
   try {
-    const valores = [[document.getElementById('ent-data').value, document.getElementById('ent-desc').value, document.getElementById('ent-categoria').value, parseFloat(document.getElementById('ent-valor').value)]];
-    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ENTRADAS}'!A:D`)}:append?valueInputOption=USER_ENTERED`, { method: 'POST', body: JSON.stringify({ values: valores }) });
-    await carregarDados(); renderKPIs(); renderResumoMensal(); renderRecentes();
+    const materiais = Array.from(document.querySelectorAll('#ent-materiais-lista .material-row')).map(row => ({
+      item: row.querySelector('.mat-item').value.trim(),
+      quantidade: parseFloat(row.querySelector('.mat-qtd').value),
+    })).filter(m => m.item && m.quantidade > 0);
+
+    for (const m of materiais) {
+      if (!encontrarItemEstoque(m.item)) throw new Error(`Item "${m.item}" não encontrado no estoque. Registre a compra dele primeiro.`);
+    }
+
+    const data = document.getElementById('ent-data').value;
+    const atendimentoId = materiais.length ? `A${Date.now()}` : '';
+    const valores = [[data, document.getElementById('ent-desc').value, document.getElementById('ent-categoria').value, parseFloat(document.getElementById('ent-valor').value), atendimentoId]];
+    await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_ENTRADAS}'!A:E`)}:append?valueInputOption=USER_ENTERED`, { method: 'POST', body: JSON.stringify({ values: valores }) });
+
+    for (const m of materiais) {
+      await baixarEstoque(data, atendimentoId, m.item, m.quantidade);
+    }
+
+    await atualizarTudo();
     e.target.reset(); document.getElementById('ent-data').value = hoje();
+    document.getElementById('ent-materiais-lista').innerHTML = '';
     msg.textContent = 'Entrada adicionada!'; msg.className = 'form-msg ok';
   } catch (err) {
     msg.textContent = 'Erro: ' + err.message; msg.className = 'form-msg erro';
@@ -472,14 +708,33 @@ document.getElementById('form-entrada').addEventListener('submit', async (e) => 
 
 document.getElementById('form-saida').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const btn = e.target.querySelector('button');
+  const btn = e.target.querySelector('button[type="submit"]');
   const msg = document.getElementById('sai-msg');
   btn.disabled = true; msg.className = 'form-msg';
   try {
-    const valores = [[document.getElementById('sai-data').value, document.getElementById('sai-desc').value, document.getElementById('sai-categoria').value, parseFloat(document.getElementById('sai-valor').value)]];
+    const categoria = document.getElementById('sai-categoria').value;
+    const valorPago = parseFloat(document.getElementById('sai-valor').value);
+    const data = document.getElementById('sai-data').value;
+    const desc = document.getElementById('sai-desc').value;
+    const item = document.getElementById('sai-item').value.trim();
+    const unidade = document.getElementById('sai-unidade').value.trim();
+    const quantidade = parseFloat(document.getElementById('sai-quantidade').value);
+
+    if (categoria === 'Compra de Material' && (!item || !(quantidade > 0))) {
+      throw new Error('Informe o item e a quantidade comprada.');
+    }
+
+    const valores = [[data, desc, categoria, valorPago]];
     await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_SAIDAS}'!A:D`)}:append?valueInputOption=USER_ENTERED`, { method: 'POST', body: JSON.stringify({ values: valores }) });
-    await carregarDados(); renderKPIs(); renderResumoMensal(); renderRecentes();
+
+    if (categoria === 'Compra de Material') {
+      await registrarCompraEstoque(item, unidade, quantidade, valorPago);
+    }
+
+    await atualizarTudo();
     e.target.reset(); document.getElementById('sai-data').value = hoje();
+    document.getElementById('sai-unidade').value = 'un';
+    atualizarCamposCompra();
     msg.textContent = 'Saída adicionada!'; msg.className = 'form-msg ok';
   } catch (err) {
     msg.textContent = 'Erro: ' + err.message; msg.className = 'form-msg erro';
