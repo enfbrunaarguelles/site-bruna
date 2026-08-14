@@ -355,7 +355,7 @@
         <div class="corpo-d">
           <div class="cabecalho-d">
             <h3>Avaliação inicial + primeiro curativo básico</h3>
-            <div class="valor-d">R$ 250</div>
+            <div class="valor-d">R$ 350</div>
           </div>
           <p>A primeira avaliação é o momento mais importante do tratamento. Nela, são analisados o tipo de ferida, tempo de evolução, características do leito da ferida, pele ao redor, presença de exsudato, sinais locais, histórico de saúde, cuidados já realizados e materiais mais indicados para cada caso.</p>
           <span class="label-inclui">Inclui</span>
@@ -633,7 +633,7 @@ const MATERIAIS = MATERIAIS_BASE.map((m, i) => {
 })
 
 const PRESENCIAL = [
-  { cod:'C01',  srv:'Avaliação inicial + primeiro curativo básico', mat:'Incluso',        val:250,  obs:'Avaliação completa, plano terapêutico e primeiro curativo básico' },
+  { cod:'C01',  srv:'Avaliação inicial + primeiro curativo básico', mat:'Incluso',        val:350,  obs:'Avaliação completa, plano terapêutico e primeiro curativo básico' },
   { cod:'C02',  srv:'Reavaliação sem curativo',            mat:'—',              val:180,  obs:'Reavaliação e ajuste de conduta' },
   { cod:'CU01', srv:'Curativo simples',                    mat:'Incluso',        val:150,  obs:'Materiais básicos, menor complexidade técnica' },
   { cod:'CU02', srv:'Curativo intermediário',              mat:'Incluso',        val:230,  obs:'Coberturas específicas de custo moderado' },
@@ -691,7 +691,7 @@ const DESCRICAO_TIPO = {
   'Curativo especial domiciliar': 'Indicado quando há necessidade de materiais de alto custo, coberturas avançadas ou combinações específicas de produtos. O valor é calculado individualmente conforme o material utilizado, quantidade necessária, complexidade do cuidado e frequência dos atendimentos.' + NOTA_DOMICILIAR,
 }
 
-const SIM_DEFAULT = { honorario:250, material:110, multiplicador:1.6, deslocamento:0, laser:90, tipoLabel:'Avaliação inicial + primeiro curativo básico' }
+const SIM_DEFAULT = { honorario:350, material:110, multiplicador:1.6, deslocamento:0, laser:90, tipoLabel:'Avaliação inicial + primeiro curativo básico' }
 const SIM_CAMPOS = [
   { key:'honorario',     label:'Honorário técnico',          hint:'Escolha o tipo de atendimento na lista — o valor vem direto das tabelas. Pode ajustar manualmente depois, se precisar.', prefix:true,  step:10   },
   { key:'material',      label:'Custo do material especial', hint:'Custo real do material utilizado',             prefix:true,  step:5    },
