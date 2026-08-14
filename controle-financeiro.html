@@ -299,6 +299,75 @@ let saidas = [];
 let estoque = [];
 let consumo = [];
 
+// Mesmo catálogo de materiais da página de precificação, usado só pra sugerir
+// nome e unidade e evitar digitar tudo de novo aqui.
+const CATALOGO_MATERIAIS = [
+  { item: 'Luva de procedimento', unidade: 'un' },
+  { item: 'Luva estéril', unidade: 'un' },
+  { item: 'Máscara cirúrgica', unidade: 'un' },
+  { item: 'Máscara PFF2/N95', unidade: 'un' },
+  { item: 'Avental descartável', unidade: 'un' },
+  { item: 'Touca descartável', unidade: 'un' },
+  { item: 'Propé descartável', unidade: 'un' },
+  { item: 'Óculos ou protetor facial', unidade: 'un' },
+  { item: 'Campo estéril', unidade: 'un' },
+  { item: 'Saco para descarte', unidade: 'un' },
+  { item: 'Soro fisiológico 0,9% 100 ml', unidade: 'ml' },
+  { item: 'Soro fisiológico 0,9% 250 ml', unidade: 'ml' },
+  { item: 'Soro fisiológico 0,9% 500 ml', unidade: 'ml' },
+  { item: 'Clorexidina aquosa', unidade: 'ml' },
+  { item: 'PVPI, se aplicável', unidade: 'ml' },
+  { item: 'Água destilada / solução de limpeza', unidade: 'ml' },
+  { item: 'Seringa para irrigação 20 ml', unidade: 'un' },
+  { item: 'Agulha para aspiração/irrigação', unidade: 'un' },
+  { item: 'Cuba rim descartável ou bandeja', unidade: 'un' },
+  { item: 'Compressa para limpeza (gaze não estéril)', unidade: 'un' },
+  { item: 'Gaze estéril', unidade: 'un' },
+  { item: 'Compressa estéril', unidade: 'un' },
+  { item: 'Compressa não aderente', unidade: 'un' },
+  { item: 'Atadura de crepe (rolo 12 cm x 1,80 m)', unidade: 'cm' },
+  { item: 'Atadura de rayon 7,5 cm x 5 m estéril', unidade: 'cm' },
+  { item: 'Curativo Kerlix rolo 11,4 cm x 3,7 m', unidade: 'cm' },
+  { item: 'Algodão ortopédico, se aplicável', unidade: 'g' },
+  { item: 'Esparadrapo', unidade: 'cm' },
+  { item: 'Micropore 25 mm x 10 m', unidade: 'cm' },
+  { item: 'Filme transparente (rolo 10 cm x 10 m)', unidade: 'cm' },
+  { item: 'Fixador adesivo', unidade: 'un' },
+  { item: 'Faixa tubular', unidade: 'cm' },
+  { item: 'Malha tubular', unidade: 'cm' },
+  { item: 'Tesoura (depreciação)', unidade: 'un' },
+  { item: 'Pinça (depreciação)', unidade: 'un' },
+  { item: 'Hidrogel (tubo 30 g)', unidade: 'g' },
+  { item: 'Hidrocoloide (placa 10x10)', unidade: 'un' },
+  { item: 'Alginato de cálcio (placa 10x10)', unidade: 'un' },
+  { item: 'Alginato com prata', unidade: 'un' },
+  { item: 'Espuma de poliuretano (10x10)', unidade: 'un' },
+  { item: 'Espuma com prata (10x10)', unidade: 'un' },
+  { item: 'Carvão ativado (sem prata)', unidade: 'un' },
+  { item: 'Carvão ativado com prata (10x10)', unidade: 'un' },
+  { item: 'Tela não aderente', unidade: 'un' },
+  { item: 'Tela com petrolatum 7,6x7,6 cm', unidade: 'un' },
+  { item: 'Tela com silicone', unidade: 'un' },
+  { item: 'Cobertura antimicrobiana', unidade: 'un' },
+  { item: 'Cobertura com PHMB (10,2x10,2 cm)', unidade: 'un' },
+  { item: 'Cobertura com prata nanocristalina', unidade: 'un' },
+  { item: 'Cobertura absorvente', unidade: 'un' },
+  { item: 'Cobertura superabsorvente', unidade: 'un' },
+  { item: 'Placa de colágeno', unidade: 'un' },
+  { item: 'Barreira protetora de pele (spray 28 ml)', unidade: 'ml' },
+  { item: 'Creme barreira (tubo 92-100 g)', unidade: 'g' },
+  { item: 'Protetor cutâneo spray (28 ml)', unidade: 'ml' },
+  { item: 'Pielsana sachet 7,5 cm x 15 cm (5 ml)', unidade: 'un' },
+  { item: 'Lâmina de bisturi', unidade: 'un' },
+  { item: 'Cabo de bisturi (depreciação)', unidade: 'un' },
+];
+
+function buscarUnidadeCatalogo(nome) {
+  const alvo = (nome || '').trim().toLowerCase();
+  const item = CATALOGO_MATERIAIS.find(m => m.item.toLowerCase() === alvo);
+  return item ? item.unidade : null;
+}
+
 const fmtBRL = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
 const hoje = () => new Date().toISOString().slice(0, 10);
 const REDIRECT_URI = window.location.origin + decodeURIComponent(window.location.pathname);
