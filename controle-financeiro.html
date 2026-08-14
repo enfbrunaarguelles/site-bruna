@@ -660,7 +660,30 @@ function renderEstoque() {
 
 function atualizarListaItensEstoque() {
   const datalist = document.getElementById('lista-itens-estoque');
-  if (datalist) datalist.innerHTML = estoque.map(it => `<option value="${it.item}"></option>`).join('');
+  if (!datalist) return;
+  const nomes = new Map();
+  CATALOGO_MATERIAIS.forEach(m => nomes.set(m.item.toLowerCase(), m.item));
+  estoque.forEach(it => nomes.set(it.item.toLowerCase(), it.item));
+  datalist.innerHTML = Array.from(nomes.values())
+    .sort((a, b) => a.localeCompare(b, 'pt-BR'))
+    .map(nome => `<option value="${nome}"></option>`).join('');
+}
+
+function importarMateriaisPendentes() {
+  let pendentes;
+  try { pendentes = JSON.parse(localStorage.getItem('cf_materiais_pendentes') || 'null'); } catch { pendentes = null; }
+  if (!pendentes || !pendentes.length) return;
+  pendentes.forEach(p => {
+    criarLinhaMaterial();
+    const linhas = document.querySelectorAll('#ent-materiais-lista .material-row');
+    const ultima = linhas[linhas.length - 1];
+    ultima.querySelector('.mat-item').value = p.item;
+    ultima.querySelector('.mat-qtd').value = p.quantidade;
+  });
+  localStorage.removeItem('cf_materiais_pendentes');
+  const msg = document.getElementById('ent-msg');
+  msg.textContent = `${pendentes.length} ${pendentes.length === 1 ? 'material importado' : 'materiais importados'} da precificação!`;
+  msg.className = 'form-msg ok';
 }
 
 function calcularRentabilidadePorAtendimento() {
@@ -711,6 +734,7 @@ async function entrarNoApp() {
     atualizarListaItensEstoque();
     document.getElementById('carregando').style.display = 'none';
     document.getElementById('conteudo').style.display = 'block';
+    importarMateriaisPendentes();
   } catch (e) {
     document.getElementById('carregando').textContent = 'Erro ao carregar dados: ' + e.message;
   }

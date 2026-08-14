@@ -302,13 +302,15 @@
             <p class="valor-t" id="total-valor">R$ 0,00</p>
             <p class="count-t" id="total-count">0 itens selecionados</p>
           </div>
-          <div style="display:flex; gap:10px;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
             <button class="btn-limpar" id="btn-restaurar-custos">Restaurar custos padrão</button>
             <button class="btn-limpar" id="btn-limpar">Limpar seleção</button>
+            <button class="btn-limpar" id="btn-enviar-financeiro" style="border-color:var(--terracota);color:var(--terracota);">↓ Enviar pro Controle Financeiro</button>
           </div>
         </div>
       </div>
-      <p class="instrucao">Marque os materiais utilizados, ajuste o custo unitário e a quantidade.<br>O total atualiza automaticamente.</p>
+      <p class="instrucao">Marque os materiais utilizados, ajuste o custo unitário e a quantidade.<br>O total atualiza automaticamente. Terminou a seleção do atendimento de hoje? Clique em "Enviar pro Controle Financeiro" e ele já aparece pronto por lá.</p>
+      <p class="instrucao" id="msg-enviar-financeiro" style="display:none;color:var(--salvia);font-weight:600;"></p>
       <div id="lista-materiais"></div>
     </div>
 
@@ -870,6 +872,27 @@ document.getElementById('btn-restaurar-custos').addEventListener('click', () => 
   salvar()
   renderizarMateriais()
   atualizarTotal()
+})
+
+document.getElementById('btn-enviar-financeiro').addEventListener('click', () => {
+  const itens = []
+  MATERIAIS.forEach(m => {
+    const s = selecao[m.id]
+    if (!s || !s.ativo) return
+    const quantidade = m.embalagem ? (s.uso || 0) : (s.qtd || 1)
+    if (quantidade > 0) itens.push({ item: m.item, quantidade })
+  })
+  const aviso = document.getElementById('msg-enviar-financeiro')
+  if (!itens.length) {
+    aviso.textContent = 'Selecione ao menos um material antes de enviar.'
+    aviso.style.color = 'var(--terracota)'
+    aviso.style.display = 'block'
+    return
+  }
+  localStorage.setItem('cf_materiais_pendentes', JSON.stringify(itens))
+  aviso.textContent = `${itens.length} ${itens.length === 1 ? 'material enviado' : 'materiais enviados'}! Abra o Controle Financeiro, a lista já aparece pronta na próxima entrada.`
+  aviso.style.color = 'var(--salvia)'
+  aviso.style.display = 'block'
 })
 
 // ── Simulador ────────────────────────────────────────────────────────────────
