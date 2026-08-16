@@ -143,30 +143,41 @@
     .sheet{padding:18px 14px;}
   }
 
+  /* ---------- TIMERS ---------- */
+  .timers-block{margin-bottom:22px;padding:16px 18px;border-left:4px solid var(--green-dark);background:#f6f2ea;border-radius:0 6px 6px 0;}
+  .timers-head{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+  .timers-letter{background:var(--green-dark);color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;font-weight:bold;font-size:14px;flex-shrink:0;}
+  .timers-title{font-variant:small-caps;font-size:16px;color:var(--green-dark);font-weight:bold;}
+  .timers-sub{font-size:11.5px;color:#777;margin:0 0 14px 38px;font-family:Arial,sans-serif;line-height:1.5;}
+  .impact-box{background:#fff;border:1px solid var(--red);border-radius:4px;padding:12px 14px;margin-bottom:14px;}
+  .impact-box label.field{color:var(--red);font-weight:bold;}
+  .impact-box textarea{min-height:70px;}
+  fieldset.timers-fieldset{margin-top:14px;}
+
   /* ---------- ACCESS GATE ---------- */
   #gate-login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:#e7ded0; }
   .gate-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:380px; max-width:100%; overflow:hidden; }
-  .gate-card .topo{ height:3px; background:var(--cipreste); }
+  .gate-card .topo{ height:3px; background:var(--green-dark); }
   .gate-inner{ padding:40px 36px 36px; text-align:center; }
   .gate-inner img{ height:56px; width:auto; margin:0 auto 20px; display:block; }
   .gate-label{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; }
-  .gate-label span{ font-size:9.5px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
-  .gate-label .l{ width:20px; height:.5px; background:var(--terracota); opacity:.7; }
-  .gate-inner h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 5px; }
-  .gate-inner p{ font-size:11px; color:var(--ink-soft); margin:0; }
-  .gate-divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:22px 0; }
+  .gate-label span{ font-size:9.5px; letter-spacing:.24em; color:var(--red); text-transform:uppercase; font-weight:600; }
+  .gate-label .l{ width:20px; height:.5px; background:var(--red); opacity:.7; }
+  .gate-inner h1{ font-family:Georgia, serif; font-size:19px; font-weight:600; color:var(--green-dark); line-height:1.2; margin:0 0 5px; }
+  .gate-inner p{ font-size:11px; color:#555; margin:0; }
+  .gate-divisor{ height:.5px; background:var(--green-dark); opacity:.12; margin:22px 0; }
   .gate-inner input[type=password]{
     width:100%; padding:11px 13px; font-size:13px; font-family:inherit;
-    border:1px solid var(--line); background:#fff; color:var(--ink);
+    border:1px solid var(--line); background:#fff; color:var(--text);
     outline:none; margin-bottom:9px;
   }
-  .gate-inner input[type=password].erro{ border-color:var(--terracota); }
-  .gate-inner .gate-erro{ font-size:11px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .gate-inner input[type=password].erro{ border-color:var(--red); }
+  .gate-inner .gate-erro{ font-size:11px; color:var(--red); margin-bottom:8px; display:none; }
   .gate-inner button{
-    width:100%; padding:12px; background:var(--cipreste); color:#fff; border:none;
+    width:100%; padding:12px; background:var(--green-dark); color:#fff; border:none;
     font-size:12.5px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
   }
-  .gate-inner button:hover{ background:#3d5247; }
+  .gate-inner button:hover{ background:var(--green); }
   @media print{ #gate-login{ display:none !important; } }
 </style>
 </head>
@@ -310,9 +321,9 @@
     <label class="field" style="margin-top:12px;">Observações gerais / histórico relevante<textarea name="observacoes_gerais"></textarea></label>
   </section>
 
-  <!-- 4. LOCALIZAÇÃO -->
+  <!-- 4. LOCALIZAÇÃO E ETIOLOGIA -->
   <section>
-    <div class="sec-title"><span class="sec-num">4</span>Localização da Lesão</div>
+    <div class="sec-title"><span class="sec-num">4</span>Localização e Etiologia da Ferida</div>
     <div class="note">Descreva o(s) local(is) da(s) lesão(ões). Numere quando houver múltiplas feridas.</div>
     <div class="grid g2">
       <label class="field">Localização (descrição)<input type="text" name="localizacao_descricao"></label>
@@ -322,12 +333,7 @@
       <label class="field">Nº de lesões<input type="number" min="0" name="numero_lesoes"></label>
       <label class="field">Lesão nº / identificação<input type="text" name="lesao_identificacao"></label>
     </div>
-  </section>
-
-  <!-- 5. ETIOLOGIA -->
-  <section>
-    <div class="sec-title"><span class="sec-num">5</span>Etiologia da Ferida</div>
-    <div class="check-group">
+    <div class="check-group" style="margin-top:14px;">
       <label class="check"><input type="checkbox" name="etio_ulcera_venosa" value="Úlcera venosa"> Úlcera venosa</label>
       <label class="check"><input type="checkbox" name="etio_ulcera_arterial" value="Úlcera arterial"> Úlcera arterial</label>
       <label class="check"><input type="checkbox" name="etio_ulcera_mista" value="Úlcera mista"> Úlcera mista</label>
@@ -341,126 +347,9 @@
     <label class="field" style="margin-top:10px;">Outra etiologia<input type="text" name="outra_etiologia"></label>
   </section>
 
-  <!-- 6. CARACTERÍSTICAS -->
+  <!-- 5. ITB -->
   <section>
-    <div class="sec-title"><span class="sec-num">6</span>Características da Ferida</div>
-    <div class="grid g4">
-      <label class="field">Comprimento (cm)<input type="text" name="comprimento_cm"></label>
-      <label class="field">Largura (cm)<input type="text" name="largura_cm"></label>
-      <label class="field">Profundidade (cm)<input type="text" name="profundidade_cm"></label>
-      <label class="field">Área estimada (cm²)<input type="text" name="area_estimada"></label>
-    </div>
-
-    <div class="grid g2" style="margin-top:12px;">
-      <div class="radio-row"><span class="lbl">Túnel / descolamento:</span>
-        <label class="check"><input type="radio" name="tunel_descolamento" value="Não"> Não</label>
-        <label class="check"><input type="radio" name="tunel_descolamento" value="Sim"> Sim</label>
-      </div>
-      <label class="field">Localização (horário)<input type="text" name="tunel_localizacao_horario"></label>
-    </div>
-
-    <div class="grid g4" style="margin-top:12px;">
-      <label class="field">Granulação %<input type="number" min="0" max="100" name="leito_granulacao_pct"></label>
-      <label class="field">Esfacelo %<input type="number" min="0" max="100" name="leito_esfacelo_pct"></label>
-      <label class="field">Necrose %<input type="number" min="0" max="100" name="leito_necrose_pct"></label>
-      <label class="field">Epitelização %<input type="number" min="0" max="100" name="leito_epitelizacao_pct"></label>
-    </div>
-
-    <div class="grid g2" style="margin-top:14px;">
-      <div class="radio-row"><span class="lbl">Exsudato — tipo:</span>
-        <label class="check"><input type="radio" name="exsudato_tipo" value="Seroso"> Seroso</label>
-        <label class="check"><input type="radio" name="exsudato_tipo" value="Serossanguinolento"> Serossanguinolento</label>
-        <label class="check"><input type="radio" name="exsudato_tipo" value="Sanguinolento"> Sanguinolento</label>
-        <label class="check"><input type="radio" name="exsudato_tipo" value="Purulento"> Purulento</label>
-      </div>
-      <div class="radio-row"><span class="lbl">Quantidade:</span>
-        <label class="check"><input type="radio" name="exsudato_quantidade" value="Ausente"> Ausente</label>
-        <label class="check"><input type="radio" name="exsudato_quantidade" value="Escasso"> Escasso</label>
-        <label class="check"><input type="radio" name="exsudato_quantidade" value="Moderado"> Moderado</label>
-        <label class="check"><input type="radio" name="exsudato_quantidade" value="Abundante"> Abundante</label>
-      </div>
-    </div>
-    <div class="radio-row" style="margin-top:8px;"><span class="lbl">Odor:</span>
-      <label class="check"><input type="radio" name="odor" value="Ausente"> Ausente</label>
-      <label class="check"><input type="radio" name="odor" value="Leve"> Leve</label>
-      <label class="check"><input type="radio" name="odor" value="Fétido"> Fétido</label>
-    </div>
-
-    <fieldset style="margin-top:14px;">
-      <legend>Bordas</legend>
-      <div class="check-group">
-        <label class="check"><input type="checkbox" name="bordas_aderidas" value="Aderidas"> Aderidas</label>
-        <label class="check"><input type="checkbox" name="bordas_descoladas" value="Descoladas"> Descoladas</label>
-        <label class="check"><input type="checkbox" name="bordas_maceradas" value="Maceradas"> Maceradas</label>
-        <label class="check"><input type="checkbox" name="bordas_epibolia" value="Epibolia (enroladas)"> Epibolia (enroladas)</label>
-        <label class="check"><input type="checkbox" name="bordas_hiperqueratose" value="Hiperqueratose"> Hiperqueratose</label>
-      </div>
-    </fieldset>
-
-    <fieldset>
-      <legend>Pele perilesional</legend>
-      <div class="check-group">
-        <label class="check"><input type="checkbox" name="peri_integra" value="Íntegra"> Íntegra</label>
-        <label class="check"><input type="checkbox" name="peri_macerada" value="Macerada"> Macerada</label>
-        <label class="check"><input type="checkbox" name="peri_eritematosa" value="Eritematosa"> Eritematosa</label>
-        <label class="check"><input type="checkbox" name="peri_ressecada" value="Ressecada / descamativa"> Ressecada / descamativa</label>
-        <label class="check"><input type="checkbox" name="peri_edema" value="Edema"> Edema</label>
-        <label class="check"><input type="checkbox" name="peri_hiperpigmentacao" value="Hiperpigmentação"> Hiperpigmentação</label>
-      </div>
-    </fieldset>
-
-    <fieldset>
-      <legend>Sinais sugestivos de infecção</legend>
-      <div class="check-group">
-        <label class="check"><input type="checkbox" name="infec_eritema" value="Eritema"> Eritema</label>
-        <label class="check"><input type="checkbox" name="infec_calor" value="Calor local"> Calor local</label>
-        <label class="check"><input type="checkbox" name="infec_edema" value="Edema"> Edema</label>
-        <label class="check"><input type="checkbox" name="infec_dor" value="Dor aumentada"> Dor aumentada</label>
-        <label class="check"><input type="checkbox" name="infec_purulento" value="Exsudato purulento"> Exsudato purulento</label>
-        <label class="check"><input type="checkbox" name="infec_odor" value="Odor fétido"> Odor fétido</label>
-        <label class="check"><input type="checkbox" name="infec_retardo" value="Retardo de cicatrização"> Retardo de cicatrização</label>
-      </div>
-    </fieldset>
-  </section>
-
-  <!-- 7. EVA -->
-  <section>
-    <div class="sec-title"><span class="sec-num">7</span>Avaliação da Dor — Escala Visual Analógica (EVA)</div>
-    <div class="eva-scale">
-      <!-- generated via JS below -->
-      <span id="evaContainer" style="display:flex;width:100%;justify-content:space-between;"></span>
-    </div>
-    <div class="check-group" style="margin-top:6px;">
-      <span style="font-size:11px;color:#888;">Sem dor</span>
-      <span style="font-size:11px;color:#888;margin-left:auto;">Pior dor imaginável</span>
-    </div>
-    <div class="radio-row" style="margin-top:14px;"><span class="lbl">Características:</span>
-      <label class="check"><input type="radio" name="dor_caracteristica" value="Contínua"> Contínua</label>
-      <label class="check"><input type="radio" name="dor_caracteristica" value="Intermitente"> Intermitente</label>
-      <label class="check"><input type="radio" name="dor_caracteristica" value="Em repouso"> Em repouso</label>
-      <label class="check"><input type="radio" name="dor_caracteristica" value="À troca do curativo"> À troca do curativo</label>
-      <label class="check"><input type="radio" name="dor_caracteristica" value="Ausente"> Ausente</label>
-    </div>
-  </section>
-
-  <!-- 8. NPIAP -->
-  <section>
-    <div class="sec-title"><span class="sec-num">8</span>Classificação da Lesão por Pressão (NPIAP/MS)</div>
-    <div class="check-group">
-      <label class="check"><input type="radio" name="npiap_estagio" value="Estágio 1 — eritema não branqueável"> Estágio 1 — eritema não branqueável</label>
-      <label class="check"><input type="radio" name="npiap_estagio" value="Estágio 2 — perda parcial da derme"> Estágio 2 — perda parcial da derme</label>
-      <label class="check"><input type="radio" name="npiap_estagio" value="Estágio 3 — perda total da pele"> Estágio 3 — perda total da pele</label>
-      <label class="check"><input type="radio" name="npiap_estagio" value="Estágio 4 — perda tissular total"> Estágio 4 — perda tissular total</label>
-      <label class="check"><input type="radio" name="npiap_estagio" value="Não classificável"> Não classificável</label>
-      <label class="check"><input type="radio" name="npiap_estagio" value="Lesão tissular profunda (LTP)"> Lesão tissular profunda (LTP)</label>
-      <label class="check"><input type="radio" name="npiap_estagio" value="Relacionada a dispositivo médico"> Relacionada a dispositivo médico</label>
-      <label class="check"><input type="radio" name="npiap_estagio" value="Membranas mucosas"> Membranas mucosas</label>
-    </div>
-  </section>
-
-  <!-- 9. ITB -->
-  <section>
-    <div class="sec-title"><span class="sec-num">9</span>Índice Tornozelo-Braço (ITB)</div>
+    <div class="sec-title"><span class="sec-num">5</span>Índice Tornozelo-Braço (ITB)</div>
     <div class="grid g4">
       <label class="field">PAS braço (mmHg)<input type="text" name="itb_pas_braco"></label>
       <label class="field">PAS tornozelo D<input type="text" name="itb_pas_tornozelo_d"></label>
@@ -477,43 +366,174 @@
     </div>
   </section>
 
-  <!-- 10. BRADEN -->
+  <!-- 6. TIMERS -->
   <section>
-    <div class="sec-title"><span class="sec-num">10</span>Escala de Braden — Risco de Lesão por Pressão</div>
-    <div class="grid g2">
-      <label class="field">Percepção sensorial (1–4)<input type="number" min="1" max="4" name="braden_percepcao"></label>
-      <label class="field">Umidade da pele (1–4)<input type="number" min="1" max="4" name="braden_umidade"></label>
-      <label class="field">Atividade (1–4)<input type="number" min="1" max="4" name="braden_atividade"></label>
-      <label class="field">Mobilidade (1–4)<input type="number" min="1" max="4" name="braden_mobilidade"></label>
-      <label class="field">Nutrição (1–4)<input type="number" min="1" max="4" name="braden_nutricao"></label>
-      <label class="field">Fricção e cisalhamento (1–3)<input type="number" min="1" max="3" name="braden_friccao"></label>
+    <div class="sec-title"><span class="sec-num">6</span>Avaliação Estruturada da Ferida — TIMERS</div>
+    <div class="note">Instrumento estruturado de avaliação do leito da ferida, organizado nas seis dimensões T-I-M-E-R-S.</div>
+
+    <div class="timers-block">
+      <div class="timers-head"><span class="timers-letter">T</span><span class="timers-title">Tecido</span></div>
+      <div class="timers-sub">Viabilidade do leito (necrose/esfacelo x granulação/epitelização) e necessidade de desbridamento.</div>
+      <div class="grid g4">
+        <label class="field">Comprimento (cm)<input type="text" name="comprimento_cm"></label>
+        <label class="field">Largura (cm)<input type="text" name="largura_cm"></label>
+        <label class="field">Profundidade (cm)<input type="text" name="profundidade_cm"></label>
+        <label class="field">Área estimada (cm²)<input type="text" name="area_estimada"></label>
+      </div>
+      <div class="grid g4" style="margin-top:12px;">
+        <label class="field">Granulação %<input type="number" min="0" max="100" name="leito_granulacao_pct"></label>
+        <label class="field">Esfacelo %<input type="number" min="0" max="100" name="leito_esfacelo_pct"></label>
+        <label class="field">Necrose %<input type="number" min="0" max="100" name="leito_necrose_pct"></label>
+        <label class="field">Epitelização %<input type="number" min="0" max="100" name="leito_epitelizacao_pct"></label>
+      </div>
+      <label class="field" style="margin-top:12px;">Desbridamento (tipo, se indicado)<input type="text" name="conduta_desbridamento"></label>
+      <label class="field" style="margin-top:12px;">Achados / conduta — Tecido<textarea name="timers_t"></textarea></label>
     </div>
-    <label class="field" style="margin-top:12px;max-width:220px;">Pontuação total (/23)<input type="number" min="0" max="23" name="braden_total"></label>
-    <div class="note" style="margin-top:8px;">≤9 risco muito alto · 10–12 alto · 13–14 moderado · 15–18 baixo · 19–23 sem risco</div>
+
+    <div class="timers-block">
+      <div class="timers-head"><span class="timers-letter">I</span><span class="timers-title">Inflamação / Infecção</span></div>
+      <div class="timers-sub">Sinais de infecção, biofilme e carga bacteriana.</div>
+      <div class="check-group">
+        <label class="check"><input type="checkbox" name="infec_eritema" value="Eritema"> Eritema</label>
+        <label class="check"><input type="checkbox" name="infec_calor" value="Calor local"> Calor local</label>
+        <label class="check"><input type="checkbox" name="infec_edema" value="Edema"> Edema</label>
+        <label class="check"><input type="checkbox" name="infec_dor" value="Dor aumentada"> Dor aumentada</label>
+        <label class="check"><input type="checkbox" name="infec_purulento" value="Exsudato purulento"> Exsudato purulento</label>
+        <label class="check"><input type="checkbox" name="infec_odor" value="Odor fétido"> Odor fétido</label>
+        <label class="check"><input type="checkbox" name="infec_retardo" value="Retardo de cicatrização"> Retardo de cicatrização</label>
+      </div>
+      <div class="radio-row" style="margin-top:12px;"><span class="lbl">Odor:</span>
+        <label class="check"><input type="radio" name="odor" value="Ausente"> Ausente</label>
+        <label class="check"><input type="radio" name="odor" value="Leve"> Leve</label>
+        <label class="check"><input type="radio" name="odor" value="Fétido"> Fétido</label>
+      </div>
+      <label class="field" style="margin-top:12px;">Achados / conduta — Inflamação/Infecção<textarea name="timers_i"></textarea></label>
+    </div>
+
+    <div class="timers-block">
+      <div class="timers-head"><span class="timers-letter">M</span><span class="timers-title">Umidade (Moisture)</span></div>
+      <div class="timers-sub">Equilíbrio do exsudato — maceração x ressecamento da pele perilesional.</div>
+      <div class="grid g2">
+        <div class="radio-row"><span class="lbl">Exsudato — tipo:</span>
+          <label class="check"><input type="radio" name="exsudato_tipo" value="Seroso"> Seroso</label>
+          <label class="check"><input type="radio" name="exsudato_tipo" value="Serossanguinolento"> Serossanguinolento</label>
+          <label class="check"><input type="radio" name="exsudato_tipo" value="Sanguinolento"> Sanguinolento</label>
+          <label class="check"><input type="radio" name="exsudato_tipo" value="Purulento"> Purulento</label>
+        </div>
+        <div class="radio-row"><span class="lbl">Quantidade:</span>
+          <label class="check"><input type="radio" name="exsudato_quantidade" value="Ausente"> Ausente</label>
+          <label class="check"><input type="radio" name="exsudato_quantidade" value="Escasso"> Escasso</label>
+          <label class="check"><input type="radio" name="exsudato_quantidade" value="Moderado"> Moderado</label>
+          <label class="check"><input type="radio" name="exsudato_quantidade" value="Abundante"> Abundante</label>
+        </div>
+      </div>
+      <fieldset class="timers-fieldset">
+        <legend>Pele perilesional</legend>
+        <div class="check-group">
+          <label class="check"><input type="checkbox" name="peri_integra" value="Íntegra"> Íntegra</label>
+          <label class="check"><input type="checkbox" name="peri_macerada" value="Macerada"> Macerada</label>
+          <label class="check"><input type="checkbox" name="peri_eritematosa" value="Eritematosa"> Eritematosa</label>
+          <label class="check"><input type="checkbox" name="peri_ressecada" value="Ressecada / descamativa"> Ressecada / descamativa</label>
+          <label class="check"><input type="checkbox" name="peri_edema" value="Edema"> Edema</label>
+          <label class="check"><input type="checkbox" name="peri_hiperpigmentacao" value="Hiperpigmentação"> Hiperpigmentação</label>
+        </div>
+      </fieldset>
+      <label class="field">Achados / conduta — Umidade<textarea name="timers_m"></textarea></label>
+    </div>
+
+    <div class="timers-block">
+      <div class="timers-head"><span class="timers-letter">E</span><span class="timers-title">Borda (Edge)</span></div>
+      <div class="timers-sub">Avanço epitelial, bordas descoladas/epibolia, túnel ou descolamento.</div>
+      <fieldset>
+        <legend>Bordas</legend>
+        <div class="check-group">
+          <label class="check"><input type="checkbox" name="bordas_aderidas" value="Aderidas"> Aderidas</label>
+          <label class="check"><input type="checkbox" name="bordas_descoladas" value="Descoladas"> Descoladas</label>
+          <label class="check"><input type="checkbox" name="bordas_maceradas" value="Maceradas"> Maceradas</label>
+          <label class="check"><input type="checkbox" name="bordas_epibolia" value="Epibolia (enroladas)"> Epibolia (enroladas)</label>
+          <label class="check"><input type="checkbox" name="bordas_hiperqueratose" value="Hiperqueratose"> Hiperqueratose</label>
+        </div>
+      </fieldset>
+      <div class="grid g2" style="margin-top:8px;">
+        <div class="radio-row"><span class="lbl">Túnel / descolamento:</span>
+          <label class="check"><input type="radio" name="tunel_descolamento" value="Não"> Não</label>
+          <label class="check"><input type="radio" name="tunel_descolamento" value="Sim"> Sim</label>
+        </div>
+        <label class="field">Localização (horário)<input type="text" name="tunel_localizacao_horario"></label>
+      </div>
+      <label class="field" style="margin-top:12px;">Achados / conduta — Borda<textarea name="timers_e"></textarea></label>
+    </div>
+
+    <div class="timers-block">
+      <div class="timers-head"><span class="timers-letter">R</span><span class="timers-title">Reparo / Regeneração</span></div>
+      <div class="timers-sub">Resposta ao tratamento, dor como barreira à cicatrização, risco de lesão por pressão e terapias avançadas.</div>
+      <div class="eva-scale">
+        <span id="evaContainer" style="display:flex;width:100%;justify-content:space-between;"></span>
+      </div>
+      <div class="check-group" style="margin-top:6px;">
+        <span style="font-size:11px;color:#888;">Sem dor</span>
+        <span style="font-size:11px;color:#888;margin-left:auto;">Pior dor imaginável</span>
+      </div>
+      <div class="radio-row" style="margin-top:14px;"><span class="lbl">Características:</span>
+        <label class="check"><input type="radio" name="dor_caracteristica" value="Contínua"> Contínua</label>
+        <label class="check"><input type="radio" name="dor_caracteristica" value="Intermitente"> Intermitente</label>
+        <label class="check"><input type="radio" name="dor_caracteristica" value="Em repouso"> Em repouso</label>
+        <label class="check"><input type="radio" name="dor_caracteristica" value="À troca do curativo"> À troca do curativo</label>
+        <label class="check"><input type="radio" name="dor_caracteristica" value="Ausente"> Ausente</label>
+      </div>
+      <fieldset class="timers-fieldset">
+        <legend>Classificação da Lesão por Pressão (NPIAP/MS) — se aplicável</legend>
+        <div class="check-group">
+          <label class="check"><input type="radio" name="npiap_estagio" value="Estágio 1 — eritema não branqueável"> Estágio 1 — eritema não branqueável</label>
+          <label class="check"><input type="radio" name="npiap_estagio" value="Estágio 2 — perda parcial da derme"> Estágio 2 — perda parcial da derme</label>
+          <label class="check"><input type="radio" name="npiap_estagio" value="Estágio 3 — perda total da pele"> Estágio 3 — perda total da pele</label>
+          <label class="check"><input type="radio" name="npiap_estagio" value="Estágio 4 — perda tissular total"> Estágio 4 — perda tissular total</label>
+          <label class="check"><input type="radio" name="npiap_estagio" value="Não classificável"> Não classificável</label>
+          <label class="check"><input type="radio" name="npiap_estagio" value="Lesão tissular profunda (LTP)"> Lesão tissular profunda (LTP)</label>
+          <label class="check"><input type="radio" name="npiap_estagio" value="Relacionada a dispositivo médico"> Relacionada a dispositivo médico</label>
+          <label class="check"><input type="radio" name="npiap_estagio" value="Membranas mucosas"> Membranas mucosas</label>
+        </div>
+      </fieldset>
+      <fieldset class="timers-fieldset">
+        <legend>Escala de Braden — Risco de Lesão por Pressão</legend>
+        <div class="grid g2">
+          <label class="field">Percepção sensorial (1–4)<input type="number" min="1" max="4" name="braden_percepcao"></label>
+          <label class="field">Umidade da pele (1–4)<input type="number" min="1" max="4" name="braden_umidade"></label>
+          <label class="field">Atividade (1–4)<input type="number" min="1" max="4" name="braden_atividade"></label>
+          <label class="field">Mobilidade (1–4)<input type="number" min="1" max="4" name="braden_mobilidade"></label>
+          <label class="field">Nutrição (1–4)<input type="number" min="1" max="4" name="braden_nutricao"></label>
+          <label class="field">Fricção e cisalhamento (1–3)<input type="number" min="1" max="3" name="braden_friccao"></label>
+        </div>
+        <label class="field" style="margin-top:12px;max-width:220px;">Pontuação total (/23)<input type="number" min="0" max="23" name="braden_total"></label>
+        <div class="note" style="margin-top:8px;">≤9 risco muito alto · 10–12 alto · 13–14 moderado · 15–18 baixo · 19–23 sem risco</div>
+      </fieldset>
+      <label class="field" style="margin-top:12px;">Achados / conduta — Reparo/Regeneração<textarea name="timers_r"></textarea></label>
+    </div>
+
+    <div class="timers-block">
+      <div class="timers-head"><span class="timers-letter">S</span><span class="timers-title">Fatores Sociais / Paciente</span></div>
+      <div class="timers-sub">Adesão ao tratamento, suporte, condições socioeconômicas e impacto da ferida na vida do paciente.</div>
+      <div class="impact-box">
+        <label class="field">O que essa ferida significa para você? — impactos na rotina, trabalho, sono, autoestima e vida social<textarea name="impacto_significado_ferida"></textarea></label>
+      </div>
+      <div class="grid g2">
+        <label class="field">Suporte familiar / cuidador<input type="text" name="suporte_familiar_cuidador"></label>
+        <label class="field">Dificuldades de acesso a insumos / tratamento<input type="text" name="acesso_insumos_dificuldades"></label>
+      </div>
+      <div class="radio-row" style="margin-top:12px;"><span class="lbl">Adesão ao tratamento:</span>
+        <label class="check"><input type="radio" name="adesao_tratamento" value="Boa"> Boa</label>
+        <label class="check"><input type="radio" name="adesao_tratamento" value="Parcial"> Parcial</label>
+        <label class="check"><input type="radio" name="adesao_tratamento" value="Baixa"> Baixa</label>
+      </div>
+      <label class="field" style="margin-top:12px;">Achados / conduta — Fatores Sociais<textarea name="timers_s"></textarea></label>
+    </div>
   </section>
 
-  <!-- 11. TIMERS -->
+  <!-- 7. CONDUTA -->
   <section>
-    <div class="sec-title"><span class="sec-num">11</span>Avaliação Estruturada do Leito — TIMERS</div>
-    <table class="scale">
-      <thead><tr><th style="width:14%;">Dimensão</th><th style="width:36%;">O que avaliar</th><th>Achados / conduta</th></tr></thead>
-      <tbody>
-        <tr><td><b>T</b> — Tecido</td><td>Viável vs. inviável (necrose/esfacelo); necessidade de desbridamento</td><td><textarea name="timers_t"></textarea></td></tr>
-        <tr><td><b>I</b> — Inflamação / Infecção</td><td>Sinais de infecção, biofilme, carga bacteriana</td><td><textarea name="timers_i"></textarea></td></tr>
-        <tr><td><b>M</b> — Umidade (Moisture)</td><td>Equilíbrio do exsudato; maceração vs. ressecamento</td><td><textarea name="timers_m"></textarea></td></tr>
-        <tr><td><b>E</b> — Borda (Edge)</td><td>Epitelização, bordas descoladas/epibolia</td><td><textarea name="timers_e"></textarea></td></tr>
-        <tr><td><b>R</b> — Reparo / Regeneração</td><td>Resposta ao tratamento; terapias avançadas</td><td><textarea name="timers_r"></textarea></td></tr>
-        <tr><td><b>S</b> — Fatores Sociais / paciente</td><td>Adesão, suporte, condições socioeconômicas</td><td><textarea name="timers_s"></textarea></td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- 12. CONDUTA -->
-  <section>
-    <div class="sec-title"><span class="sec-num">12</span>Conduta e Plano de Cuidados</div>
+    <div class="sec-title"><span class="sec-num">7</span>Conduta e Plano de Cuidados</div>
     <div class="grid g2">
       <label class="field">Limpeza / solução (SF 0,9%, PHMB, outro)<input type="text" name="conduta_limpeza"></label>
-      <label class="field">Desbridamento (tipo)<input type="text" name="conduta_desbridamento"></label>
       <label class="field">Cobertura primária<input type="text" name="conduta_cobertura_primaria"></label>
       <label class="field">Cobertura secundária / fixação<input type="text" name="conduta_cobertura_secundaria"></label>
       <label class="field">Frequência de troca<input type="text" name="conduta_frequencia_troca"></label>
@@ -707,94 +727,117 @@
     if (todasEtio.length) locTxt += `Etiologia compatível com ${joinFrase(todasEtio.map(e => e.toLowerCase()))}.`;
     if (locTxt.trim()) p.push(locTxt.trim());
 
-    // Características da ferida
+    // ITB
+    const itbD = val(form, 'itb_membro_d');
+    const itbE = val(form, 'itb_membro_e');
+    const pulsos = val(form, 'itb_pulsos_pediosos');
+    let itbTxt = '';
+    if (itbD || itbE) itbTxt += `Índice tornozelo-braço: membro direito ${itbD || 'não aferido'}, membro esquerdo ${itbE || 'não aferido'}. `;
+    if (pulsos) itbTxt += `Pulsos pediosos: ${pulsos}.`;
+    if (itbTxt.trim()) p.push(itbTxt.trim());
+
+    // TIMERS — T: Tecido
     const comp = val(form, 'comprimento_cm');
     const larg = val(form, 'largura_cm');
     const prof = val(form, 'profundidade_cm');
     const area = val(form, 'area_estimada');
-    const tunel = checkedLabel(form, 'tunel_descolamento');
-    const tunelHorario = val(form, 'tunel_localizacao_horario');
     const gGran = val(form, 'leito_granulacao_pct');
     const gEsf = val(form, 'leito_esfacelo_pct');
     const gNec = val(form, 'leito_necrose_pct');
     const gEpit = val(form, 'leito_epitelizacao_pct');
-    const exsuTipo = checkedLabel(form, 'exsudato_tipo');
-    const exsuQtd = checkedLabel(form, 'exsudato_quantidade');
-    const odor = checkedLabel(form, 'odor');
-    const bordas = checkedList(form, ['bordas_aderidas','bordas_descoladas','bordas_maceradas','bordas_epibolia','bordas_hiperqueratose']);
-    const peri = checkedList(form, ['peri_integra','peri_macerada','peri_eritematosa','peri_ressecada','peri_edema','peri_hiperpigmentacao']);
-    const infeccao = checkedList(form, ['infec_eritema','infec_calor','infec_edema','infec_dor','infec_purulento','infec_odor','infec_retardo']);
+    const desbrid = val(form, 'conduta_desbridamento');
+    const timersT = val(form, 'timers_t');
 
-    let caracTxt = '';
+    let tTxt = '';
     if (comp || larg || prof || area) {
-      caracTxt += 'Ao exame, ferida medindo ';
+      tTxt += 'Ao exame, ferida medindo ';
       const dims = [];
       if (comp) dims.push(`${comp} cm de comprimento`);
       if (larg) dims.push(`${larg} cm de largura`);
       if (prof) dims.push(`${prof} cm de profundidade`);
-      caracTxt += joinFrase(dims);
-      if (area) caracTxt += `, área estimada de ${area} cm²`;
-      caracTxt += '. ';
+      tTxt += joinFrase(dims);
+      if (area) tTxt += `, área estimada de ${area} cm²`;
+      tTxt += '. ';
     }
-    if (tunel) caracTxt += tunel === 'Sim' ? `Presença de túnel/descolamento${tunelHorario ? ` em região de ${tunelHorario}` : ''}. ` : 'Ausência de túnel ou descolamento. ';
     const leitoPercentuais = [];
     if (gGran) leitoPercentuais.push(`${gGran}% de tecido de granulação`);
     if (gEsf) leitoPercentuais.push(`${gEsf}% de esfacelo`);
     if (gNec) leitoPercentuais.push(`${gNec}% de necrose`);
     if (gEpit) leitoPercentuais.push(`${gEpit}% de epitelização`);
-    if (leitoPercentuais.length) caracTxt += `Leito da ferida composto por ${joinFrase(leitoPercentuais)}. `;
-    if (exsuTipo || exsuQtd) caracTxt += `Exsudato ${exsuQtd ? exsuQtd.toLowerCase() : ''}${exsuTipo ? ` do tipo ${exsuTipo.toLowerCase()}` : ''}. `;
-    if (odor) caracTxt += `Odor ${odor.toLowerCase()}. `;
-    if (bordas.length) caracTxt += `Bordas ${joinFrase(bordas.map(b => b.toLowerCase()))}. `;
-    if (peri.length) caracTxt += `Pele perilesional ${joinFrase(peri.map(p => p.toLowerCase()))}. `;
-    if (infeccao.length) {
-      caracTxt += `Sinais sugestivos de infecção presentes: ${joinFrase(infeccao.map(i => i.toLowerCase()))}.`;
-    } else {
-      caracTxt += 'Sem sinais sugestivos de infecção no momento da avaliação.';
-    }
-    if (caracTxt.trim()) p.push(caracTxt.trim());
+    if (leitoPercentuais.length) tTxt += `Leito da ferida composto por ${joinFrase(leitoPercentuais)}. `;
+    if (desbrid) tTxt += `Desbridamento: ${desbrid}. `;
+    if (timersT) tTxt += timersT;
+    if (tTxt.trim()) p.push('T — Tecido: ' + tTxt.trim());
 
-    // Dor
+    // TIMERS — I: Inflamação/Infecção
+    const infeccao = checkedList(form, ['infec_eritema','infec_calor','infec_edema','infec_dor','infec_purulento','infec_odor','infec_retardo']);
+    const odor = checkedLabel(form, 'odor');
+    const timersI = val(form, 'timers_i');
+    let iTxt = '';
+    if (infeccao.length) {
+      iTxt += `Sinais sugestivos de infecção presentes: ${joinFrase(infeccao.map(i => i.toLowerCase()))}. `;
+    } else {
+      iTxt += 'Sem sinais sugestivos de infecção no momento da avaliação. ';
+    }
+    if (odor) iTxt += `Odor ${odor.toLowerCase()}. `;
+    if (timersI) iTxt += timersI;
+    if (iTxt.trim()) p.push('I — Inflamação/Infecção: ' + iTxt.trim());
+
+    // TIMERS — M: Umidade
+    const exsuTipo = checkedLabel(form, 'exsudato_tipo');
+    const exsuQtd = checkedLabel(form, 'exsudato_quantidade');
+    const peri = checkedList(form, ['peri_integra','peri_macerada','peri_eritematosa','peri_ressecada','peri_edema','peri_hiperpigmentacao']);
+    const timersM = val(form, 'timers_m');
+    let mTxt = '';
+    if (exsuTipo || exsuQtd) mTxt += `Exsudato ${exsuQtd ? exsuQtd.toLowerCase() : ''}${exsuTipo ? ` do tipo ${exsuTipo.toLowerCase()}` : ''}. `;
+    if (peri.length) mTxt += `Pele perilesional ${joinFrase(peri.map(pp => pp.toLowerCase()))}. `;
+    if (timersM) mTxt += timersM;
+    if (mTxt.trim()) p.push('M — Umidade: ' + mTxt.trim());
+
+    // TIMERS — E: Borda
+    const bordas = checkedList(form, ['bordas_aderidas','bordas_descoladas','bordas_maceradas','bordas_epibolia','bordas_hiperqueratose']);
+    const tunel = checkedLabel(form, 'tunel_descolamento');
+    const tunelHorario = val(form, 'tunel_localizacao_horario');
+    const timersE = val(form, 'timers_e');
+    let eTxt = '';
+    if (bordas.length) eTxt += `Bordas ${joinFrase(bordas.map(b => b.toLowerCase()))}. `;
+    if (tunel) eTxt += tunel === 'Sim' ? `Presença de túnel/descolamento${tunelHorario ? ` em região de ${tunelHorario}` : ''}. ` : 'Ausência de túnel ou descolamento. ';
+    if (timersE) eTxt += timersE;
+    if (eTxt.trim()) p.push('E — Borda: ' + eTxt.trim());
+
+    // TIMERS — R: Reparo/Regeneração
     const eva = checkedLabel(form, 'eva_dor');
     const dorCarac = checkedLabel(form, 'dor_caracteristica');
-    if (eva !== '' || dorCarac) {
-      let dorTxt = '';
-      if (eva !== '') dorTxt += `Dor referida em ${eva}/10 na escala visual analógica`;
-      if (dorCarac) dorTxt += `${eva !== '' ? ', de caráter' : 'Dor de caráter'} ${dorCarac.toLowerCase()}`;
-      dorTxt += '.';
-      p.push(dorTxt);
-    }
-
-    // Escalas
     const npiap = checkedLabel(form, 'npiap_estagio');
-    const itbD = val(form, 'itb_membro_d');
-    const itbE = val(form, 'itb_membro_e');
-    const pulsos = val(form, 'itb_pulsos_pediosos');
     const bradenTotal = val(form, 'braden_total');
-
-    let escalasTxt = '';
-    if (npiap) escalasTxt += `Classificação da lesão por pressão (NPIAP/MS): ${npiap}. `;
-    if (itbD || itbE) escalasTxt += `Índice tornozelo-braço: membro direito ${itbD || 'não aferido'}, membro esquerdo ${itbE || 'não aferido'}. `;
-    if (pulsos) escalasTxt += `Pulsos pediosos: ${pulsos}. `;
-    if (bradenTotal) escalasTxt += `Escala de Braden: pontuação total ${bradenTotal}/23.`;
-    if (escalasTxt.trim()) p.push(escalasTxt.trim());
-
-    // TIMERS
-    const timers = [
-      ['Tecido', val(form,'timers_t')],
-      ['Inflamação/Infecção', val(form,'timers_i')],
-      ['Umidade', val(form,'timers_m')],
-      ['Borda', val(form,'timers_e')],
-      ['Reparo/Regeneração', val(form,'timers_r')],
-      ['Fatores sociais', val(form,'timers_s')],
-    ].filter(([,v]) => v);
-    if (timers.length) {
-      p.push('Avaliação estruturada do leito da ferida (TIMERS): ' + timers.map(([k,v]) => `${k} — ${v}`).join('; ') + '.');
+    const timersR = val(form, 'timers_r');
+    let rTxt = '';
+    if (eva !== '' || dorCarac) {
+      if (eva !== '') rTxt += `Dor referida em ${eva}/10 na escala visual analógica`;
+      if (dorCarac) rTxt += `${eva !== '' ? ', de caráter' : 'Dor de caráter'} ${dorCarac.toLowerCase()}`;
+      rTxt += '. ';
     }
+    if (npiap) rTxt += `Classificação da lesão por pressão (NPIAP/MS): ${npiap}. `;
+    if (bradenTotal) rTxt += `Escala de Braden: pontuação total ${bradenTotal}/23. `;
+    if (timersR) rTxt += timersR;
+    if (rTxt.trim()) p.push('R — Reparo/Regeneração: ' + rTxt.trim());
+
+    // TIMERS — S: Fatores Sociais/Paciente
+    const impacto = val(form, 'impacto_significado_ferida');
+    const suporte = val(form, 'suporte_familiar_cuidador');
+    const acessoInsumos = val(form, 'acesso_insumos_dificuldades');
+    const adesao = checkedLabel(form, 'adesao_tratamento');
+    const timersS = val(form, 'timers_s');
+    let sTxt = '';
+    if (impacto) sTxt += `Sobre o significado da ferida em sua vida, o(a) paciente relata: "${impacto}". `;
+    if (suporte) sTxt += `Suporte familiar/cuidador: ${suporte}. `;
+    if (adesao) sTxt += `Adesão ao tratamento: ${adesao.toLowerCase()}. `;
+    if (acessoInsumos) sTxt += `Dificuldades de acesso a insumos/tratamento: ${acessoInsumos}. `;
+    if (timersS) sTxt += timersS;
+    if (sTxt.trim()) p.push('S — Fatores Sociais/Paciente: ' + sTxt.trim());
 
     // Conduta
     const limpeza = val(form, 'conduta_limpeza');
-    const desbrid = val(form, 'conduta_desbridamento');
     const covPrim = val(form, 'conduta_cobertura_primaria');
     const covSec = val(form, 'conduta_cobertura_secundaria');
     const freqTroca = val(form, 'conduta_frequencia_troca');
@@ -804,7 +847,6 @@
 
     let condutaTxt = '';
     if (limpeza) condutaTxt += `Realizada limpeza com ${limpeza}. `;
-    if (desbrid) condutaTxt += `Desbridamento: ${desbrid}. `;
     if (covPrim) condutaTxt += `Aplicada cobertura primária: ${covPrim}`;
     if (covSec) condutaTxt += `${covPrim ? ', associada a' : 'Aplicada'} cobertura secundária/fixação: ${covSec}`;
     if (covPrim || covSec) condutaTxt += '. ';
