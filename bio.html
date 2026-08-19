@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bruna Arguelles | Enfermeira Especializada</title>
+<meta name="description" content="Cuidado especializado no tratamento de feridas, com técnica e presença. Agende sua avaliação em Juiz de Fora/MG." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c;
+    --salvia-soft:#5A7A6B22; --line:#5A7A6B44;
+    --cream-2:#efe7d6;
+    --whatsapp:#25D366;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--pergaminho); font-family:var(--serif-body); color:var(--ink);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    font-size:18px; line-height:1.6; overflow-x:hidden;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ width:min(560px, 92vw); margin:0 auto; }
+  h1,h2,h3{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); margin:0; }
+  .diamond{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); flex:none; display:inline-block; }
+  .kicker{ font-size:12.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--terracota); font-weight:600; display:flex; align-items:center; justify-content:center; gap:10px; }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; height:100svh; min-height:620px; width:100%; overflow:hidden; }
+  .hero img.bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 10%; }
+  .hero .veil{
+    position:absolute; inset:0;
+    background:linear-gradient(to top, var(--pergaminho) 0%, var(--pergaminho) 40%, rgba(247,242,232,.88) 52%, rgba(247,242,232,.15) 74%, transparent 88%);
+  }
+  .hero .mono{ position:absolute; top:26px; left:26px; height:34px; width:auto; opacity:.92; z-index:2; }
+  .hero-content{
+    position:absolute; left:0; right:0; bottom:0; z-index:2;
+    padding:0 6vw 34px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px;
+  }
+  .hero-content .kicker{ margin-bottom:2px; }
+  .hero h1{ font-size:clamp(38px, 10vw, 52px); line-height:1.02; letter-spacing:.005em; }
+  .hero .lede{ font-size:16.5px; color:var(--ink-soft); max-width:36ch; margin:0; text-wrap:pretty; }
+  .badge{
+    display:inline-flex; align-items:center; gap:9px; border:1px solid var(--line); border-radius:30px;
+    padding:6px 15px 6px 8px; background:var(--cream-2);
+  }
+  .badge .ic{ width:26px; height:26px; border-radius:50%; background:var(--salvia-soft); display:flex; align-items:center; justify-content:center; flex:none; }
+  .badge .ic svg{ width:14px; height:14px; stroke:var(--cipreste); fill:none; stroke-width:1.8; }
+  .badge .tx{ text-align:left; line-height:1.15; }
+  .badge .a{ font-family:var(--serif-display); font-size:13.5px; font-weight:600; color:var(--cipreste); }
+  .badge .b{ font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
+  .hero .btn{
+    display:inline-flex; align-items:center; gap:9px; font-family:var(--serif-body); font-weight:600;
+    font-size:15.5px; letter-spacing:.02em; padding:14px 30px; border-radius:34px; cursor:pointer;
+    border:1.5px solid var(--terracota); background:var(--terracota); color:var(--pergaminho);
+    transition:transform .15s, box-shadow .2s; white-space:nowrap; margin-top:4px;
+  }
+  .hero .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(42,58,51,.22); }
+  .hero .btn svg{ width:17px; height:17px; }
+  .social-row{ display:flex; align-items:center; gap:12px; margin-top:4px; }
+  .social-row a{
+    width:40px; height:40px; border-radius:50%; border:1px solid var(--line); background:var(--pergaminho);
+    display:flex; align-items:center; justify-content:center; transition:transform .2s, border-color .2s, background .2s;
+  }
+  .social-row a:hover{ transform:translateY(-3px) scale(1.05); border-color:var(--salvia); background:var(--cream-2); }
+  .social-row svg{ width:18px; height:18px; stroke:var(--cipreste); fill:none; stroke-width:1.6; }
+
+  /* ---------- TICKER ---------- */
+  .ticker-sec{ padding:40px 0 34px; text-align:center; }
+  .ticker-sec h2{ font-size:clamp(21px, 4.6vw, 27px); margin-top:10px; letter-spacing:.01em; }
+  .ticker-sec h2 span{ color:var(--terracota); padding:0 4px; font-style:italic; }
+  .ticker-strip{
+    margin-top:26px; background:var(--cipreste); overflow:hidden; padding:15px 0;
+  }
+  .ticker-track{ display:flex; width:max-content; animation:scroll 22s linear infinite; }
+  .ticker-track span{
+    display:inline-flex; align-items:center; gap:14px; font-family:var(--serif-display); font-style:italic;
+    font-size:17px; color:var(--pergaminho); padding:0 20px; white-space:nowrap;
+  }
+  .ticker-track .dot{ width:5px; height:5px; background:var(--terracota); border-radius:50%; }
+  @keyframes scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce){ .ticker-track{ animation:none; } }
+
+  /* ---------- LINKS ---------- */
+  .links-sec{ padding:8px 0 44px; }
+  .link-stack{ display:flex; flex-direction:column; gap:13px; }
+  .lbtn{
+    display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+    font-family:var(--serif-body); font-weight:600; font-size:15px; letter-spacing:.01em;
+    padding:17px 22px; border-radius:30px; text-align:center;
+    border:1.5px solid var(--cipreste); background:var(--cipreste); color:var(--pergaminho);
+    transition:transform .18s, box-shadow .2s, background .2s;
+  }
+  .lbtn:hover{ transform:translateY(-2px) scale(1.01); box-shadow:0 14px 30px rgba(42,58,51,.18); }
+  .lbtn.terra{ background:var(--terracota); border-color:var(--terracota); }
+  .lbtn.ghost{ background:var(--pergaminho); color:var(--cipreste); border-color:var(--line); }
+  .lbtn.ghost:hover{ background:var(--cream-2); border-color:var(--salvia); }
+  .lbtn svg{ width:17px; height:17px; flex:none; }
+
+  /* ---------- LOCATION ---------- */
+  .loc-sec{ padding:14px 0 54px; }
+  .loc-card{
+    border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--cream-2);
+  }
+  .loc-map{
+    position:relative; aspect-ratio:16/9;
+    background-color:var(--cream-2);
+    background-image:repeating-linear-gradient(45deg, #5A7A6B14 0 11px, transparent 11px 22px);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .loc-map .pin{ position:relative; display:flex; flex-direction:column; align-items:center; }
+  .loc-map .pin .ring{
+    width:56px; height:56px; border-radius:50%; background:#F7F2E8; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px rgba(42,58,51,.14);
+  }
+  .loc-map .pin svg{ width:26px; height:26px; stroke:var(--terracota); fill:none; stroke-width:1.6; }
+  .loc-body{ padding:22px 24px 24px; text-align:center; }
+  .loc-body .lab{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--terracota); font-weight:600; }
+  .loc-body .addr{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); margin-top:7px; line-height:1.3; }
+  .loc-body .lbtn{ margin-top:18px; }
+
+  /* ---------- FOOTER ---------- */
+  footer.bio{ padding:10px 0 100px; text-align:center; }
+  .foot-social{ display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:9px; }
+  .foot-social a{
+    display:flex; align-items:center; gap:7px; height:36px; padding:0 15px; border-radius:30px;
+    border:1px solid var(--line); background:var(--pergaminho); font-size:12px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink); transition:background .2s, border-color .2s;
+  }
+  .foot-social a:hover{ background:var(--cream-2); border-color:var(--salvia); }
+  .foot-social svg{ width:14px; height:14px; stroke:var(--cipreste); fill:none; stroke-width:1.7; }
+  footer.bio .nm{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); margin-top:28px; }
+  footer.bio .crm{ font-size:12px; letter-spacing:.08em; color:var(--ink-soft); margin-top:5px; }
+  footer.bio .cr{ font-size:11px; color:var(--ink-soft); opacity:.7; margin-top:16px; }
+
+  /* ---------- FLOATING WHATSAPP ---------- */
+  .float-wa{
+    position:fixed; bottom:20px; right:20px; z-index:50; width:54px; height:54px; border-radius:50%;
+    background:var(--whatsapp); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 26px rgba(37,211,102,.4); transition:transform .2s, box-shadow .2s;
+  }
+  .float-wa:hover{ transform:scale(1.08); box-shadow:0 14px 32px rgba(37,211,102,.5); }
+  .float-wa svg{ width:26px; height:26px; fill:#fff; }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <img class="bg" src="assets/bruna-retrato.jpg" alt="Bruna Arguelles, enfermeira especializada em tratamento de feridas" />
+  <div class="veil"></div>
+  <img class="mono" src="assets/monogram.png" alt="" />
+  <div class="hero-content">
+    <div class="kicker"><span class="diamond"></span><span>Enfermagem Especializada · Juiz de Fora/MG</span></div>
+    <h1>Bruna Arguelles</h1>
+    <p class="lede">Cuidado especializado no tratamento de feridas, com técnica, ciência e presença.</p>
+    <span class="badge">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 4.5 6.5 4.5c2 0 3.2 1 4.5 2.5C12.3 5.5 13.5 4.5 15.5 4.5c4 0 5.5 4.5 4 7.5C19 16.5 12 21 12 21z"/></svg></span>
+      <span class="tx"><span class="a">COREN/MG 761268</span><br /><span class="b">Enfermeira habilitada</span></span>
+    </span>
+    <a class="btn" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.737-.98a9.913 9.913 0 0 0 .241.273z"/></svg>
+      <span>Agendar Avaliação</span>
+    </a>
+    <div class="social-row">
+      <a href="https://instagram.com/cuidarpelabruna" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://wa.me/5532991027249" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </a>
+      <a href="https://www.google.com/maps/place/?q=Enfermeira+Bruna+Arguelles+-+Tratamento+de+Feridas&ftid=0x6609298f98083e87:0x6a38be119f92114d" target="_blank" rel="noopener" aria-label="Localização">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ATENDIMENTO (ticker) ============ -->
+<section class="ticker-sec">
+  <div class="wrap">
+    <div class="kicker"><span class="diamond"></span><span>Atendimento</span><span class="diamond"></span></div>
+    <h2>Avaliação <span>·</span> Diagnóstico <span>·</span> Curativo <span>·</span> Cicatrização</h2>
+  </div>
+  <div class="ticker-strip">
+    <div class="ticker-track">
+      <span><span class="dot"></span>Avaliação</span>
+      <span><span class="dot"></span>Diagnóstico</span>
+      <span><span class="dot"></span>Curativo</span>
+      <span><span class="dot"></span>Cicatrização</span>
+      <span><span class="dot"></span>Avaliação</span>
+      <span><span class="dot"></span>Diagnóstico</span>
+      <span><span class="dot"></span>Curativo</span>
+      <span><span class="dot"></span>Cicatrização</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LINKS ============ -->
+<section class="links-sec">
+  <div class="wrap link-stack">
+    <a class="lbtn terra" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.737-.98a9.913 9.913 0 0 0 .241.273z"/></svg>
+      Agendar Avaliação
+    </a>
+    <a class="lbtn" href="https://g.page/r/CU0Rkp8RvjhqEAE/review" target="_blank" rel="noopener">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+      Avaliar no Google
+    </a>
+    <a class="lbtn" href="tratamento-de-feridas-juiz-de-fora.html">
+      Tratamento de Feridas
+    </a>
+    <a class="lbtn" href="curativo-domiciliar.html">
+      Curativo Domiciliar
+    </a>
+    <a class="lbtn ghost" href="index.html">
+      Visite meu site
+    </a>
+  </div>
+</section>
+
+<!-- ============ LOCALIZAÇÃO ============ -->
+<section class="loc-sec">
+  <div class="wrap">
+    <div class="kicker" style="justify-content:flex-start; margin-bottom:18px;"><span class="diamond"></span><span>Localização</span></div>
+    <div class="loc-card">
+      <div class="loc-map">
+        <div class="pin">
+          <div class="ring"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></div>
+        </div>
+      </div>
+      <div class="loc-body">
+        <div class="lab">Consultório · Juiz de Fora/MG</div>
+        <div class="addr">Rua Renato Dias, 322<br />Bom Pastor</div>
+        <a class="lbtn ghost" href="https://www.google.com/maps/place/?q=Enfermeira+Bruna+Arguelles+-+Tratamento+de+Feridas&ftid=0x6609298f98083e87:0x6a38be119f92114d" target="_blank" rel="noopener">
+          Abrir no Google Maps
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bio">
+  <div class="wrap">
+    <div class="foot-social">
+      <a href="https://wa.me/5532991027249" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://instagram.com/cuidarpelabruna" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+      <a href="index.html">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg>
+        Site
+      </a>
+      <a href="https://www.google.com/maps/place/?q=Enfermeira+Bruna+Arguelles+-+Tratamento+de+Feridas&ftid=0x6609298f98083e87:0x6a38be119f92114d" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        Localização
+      </a>
+    </div>
+    <div class="nm">Bruna Arguelles</div>
+    <div class="crm">COREN/MG 761268</div>
+    <div class="cr">© 2026 · Todos os direitos reservados</div>
+  </div>
+</footer>
+
+<a class="float-wa" href="https://wa.me/5532991027249?text=Ol%C3%A1%20Bruna%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener" aria-label="Enviar mensagem no WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.737-.98a9.913 9.913 0 0 0 .241.273z"/></svg>
+</a>
+
+</body>
+</html>
