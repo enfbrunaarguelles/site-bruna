@@ -100,6 +100,14 @@
   .fase-meta input::placeholder{ color:#5A7A6B66; font-style:italic; }
   .fase-meta input.valor{ font-weight:600; color:var(--cipreste); }
 
+  .modalidade{ margin-top:9px; padding-top:8px; border-top:1px dotted var(--line); }
+  .modalidade-titulo{ font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin:0 0 6px; }
+  .opt{ display:flex; align-items:flex-start; gap:7px; font-size:9.8px; color:var(--ink); line-height:1.5; margin-bottom:6px; cursor:pointer; }
+  .opt input{ appearance:none; -webkit-appearance:none; width:12px; height:12px; border:1.3px solid var(--salvia); border-radius:2px; margin:2px 0 0; cursor:pointer; position:relative; flex:none; background:#fff; }
+  .opt input:checked{ background:var(--terracota); border-color:var(--terracota); }
+  .opt input:checked::after{ content:"✓"; position:absolute; inset:0; color:#fff; font-size:9px; line-height:12px; text-align:center; }
+  .modalidade .fm{ max-width:260px; margin-top:2px; }
+
   .alerta-box{
     background:var(--pergaminho); border-left:2.5px solid var(--terracota); padding:11px 14px; margin-top:4px;
   }
@@ -146,6 +154,7 @@
     .fld, .resumo-area, .fase-body, .objetivo, .fase-meta input, h2.sec .periodo{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
     .fld::placeholder, .fase-meta input::placeholder, h2.sec .periodo::placeholder{ color:transparent !important; }
     .resumo-area:empty::before, .fase-body:empty::before, .objetivo:empty::before{ content:none !important; }
+    .opt input{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   }
   @media screen and (max-width:760px){
     body{ padding:12px 12px 84px; }
@@ -246,6 +255,12 @@
             <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase1_frequencia" value="Diária no início, espaçando conforme a melhora"></div>
             <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase1_valor" value="R$ 340,00"></div>
             <div class="fm"><span class="lab">Pacote de 8 sessões</span><input class="valor" type="text" data-k="fase1_pacote8" value="R$ 2.450,00 (estimativa)"></div>
+          </div>
+          <div class="modalidade">
+            <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
+            <label class="opt"><input type="checkbox" data-k="fase1_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
+            <label class="opt"><input type="checkbox" data-k="fase1_mod_parcial"><span>Eu realizo 2 desbridamentos por semana, presenciais, e os demais cuidados são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
+            <div class="fm"><span class="lab">Valor (2x por semana comigo)</span><input class="valor" type="text" data-k="fase1_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
           </div>
         </section>
 
@@ -362,7 +377,8 @@
       var ORIGINAL = {};
       fields.forEach(function(el){
         var k = el.dataset.k;
-        ORIGINAL[k] = el.isContentEditable ? el.innerHTML : el.value;
+        if (el.type === 'checkbox') ORIGINAL[k] = el.checked;
+        else ORIGINAL[k] = el.isContentEditable ? el.innerHTML : el.value;
       });
 
       var saved = {};
@@ -370,20 +386,30 @@
       fields.forEach(function(el){
         var k = el.dataset.k;
         if (!(k in saved)) return;
-        if (el.isContentEditable) el.innerHTML = saved[k];
+        if (el.type === 'checkbox') el.checked = !!saved[k];
+        else if (el.isContentEditable) el.innerHTML = saved[k];
         else el.value = saved[k];
       });
+
+      // as duas modalidades da Fase 1 funcionam como opção única (marcar uma desmarca a outra)
+      var modCompleta = document.querySelector('[data-k="fase1_mod_completa"]');
+      var modParcial = document.querySelector('[data-k="fase1_mod_parcial"]');
+      if (modCompleta && modParcial){
+        modCompleta.addEventListener('change', function(){ if (modCompleta.checked) modParcial.checked = false; });
+        modParcial.addEventListener('change', function(){ if (modParcial.checked) modCompleta.checked = false; });
+      }
 
       function persist(){
         var data = {};
         fields.forEach(function(el){
-          if (el.isContentEditable){ data[el.dataset.k] = el.innerHTML; }
+          if (el.type === 'checkbox'){ data[el.dataset.k] = el.checked; el.toggleAttribute('checked', el.checked); }
+          else if (el.isContentEditable){ data[el.dataset.k] = el.innerHTML; }
           else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
         });
         try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
       }
       fields.forEach(function(el){
-        el.addEventListener('input', persist);
+        el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', persist);
       });
       persist();
 
@@ -397,6 +423,8 @@
             else { el.value = ''; el.setAttribute('value', ''); }
           } else if (k === 'cidade_ass'){
             el.value = 'Juiz de Fora/MG'; el.setAttribute('value', el.value);
+          } else if (el.type === 'checkbox'){
+            el.checked = ORIGINAL[k]; el.toggleAttribute('checked', el.checked);
           } else if (el.isContentEditable){
             el.innerHTML = ORIGINAL[k];
           } else {
