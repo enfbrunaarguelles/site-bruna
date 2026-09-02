@@ -279,6 +279,12 @@
             <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase2_valor" value="R$ 190,00 a R$ 290,00"></div>
             <div class="fm"><span class="lab">Pacote de 8 sessões</span><input class="valor" type="text" data-k="fase2_pacote8" value="R$ 1.550,00"></div>
           </div>
+          <div class="modalidade">
+            <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
+            <label class="opt"><input type="checkbox" data-k="fase2_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
+            <label class="opt"><input type="checkbox" data-k="fase2_mod_parcial"><span>Eu faço 1 visita por semana, e os demais cuidados são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
+            <div class="fm"><span class="lab">Valor (1x por semana comigo)</span><input class="valor" type="text" data-k="fase2_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
+          </div>
         </section>
 
         <section class="block">
@@ -295,6 +301,12 @@
             <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase3_frequencia" value="1 a 2 vezes por semana"></div>
             <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase3_valor" value="R$ 190,00 a R$ 290,00"></div>
             <div class="fm"><span class="lab">Pacote de 8 sessões</span><input class="valor" type="text" data-k="fase3_pacote8" value="R$ 1.550,00"></div>
+          </div>
+          <div class="modalidade">
+            <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
+            <label class="opt"><input type="checkbox" data-k="fase3_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
+            <label class="opt"><input type="checkbox" data-k="fase3_mod_parcial"><span>Eu faço uma reavaliação quinzenal, e os cuidados do dia a dia são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
+            <div class="fm"><span class="lab">Valor (reavaliação quinzenal)</span><input class="valor" type="text" data-k="fase3_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
           </div>
         </section>
 
@@ -391,13 +403,15 @@
         else el.value = saved[k];
       });
 
-      // as duas modalidades da Fase 1 funcionam como opção única (marcar uma desmarca a outra)
-      var modCompleta = document.querySelector('[data-k="fase1_mod_completa"]');
-      var modParcial = document.querySelector('[data-k="fase1_mod_parcial"]');
-      if (modCompleta && modParcial){
-        modCompleta.addEventListener('change', function(){ if (modCompleta.checked) modParcial.checked = false; });
-        modParcial.addEventListener('change', function(){ if (modParcial.checked) modCompleta.checked = false; });
-      }
+      // em cada fase, as duas modalidades funcionam como opção única (marcar uma desmarca a outra)
+      ['fase1','fase2','fase3'].forEach(function(fase){
+        var modCompleta = document.querySelector('[data-k="' + fase + '_mod_completa"]');
+        var modParcial = document.querySelector('[data-k="' + fase + '_mod_parcial"]');
+        if (modCompleta && modParcial){
+          modCompleta.addEventListener('change', function(){ if (modCompleta.checked) modParcial.checked = false; });
+          modParcial.addEventListener('change', function(){ if (modParcial.checked) modCompleta.checked = false; });
+        }
+      });
 
       function persist(){
         var data = {};
