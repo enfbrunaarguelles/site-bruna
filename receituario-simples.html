@@ -114,18 +114,12 @@
   @page{ size:A4; margin:0; }
   @media print{
     body{ background:#fff; padding:0; }
-    .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; padding:0; }
+    .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
     .toolbar{ display:none !important; }
     .fld, .rx-area{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
     .fld::placeholder{ color:transparent !important; }
     .rx-area:empty::before{ content:none !important; }
-
-    /* cabeçalho e rodapé fixos, repetem em toda página impressa */
-    .page::after{ content:none; }
-    header{ position:fixed; top:0; left:0; right:0; padding:13mm 19mm 9px; background:#fff; z-index:10; }
-    header::before{ content:""; position:absolute; left:0; right:0; top:0; height:5mm; background:var(--cipreste); }
-    footer{ position:fixed; left:0; right:0; bottom:0; padding:7px 19mm 9mm; margin-top:0; background:#fff; z-index:10; }
-    .inner{ padding:33mm 19mm 15mm !important; }
+    header, footer{ page-break-inside:avoid; }
   }
   @media screen and (max-width:760px){
     body{ padding:12px 12px 70px; }
