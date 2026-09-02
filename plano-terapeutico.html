@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano Terapêutico — Bruna Arguelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B66; --line-strong:#2A3A3340;
+    --field:#2A3A33; --field-line:#2A3A3366;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:#e7ded0; font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; padding:30px 0 64px; }
+
+  .page{
+    width:210mm; min-height:297mm; margin:0 auto; background:#fff;
+    background-image:linear-gradient(180deg,#ffffff 0%, #fffdf9 100%);
+    box-shadow:0 18px 50px rgba(42,58,51,.22);
+    padding:13mm 15mm 12mm; position:relative; display:flex; flex-direction:column;
+  }
+  .page::after{ content:""; position:absolute; left:0; right:0; top:0; height:5mm; background:var(--cipreste); }
+  .inner{ position:relative; z-index:1; padding:4mm 4mm 0; display:flex; flex-direction:column; flex:1; }
+
+  header{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; padding-bottom:9px; border-bottom:1.5px solid var(--cipreste); }
+  header .logo{ height:42px; width:auto; display:block; }
+  header .org{ text-align:right; font-size:8.4px; letter-spacing:.03em; color:var(--ink-soft); line-height:1.5; }
+  header .org strong{ color:var(--cipreste); font-weight:600; }
+
+  .doc-title{ text-align:center; margin:12px 0 4px; }
+  .doc-title h1{ font-family:var(--serif-display); font-weight:600; font-size:21px; letter-spacing:.015em; color:var(--cipreste); margin:0; line-height:1.1; }
+  .doc-title .sub{ font-size:8.6px; letter-spacing:.24em; text-transform:uppercase; color:var(--terracota); margin-top:4px; font-weight:600; }
+  .rule-orn{ display:flex; align-items:center; justify-content:center; gap:8px; margin:6px auto 0; max-width:200px; }
+  .rule-orn .l{ height:1px; flex:1; background:var(--line); }
+  .rule-orn .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); }
+
+  main{ font-size:10.4px; line-height:1.55; color:var(--ink); margin-top:10px; }
+
+  .fields{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px 18px; margin-bottom:10px; }
+  .f{ display:flex; flex-direction:column; }
+  .f .lab{ font-size:7.6px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin-bottom:4px; }
+  .fld{
+    border:none; border-bottom:1px solid var(--field-line);
+    background:transparent; font-family:var(--serif-body); font-size:10.4px; color:var(--field);
+    padding:0 2px 2px; line-height:1.4; outline:none; width:100%; min-height:14px;
+  }
+  .fld:focus{ border-bottom-color:var(--terracota); background:#C978620d; }
+  .fld::placeholder{ color:#5A7A6B66; font-style:italic; }
+
+  section.block{ margin-top:14px; page-break-inside:avoid; }
+  h2.sec{
+    font-family:var(--serif-display); font-size:14.5px; font-weight:600; color:var(--cipreste);
+    margin:0 0 6px; display:flex; align-items:center; gap:8px; letter-spacing:.01em;
+    border-bottom:1px solid var(--line); padding-bottom:5px; flex-wrap:wrap;
+  }
+  h2.sec .n{
+    font-family:var(--serif-body); font-size:9px; font-weight:600; color:#fff; background:var(--salvia);
+    width:17px; height:17px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex:none;
+  }
+  h2.sec.fase .n{ background:var(--terracota); }
+  h2.sec .periodo{
+    margin-left:auto; font-size:8.2px; letter-spacing:.06em; text-transform:uppercase; color:var(--salvia); font-weight:600;
+    border:none; border-bottom:1px dotted var(--field-line); background:transparent; font-family:var(--serif-body);
+    text-align:right; outline:none; width:170px; padding:0 0 2px;
+  }
+  h2.sec .periodo::placeholder{ color:#5A7A6B88; font-style:italic; text-transform:none; letter-spacing:.02em; }
+
+  .resumo-area{
+    min-height:14mm; border:none; outline:none; border-bottom:1px solid var(--field-line);
+    font-family:var(--serif-body); font-size:10.4px; line-height:1.6; color:var(--field); padding:2px;
+    text-align:justify;
+  }
+  .resumo-area:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; font-style:italic; }
+
+  .objetivo{
+    min-height:14px; border:none; outline:none; border-bottom:1px dotted var(--field-line);
+    font-size:9.8px; color:var(--ink-soft); font-style:italic; margin:0 0 7px; padding:0 0 3px;
+  }
+  .objetivo:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; }
+  .objetivo b{ color:var(--cipreste); font-style:normal; font-weight:600; }
+
+  .fase-body{ font-size:10.2px; line-height:1.6; outline:none; min-height:16px; }
+  .fase-body ul{ margin:0; padding-left:17px; }
+  .fase-body li{ margin-bottom:4px; }
+  .fase-body b{ color:var(--cipreste); }
+  .fase-body:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; font-style:italic; }
+
+  .fase-meta{ display:flex; gap:20px; flex-wrap:wrap; margin-top:8px; padding-top:7px; border-top:1px dotted var(--line); }
+  .fase-meta .fm{ display:flex; flex-direction:column; flex:1; min-width:150px; }
+  .fase-meta .lab{ font-size:7.6px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin-bottom:3px; }
+  .fase-meta input{
+    border:none; border-bottom:1px solid var(--field-line); background:transparent; font-family:var(--serif-body);
+    font-size:10.4px; color:var(--field); outline:none; padding:0 2px 2px; width:100%;
+  }
+  .fase-meta input::placeholder{ color:#5A7A6B66; font-style:italic; }
+  .fase-meta input.valor{ font-weight:600; color:var(--cipreste); }
+
+  .alerta-box{
+    background:var(--pergaminho); border-left:2.5px solid var(--terracota); padding:11px 14px; margin-top:4px;
+  }
+  .alerta-box ul{ margin:0; padding-left:17px; }
+  .alerta-box li{ margin-bottom:4px; }
+
+  .nota-box{
+    background:#5A7A6B12; padding:9px 13px; margin-top:4px; font-size:9.8px; color:var(--ink-soft); line-height:1.6;
+  }
+
+  .sign-wrap{ margin-top:16px; padding-top:10px; page-break-inside:avoid; }
+  .place-date{ font-size:10px; margin-bottom:10px; display:flex; align-items:flex-end; gap:5px; flex-wrap:wrap; }
+  .place-date .fld{ width:auto; }
+  .place-date .fld.cidade{ flex:0 1 150px; }
+  .place-date .fld.sm{ flex:0 0 42px; text-align:center; }
+  .place-date .fld.md{ flex:0 0 88px; text-align:center; }
+  .signs{ display:flex; justify-content:flex-start; margin-top:12mm; }
+  .sig{ text-align:center; width:230px; }
+  .sig .sig-stamp{ display:block; width:104px; height:auto; margin:0 auto -18px; position:relative; z-index:1; pointer-events:none; mix-blend-mode:multiply; }
+  .sig .line{ border-top:1px solid var(--cipreste); margin-bottom:4px; }
+  .sig .role{ font-size:9.2px; color:var(--cipreste); font-weight:600; letter-spacing:.02em; }
+  .sig .hint{ font-size:7.8px; color:var(--salvia); margin-top:2px; letter-spacing:.04em; font-style:italic; }
+
+  footer{ margin-top:10px; padding-top:7px; border-top:1px solid var(--cipreste); display:flex; justify-content:space-between; align-items:center; font-size:7.8px; color:var(--ink-soft); letter-spacing:.03em; }
+  footer .d{ width:4px; height:4px; background:var(--terracota); transform:rotate(45deg); display:inline-block; margin:0 6px; }
+  footer b{ color:var(--cipreste); font-weight:600; }
+
+  .aviso-uso{ font-size:8px; font-style:italic; color:var(--salvia); text-align:center; margin-top:10px; }
+
+  .toolbar{ position:fixed; left:0; right:0; bottom:0; z-index:9999; background:var(--cipreste); display:flex; align-items:center; justify-content:center; gap:14px; padding:11px 16px; box-shadow:0 -6px 20px rgba(42,58,51,.22); flex-wrap:wrap; }
+  .toolbar .msg{ color:#F7F2E8cc; font-size:12px; }
+  .toolbar .msg b{ color:#fff; }
+  .toolbar button{ font-family:var(--serif-body); font-size:13.5px; font-weight:600; cursor:pointer; border-radius:7px; padding:9px 18px; border:1px solid transparent; display:inline-flex; align-items:center; gap:8px; }
+  .btn-pdf{ background:var(--terracota); color:#fff; }
+  .btn-pdf:hover{ background:#b96954; }
+  .btn-clear{ background:transparent; color:#F7F2E8; border-color:#F7F2E866; }
+  .btn-clear:hover{ background:#ffffff1a; }
+
+  @page{ size:A4; margin:0; }
+  @media print{
+    body{ background:#fff; padding:0; }
+    .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
+    .toolbar{ display:none !important; }
+    .fld, .resumo-area, .fase-body, .objetivo, .fase-meta input, h2.sec .periodo{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
+    .fld::placeholder, .fase-meta input::placeholder, h2.sec .periodo::placeholder{ color:transparent !important; }
+    .resumo-area:empty::before, .fase-body:empty::before, .objetivo:empty::before{ content:none !important; }
+  }
+  @media screen and (max-width:760px){
+    body{ padding:12px 12px 84px; }
+    .page{ width:100%; min-height:0; padding:8mm 6mm; }
+    .fields{ grid-template-columns:1fr 1fr; }
+    .fase-meta{ flex-direction:column; gap:8px; }
+  }
+
+  /* ---------- ACCESS GATE ---------- */
+  #gate-login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:#e7ded0; }
+  .gate-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:380px; max-width:100%; overflow:hidden; }
+  .gate-card .topo{ height:3px; background:var(--cipreste); }
+  .gate-inner{ padding:40px 36px 36px; text-align:center; }
+  .gate-inner img{ height:56px; width:auto; margin:0 auto 20px; display:block; }
+  .gate-label{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; }
+  .gate-label span{ font-size:9.5px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .gate-label .l{ width:20px; height:.5px; background:var(--terracota); opacity:.7; }
+  .gate-inner h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 5px; }
+  .gate-inner p{ font-size:11px; color:var(--ink-soft); margin:0; }
+  .gate-divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:22px 0; }
+  .gate-inner input[type=password]{
+    width:100%; padding:11px 13px; font-size:13px; font-family:inherit;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    outline:none; margin-bottom:9px;
+  }
+  .gate-inner input[type=password].erro{ border-color:var(--terracota); }
+  .gate-inner .gate-erro{ font-size:11px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .gate-inner button{
+    width:100%; padding:12px; background:var(--cipreste); color:#fff; border:none;
+    font-size:12.5px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
+  }
+  .gate-inner button:hover{ background:#3d5247; }
+  @media print{ #gate-login{ display:none !important; } }
+</style>
+</head>
+<body>
+<div id="gate-login">
+  <div class="gate-card">
+    <div class="topo"></div>
+    <div class="gate-inner">
+      <img src="assets/logo.png" alt="Bruna Arguelles">
+      <div class="gate-label"><span class="l"></span><span>Acesso restrito</span><span class="l"></span></div>
+      <h1>Bruna Arguelles</h1>
+      <p>Enfermagem Especializada</p>
+      <div class="gate-divisor"></div>
+      <input type="password" id="gate-senha" placeholder="Senha">
+      <p class="gate-erro" id="gate-erro">Senha incorreta.</p>
+      <button id="gate-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="app-content" style="display:none;">
+
+  <div class="page" data-screen-label="Plano Terapêutico">
+    <div class="inner">
+
+      <header>
+        <img class="logo" src="assets/logo.png" alt="Bruna Arguelles, Enfermeira">
+        <div class="org"><strong>BRUNA ARGUELLES, ENFERMAGEM ESPECIALIZADA</strong><br>COREN/MG 761268-ENF · CNPJ 66.913.603/0001-92</div>
+      </header>
+
+      <div class="doc-title">
+        <h1>Plano Terapêutico</h1>
+        <div class="sub">Plano de cuidados por fases, com valores, para o paciente e a família</div>
+        <div class="rule-orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+      </div>
+
+      <main>
+        <div class="fields">
+          <div class="f"><span class="lab">Paciente</span><input class="fld" type="text" data-k="nome" placeholder="Nome do paciente"></div>
+          <div class="f"><span class="lab">Idade</span><input class="fld" type="text" data-k="idade" placeholder="Ex.: 74 anos"></div>
+          <div class="f"><span class="lab">Ferida</span><input class="fld" type="text" data-k="ferida" placeholder="Localização da ferida"></div>
+          <div class="f"><span class="lab">Data do plano</span><input class="fld" type="text" data-k="data" placeholder="__/__/____"></div>
+        </div>
+
+        <section class="block">
+          <h2 class="sec"><span class="n">R</span>Resumo do caso</h2>
+          <div class="resumo-area" contenteditable="true" data-k="resumo" data-placeholder="Explique em linguagem simples, sem termos técnicos...">Ferida na perna, com alguns meses de evolução, associada a uma circulação prejudicada (já foi feita uma cirurgia recente para melhorar o fluxo de sangue). No momento a ferida está com sinais de infecção, por isso o acompanhamento precisa ser mais próximo nesta fase.</div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec fase"><span class="n">1</span>Fase 1, Controle da infecção<input class="periodo" type="text" data-k="fase1_periodo" value="Semanas 1 a 2"></h2>
+          <div class="objetivo" contenteditable="true" data-k="fase1_objetivo" data-placeholder="Objetivo desta fase...">Diminuir a infecção, limpar a ferida e controlar a secreção.</div>
+          <div class="fase-body" contenteditable="true" data-k="fase1_condutas" data-placeholder="O que será feito nesta fase...">
+            <ul>
+              <li>Acompanho a ferida com bastante frequência no começo, podendo espaçar um pouco assim que a secreção diminuir e se mantiver estável por algumas visitas seguidas.</li>
+              <li>A cada visita, faço a limpeza da ferida e retiro com cuidado o tecido que não está saudável.</li>
+              <li>Uso um produto que ajuda a controlar a infecção, aplicado por alguns minutos antes da troca.</li>
+              <li>Escolho a cobertura (o material que fica sobre a ferida) de acordo com cada parte dela, já que algumas áreas produzem mais secreção que outras.</li>
+              <li>Protejo a pele ao redor da ferida para evitar que ela também se machuque.</li>
+              <li>Vou entrar em contato com o médico responsável pela circulação da perna, para reavaliar se está tudo bem com o fluxo de sangue.</li>
+              <li>Vou conversar com o médico sobre a necessidade de um exame da secreção e, se for o caso, uso de antibiótico.</li>
+              <li>Reforço o remédio para dor antes da troca do curativo, já que a dor tem sido forte, e vou conversar com o médico sobre ajustar o remédio para esse tipo de dor (a que dá sensação de queimação).</li>
+            </ul>
+          </div>
+          <div class="fase-meta">
+            <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase1_frequencia" value="Diária no início, espaçando conforme a melhora"></div>
+            <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase1_valor" value="R$ 340,00"></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec fase"><span class="n">2</span>Fase 2, Redução da secreção<input class="periodo" type="text" data-k="fase2_periodo" value="Semanas 3 a 4, se a evolução for boa"></h2>
+          <div class="objetivo" contenteditable="true" data-k="fase2_objetivo" data-placeholder="Objetivo desta fase...">Continuar controlando a secreção e estimular o início da cicatrização.</div>
+          <div class="fase-body" contenteditable="true" data-k="fase2_condutas" data-placeholder="O que será feito nesta fase...">
+            <ul>
+              <li>Reavalio a ferida com menos frequência, já que a infecção estará mais controlada.</li>
+              <li>Troco o tipo de cobertura conforme a secreção for diminuindo.</li>
+              <li>Reavalio a dor a cada visita, antes e depois da troca.</li>
+            </ul>
+          </div>
+          <div class="fase-meta">
+            <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase2_frequencia" value="2 a 3 vezes por semana"></div>
+            <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase2_valor" value="R$ 190,00 a R$ 290,00"></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec fase"><span class="n">3</span>Fase 3, Fechamento<input class="periodo" type="text" data-k="fase3_periodo" value="A partir da estabilização"></h2>
+          <div class="objetivo" contenteditable="true" data-k="fase3_objetivo" data-placeholder="Quando esta fase começa...">Começa quando o médico confirmar que a circulação da perna está adequada.</div>
+          <div class="fase-body" contenteditable="true" data-k="fase3_condutas" data-placeholder="O que será feito nesta fase...">
+            <ul>
+              <li>Foco em proteger as bordas da ferida e evitar atrito ou pressão na região.</li>
+              <li>Oriento os cuidados do dia a dia em casa.</li>
+              <li>Fico atenta a qualquer sinal de que a infecção esteja voltando.</li>
+            </ul>
+          </div>
+          <div class="fase-meta">
+            <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase3_frequencia" value="1 a 2 vezes por semana"></div>
+            <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase3_valor" value="R$ 190,00 a R$ 290,00"></div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec">Sinais de alerta</h2>
+          <div class="alerta-box">
+            <div class="fase-body" contenteditable="true" data-k="alertas" data-placeholder="Sinais de alerta em linguagem simples...">
+              <p style="margin:0 0 6px;">Ligue para mim antes da próxima visita se notar:</p>
+              <ul>
+                <li>Febre ou calafrios.</li>
+                <li>A pessoa ficar de repente muito mal disposta, confusa ou muito fraca.</li>
+                <li>A perna ficar mais fria, mais pálida ou muito mais dolorida que o normal.</li>
+                <li>A ferida aumentar muito de tamanho ou ficar mais funda.</li>
+                <li>Dor muito forte que não melhora nem com o remédio combinado.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec">Acompanhamento da evolução</h2>
+          <div class="nota-box">
+            <div class="fase-body" contenteditable="true" data-k="mensuracao" data-placeholder="Como o progresso será acompanhado...">Vou tirar fotos da ferida a cada visita, sempre do mesmo jeito, para acompanhar a evolução com mais precisão.</div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h2 class="sec">Sobre os valores</h2>
+          <div class="nota-box">
+            <div class="fase-body" contenteditable="true" data-k="nota_valores" data-placeholder="Metodologia de precificação...">O valor de cada visita considera o material realmente utilizado naquele dia, por isso pode variar. O intervalo tende a aumentar e o custo por visita a diminuir conforme o quadro evolui e a fase avança.</div>
+          </div>
+        </section>
+
+        <div class="sign-wrap">
+          <div class="place-date">
+            <input class="fld cidade" type="text" data-k="cidade_ass" value="Juiz de Fora/MG">
+            <span>,</span>
+            <input class="fld sm" type="text" data-k="dia" placeholder="dia">
+            <span>de</span>
+            <input class="fld md" type="text" data-k="mes" placeholder="mês">
+            <span>de</span>
+            <input class="fld sm" type="text" data-k="ano" placeholder="ano">
+            <span>.</span>
+          </div>
+          <div class="signs">
+            <div class="sig">
+              <img class="sig-stamp" src="assets/assinatura-bruna.png" alt="Assinatura de Bruna Arguelles">
+              <div class="line"></div>
+              <div class="role">Bruna Arguelles, Enfermeira</div>
+              <div class="hint">COREN/MG nº 761268-ENF, responsável técnica</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="aviso-uso">Este documento é orientativo e não substitui a reavaliação presencial, em caso de dúvida, entre em contato antes de alterar qualquer cuidado.</p>
+      </main>
+
+      <footer>
+        <span><b>Bruna Arguelles</b> · Enfermagem Especializada em Feridas</span>
+        <span>Plano Terapêutico <span class="d"></span> Registro Técnico</span>
+      </footer>
+
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="msg">Preencha os campos e clique em <b>Baixar PDF</b>.</span>
+    <button class="btn-pdf" id="btnPdf">⤓ Baixar PDF</button>
+    <button class="btn-clear" id="btnClear">Limpar campos</button>
+  </div>
+
+  <script>
+    (function(){
+      var KEY = 'plano-terapeutico-v1';
+      var IDENTIDADE = ['nome','idade','ferida','data','dia','mes','ano'];
+      var fields = Array.prototype.slice.call(document.querySelectorAll('[data-k]'));
+      var ORIGINAL = {};
+      fields.forEach(function(el){
+        var k = el.dataset.k;
+        ORIGINAL[k] = el.isContentEditable ? el.innerHTML : el.value;
+      });
+
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ saved = {}; }
+      fields.forEach(function(el){
+        var k = el.dataset.k;
+        if (!(k in saved)) return;
+        if (el.isContentEditable) el.innerHTML = saved[k];
+        else el.value = saved[k];
+      });
+
+      function persist(){
+        var data = {};
+        fields.forEach(function(el){
+          if (el.isContentEditable){ data[el.dataset.k] = el.innerHTML; }
+          else { data[el.dataset.k] = el.value; el.setAttribute('value', el.value); }
+        });
+        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+      }
+      fields.forEach(function(el){
+        el.addEventListener('input', persist);
+      });
+      persist();
+
+      document.getElementById('btnPdf').addEventListener('click', function(){ persist(); window.print(); });
+      document.getElementById('btnClear').addEventListener('click', function(){
+        if (!confirm('Limpar os dados deste paciente? O texto padrão do plano (fases, alertas etc.) é mantido, só os dados de identificação são apagados.')) return;
+        fields.forEach(function(el){
+          var k = el.dataset.k;
+          if (IDENTIDADE.indexOf(k) !== -1){
+            if (el.isContentEditable) el.innerHTML = '';
+            else { el.value = ''; el.setAttribute('value', ''); }
+          } else if (k === 'cidade_ass'){
+            el.value = 'Juiz de Fora/MG'; el.setAttribute('value', el.value);
+          } else if (el.isContentEditable){
+            el.innerHTML = ORIGINAL[k];
+          } else {
+            el.value = ORIGINAL[k]; el.setAttribute('value', el.value || '');
+          }
+        });
+        persist();
+      });
+    })();
+  </script>
+
+</div>
+
+<script>
+(function(){
+  var SENHA = 'bruna2024';
+  var authed = false;
+  try { authed = sessionStorage.getItem('docs_auth') === '1'; } catch(e){}
+  var gate = document.getElementById('gate-login');
+  var app = document.getElementById('app-content');
+  if (authed){
+    gate.style.display = 'none';
+    app.style.display = 'block';
+  }
+  function tentar(){
+    var input = document.getElementById('gate-senha');
+    if (input.value === SENHA){
+      try { sessionStorage.setItem('docs_auth', '1'); } catch(e){}
+      gate.style.display = 'none';
+      app.style.display = 'block';
+    } else {
+      input.classList.add('erro');
+      document.getElementById('gate-erro').style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+  document.getElementById('gate-entrar').addEventListener('click', tentar);
+  document.getElementById('gate-senha').addEventListener('keydown', function(e){ if (e.key === 'Enter') tentar(); });
+})();
+</script>
+</body></html>
