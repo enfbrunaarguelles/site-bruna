@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POP — Laserterapia em Feridas — Bruna Arguelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B55; --line-strong:#2A3A3330;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:#e7ded0; font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  a{ color:var(--terracota); }
+
+  .sheet{ max-width:900px; margin:0 auto; background:#fff; box-shadow:0 18px 50px rgba(42,58,51,.18); padding:0 0 60px; }
+  .topo-faixa{ height:5mm; background:var(--cipreste); }
+
+  header{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; padding:26px 40px 14px; border-bottom:1.5px solid var(--cipreste); }
+  header .logo{ height:44px; width:auto; display:block; }
+  header .org{ text-align:right; font-size:10.5px; color:var(--ink-soft); line-height:1.5; }
+  header .org b{ color:var(--cipreste); }
+
+  .doc-title{ text-align:center; padding:26px 40px 6px; }
+  .doc-title .kicker{ font-size:10px; letter-spacing:.26em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin-bottom:8px; }
+  .doc-title h1{ font-family:var(--serif-display); font-weight:600; font-size:28px; color:var(--cipreste); margin:0; line-height:1.15; }
+  .doc-title .sub{ font-size:14px; color:var(--ink-soft); margin-top:8px; font-style:italic; }
+  .rule-orn{ display:flex; align-items:center; justify-content:center; gap:8px; margin:16px auto 0; max-width:220px; }
+  .rule-orn .l{ height:1px; flex:1; background:var(--line); }
+  .rule-orn .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); }
+
+  main{ padding:8px 40px 0; font-size:14.5px; line-height:1.7; }
+
+  section.pop-sec{ margin-top:34px; }
+  h2.pop-h{
+    font-family:var(--serif-display); font-weight:600; font-size:19px; color:var(--cipreste);
+    display:flex; align-items:center; gap:10px; margin:0 0 12px; border-bottom:1px solid var(--line); padding-bottom:8px;
+  }
+  h2.pop-h .n{
+    font-family:var(--serif-body); font-size:11px; font-weight:600; color:#fff; background:var(--terracota);
+    width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex:none;
+  }
+  h3.pop-h3{ font-family:var(--serif-display); font-weight:600; font-size:15.5px; color:var(--cipreste); margin:20px 0 8px; }
+
+  main p{ margin:0 0 12px; text-align:justify; }
+  main ul, main ol{ margin:0 0 12px; padding-left:22px; }
+  main li{ margin-bottom:6px; }
+  main b{ color:var(--cipreste); }
+
+  .nota{ background:var(--pergaminho); border-left:2.5px solid var(--terracota); padding:12px 16px; font-size:13px; color:var(--ink-soft); margin:14px 0; }
+
+  .table-wrap{ overflow-x:auto; margin:14px 0; border:1px solid var(--line); }
+  table.pop-table{ width:100%; border-collapse:collapse; font-size:12px; min-width:640px; }
+  table.pop-table th, table.pop-table td{ border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top; }
+  table.pop-table th{ background:var(--pergaminho); color:var(--cipreste); font-weight:600; font-size:11px; letter-spacing:.02em; text-transform:uppercase; }
+  table.pop-table tr:nth-child(even) td{ background:#5A7A6B08; }
+
+  .refs{ font-size:12px; color:var(--ink-soft); line-height:1.6; }
+  .refs ol{ padding-left:20px; }
+  .refs li{ margin-bottom:10px; }
+  .refs .meta{ font-style:italic; }
+
+  footer.doc-footer{ margin-top:40px; padding:16px 40px 0; border-top:1px solid var(--cipreste); display:flex; justify-content:space-between; align-items:center; font-size:10.5px; color:var(--ink-soft); }
+  footer.doc-footer b{ color:var(--cipreste); }
+
+  .toolbar{ position:fixed; left:0; right:0; bottom:0; z-index:9999; background:var(--cipreste); display:flex; align-items:center; justify-content:center; gap:14px; padding:11px 16px; box-shadow:0 -6px 20px rgba(42,58,51,.22); }
+  .toolbar button{ font-family:var(--serif-body); font-size:13.5px; font-weight:600; cursor:pointer; border-radius:7px; padding:9px 18px; border:1px solid transparent; background:var(--terracota); color:#fff; }
+  .toolbar button:hover{ background:#b96954; }
+  .toolbar a.voltar{ color:#F7F2E8cc; font-size:12px; text-decoration:none; }
+  .toolbar a.voltar:hover{ color:#fff; }
+
+  body{ padding-bottom:70px; }
+
+  @media print{
+    body{ background:#fff; padding-bottom:0; }
+    .sheet{ box-shadow:none; max-width:none; }
+    .toolbar{ display:none !important; }
+    section.pop-sec{ page-break-inside:avoid; }
+    table.pop-table{ font-size:10.5px; }
+  }
+  @media screen and (max-width:700px){
+    header, .doc-title, main, footer.doc-footer{ padding-left:20px; padding-right:20px; }
+  }
+
+  /* ---------- ACCESS GATE ---------- */
+  #gate-login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:#e7ded0; }
+  .gate-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:380px; max-width:100%; overflow:hidden; }
+  .gate-card .topo{ height:3px; background:var(--cipreste); }
+  .gate-inner{ padding:40px 36px 36px; text-align:center; }
+  .gate-inner img{ height:56px; width:auto; margin:0 auto 20px; display:block; }
+  .gate-label{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; }
+  .gate-label span{ font-size:9.5px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .gate-label .l{ width:20px; height:.5px; background:var(--terracota); opacity:.7; }
+  .gate-inner h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 5px; }
+  .gate-inner p{ font-size:11px; color:var(--ink-soft); margin:0; }
+  .gate-divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:22px 0; }
+  .gate-inner input[type=password]{
+    width:100%; padding:11px 13px; font-size:13px; font-family:inherit;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    outline:none; margin-bottom:9px;
+  }
+  .gate-inner input[type=password].erro{ border-color:var(--terracota); }
+  .gate-inner .gate-erro{ font-size:11px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .gate-inner button{
+    width:100%; padding:12px; background:var(--cipreste); color:#fff; border:none;
+    font-size:12.5px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
+  }
+  .gate-inner button:hover{ background:#3d5247; }
+  @media print{ #gate-login{ display:none !important; } }
+</style>
+</head>
+<body>
+<div id="gate-login">
+  <div class="gate-card">
+    <div class="topo"></div>
+    <div class="gate-inner">
+      <img src="assets/logo.png" alt="Bruna Arguelles">
+      <div class="gate-label"><span class="l"></span><span>Acesso restrito</span><span class="l"></span></div>
+      <h1>Bruna Arguelles</h1>
+      <p>Enfermagem Especializada</p>
+      <div class="gate-divisor"></div>
+      <input type="password" id="gate-senha" placeholder="Senha">
+      <p class="gate-erro" id="gate-erro">Senha incorreta.</p>
+      <button id="gate-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="app-content" style="display:none;">
+<div class="sheet">
+  <div class="topo-faixa"></div>
+
+  <header>
+    <img class="logo" src="assets/logo.png" alt="Bruna Arguelles, Enfermeira">
+    <div class="org"><b>Bruna Arguelles</b><br>COREN/MG 761268-ENF · CNPJ 66.913.603/0001-92</div>
+  </header>
+
+  <div class="doc-title">
+    <div class="kicker">Procedimento Operacional Padrão</div>
+    <h1>Aplicação de Laserterapia de Baixa Intensidade (LLLT) em Feridas</h1>
+    <div class="rule-orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+  </div>
+
+  <main>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">1</span>Objetivo</h2>
+      <p>Padronizar a aplicação da Laserterapia de Baixa Intensidade (LLLT), também chamada de fotobiomodulação, como recurso terapêutico adjuvante no tratamento de feridas agudas e crônicas, visando estimular a cicatrização tecidual, reduzir o processo inflamatório e proporcionar analgesia, com segurança e reprodutibilidade técnica.</p>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">2</span>Aplicação / Público-Alvo</h2>
+      <p>Aplica-se a profissionais de saúde habilitados (enfermeiros, fisioterapeutas, médicos) que realizam terapia a laser em ambiente ambulatorial, hospitalar ou domiciliar, em pacientes portadores de feridas agudas, cirúrgicas ou crônicas (ex.: úlceras venosas, arteriais, por pressão, pé diabético, deiscências e queimaduras).</p>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">3</span>Definições</h2>
+      <ul>
+        <li><b>LLLT (Low-Level Laser Therapy).</b> Também referida como fotobiomodulação, consiste na aplicação de luz laser de baixa potência (não térmica), nas faixas do espectro vermelho e infravermelho, com efeitos bioestimulantes, anti-inflamatórios e analgésicos.</li>
+        <li><b>Laser Vermelho (660 nm).</b> Comprimento de onda com maior absorção por citocromo c oxidase e flavoproteínas mitocondriais nas camadas epidérmica e dérmica superficial, favorecendo proliferação celular, síntese de ATP e reepitelização.</li>
+        <li><b>Laser Infravermelho (808 nm).</b> Maior capacidade de penetração tecidual (na ordem de 5–10 mm), atingindo fibroblastos, células endoteliais e estruturas vasculares em derme profunda e hipoderme, com maior indicação para efeito analgésico e anti-inflamatório.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">4</span>Fundamentação Técnica dos Parâmetros</h2>
+      <div class="table-wrap">
+        <table class="pop-table">
+          <thead><tr><th>Parâmetro</th><th>Laser Vermelho</th><th>Laser Infravermelho</th></tr></thead>
+          <tbody>
+            <tr><td>Comprimento de onda</td><td>660 nm (±10 nm)</td><td>808 nm (±10 nm)</td></tr>
+            <tr><td>Potência</td><td>100 mW</td><td>100 mW</td></tr>
+            <tr><td>Penetração tecidual</td><td>Superficial (epiderme/derme superficial)</td><td>Profunda (derme profunda/hipoderme)</td></tr>
+            <tr><td>Principal indicação clínica</td><td>Bioestimulação, reepitelização, cicatrização de bordas e leito superficial</td><td>Ação analgésica, anti-inflamatória, tecidos profundos</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A literatura de fotobiomodulação identifica o comprimento de onda de 660 nm como um dos mais estudados e eficazes para cicatrização de feridas, com doses de energia geralmente entre 1–6 J/cm² (mais comumente 3–5 J/cm²) associadas aos melhores desfechos clínicos. Comprimentos de onda na faixa do infravermelho próximo (808–810 nm) também demonstraram eficácia em promover fechamento de feridas e reepitelização, além de proporcionar efeito analgésico relevante em quadros de dor pós-operatória e inflamatória.</p>
+      <p>A dosimetria deve seguir a <b>curva de Arndt-Schultz (efeito bifásico/hormese)</b>: doses insuficientes não produzem efeito biológico relevante, enquanto doses excessivas podem inibir, em vez de estimular, a proliferação celular. Em geral, recomenda-se não ultrapassar 10 J/cm² por ponto/sessão sobre tecido em reparação ativa, salvo protocolos específicos de tecido necrótico/hipertrófico. A dose deve ser ajustada conforme o tipo de tecido predominante no leito da ferida e a condição das bordas, conforme detalhado a seguir.</p>
+
+      <h3 class="pop-h3">4.1 Dosimetria por Tipo de Tecido do Leito da Ferida e por Bordas</h3>
+      <div class="table-wrap">
+        <table class="pop-table">
+          <thead><tr><th>Tecido / Condição</th><th>Laser Vermelho 660 nm</th><th>Laser Infravermelho 808 nm</th><th>Protocolo Combinado</th><th>Racional / Ref.</th></tr></thead>
+          <tbody>
+            <tr><td>Tecido de granulação (leito vermelho vivo, vascularizado, fase proliferativa)</td><td>4–6 J/cm² por ponto (máx. 6 J/cm²), técnica pontual espaçada 1 cm</td><td>4–6 J/cm² por ponto, priorizando perfusão e síntese de colágeno em derme profunda</td><td>3 J/cm² vermelho + 3 J/cm² infravermelho no mesmo ponto (dose total ≤ 6–8 J/cm²/sessão)</td><td>Doses nesta faixa associadas a maior neovascularização, fibroblastos e deposição de matriz extracelular; consistente com faixa de 3–5 J/cm² relatada como ótima e com fluência ideal de 5–10 J por ponto [3][10][15]</td></tr>
+            <tr><td>Esfacelo/fibrina (tecido amarelo, exsudativo, fase inflamatória prolongada)</td><td>2–4 J/cm² por ponto (dose reduzida para não estimular carga bacteriana/exsudato)</td><td>4–6 J/cm² por ponto (efeito anti-inflamatório e analgésico, redução de edema perilesional)</td><td>2 J/cm² vermelho + 4 J/cm² infravermelho (priorizar infravermelho)</td><td>Associar sempre a desbridamento mecânico/enzimático prévio; infravermelho preferido pela penetração e ação anti-inflamatória em tecido mais espesso/exsudativo [4][13]</td></tr>
+            <tr><td>Tecido necrótico/escara seca ou aderida</td><td>Não irradiar diretamente até desbridamento</td><td>Não irradiar diretamente até desbridamento</td><td>Não recomendado sobre a necrose</td><td>Irradiar apenas bordas viáveis adjacentes, com dose reduzida (1–2 J/cm²), após avaliação médica; contraindicação relativa até remoção do tecido desvitalizado</td></tr>
+            <tr><td>Bordas da ferida / epitélio neoformado (borda rosada, fina, em migração)</td><td>1–3 J/cm² por ponto (dose baixa, efeito hormético)</td><td>2–4 J/cm² por ponto</td><td>1–2 J/cm² vermelho + 2–3 J/cm² infravermelho, varredura ao longo de toda a borda (~1 cm de halo)</td><td>Doses mais baixas preservam o efeito estimulatório sem inibir migração/proliferação queratinocítica; wavelengths 630–660 nm favorecem proliferação de fibroblastos e reepitelização [11][14][16]</td></tr>
+            <tr><td>Pele perilesional íntegra (halo de ~1–2 cm ao redor da ferida)</td><td>2–4 J/cm²</td><td>4–6 J/cm²</td><td>2 J/cm² vermelho + 4 J/cm² infravermelho</td><td>Objetivo analgésico e anti-inflamatório, sem necessidade de estímulo proliferativo direto</td></tr>
+            <tr><td>Feridas hiperexsudativas / infecção controlada em acompanhamento</td><td>1–2 J/cm² (dose mínima efetiva)</td><td>2–4 J/cm²</td><td>1 J/cm² vermelho + 2 J/cm² infravermelho</td><td>Uso cauteloso; reavaliar resposta inflamatória a cada sessão; suspender se sinais de piora</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="pop-h3">4.2 Ajustes por Etiologia da Ferida</h3>
+      <p>Modificadores sobre a dosimetria por tecido:</p>
+      <ul>
+        <li><b>Úlcera de pé diabético.</b> Revisões sistemáticas apontam 660 nm como comprimento de onda ideal, seguido de 890 nm, com faixa de dose de 1–6 J/cm² mais empregada nos ensaios clínicos; ensaio com laser infravermelho pulsado 808 nm domiciliar mostrou maior taxa de fechamento &gt;90% (70% vs. 10%, p=0,006) [15].</li>
+        <li><b>Úlcera por pressão (grau 2).</b> Estudos utilizam predominantemente 1 J/cm² ou 4 J/cm², 3–5 sessões/semana por 4–6 semanas, com comprimentos de onda entre 650–820 nm [14].</li>
+        <li><b>Úlceras venosas/arteriais e feridas crônicas de membros inferiores.</b> Densidades de energia entre 2,4–126 J/cm² foram reportadas em revisão sistemática, com predomínio de doses entre 4–6 J/cm² [11].</li>
+      </ul>
+      <div class="nota">Nestes casos, a dosimetria por etiologia deve ser combinada com a dosimetria por tecido (item 4.1): usar o valor da etiologia como referência de teto e ajustar para baixo conforme o tecido predominante (ex.: em úlcera de pé diabético com leito fibrinoso, priorizar a faixa de 2–4 J/cm² do tecido de esfacelo, não o teto da etiologia).</div>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">5</span>Indicações</h2>
+      <ul>
+        <li>Feridas agudas (pós-cirúrgicas, traumáticas).</li>
+        <li>Feridas crônicas: úlceras venosas, arteriais, por pressão, pé diabético.</li>
+        <li>Deiscências de sutura.</li>
+        <li>Queimaduras superficiais e de espessura parcial.</li>
+        <li>Controle de dor e edema associados à ferida.</li>
+        <li>Estímulo à angiogênese e formação de tecido de granulação.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">6</span>Contraindicações</h2>
+      <ul>
+        <li>Irradiação direta sobre neoplasias ou lesões suspeitas de malignidade.</li>
+        <li>Irradiação sobre a região tireoidiana em pacientes com disfunção tireoidiana não controlada.</li>
+        <li>Gravidez: evitar aplicação sobre abdome e região lombossacra.</li>
+        <li>Fotossensibilidade cutânea ou uso de fármacos fotossensibilizantes.</li>
+        <li>Epilepsia fotossensível (cautela com dispositivos pulsáteis).</li>
+        <li>Irradiação direta sobre os olhos.</li>
+        <li>Áreas com infecção ativa não controlada, a critério da avaliação clínica (avaliar risco-benefício).</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">7</span>Materiais Necessários</h2>
+      <ul>
+        <li>Aparelho de laser terapêutico calibrado, com emissores vermelho (660 nm) e infravermelho (808 nm).</li>
+        <li>Óculos de proteção específicos para o comprimento de onda utilizado (paciente e operador).</li>
+        <li>Luvas de procedimento.</li>
+        <li>Gaze estéril e solução salina (para limpeza prévia da ferida, se indicado).</li>
+        <li>Régua ou dispositivo de medição da área da ferida.</li>
+        <li>Ficha de registro/prontuário para dosimetria e evolução.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">8</span>Procedimento Técnico</h2>
+      <ol>
+        <li><b>Higienização das mãos</b> e paramentação com luvas de procedimento.</li>
+        <li><b>Avaliação da ferida.</b> Inspecionar leito, bordas, exsudato, sinais de infecção, área e profundidade. Fotografar/registrar, se protocolo institucional exigir.</li>
+        <li><b>Limpeza da ferida</b> conforme protocolo padrão de curativos, antes da aplicação do laser.</li>
+        <li><b>Orientar o paciente e o operador</b> a utilizarem óculos de proteção específicos para o comprimento de onda em uso.</li>
+        <li><b>Seleção do comprimento de onda:</b>
+          <ul>
+            <li>Utilizar laser vermelho (660 nm, 100 mW) para estímulo de reepitelização e bioestimulação em leito e bordas superficiais da ferida.</li>
+            <li>Utilizar laser infravermelho (808 nm, 100 mW) quando houver necessidade de ação analgésica, anti-inflamatória ou alcance de tecidos mais profundos (ex.: dor perilesional, edema, tecido subcutâneo comprometido).</li>
+            <li>Ambos podem ser utilizados de forma combinada/sequencial na mesma sessão, conforme avaliação clínica e objetivo terapêutico.</li>
+          </ul>
+        </li>
+        <li><b>Técnica de aplicação.</b> Técnica pontual (varredura) ou por varredura contínua sobre toda a extensão da lesão e bordas (aproximadamente 1 cm ao redor da ferida), mantendo a caneta do laser perpendicular à superfície e em contato suave ou a curta distância (conforme especificação do fabricante).</li>
+        <li><b>Dosimetria.</b> Identificar o(s) tecido(s) predominante(s) no leito (granulação, esfacelo/fibrina, necrose) e a condição das bordas, e aplicar a dose específica constante na tabela do item 4.1 (e o ajuste por etiologia do item 4.2, quando aplicável), calculando a densidade de energia (J/cm²) separadamente para cada área da ferida (leito e bordas) e para cada comprimento de onda utilizado (vermelho, infravermelho ou combinado), ajustando o tempo de exposição conforme a potência do equipamento (100 mW) e a área tratada. Quando a ferida apresentar mais de um tipo de tecido, tratar cada área com a dose correspondente ao seu tecido predominante, evitando aplicar dose de granulação sobre esfacelo/necrose ou vice-versa.</li>
+        <li><b>Frequência.</b> Sessões geralmente de 2 a 3 vezes por semana, ajustadas conforme evolução clínica e resposta cicatricial, com reavaliação periódica.</li>
+        <li><b>Finalização.</b> Realizar cobertura da ferida conforme protocolo de curativo vigente na instituição.</li>
+        <li><b>Registro em prontuário.</b> Comprimento de onda utilizado, potência, tempo de exposição, dose (J/cm²), área tratada, resposta clínica e intercorrências.</li>
+      </ol>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">9</span>Cuidados e Precauções</h2>
+      <ul>
+        <li>Nunca direcionar o feixe de laser diretamente aos olhos do paciente ou do operador.</li>
+        <li>Verificar calibração periódica do equipamento.</li>
+        <li>Não aplicar sobre pele com sinais de necrose extensa sem avaliação prévia quanto à indicação.</li>
+        <li>Monitorar sinais de melhora (redução de área, exsudato, dor) e de piora (sinais de infecção, deiscência) a cada sessão.</li>
+        <li>Suspender a terapia e reavaliar em caso de agravamento do quadro local ou sistêmico.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">10</span>Critérios de Reavaliação</h2>
+      <ul>
+        <li>Reavaliação clínica e fotográfica da ferida a cada 1 a 2 semanas, ou conforme protocolo institucional.</li>
+        <li>Ajuste de parâmetros (comprimento de onda, dose, frequência) conforme fase de cicatrização (inflamatória, proliferativa, remodelação).</li>
+        <li>Encaminhamento para avaliação médica especializada em caso de ausência de resposta após 4 semanas de tratamento ou sinais de complicação.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">11</span>Registros</h2>
+      <p>Todas as sessões devem ser documentadas em prontuário/ficha específica, contendo: data, parâmetros utilizados (comprimento de onda, potência, dose, tempo, área tratada), avaliação da ferida antes e após o procedimento, intercorrências e assinatura do profissional responsável.</p>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">R</span>Referências</h2>
+      <div class="refs">
+        <ol>
+          <li>Effect of Red and Near-Infrared Wavelengths on Low-Level Laser (Light) Therapy-Induced Healing of Partial-Thickness Dermal Abrasion in Mice. <span class="meta">Lasers in Medical Science, 2014. Gupta A, Dai T, Hamblin MR.</span></li>
+          <li>Photobiomodulation With Pulsed and Continuous Wave Near-Infrared Laser (810 Nm, Al-Ga-As) Augments Dermal Wound Healing in Immunosuppressed Rats. <span class="meta">PloS One, 2016. Keshri GK, Gupta A, Yadav A, Sharma SK, Singh SB.</span></li>
+          <li>Photobiomodulation therapy and low-level light therapy in wound healing. <span class="meta">Lasers in Medical Science, 2023. Aggarwal I, Lio PA.</span></li>
+          <li>Qualitative Comparison of LED and LASER Effects on Cutaneous Wound Healing: A Systematic Review of Experimental Studies. <span class="meta">Cell Biochemistry and Function, 2026. Miranda MB, Barros ACS, Rocha RBD, Magalhães AT, Cardoso VS. (SR)</span></li>
+          <li>Photobiomodulation in diabetic wound healing: A review of red and near-infrared wavelength applications. <span class="meta">Cell Biochemistry and Function, 2021. Oyebode O, Houreld NN, Abrahamse H. (Review)</span></li>
+          <li>Clinical dosimetry and efficacy of LED photobiomodulation for chronic lower-limb wound healing: a systematic review of randomized trials. <span class="meta">Lasers in Medical Science, 2026. Miranda MB, Barros ACS, de Paula AVL, et al. (Recent, SR)</span></li>
+          <li>The validity and safety of multispectral light emitting diode (LED) treatment on grade 2 pressure ulcer: Double-blinded, randomized controlled clinical trial. <span class="meta">PloS One, 2023. Lim NK, Goo H, Yoon SR, et al. (RCT)</span></li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="doc-footer">
+    <span><b>Bruna Arguelles</b> · Enfermagem Especializada em Feridas</span>
+    <span>POP · Laserterapia em Feridas</span>
+  </footer>
+</div>
+</div>
+
+<div class="toolbar" id="toolbar">
+  <a class="voltar" href="area-restrita.html">← Voltar</a>
+  <button id="btnPdf">⤓ Baixar PDF</button>
+</div>
+
+<script>
+  document.getElementById('btnPdf').addEventListener('click', function(){ window.print(); });
+</script>
+
+<script>
+(function(){
+  var SENHA = 'bruna2024';
+  var authed = false;
+  try { authed = sessionStorage.getItem('docs_auth') === '1'; } catch(e){}
+  var gate = document.getElementById('gate-login');
+  var app = document.getElementById('app-content');
+  if (authed){
+    gate.style.display = 'none';
+    app.style.display = 'block';
+  }
+  function tentar(){
+    var input = document.getElementById('gate-senha');
+    if (input.value === SENHA){
+      try { sessionStorage.setItem('docs_auth', '1'); } catch(e){}
+      gate.style.display = 'none';
+      app.style.display = 'block';
+    } else {
+      input.classList.add('erro');
+      document.getElementById('gate-erro').style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+  document.getElementById('gate-entrar').addEventListener('click', tentar);
+  document.getElementById('gate-senha').addEventListener('keydown', function(e){ if (e.key === 'Enter') tentar(); });
+})();
+</script>
+</body></html>

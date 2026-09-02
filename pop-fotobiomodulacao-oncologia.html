@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POP — Fotobiomodulação em Oncologia — Bruna Arguelles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
+    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B55; --line-strong:#2A3A3330;
+    --serif-display:"Cormorant Garamond", Georgia, serif;
+    --serif-body:"EB Garamond", Georgia, serif;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:#e7ded0; font-family:var(--serif-body); color:var(--ink); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  a{ color:var(--terracota); }
+
+  .sheet{ max-width:900px; margin:0 auto; background:#fff; box-shadow:0 18px 50px rgba(42,58,51,.18); padding:0 0 60px; }
+  .topo-faixa{ height:5mm; background:var(--cipreste); }
+
+  header{ display:flex; align-items:flex-end; justify-content:space-between; gap:18px; padding:26px 40px 14px; border-bottom:1.5px solid var(--cipreste); }
+  header .logo{ height:44px; width:auto; display:block; }
+  header .org{ text-align:right; font-size:10.5px; color:var(--ink-soft); line-height:1.5; }
+  header .org b{ color:var(--cipreste); }
+
+  .doc-title{ text-align:center; padding:26px 40px 6px; }
+  .doc-title .kicker{ font-size:10px; letter-spacing:.26em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin-bottom:8px; }
+  .doc-title h1{ font-family:var(--serif-display); font-weight:600; font-size:28px; color:var(--cipreste); margin:0; line-height:1.15; }
+  .doc-title .sub{ font-size:14px; color:var(--ink-soft); margin-top:8px; font-style:italic; }
+  .rule-orn{ display:flex; align-items:center; justify-content:center; gap:8px; margin:16px auto 0; max-width:220px; }
+  .rule-orn .l{ height:1px; flex:1; background:var(--line); }
+  .rule-orn .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); }
+
+  main{ padding:8px 40px 0; font-size:14.5px; line-height:1.7; }
+
+  section.pop-sec{ margin-top:34px; }
+  h2.pop-h{
+    font-family:var(--serif-display); font-weight:600; font-size:19px; color:var(--cipreste);
+    display:flex; align-items:center; gap:10px; margin:0 0 12px; border-bottom:1px solid var(--line); padding-bottom:8px;
+  }
+  h2.pop-h .n{
+    font-family:var(--serif-body); font-size:11px; font-weight:600; color:#fff; background:var(--terracota);
+    width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex:none;
+  }
+  h3.pop-h3{ font-family:var(--serif-display); font-weight:600; font-size:15.5px; color:var(--cipreste); margin:20px 0 8px; }
+
+  main p{ margin:0 0 12px; text-align:justify; }
+  main ul, main ol{ margin:0 0 12px; padding-left:22px; }
+  main li{ margin-bottom:6px; }
+  main b{ color:var(--cipreste); }
+
+  .nota{ background:var(--pergaminho); border-left:2.5px solid var(--terracota); padding:12px 16px; font-size:13px; color:var(--ink-soft); margin:14px 0; }
+
+  .table-wrap{ overflow-x:auto; margin:14px 0; border:1px solid var(--line); }
+  table.pop-table{ width:100%; border-collapse:collapse; font-size:12px; min-width:640px; }
+  table.pop-table th, table.pop-table td{ border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top; }
+  table.pop-table th{ background:var(--pergaminho); color:var(--cipreste); font-weight:600; font-size:11px; letter-spacing:.02em; text-transform:uppercase; }
+  table.pop-table tr:nth-child(even) td{ background:#5A7A6B08; }
+
+  .refs{ font-size:12px; color:var(--ink-soft); line-height:1.6; }
+  .refs ol{ padding-left:20px; }
+  .refs li{ margin-bottom:10px; }
+  .refs .meta{ font-style:italic; }
+
+  footer.doc-footer{ margin-top:40px; padding:16px 40px 0; border-top:1px solid var(--cipreste); display:flex; justify-content:space-between; align-items:center; font-size:10.5px; color:var(--ink-soft); }
+  footer.doc-footer b{ color:var(--cipreste); }
+
+  .toolbar{ position:fixed; left:0; right:0; bottom:0; z-index:9999; background:var(--cipreste); display:flex; align-items:center; justify-content:center; gap:14px; padding:11px 16px; box-shadow:0 -6px 20px rgba(42,58,51,.22); }
+  .toolbar button{ font-family:var(--serif-body); font-size:13.5px; font-weight:600; cursor:pointer; border-radius:7px; padding:9px 18px; border:1px solid transparent; background:var(--terracota); color:#fff; }
+  .toolbar button:hover{ background:#b96954; }
+  .toolbar a.voltar{ color:#F7F2E8cc; font-size:12px; text-decoration:none; }
+  .toolbar a.voltar:hover{ color:#fff; }
+
+  body{ padding-bottom:70px; }
+
+  @media print{
+    body{ background:#fff; padding-bottom:0; }
+    .sheet{ box-shadow:none; max-width:none; }
+    .toolbar{ display:none !important; }
+    section.pop-sec{ page-break-inside:avoid; }
+    table.pop-table{ font-size:10.5px; }
+  }
+  @media screen and (max-width:700px){
+    header, .doc-title, main, footer.doc-footer{ padding-left:20px; padding-right:20px; }
+  }
+
+  /* ---------- ACCESS GATE ---------- */
+  #gate-login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:#e7ded0; }
+  .gate-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:380px; max-width:100%; overflow:hidden; }
+  .gate-card .topo{ height:3px; background:var(--cipreste); }
+  .gate-inner{ padding:40px 36px 36px; text-align:center; }
+  .gate-inner img{ height:56px; width:auto; margin:0 auto 20px; display:block; }
+  .gate-label{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; }
+  .gate-label span{ font-size:9.5px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .gate-label .l{ width:20px; height:.5px; background:var(--terracota); opacity:.7; }
+  .gate-inner h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 5px; }
+  .gate-inner p{ font-size:11px; color:var(--ink-soft); margin:0; }
+  .gate-divisor{ height:.5px; background:var(--cipreste); opacity:.12; margin:22px 0; }
+  .gate-inner input[type=password]{
+    width:100%; padding:11px 13px; font-size:13px; font-family:inherit;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+    outline:none; margin-bottom:9px;
+  }
+  .gate-inner input[type=password].erro{ border-color:var(--terracota); }
+  .gate-inner .gate-erro{ font-size:11px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .gate-inner button{
+    width:100%; padding:12px; background:var(--cipreste); color:#fff; border:none;
+    font-size:12.5px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
+  }
+  .gate-inner button:hover{ background:#3d5247; }
+  @media print{ #gate-login{ display:none !important; } }
+</style>
+</head>
+<body>
+<div id="gate-login">
+  <div class="gate-card">
+    <div class="topo"></div>
+    <div class="gate-inner">
+      <img src="assets/logo.png" alt="Bruna Arguelles">
+      <div class="gate-label"><span class="l"></span><span>Acesso restrito</span><span class="l"></span></div>
+      <h1>Bruna Arguelles</h1>
+      <p>Enfermagem Especializada</p>
+      <div class="gate-divisor"></div>
+      <input type="password" id="gate-senha" placeholder="Senha">
+      <p class="gate-erro" id="gate-erro">Senha incorreta.</p>
+      <button id="gate-entrar">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="app-content" style="display:none;">
+<div class="sheet">
+  <div class="topo-faixa"></div>
+
+  <header>
+    <img class="logo" src="assets/logo.png" alt="Bruna Arguelles, Enfermeira">
+    <div class="org"><b>Bruna Arguelles</b><br>COREN/MG 761268-ENF · CNPJ 66.913.603/0001-92</div>
+  </header>
+
+  <div class="doc-title">
+    <div class="kicker">Procedimento Operacional Padrão</div>
+    <h1>Fotobiomodulação (LLLT) para Controle de Sintomas em Oncologia</h1>
+    <div class="sub">Radioterapia e Quimioterapia</div>
+    <div class="rule-orn"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+  </div>
+
+  <main>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">1</span>Objetivo</h2>
+      <p>Padronizar a aplicação da fotobiomodulação (PBM)/laserterapia de baixa intensidade (LLLT) para prevenção e controle de sintomas decorrentes de radioterapia (RT) e quimioterapia (QT) em pacientes oncológicos, incluindo mucosite oral, radiodermatite, linfedema, xerostomia/disgeusia e neuropatia periférica induzida por quimioterapia (NPIQ).</p>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">2</span>Equipamentos e Parâmetros Gerais</h2>
+      <ul>
+        <li>Laser vermelho: 660 nm (± 10 nm), potência 100 mW.</li>
+        <li>Laser infravermelho: 808 nm (± 10 nm), potência 100 mW.</li>
+        <li>Em protocolos combinados, os dois comprimentos de onda podem ser emitidos simultaneamente para atingir cromóforos distintos e profundidades teciduais diferentes.</li>
+        <li>Modo de emissão contínuo ou pulsado (&lt;100 Hz); luz pulsada de baixa frequência pode ser superior para cicatrização/prevenção de lesão.</li>
+        <li>Uso de óculos de proteção específicos para o comprimento de onda em todos os procedimentos (paciente e operador).</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">3</span>Avaliação Pré-Aplicação</h2>
+      <ul>
+        <li>Confirmar diagnóstico oncológico, modalidade de tratamento (RT, QT, RT+QT, TCTH) e fase do tratamento.</li>
+        <li>Graduar a toxicidade presente pela escala apropriada (OMS para mucosite oral; RTOG/CTCAE para radiodermatite; perimetria para linfedema).</li>
+        <li>Checar contraindicações: lesão suspeita de malignidade não tratada na área a irradiar diretamente (avaliar caso a caso com oncologista), fotossensibilidade medicamentosa ativa, gestação (área abdominal/pélvica), história de epilepsia fotossensível quando aplicável.</li>
+        <li>Registrar localização exata, extensão da lesão/área e sintomas basais (dor, ardor, disfagia).</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">4</span>Dosimetria por Condição</h2>
+      <p>Joules vermelho, infravermelho e combinado.</p>
+      <div class="table-wrap">
+        <table class="pop-table">
+          <thead>
+            <tr><th>Condição / Fase</th><th>Laser Vermelho (660 nm)</th><th>Laser Infravermelho (808 nm)</th><th>Protocolo Combinado (660 + 808 nm)</th><th>Frequência</th><th>Ref.</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Mucosite oral, prevenção (protocolo Heimlich et al.)</td><td>Intraoral: 22 pontos, 2 J/ponto (0,08 cm² de spot aproximado)</td><td>Extraoral: 2 pontos, 6 J/ponto</td><td>Orofaringe (fibra óptica 10,5 cm): 2 pontos, 2 J/ponto; aplicação combinada intraoral + extraoral + orofaríngea na mesma sessão</td><td>Diária, do início ao fim da QT/TCTH</td><td>[1]</td></tr>
+            <tr><td>Mucosite oral, prevenção (diretriz histórica MASCC/ISOO pré-2011)</td><td>650 nm, 40 mW, 2 J/cm² por sítio (2 s/ponto); alternativa 632,8 nm em RT de cabeça e pescoço sem QT concomitante</td><td>Não especificado nesta diretriz</td><td>Não se aplica (protocolo monocromático)</td><td>Diária durante o condicionamento (HSCT) ou durante a RT</td><td>[3]</td></tr>
+            <tr><td>Mucosite oral, prevenção (regimen geral proposto por Zecha et al.)</td><td>633–685 nm, 10–150 mW</td><td>780–830 nm, 10–150 mW</td><td>2–3 J/cm² na superfície tratada, não excedendo 6 J/cm² por ponto, para qualquer um dos dois comprimentos de onda</td><td>2–3x/semana até diária</td><td>[4]</td></tr>
+            <tr><td>Mucosite oral, tratamento de lesão já estabelecida (grau ≥2)</td><td>660 nm associado ao IV na mesma sessão</td><td>808 nm associado ao vermelho na mesma sessão</td><td>Dose combinada podendo atingir até 22,2 J/cm² intraoral (protocolos de maior dose para lesão instalada); segurança documentada em série retrospectiva de 15 anos em TCTH</td><td>Diária até resolução clínica da lesão</td><td>[5]</td></tr>
+            <tr><td>Radiodermatite aguda, prevenção (protocolo clínico de 4 J/cm²)</td><td>Pode ser usado isoladamente a 660 nm, 4 J/cm² por campo</td><td>808–905 nm, 4 J/cm² por campo (parâmetro mais estudado nesta indicação)</td><td>Diodo duplo (ex.: 905 + 808 nm) aplicado simultaneamente sobre toda a área do campo de RT</td><td>2x/semana, da 1ª à última sessão de RT, aplicado 30–120 min antes</td><td>[6][10]</td></tr>
+            <tr><td>Radiodermatite com inflamação subcutânea estabelecida (posicionamento WALT)</td><td>Não é o comprimento de onda preferencial nesta indicação</td><td>810 nm, irradiância 10–150 mW/cm², fluência equivalente a 1–2 Einstein por campo (fótons, não J/cm² convencional)</td><td>Associação vermelho/IV não padronizada para este estágio</td><td>3–4x/semana por 5–6 semanas</td><td>[6]</td></tr>
+            <tr><td>Linfedema relacionado ao câncer</td><td>Sem dose padronizada publicada; usado sobre pele e trajetos linfáticos superficiais</td><td>Sem dose padronizada publicada; preferido para maior penetração em tecido subcutâneo fibrótico</td><td>Parâmetros heterogêneos entre serviços; dose deve ser adaptada à extensão da área e documentada por sessão</td><td>2–3x/semana, ciclos de várias semanas</td><td>[7][8]</td></tr>
+            <tr><td>Xerostomia, disgeusia, trismo (RT de cabeça e pescoço)</td><td>Aplicação intraoral/extraoral sobre glândulas salivares e ATM, dose não padronizada na literatura atual</td><td>Preferido para glândulas mais profundas (parótida) pela maior penetração tecidual</td><td>Associação vermelho/IV extrapolada do protocolo de mucosite (2–3 J/cm², máximo 6 J/cm² por ponto), sem validação específica para esta indicação</td><td>2–3x/semana</td><td>[4][9]</td></tr>
+            <tr><td>Neuropatia periférica induzida por quimioterapia (NPIQ), protocolo Teng et al.</td><td>658 nm, 8 mW: dose inicial de 1 J/ponto, com escalonamento para 2 J/ponto conforme tolerância</td><td>Não utilizado neste protocolo específico</td><td>Não se aplica (laser monocromático de baixa potência)</td><td>2x/semana por 6 semanas (12 sessões); 16 pontos em espaços interdigitais de mãos/pés + 10 pontos sobre dermátomos C6–T1 e L5–S1 bilaterais</td><td>[7]</td></tr>
+            <tr><td>NPIQ, protocolo NEUROLIGHT</td><td>Não utilizado neste protocolo</td><td>808 nm associado ao laser de 905 nm (classe IV), potência de pico 1,1 W (808 nm) e 25 W (905 nm pulsado), densidade de potência 0,168 W/cm²</td><td>Fluência de 6 J/cm² (melhor resposta em dor) ou 8 J/cm², aplicada bilateralmente na superfície palmar e plantar (spot de 150 cm²)</td><td>2x/semana por 3 semanas</td><td>[6][8][10]</td></tr>
+            <tr><td>NPIQ, protocolo Hsieh et al.</td><td>Não utilizado</td><td>GaAlAs 780 nm, 80 mW, 48 J/cm²</td><td>Não se aplica</td><td>3x/semana por 4 semanas</td><td>[6]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="nota"><b>Limites de segurança.</b> Para mucosite oral, o teto de 6 J/cm² por ponto foi estabelecido como margem de precaução, já que não há dados clínicos definindo um limite superior seguro; doses acima do ótimo podem ter efeito bifásico e reduzir o benefício terapêutico [4][9].</div>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">5</span>Técnica de Aplicação</h2>
+      <ul>
+        <li>Posicionar o paciente confortavelmente, com boa iluminação e acesso à área-alvo.</li>
+        <li>Higienizar a pele ou mucosa antes da aplicação; remover secreções, biofilme ou crostas quando presentes.</li>
+        <li>Na mucosite oral, aplicar o laser em pontos sucessivos sobre toda a superfície acometida (mucosa jugal, labial, ventre e dorso lingual, palato mole, orofaringe conforme protocolo), mantendo a ponteira em contato suave e perpendicular à superfície.</li>
+        <li>Na radiodermatite, tratar toda a área do campo de irradiação (não apenas a lesão visível), respeitando o intervalo recomendado antes da sessão de RT.</li>
+        <li>No linfedema, aplicar sobre trajetos linfáticos e áreas de fibrose, seguindo padrão de varredura ou pontos conforme o equipamento disponível.</li>
+        <li>Documentar comprimento de onda, potência, tempo de exposição por ponto/área, dose total (J/cm²) e número de pontos tratados em cada sessão.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">6</span>Reavaliação e Critérios de Ajuste</h2>
+      <ul>
+        <li>Reavaliar a cada sessão o grau de mucosite (escala OMS), da dermatite (RTOG/CTCAE) e a circunferência/volume do membro no linfedema.</li>
+        <li>Suspender ou reduzir a dose em caso de piora aguda, sinais de infecção secundária ou sangramento ativo não controlado na área.</li>
+        <li>Documentar resposta subjetiva (dor, capacidade de deglutição, prurido) e objetiva (fotografia padronizada, quando indicado) a cada 3–5 sessões.</li>
+        <li>Manter comunicação com a equipe de oncologia/radioterapia para ajuste conforme evolução do tratamento sistêmico.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">7</span>Registro em Prontuário</h2>
+      <ul>
+        <li>Diagnóstico oncológico e tratamento em curso (RT/QT/combinado), data da última sessão oncológica.</li>
+        <li>Sítio e grau da toxicidade antes e após cada sessão de PBM.</li>
+        <li>Parâmetros completos utilizados (comprimento de onda, potência, dose, número de pontos, tempo total).</li>
+        <li>Intercorrências e conduta adotada.</li>
+        <li>Assinatura e identificação do profissional responsável.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">8</span>Considerações Finais</h2>
+      <ul>
+        <li>Os parâmetros descritos refletem protocolos publicados e posicionamentos de sociedades (MASCC/ISOO, WALT), mas ainda há heterogeneidade entre estudos quanto a comprimento de onda ideal, dose e frequência, sobretudo para radiodermatite, linfedema, xerostomia e neuropatia.</li>
+        <li>A associação de comprimentos de onda vermelho e infravermelho é utilizada para atingir cromóforos e profundidades distintas, especialmente em protocolos de tratamento (não apenas prevenção) de mucosite estabelecida.</li>
+        <li>A individualização por fototipo cutâneo é recomendada, já que a pigmentação da pele pode alterar a absorção de cromóforos e a resposta biológica à PBM.</li>
+      </ul>
+    </section>
+
+    <section class="pop-sec">
+      <h2 class="pop-h"><span class="n">R</span>Referências</h2>
+      <div class="refs">
+        <ol>
+          <li>Proposal of a prophylactic photobiomodulation protocol for chemotherapy-induced oral and oropharyngeal mucositis: a randomized clinical trial. <span class="meta">Lasers in Medical Science, 2023. Heimlich FV, de Arruda JAA, Pereira NM, et al.</span></li>
+          <li>Systematic review of photobiomodulation for the management of oral mucositis in cancer patients and clinical practice guidelines. <span class="meta">Supportive Care in Cancer, 2019. Zadik Y, Arany PR, Fregnani ER, et al. (SR)</span></li>
+          <li>Low-level laser therapy/photobiomodulation in the management of side effects of chemoradiation therapy in head and neck cancer: part 2: proposed applications and treatment protocols. <span class="meta">Supportive Care in Cancer, 2016. Zecha JA, Raber-Durlacher JE, Nair RG, et al. (Review)</span></li>
+          <li>Low level laser therapy/photobiomodulation in the management of side effects of chemoradiation therapy in head and neck cancer: part 1: mechanisms of action, dosimetric, and safety considerations. <span class="meta">Supportive Care in Cancer, 2016. Zecha JA, Raber-Durlacher JE, Nair RG, et al. (Review)</span></li>
+          <li>Evaluating the efficacy of photobiomodulation therapy in the management of chemotherapy-induced peripheral neuropathy: a pilot trial (NEUROLIGHT trial). <span class="meta">Lasers in Medical Science, 2026. Claes M, Lodewijckx J, Robijns J, et al. (Recent, RCT)</span></li>
+          <li>Evaluating laser photobiomodulation for chemotherapy-induced peripheral neuropathy: a randomised phase II trial. <span class="meta">Supportive Care in Cancer, 2022. Teng C, Egger S, Blinman PL, Vardy JL. (RCT)</span></li>
+          <li>Interventions for Preventing Oral Mucositis in People Receiving Cancer Treatment: Photobiomodulation. <span class="meta">The Cochrane Database of Systematic Reviews, 2024. Lewis SR, Riley P, Deligianni E, et al.</span></li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="doc-footer">
+    <span><b>Bruna Arguelles</b> · Enfermagem Especializada em Feridas</span>
+    <span>POP · Fotobiomodulação em Oncologia</span>
+  </footer>
+</div>
+</div>
+
+<div class="toolbar" id="toolbar">
+  <a class="voltar" href="area-restrita.html">← Voltar</a>
+  <button id="btnPdf">⤓ Baixar PDF</button>
+</div>
+
+<script>
+  document.getElementById('btnPdf').addEventListener('click', function(){ window.print(); });
+</script>
+
+<script>
+(function(){
+  var SENHA = 'bruna2024';
+  var authed = false;
+  try { authed = sessionStorage.getItem('docs_auth') === '1'; } catch(e){}
+  var gate = document.getElementById('gate-login');
+  var app = document.getElementById('app-content');
+  if (authed){
+    gate.style.display = 'none';
+    app.style.display = 'block';
+  }
+  function tentar(){
+    var input = document.getElementById('gate-senha');
+    if (input.value === SENHA){
+      try { sessionStorage.setItem('docs_auth', '1'); } catch(e){}
+      gate.style.display = 'none';
+      app.style.display = 'block';
+    } else {
+      input.classList.add('erro');
+      document.getElementById('gate-erro').style.display = 'block';
+      input.value = '';
+      input.focus();
+    }
+  }
+  document.getElementById('gate-entrar').addEventListener('click', tentar);
+  document.getElementById('gate-senha').addEventListener('keydown', function(e){ if (e.key === 'Enter') tentar(); });
+})();
+</script>
+</body></html>
