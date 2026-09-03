@@ -53,6 +53,10 @@
   .fld::placeholder{ color:#5A7A6B66; font-style:italic; }
 
   section.block{ margin-top:14px; page-break-inside:avoid; }
+  .fase-toggle{ display:flex; align-items:center; gap:7px; font-size:8.5px; color:var(--salvia); letter-spacing:.04em; margin-bottom:8px; cursor:pointer; user-select:none; }
+  .fase-toggle input{ accent-color:var(--terracota); width:13px; height:13px; cursor:pointer; }
+  .fase-section.off > *:not(.fase-toggle){ display:none !important; }
+  .fase-section.off{ opacity:.5; }
   h2.sec{
     font-family:var(--serif-display); font-size:14.5px; font-weight:600; color:var(--cipreste);
     margin:0 0 6px; display:flex; align-items:center; gap:8px; letter-spacing:.01em;
@@ -167,6 +171,8 @@
     .resumo-area:empty::before, .fase-body:empty::before, .objetivo:empty::before, .declaracao:empty::before{ content:none !important; }
     .opt input{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     .declaracao{ background:transparent !important; }
+    .fase-toggle{ display:none !important; }
+    .fase-section.off{ display:none !important; }
   }
   @media screen and (max-width:760px){
     body{ padding:12px 12px 84px; }
@@ -248,7 +254,8 @@
           <div class="resumo-area" contenteditable="true" data-k="resumo" data-placeholder="Explique em linguagem simples, sem termos técnicos...">Ferida na perna, com alguns meses de evolução, associada a uma circulação prejudicada (já foi feita uma cirurgia recente para melhorar o fluxo de sangue). No momento a ferida está com sinais de infecção, por isso o acompanhamento precisa ser mais próximo nesta fase.</div>
         </section>
 
-        <section class="block">
+        <section class="block fase-section" data-fase="fase1">
+          <label class="fase-toggle"><input type="checkbox" data-k="fase1_incluir" checked><span>Incluir esta fase neste documento</span></label>
           <h2 class="sec fase"><span class="n">1</span><input class="fase-nome" type="text" data-k="fase1_nome" value="Fase 1, Controle da infecção"><input class="periodo" type="text" data-k="fase1_periodo" value="Semanas 1 a 2"></h2>
           <div class="objetivo" contenteditable="true" data-k="fase1_objetivo" data-placeholder="Objetivo desta fase...">Diminuir a infecção, limpar a ferida e controlar a secreção.</div>
           <div class="fase-body" contenteditable="true" data-k="fase1_condutas" data-placeholder="O que será feito nesta fase...">
@@ -276,7 +283,8 @@
           </div>
         </section>
 
-        <section class="block">
+        <section class="block fase-section" data-fase="fase2">
+          <label class="fase-toggle"><input type="checkbox" data-k="fase2_incluir" checked><span>Incluir esta fase neste documento</span></label>
           <h2 class="sec fase"><span class="n">2</span><input class="fase-nome" type="text" data-k="fase2_nome" value="Fase 2, Redução da secreção"><input class="periodo" type="text" data-k="fase2_periodo" value="Semanas 3 a 4, se a evolução for boa"></h2>
           <div class="objetivo" contenteditable="true" data-k="fase2_objetivo" data-placeholder="Objetivo desta fase...">Continuar controlando a secreção e estimular o início da cicatrização.</div>
           <div class="fase-body" contenteditable="true" data-k="fase2_condutas" data-placeholder="O que será feito nesta fase...">
@@ -299,7 +307,8 @@
           </div>
         </section>
 
-        <section class="block">
+        <section class="block fase-section" data-fase="fase3">
+          <label class="fase-toggle"><input type="checkbox" data-k="fase3_incluir" checked><span>Incluir esta fase neste documento</span></label>
           <h2 class="sec fase"><span class="n">3</span><input class="fase-nome" type="text" data-k="fase3_nome" value="Fase 3, Fechamento"><input class="periodo" type="text" data-k="fase3_periodo" value="A partir da estabilização"></h2>
           <div class="objetivo" contenteditable="true" data-k="fase3_objetivo" data-placeholder="Quando esta fase começa...">Começa quando o médico confirmar que a circulação da perna está adequada.</div>
           <div class="fase-body" contenteditable="true" data-k="fase3_condutas" data-placeholder="O que será feito nesta fase...">
@@ -356,7 +365,7 @@
         </section>
 
         <div class="sign-wrap">
-          <div class="declaracao" contenteditable="true" data-k="declaracao" data-placeholder="Declaração de ciência do paciente/família...">Declaro estar ciente do plano de cuidados acima, das fases, valores e da metodologia de precificação descrita, e de acordo com o acompanhamento proposto.</div>
+          <div class="declaracao" contenteditable="true" data-k="declaracao" data-placeholder="Declaração de ciência do paciente/família...">Declaro estar ciente do plano de cuidados acima, das fases, valores e da metodologia de precificação descrita, e de acordo com o acompanhamento proposto. Estou ciente também de que os prazos e fases descritos são estimativas de tratamento: o tempo real de reparo depende das condições de saúde do paciente, da resposta individual ao tratamento e de fatores clínicos associados, podendo ser maior ou exigir ajustes ao longo do acompanhamento.</div>
           <div class="place-date">
             <input class="fld cidade" type="text" data-k="cidade_ass" value="Juiz de Fora/MG">
             <span>,</span>
@@ -394,7 +403,7 @@
   </div>
 
   <div class="toolbar">
-    <span class="msg">Preencha os campos e clique em <b>Baixar PDF</b>.</span>
+    <span class="msg">Marque só as fases que quer incluir e clique em <b>Baixar PDF</b>.</span>
     <button class="btn-pdf" id="btnPdf">⤓ Baixar PDF</button>
     <button class="btn-clear" id="btnClear">Limpar campos</button>
   </div>
@@ -419,6 +428,17 @@
         if (el.type === 'checkbox') el.checked = !!saved[k];
         else if (el.isContentEditable) el.innerHTML = saved[k];
         else el.value = saved[k];
+      });
+
+      // checkbox de cada fase decide se ela sai no documento (tela e PDF)
+      ['fase1','fase2','fase3'].forEach(function(fase){
+        var incluir = document.querySelector('[data-k="' + fase + '_incluir"]');
+        var sec = document.querySelector('.fase-section[data-fase="' + fase + '"]');
+        if (incluir && sec){
+          var aplicar = function(){ sec.classList.toggle('off', !incluir.checked); };
+          aplicar();
+          incluir.addEventListener('change', aplicar);
+        }
       });
 
       // em cada fase, as duas modalidades funcionam como opção única (marcar uma desmarca a outra)
