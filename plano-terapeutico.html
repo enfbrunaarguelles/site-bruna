@@ -100,7 +100,9 @@
   .fase-body b{ color:var(--cipreste); }
   .fase-body:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; font-style:italic; }
 
-  .fase-meta{ display:flex; gap:20px; flex-wrap:wrap; margin-top:8px; padding-top:7px; border-top:1px dotted var(--line); page-break-inside:avoid; }
+  .fase-valores{ page-break-inside:avoid; margin-top:8px; }
+  .fase-valores-label{ font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin:0 0 4px; opacity:.85; }
+  .fase-meta{ display:flex; gap:20px; flex-wrap:wrap; margin-top:0; padding-top:7px; border-top:1px dotted var(--line); page-break-inside:avoid; }
   .fase-meta .fm{ display:flex; flex-direction:column; flex:1; min-width:150px; }
   .fase-meta .lab{ font-size:7.6px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin-bottom:3px; }
   .fase-meta input{
@@ -272,16 +274,19 @@
               <li>Reforço o remédio para dor antes da troca do curativo, já que a dor tem sido forte, e vou conversar com o médico sobre ajustar o remédio para esse tipo de dor (a que dá sensação de queimação).</li>
             </ul>
           </div>
-          <div class="fase-meta">
-            <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase1_frequencia" value="Diária no início, espaçando conforme a melhora"></div>
-            <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase1_valor" value="R$ 340,00"></div>
-            <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase1_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase1_pacote8" value="R$ 2.450,00 (estimativa)"></div>
-          </div>
-          <div class="modalidade">
-            <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
-            <label class="opt"><input type="checkbox" data-k="fase1_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
-            <label class="opt"><input type="checkbox" data-k="fase1_mod_parcial"><span>Eu realizo 2 desbridamentos por semana, presenciais, e os demais cuidados são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
-            <div class="fm"><span class="lab">Valor (2x por semana comigo)</span><input class="valor" type="text" data-k="fase1_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
+          <div class="fase-valores">
+            <p class="fase-valores-label" data-mirror="fase1_nome"></p>
+            <div class="fase-meta">
+              <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase1_frequencia" value="Diária no início, espaçando conforme a melhora"></div>
+              <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase1_valor" value="R$ 340,00"></div>
+              <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase1_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase1_pacote8" value="R$ 2.450,00 (estimativa)"></div>
+            </div>
+            <div class="modalidade">
+              <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
+              <label class="opt"><input type="checkbox" data-k="fase1_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
+              <label class="opt"><input type="checkbox" data-k="fase1_mod_parcial"><span>Eu realizo 2 desbridamentos por semana, presenciais, e os demais cuidados são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
+              <div class="fm"><span class="lab">Valor (2x por semana comigo)</span><input class="valor" type="text" data-k="fase1_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
+            </div>
           </div>
         </section>
 
@@ -296,16 +301,19 @@
               <li>Reavalio a dor a cada visita, antes e depois da troca.</li>
             </ul>
           </div>
-          <div class="fase-meta">
-            <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase2_frequencia" value="2 a 3 vezes por semana"></div>
-            <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase2_valor" value="R$ 190,00 a R$ 290,00"></div>
-            <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase2_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase2_pacote8" value="R$ 1.550,00"></div>
-          </div>
-          <div class="modalidade">
-            <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
-            <label class="opt"><input type="checkbox" data-k="fase2_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
-            <label class="opt"><input type="checkbox" data-k="fase2_mod_parcial"><span>Eu faço 1 visita por semana, e os demais cuidados são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
-            <div class="fm"><span class="lab">Valor (1x por semana comigo)</span><input class="valor" type="text" data-k="fase2_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
+          <div class="fase-valores">
+            <p class="fase-valores-label" data-mirror="fase2_nome"></p>
+            <div class="fase-meta">
+              <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase2_frequencia" value="2 a 3 vezes por semana"></div>
+              <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase2_valor" value="R$ 190,00 a R$ 290,00"></div>
+              <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase2_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase2_pacote8" value="R$ 1.550,00"></div>
+            </div>
+            <div class="modalidade">
+              <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
+              <label class="opt"><input type="checkbox" data-k="fase2_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
+              <label class="opt"><input type="checkbox" data-k="fase2_mod_parcial"><span>Eu faço 1 visita por semana, e os demais cuidados são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
+              <div class="fm"><span class="lab">Valor (1x por semana comigo)</span><input class="valor" type="text" data-k="fase2_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
+            </div>
           </div>
         </section>
 
@@ -320,16 +328,19 @@
               <li>Fico atenta a qualquer sinal de que a infecção esteja voltando.</li>
             </ul>
           </div>
-          <div class="fase-meta">
-            <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase3_frequencia" value="1 a 2 vezes por semana"></div>
-            <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase3_valor" value="R$ 190,00 a R$ 290,00"></div>
-            <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase3_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase3_pacote8" value="R$ 1.550,00"></div>
-          </div>
-          <div class="modalidade">
-            <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
-            <label class="opt"><input type="checkbox" data-k="fase3_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
-            <label class="opt"><input type="checkbox" data-k="fase3_mod_parcial"><span>Eu faço uma reavaliação quinzenal, e os cuidados do dia a dia são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
-            <div class="fm"><span class="lab">Valor (reavaliação quinzenal)</span><input class="valor" type="text" data-k="fase3_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
+          <div class="fase-valores">
+            <p class="fase-valores-label" data-mirror="fase3_nome"></p>
+            <div class="fase-meta">
+              <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase3_frequencia" value="1 a 2 vezes por semana"></div>
+              <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase3_valor" value="R$ 190,00 a R$ 290,00"></div>
+              <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase3_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase3_pacote8" value="R$ 1.550,00"></div>
+            </div>
+            <div class="modalidade">
+              <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
+              <label class="opt"><input type="checkbox" data-k="fase3_mod_completa" checked><span>Eu realizo todos os curativos desta fase, na frequência acima.</span></label>
+              <label class="opt"><input type="checkbox" data-k="fase3_mod_parcial"><span>Eu faço uma reavaliação quinzenal, e os cuidados do dia a dia são feitos pela família em casa, seguindo minha orientação e os materiais que eu prescrevo.</span></label>
+              <div class="fm"><span class="lab">Valor (reavaliação quinzenal)</span><input class="valor" type="text" data-k="fase3_mod_parcial_valor" placeholder="R$ 0,00 por visita"></div>
+            </div>
           </div>
         </section>
 
@@ -430,6 +441,17 @@
         if (el.type === 'checkbox') el.checked = !!saved[k];
         else if (el.isContentEditable) el.innerHTML = saved[k];
         else el.value = saved[k];
+      });
+
+      // espelha o nome da fase num rotulo pequeno junto do valor, pra nao ficar sem contexto se a pagina quebrar ali
+      ['fase1','fase2','fase3'].forEach(function(fase){
+        var nomeInput = document.querySelector('[data-k="' + fase + '_nome"]');
+        var label = document.querySelector('.fase-valores-label[data-mirror="' + fase + '_nome"]');
+        if (nomeInput && label){
+          var espelhar = function(){ label.textContent = nomeInput.value; };
+          espelhar();
+          nomeInput.addEventListener('input', espelhar);
+        }
       });
 
       // checkbox de cada fase decide se ela sai no documento (tela e PDF)
