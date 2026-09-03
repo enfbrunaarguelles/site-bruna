@@ -63,6 +63,11 @@
     width:17px; height:17px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex:none;
   }
   h2.sec.fase .n{ background:var(--terracota); }
+  h2.sec .fase-nome{
+    flex:1; min-width:120px; border:none; outline:none; border-bottom:1px dotted transparent;
+    background:transparent; font:inherit; color:inherit; letter-spacing:inherit; padding:0 0 2px;
+  }
+  h2.sec .fase-nome:hover, h2.sec .fase-nome:focus{ border-bottom-color:var(--field-line); }
   h2.sec .periodo{
     margin-left:auto; font-size:8.2px; letter-spacing:.06em; text-transform:uppercase; color:var(--salvia); font-weight:600;
     border:none; border-bottom:1px dotted var(--field-line); background:transparent; font-family:var(--serif-body);
@@ -99,6 +104,10 @@
   }
   .fase-meta input::placeholder{ color:#5A7A6B66; font-style:italic; }
   .fase-meta input.valor{ font-weight:600; color:var(--cipreste); }
+  .fase-meta .lab .pacote-n{
+    width:2ch; text-align:center; border:none; outline:none; border-bottom:1px dotted var(--field-line);
+    background:transparent; font:inherit; color:var(--terracota); font-weight:700; padding:0;
+  }
 
   .modalidade{ margin-top:9px; padding-top:8px; border-top:1px dotted var(--line); }
   .modalidade-titulo{ font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin:0 0 6px; }
@@ -124,8 +133,10 @@
   .place-date .fld.cidade{ flex:0 1 150px; }
   .place-date .fld.sm{ flex:0 0 42px; text-align:center; }
   .place-date .fld.md{ flex:0 0 88px; text-align:center; }
-  .signs{ display:flex; justify-content:flex-start; margin-top:12mm; }
-  .sig{ text-align:center; width:230px; }
+  .declaracao{ font-size:9.8px; line-height:1.6; color:var(--ink-soft); outline:none; margin-top:10px; padding:9px 13px; background:#5A7A6B12; }
+  .declaracao:empty::before{ content:attr(data-placeholder); color:#5A7A6B66; font-style:italic; }
+  .signs{ display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-top:12mm; }
+  .sig{ text-align:center; flex:1; min-width:200px; }
   .sig .sig-stamp{ display:block; width:104px; height:auto; margin:0 auto -18px; position:relative; z-index:1; pointer-events:none; mix-blend-mode:multiply; }
   .sig .line{ border-top:1px solid var(--cipreste); margin-bottom:4px; }
   .sig .role{ font-size:9.2px; color:var(--cipreste); font-weight:600; letter-spacing:.02em; }
@@ -153,8 +164,9 @@
     .toolbar{ display:none !important; }
     .fld, .resumo-area, .fase-body, .objetivo, .fase-meta input, h2.sec .periodo{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
     .fld::placeholder, .fase-meta input::placeholder, h2.sec .periodo::placeholder{ color:transparent !important; }
-    .resumo-area:empty::before, .fase-body:empty::before, .objetivo:empty::before{ content:none !important; }
+    .resumo-area:empty::before, .fase-body:empty::before, .objetivo:empty::before, .declaracao:empty::before{ content:none !important; }
     .opt input{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .declaracao{ background:transparent !important; }
   }
   @media screen and (max-width:760px){
     body{ padding:12px 12px 84px; }
@@ -237,7 +249,7 @@
         </section>
 
         <section class="block">
-          <h2 class="sec fase"><span class="n">1</span>Fase 1, Controle da infecção<input class="periodo" type="text" data-k="fase1_periodo" value="Semanas 1 a 2"></h2>
+          <h2 class="sec fase"><span class="n">1</span><input class="fase-nome" type="text" data-k="fase1_nome" value="Fase 1, Controle da infecção"><input class="periodo" type="text" data-k="fase1_periodo" value="Semanas 1 a 2"></h2>
           <div class="objetivo" contenteditable="true" data-k="fase1_objetivo" data-placeholder="Objetivo desta fase...">Diminuir a infecção, limpar a ferida e controlar a secreção.</div>
           <div class="fase-body" contenteditable="true" data-k="fase1_condutas" data-placeholder="O que será feito nesta fase...">
             <ul>
@@ -254,7 +266,7 @@
           <div class="fase-meta">
             <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase1_frequencia" value="Diária no início, espaçando conforme a melhora"></div>
             <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase1_valor" value="R$ 340,00"></div>
-            <div class="fm"><span class="lab">Pacote de 8 sessões</span><input class="valor" type="text" data-k="fase1_pacote8" value="R$ 2.450,00 (estimativa)"></div>
+            <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase1_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase1_pacote8" value="R$ 2.450,00 (estimativa)"></div>
           </div>
           <div class="modalidade">
             <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
@@ -265,7 +277,7 @@
         </section>
 
         <section class="block">
-          <h2 class="sec fase"><span class="n">2</span>Fase 2, Redução da secreção<input class="periodo" type="text" data-k="fase2_periodo" value="Semanas 3 a 4, se a evolução for boa"></h2>
+          <h2 class="sec fase"><span class="n">2</span><input class="fase-nome" type="text" data-k="fase2_nome" value="Fase 2, Redução da secreção"><input class="periodo" type="text" data-k="fase2_periodo" value="Semanas 3 a 4, se a evolução for boa"></h2>
           <div class="objetivo" contenteditable="true" data-k="fase2_objetivo" data-placeholder="Objetivo desta fase...">Continuar controlando a secreção e estimular o início da cicatrização.</div>
           <div class="fase-body" contenteditable="true" data-k="fase2_condutas" data-placeholder="O que será feito nesta fase...">
             <ul>
@@ -277,7 +289,7 @@
           <div class="fase-meta">
             <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase2_frequencia" value="2 a 3 vezes por semana"></div>
             <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase2_valor" value="R$ 190,00 a R$ 290,00"></div>
-            <div class="fm"><span class="lab">Pacote de 8 sessões</span><input class="valor" type="text" data-k="fase2_pacote8" value="R$ 1.550,00"></div>
+            <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase2_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase2_pacote8" value="R$ 1.550,00"></div>
           </div>
           <div class="modalidade">
             <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
@@ -288,7 +300,7 @@
         </section>
 
         <section class="block">
-          <h2 class="sec fase"><span class="n">3</span>Fase 3, Fechamento<input class="periodo" type="text" data-k="fase3_periodo" value="A partir da estabilização"></h2>
+          <h2 class="sec fase"><span class="n">3</span><input class="fase-nome" type="text" data-k="fase3_nome" value="Fase 3, Fechamento"><input class="periodo" type="text" data-k="fase3_periodo" value="A partir da estabilização"></h2>
           <div class="objetivo" contenteditable="true" data-k="fase3_objetivo" data-placeholder="Quando esta fase começa...">Começa quando o médico confirmar que a circulação da perna está adequada.</div>
           <div class="fase-body" contenteditable="true" data-k="fase3_condutas" data-placeholder="O que será feito nesta fase...">
             <ul>
@@ -300,7 +312,7 @@
           <div class="fase-meta">
             <div class="fm"><span class="lab">Frequência de avaliação</span><input type="text" data-k="fase3_frequencia" value="1 a 2 vezes por semana"></div>
             <div class="fm"><span class="lab">Valor por visita</span><input class="valor" type="text" data-k="fase3_valor" value="R$ 190,00 a R$ 290,00"></div>
-            <div class="fm"><span class="lab">Pacote de 8 sessões</span><input class="valor" type="text" data-k="fase3_pacote8" value="R$ 1.550,00"></div>
+            <div class="fm"><span class="lab">Pacote de <input class="pacote-n" type="text" data-k="fase3_pacote_n" value="8"> sessões</span><input class="valor" type="text" data-k="fase3_pacote8" value="R$ 1.550,00"></div>
           </div>
           <div class="modalidade">
             <p class="modalidade-titulo">Como dividir esse cuidado nesta fase</p>
@@ -344,6 +356,7 @@
         </section>
 
         <div class="sign-wrap">
+          <div class="declaracao" contenteditable="true" data-k="declaracao" data-placeholder="Declaração de ciência do paciente/família...">Declaro estar ciente do plano de cuidados acima, das fases, valores e da metodologia de precificação descrita, e de acordo com o acompanhamento proposto.</div>
           <div class="place-date">
             <input class="fld cidade" type="text" data-k="cidade_ass" value="Juiz de Fora/MG">
             <span>,</span>
@@ -360,6 +373,11 @@
               <div class="line"></div>
               <div class="role">Bruna Arguelles, Enfermeira</div>
               <div class="hint">COREN/MG nº 761268-ENF, responsável técnica</div>
+            </div>
+            <div class="sig">
+              <div class="line"></div>
+              <div class="role">Paciente / Familiar responsável</div>
+              <div class="hint">Nome e assinatura</div>
             </div>
           </div>
         </div>
