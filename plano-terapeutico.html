@@ -165,7 +165,8 @@
   @page{ size:A4; margin:0; }
   @media print{
     body{ background:#fff; padding:0; }
-    .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; }
+    .page{ box-shadow:none; margin:0; width:210mm; min-height:297mm; padding:0; }
+    .page::after{ content:none; }
     .toolbar{ display:none !important; }
     .fld, .resumo-area, .fase-body, .objetivo, .fase-meta input, h2.sec .periodo{ border-bottom-color:var(--field-line) !important; background-color:transparent !important; }
     .fld::placeholder, .fase-meta input::placeholder, h2.sec .periodo::placeholder{ color:transparent !important; }
@@ -174,7 +175,25 @@
     .declaracao{ background:transparent !important; }
     .fase-toggle{ display:none !important; }
     .fase-section.off{ display:none !important; }
+
+    /* cabecalho e rodape clonados pra fora do card, repetem em toda pagina impressa */
+    #app-content > .page header, #app-content > .page footer{ display:none !important; }
+    header.print-fixed-header{
+      display:flex !important; position:fixed; top:0; left:0; right:0;
+      align-items:flex-end; justify-content:space-between; gap:18px;
+      padding:13mm 19mm 9px; border-bottom:1.5px solid var(--cipreste);
+      background:#fff; z-index:9999;
+    }
+    header.print-fixed-header::before{ content:""; position:absolute; left:0; right:0; top:0; height:5mm; background:var(--cipreste); }
+    footer.print-fixed-footer{
+      display:flex !important; position:fixed; left:0; right:0; bottom:0;
+      justify-content:space-between; align-items:center;
+      padding:7px 19mm 9mm; border-top:1px solid var(--cipreste);
+      background:#fff; font-size:7.8px; color:var(--ink-soft); letter-spacing:.03em; z-index:9999;
+    }
+    .inner{ padding:33mm 19mm 15mm !important; }
   }
+  .print-fixed-header, .print-fixed-footer{ display:none; }
   @media screen and (max-width:760px){
     body{ padding:12px 12px 84px; }
     .page{ width:100%; min-height:0; padding:8mm 6mm; }
@@ -465,6 +484,24 @@
         el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', persist);
       });
       persist();
+
+      // clona cabeçalho e rodapé pra fora do card só na hora de imprimir, pra repetir em toda página
+      function criarCloneImpressao(){
+        var original = document.querySelector('#app-content > .page header');
+        var originalFooter = document.querySelector('#app-content > .page footer');
+        if (!original || !originalFooter) return;
+        var h = original.cloneNode(true);
+        h.classList.add('print-fixed-header');
+        var f = originalFooter.cloneNode(true);
+        f.classList.add('print-fixed-footer');
+        document.body.appendChild(h);
+        document.body.appendChild(f);
+      }
+      function removerCloneImpressao(){
+        document.querySelectorAll('.print-fixed-header, .print-fixed-footer').forEach(function(el){ el.remove(); });
+      }
+      window.addEventListener('beforeprint', criarCloneImpressao);
+      window.addEventListener('afterprint', removerCloneImpressao);
 
       document.getElementById('btnPdf').addEventListener('click', function(){ persist(); window.print(); });
       document.getElementById('btnClear').addEventListener('click', function(){
