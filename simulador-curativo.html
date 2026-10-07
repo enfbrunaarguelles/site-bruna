@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulador de curativo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: ferramenta em uma coluna, pensada para iPad. Foto e marcação no alto, caixas de texto, passos e apresentação em tela cheia. */
+:root{
+  --bg:#F4F2EC; --surface:#FFFFFF; --ink:#1F2B26; --ink-soft:#4A5A53; --line:#D5D9D3;
+  --brand:#2A3A33; --brand-ink:#F7F2E8; --accent:#B9573F; --accent-ink:#FFFFFF;
+  --leito:#D6402F; --borda:#E8B93A; --peri:#3A78C2;
+  --font-display:"Cormorant Garamond", Georgia, serif;
+  --font-body:"Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A17; --surface:#1E2622; --ink:#ECEFEA; --ink-soft:#A9B5AE; --line:#34413B;
+    --brand:#0F1613; --brand-ink:#F2EFE6; --accent:#E3896F; --accent-ink:#1A1210;
+    --leito:#F0604F; --borda:#EDC253; --peri:#6FA6E6; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A17; --surface:#1E2622; --ink:#ECEFEA; --ink-soft:#A9B5AE; --line:#34413B;
+  --brand:#0F1613; --brand-ink:#F2EFE6; --accent:#E3896F; --accent-ink:#1A1210;
+  --leito:#F0604F; --borda:#EDC253; --peri:#6FA6E6; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.5;padding-inline:16px;padding-block:20px 48px;-webkit-text-size-adjust:100%}
+.wrap{max-width:960px;margin-inline:auto;display:flex;flex-direction:column;gap:20px}
+header{display:flex;flex-direction:column;gap:4px}
+h1{font-family:var(--font-display);font-size:2.3rem;line-height:1.1;margin:0;text-wrap:balance}
+header p{margin:0;color:var(--ink-soft);max-width:62ch}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+h2{font-size:1.1rem;margin:0;letter-spacing:.02em}
+h3{font-size:1rem;margin:0}
+.hint{margin:0;color:var(--ink-soft);font-size:.92rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button,select,input,textarea{font:inherit;color:var(--ink)}
+input[type=text],select,textarea{font-size:16px}
+button{min-height:48px;padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:hover{border-color:var(--ink-soft)}
+button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.45}
+button.primary{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);font-weight:700}
+.tool{display:inline-flex;align-items:center;gap:8px;font-weight:700}
+.tool[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.sw{width:14px;height:14px;border-radius:50%;display:inline-block;border:2px solid var(--surface)}
+.sw.leito{background:var(--leito)}.sw.borda{background:var(--borda)}.sw.peri{background:var(--peri)}
+.sw.seta{background:#fff;outline:2px solid #2A3A33}
+.sw.txt{background:var(--brand);border-radius:3px}
+.file{display:inline-flex;align-items:center;min-height:48px;padding:8px 16px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font-weight:700;cursor:pointer;position:relative}
+.file input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px}
+.file:focus-within{outline:3px solid var(--accent);outline-offset:2px}
+.stage{background:#101512;border-radius:10px;overflow:hidden;line-height:0;touch-action:none}
+canvas{display:block;width:100%;height:auto;max-width:100%;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.slider{display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--ink-soft)}
+.slider input[type=range]{width:150px;min-height:32px}
+.slider input[type=checkbox]{width:22px;height:22px}
+.steps{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.step{display:grid;grid-template-columns:auto 1fr auto;gap:8px 10px;align-items:start;border:1px solid var(--line);border-radius:10px;padding:10px}
+.step .n{font-weight:800;color:var(--accent);padding-top:12px;min-width:1.2em}
+.step .fields{display:flex;flex-direction:column;gap:8px;min-width:0}
+.field{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);min-height:48px}
+textarea.field{resize:vertical;min-height:76px}
+.tbox{border:1px dashed var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.lbl{display:flex;flex-direction:column;gap:4px;font-size:.88rem;color:var(--ink-soft);min-width:0}
+.note{font-size:.88rem;color:var(--ink-soft)}
+#outImg{max-width:100%;border-radius:10px;border:1px solid var(--line)}
+/* apresentação */
+#show{position:fixed;inset:0;background:#0E1311;color:#F2EFE6;display:flex;flex-direction:column;z-index:20;padding-top:env(safe-area-inset-top,0px)}
+#show .top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px}
+#show .top button{background:transparent;color:#F2EFE6;border-color:#3b4a43}
+#show .view{flex:1;min-height:0;position:relative;padding:0 12px;overflow:hidden}
+#show canvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:8px;width:auto;max-width:none}
+#show .cap{padding:10px 16px 2px;display:flex;flex-direction:column;gap:2px}
+#show .cap .t{font-family:var(--font-display);font-size:1.8rem;line-height:1.1;font-weight:700}
+#show .cap .d{font-size:1.15rem;color:#D3DBD5;max-width:72ch}
+#show .nav{display:flex;gap:10px;padding:10px 16px calc(14px + env(safe-area-inset-bottom,0px))}
+#show .nav button{flex:1;min-height:56px;font-weight:800;font-size:1.1rem;background:#1E2A25;color:#F2EFE6;border-color:#3b4a43}
+#show .nav button.next{background:#C97862;color:#1A1210;border-color:#C97862}
+#show .dots{display:flex;gap:6px;justify-content:center;padding-bottom:4px}
+#show .dots i{width:8px;height:8px;border-radius:50%;background:#3b4a43}
+#show .dots i.on{background:#C97862}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header>
+  <h1>Simulador de curativo</h1>
+  <p>Carregue a foto da ferida, pinte as áreas, coloque caixas de texto com o nome das áreas e dos produtos e apresente o curativo passo a passo na consulta online. A foto fica só no seu aparelho.</p>
+</header>
+
+<section aria-labelledby="h-foto">
+  <h2 id="h-foto">1. Foto e marcação</h2>
+  <div class="row">
+    <label class="file" for="file">Escolher foto<input id="file" type="file" accept="image/*"></label>
+    <span class="note" id="origem">Exemplo ilustrativo carregado. Escolha a foto do paciente para marcar.</span>
+  </div>
+  <div class="row" role="group" aria-label="Ferramentas de marcação">
+    <button class="tool" id="t-leito" aria-pressed="false" type="button"><span class="sw leito"></span>Leito</button>
+    <button class="tool" id="t-borda" aria-pressed="false" type="button"><span class="sw borda"></span>Borda</button>
+    <button class="tool" id="t-peri" aria-pressed="false" type="button"><span class="sw peri"></span>Perilesão</button>
+    <button class="tool" id="t-seta" aria-pressed="false" type="button"><span class="sw seta"></span>Seta</button>
+    <button class="tool" id="t-borracha" aria-pressed="false" type="button">Borracha</button>
+    <button class="tool" id="t-mover" aria-pressed="true" type="button"><span class="sw txt"></span>Mover texto</button>
+  </div>
+  <div class="row">
+    <label class="slider" for="brush">Pincel <input id="brush" type="range" min="6" max="60" value="22"></label>
+    <button id="undo" type="button">Desfazer</button>
+    <button id="clear" type="button">Limpar tudo</button>
+  </div>
+  <div class="stage"><canvas id="cv" aria-label="Foto da ferida com as áreas e textos marcados"></canvas></div>
+  <p class="hint">Escolha uma cor e pinte a área com o dedo ou a Apple Pencil. Para arrastar uma caixa de texto, use "Mover texto" e toque na caixa.</p>
+</section>
+
+<section aria-labelledby="h-txt">
+  <h2 id="h-txt">2. Caixas de texto</h2>
+  <p class="hint">Toque em um nome de área ou escreva o produto. A caixa aparece na foto: arraste para o lugar certo.</p>
+  <div class="row" role="group" aria-label="Nomes de área">
+    <button type="button" id="add-leito"><span class="sw leito"></span> + Leito</button>
+    <button type="button" id="add-borda"><span class="sw borda"></span> + Borda</button>
+    <button type="button" id="add-peri"><span class="sw peri"></span> + Perilesão</button>
+  </div>
+  <div class="row">
+    <input class="field" type="text" id="newText" placeholder="Produto ou texto, por exemplo: Hidrogel" aria-label="Texto da nova caixa" style="flex:1;min-width:200px;width:auto">
+    <button class="primary" type="button" id="addText">Adicionar caixa</button>
+  </div>
+  <div class="tbox" id="lblPanel" hidden>
+    <h3>Caixa selecionada</h3>
+    <div class="grid2">
+      <label class="lbl" for="lblText">Texto<input class="field" type="text" id="lblText"></label>
+      <label class="lbl" for="lblColor">Cor<select class="field" id="lblColor">
+        <option value="produto">Produto (verde)</option><option value="leito">Leito (vermelho)</option><option value="borda">Borda (amarelo)</option><option value="peri">Perilesão (azul)</option><option value="branco">Branco</option></select></label>
+      <label class="lbl" for="lblStep">Aparece em<select class="field" id="lblStep"></select></label>
+      <label class="lbl" for="lblSize">Tamanho<input type="range" id="lblSize" min="14" max="64" value="28" style="min-height:44px"></label>
+    </div>
+    <div class="row"><button type="button" id="lblDel">Remover caixa</button><button type="button" id="lblDone">Pronto</button></div>
+  </div>
+  <p class="hint" id="lblEmpty">Nenhuma caixa selecionada. Toque em uma caixa na foto (com "Mover texto") para editar.</p>
+</section>
+
+<section aria-labelledby="h-passos">
+  <h2 id="h-passos">3. Passos do curativo</h2>
+  <p class="hint">Cada passo destaca uma área da foto. Edite os textos conforme a prescrição do paciente.</p>
+  <ol class="steps" id="steps"></ol>
+  <div class="row"><button id="addStep" type="button">Adicionar passo</button><button id="resetSteps" type="button">Voltar aos passos padrão</button></div>
+</section>
+
+<section aria-labelledby="h-apr">
+  <h2 id="h-apr">4. Apresentar na consulta</h2>
+  <p class="hint">Abre em tela cheia, com botões grandes para avançar. Compartilhe a tela na chamada.</p>
+  <div class="row">
+    <button class="primary" id="present" type="button">Apresentar passo a passo</button>
+    <label class="slider" for="showArrows"><input type="checkbox" id="showArrows" checked> Setas</label>
+    <label class="slider" for="showTexts"><input type="checkbox" id="showTexts" checked> Textos</label>
+    <button id="makeImg" type="button">Gerar imagem da marcação</button>
+  </div>
+  <div id="outBox" hidden>
+    <p class="hint">Segure a imagem para salvar no aparelho.</p>
+    <img id="outImg" alt="Foto da ferida com a marcação">
+  </div>
+</section>
+</div>
+
+<div id="show" hidden role="dialog" aria-modal="true" aria-label="Apresentação do curativo">
+  <div class="top"><span id="sCount">Passo 1 de 6</span><button id="sClose" type="button">Fechar</button></div>
+  <div class="view" id="sView"><canvas id="cv2" aria-label="Área em destaque neste passo"></canvas></div>
+  <div class="cap"><div class="t" id="sTitle"></div><div class="d" id="sText"></div></div>
+  <div class="dots" id="sDots"></div>
+  <div class="nav"><button id="sPrev" type="button">Anterior</button><button class="next" id="sNext" type="button">Próximo</button></div>
+</div>
+
+<script>
+(function(){
+  var COLORS={leito:'#D6402F',borda:'#E8B93A',peri:'#3A78C2'};
+  var NAMES={leito:'Leito',borda:'Borda',peri:'Perilesão',todas:'Toda a ferida',nenhuma:'Sem destaque'};
+  var LBL={leito:{bg:'#D6402F',fg:'#FFFFFF'},borda:{bg:'#E8B93A',fg:'#1F2B26'},peri:{bg:'#3A78C2',fg:'#FFFFFF'},produto:{bg:'#2A3A33',fg:'#F7F2E8'},branco:{bg:'#FFFFFF',fg:'#1F2B26'}};
+  var uid=0; function nid(){return 'i'+(++uid)}
+  var DEFAULT_STEPS=[
+    {title:'Limpar o leito',area:'leito',text:'Irrigar com soro fisiológico 0,9% morno, em jato, do centro para a borda.'},
+    {title:'Limpar a pele ao redor',area:'peri',text:'Limpar a pele ao redor e secar sem esfregar.'},
+    {title:'Proteger a borda',area:'borda',text:'Passar protetor cutâneo sem álcool na borda e na pele ao redor.'},
+    {title:'Tratar o leito',area:'leito',text:'Aplicar o produto prescrito (hidrogel, colagenase, alginato ou outro) só no leito.'},
+    {title:'Cobrir',area:'todas',text:'Cobrir com a cobertura secundária (espuma com borda de silicone) e fixar sem apertar.'},
+    {title:'Registrar',area:'nenhuma',text:'Anotar data e hora no curativo e fotografar na próxima troca.'}
+  ];
+  var cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+  var cv2=document.getElementById('cv2'), ctx2=cv2.getContext('2d');
+  var W=1000,H=750, base=document.createElement('canvas'), masks={}, arrows=[], labels=[], history=[];
+  var tool='mover', drawing=false, last=null, arrowStart=null, arrowNow=null, steps=[], cur=0, selId=null, drag=null;
+  ['leito','borda','peri'].forEach(function(k){masks[k]=document.createElement('canvas')});
+  function $(id){return document.getElementById(id)}
+
+  function sizeAll(w,h){W=w;H=h;[cv,cv2,base].concat(Object.keys(masks).map(function(k){return masks[k]})).forEach(function(c){c.width=w;c.height=h})}
+  function fresh(f){return function(){return f.apply(null,arguments)}}
+
+  // ---- exemplo ilustrativo ----
+  function blob(c,cx,cy,rx,ry,seed,fill){
+    var n=40,pts=[];
+    for(var i=0;i<n;i++){var a=i/n*Math.PI*2;var r=1+0.13*Math.sin(a*3+seed)+0.07*Math.sin(a*5+seed*2.3);pts.push([cx+Math.cos(a)*rx*r,cy+Math.sin(a)*ry*r])}
+    c.beginPath();pts.forEach(function(p,i){i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1])});c.closePath();c.fillStyle=fill;c.fill();
+  }
+  function makeSample(){
+    sizeAll(1000,750);
+    var b=base.getContext('2d');
+    var g=b.createRadialGradient(500,375,60,500,375,620);g.addColorStop(0,'#D9B39A');g.addColorStop(1,'#B98F78');b.fillStyle=g;b.fillRect(0,0,W,H);
+    blob(b,500,380,280,220,1.2,'rgba(180,90,90,.35)');
+    blob(b,500,380,200,155,2.1,'#C77070');
+    blob(b,500,380,125,95,3.4,'#9E2E2E');
+    Object.keys(masks).forEach(function(k){masks[k].getContext('2d').clearRect(0,0,W,H)});
+    blob(masks.peri.getContext('2d'),500,380,330,260,1.2,COLORS.peri);
+    blob(masks.borda.getContext('2d'),500,380,215,168,2.1,COLORS.borda);
+    blob(masks.leito.getContext('2d'),500,380,128,98,3.4,COLORS.leito);
+    arrows=[{x1:850,y1:130,x2:620,y2:315}];history=[];labels=[];selId=null;
+  }
+  function sampleLabels(){
+    var s4=steps[3]&&steps[3].id;
+    labels=[
+      {id:nid(),x:500,y:380,text:'Leito',color:'leito',size:30,step:'all'},
+      {id:nid(),x:500,y:215,text:'Borda',color:'borda',size:30,step:'all'},
+      {id:nid(),x:170,y:90,text:'Perilesão',color:'peri',size:30,step:'all'},
+      {id:nid(),x:860,y:100,text:'Hidrogel',color:'produto',size:30,step:s4||'all'}
+    ];
+  }
+
+  // ---- desenho ----
+  function arrowPath(c,x1,y1,x2,y2,s){
+    var a=Math.atan2(y2-y1,x2-x1),h=s*3.2;
+    c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.moveTo(x2,y2);c.lineTo(x2-h*Math.cos(a-0.45),y2-h*Math.sin(a-0.45));c.moveTo(x2,y2);c.lineTo(x2-h*Math.cos(a+0.45),y2-h*Math.sin(a+0.45));
+  }
+  function drawArrow(c,x1,y1,x2,y2){
+    var s=Math.max(W,H)/150;
+    c.save();c.lineCap='round';c.lineJoin='round';
+    c.strokeStyle='#1F2B26';c.lineWidth=s*2.2;arrowPath(c,x1,y1,x2,y2,s);c.stroke();
+    c.strokeStyle='#FFFFFF';c.lineWidth=s;arrowPath(c,x1,y1,x2,y2,s);c.stroke();
+    c.restore();
+  }
+  function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath()}
+  function drawLabel(c,l,selected){
+    var fs=l.size*W/1000, pad=fs*0.55;
+    c.save();c.font='800 '+fs+'px "Nunito Sans", system-ui, -apple-system, sans-serif';c.textAlign='center';c.textBaseline='middle';
+    var tw=c.measureText(l.text||' ').width;
+    l.bb={x:l.x-tw/2-pad,y:l.y-fs*0.62-pad*0.55,w:tw+pad*2,h:fs*1.24+pad*1.1};
+    var col=LBL[l.color]||LBL.produto;
+    c.shadowColor='rgba(0,0,0,.35)';c.shadowBlur=fs*0.4;c.shadowOffsetY=fs*0.1;
+    rr(c,l.bb.x,l.bb.y,l.bb.w,l.bb.h,fs*0.4);c.fillStyle=col.bg;c.fill();
+    c.shadowColor='transparent';
+    c.lineWidth=Math.max(1.5,fs*0.07);c.strokeStyle='rgba(255,255,255,.9)';c.stroke();
+    c.fillStyle=col.fg;c.fillText(l.text,l.x,l.y+fs*0.04);
+    if(selected){c.setLineDash([fs*0.3,fs*0.2]);c.lineWidth=Math.max(2,fs*0.1);c.strokeStyle='#FFFFFF';rr(c,l.bb.x-fs*0.25,l.bb.y-fs*0.25,l.bb.w+fs*0.5,l.bb.h+fs*0.5,fs*0.5);c.stroke();c.setLineDash([]);c.strokeStyle='#1F2B26';c.lineWidth=Math.max(1,fs*0.04);rr(c,l.bb.x-fs*0.25,l.bb.y-fs*0.25,l.bb.w+fs*0.5,l.bb.h+fs*0.5,fs*0.5);c.stroke()}
+    c.restore();
+  }
+  function render(c,opt){
+    opt=opt||{};
+    c.clearRect(0,0,W,H);c.drawImage(base,0,0);
+    var hl=opt.highlight||null;
+    if(hl&&hl!=='todas'&&hl!=='nenhuma'){c.fillStyle='rgba(8,12,10,.45)';c.fillRect(0,0,W,H)}
+    if(hl!=='nenhuma'){
+      ['peri','borda','leito'].forEach(function(k){
+        if(hl&&hl!=='todas'&&hl!==k)return;
+        c.globalAlpha=(hl&&hl!=='todas')?0.8:0.5;c.drawImage(masks[k],0,0);
+      });
+      c.globalAlpha=1;
+    }
+    if(opt.arrows!==false)arrows.forEach(function(a){drawArrow(c,a.x1,a.y1,a.x2,a.y2)});
+    if(opt.preview)drawArrow(c,opt.preview.x1,opt.preview.y1,opt.preview.x2,opt.preview.y2);
+    if(opt.texts!==false)labels.forEach(function(l){
+      if(opt.stepId&&l.step!=='all'&&l.step!==opt.stepId)return;
+      drawLabel(c,l,opt.selId===l.id);
+    });
+  }
+  function redraw(){render(ctx,{preview:(arrowStart&&arrowNow)?{x1:arrowStart.x,y1:arrowStart.y,x2:arrowNow.x,y2:arrowNow.y}:null,selId:selId})}
+
+  // ---- histórico ----
+  function pushHistory(){
+    var snap={};Object.keys(masks).forEach(function(k){var c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(masks[k],0,0);snap[k]=c});
+    history.push({masks:snap,arrows:arrows.slice(),labels:labels.map(function(l){return Object.assign({},l)})});if(history.length>12)history.shift();
+  }
+
+  // ---- entrada (toque, caneta e mouse) ----
+  function pos(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
+  function stroke(p,q){
+    var size=$('brush').value*(W/700);
+    var targets=tool==='borracha'?['leito','borda','peri']:[tool];
+    targets.forEach(function(k){
+      var c=masks[k].getContext('2d');c.save();c.lineCap='round';c.lineJoin='round';c.lineWidth=size;
+      if(tool==='borracha'){c.globalCompositeOperation='destination-out';c.strokeStyle='#000'}else c.strokeStyle=COLORS[k];
+      c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();c.restore();
+    });
+  }
+  function hitLabel(p){
+    var tol=18*W/1000;
+    for(var i=labels.length-1;i>=0;i--){var b=labels[i].bb;if(b&&p.x>=b.x-tol&&p.x<=b.x+b.w+tol&&p.y>=b.y-tol&&p.y<=b.y+b.h+tol)return labels[i]}
+    return null;
+  }
+  cv.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    e.preventDefault();
+    try{cv.setPointerCapture(e.pointerId)}catch(err){}
+    var p=pos(e);
+    if(tool==='mover'){
+      var h=hitLabel(p);selId=h?h.id:null;
+      if(h){pushHistory();drag={dx:h.x-p.x,dy:h.y-p.y,id:h.id}}
+      syncPanel();redraw();return;
+    }
+    pushHistory();
+    if(tool==='seta'){arrowStart=p;arrowNow=p}else{drawing=true;last=p;stroke(p,{x:p.x+0.01,y:p.y})}
+    redraw();
+  });
+  cv.addEventListener('pointermove',function(e){
+    var p=pos(e);
+    if(drag){var l=byId(drag.id);if(l){l.x=Math.max(0,Math.min(W,p.x+drag.dx));l.y=Math.max(0,Math.min(H,p.y+drag.dy));redraw()}}
+    else if(tool==='seta'&&arrowStart){arrowNow=p;redraw()}
+    else if(drawing){stroke(last,p);last=p;redraw()}
+  });
+  function end(){
+    if(tool==='seta'&&arrowStart){
+      if(arrowNow&&Math.hypot(arrowNow.x-arrowStart.x,arrowNow.y-arrowStart.y)>20)arrows.push({x1:arrowStart.x,y1:arrowStart.y,x2:arrowNow.x,y2:arrowNow.y});
+      else history.pop();
+    }
+    drag=null;drawing=false;arrowStart=null;arrowNow=null;last=null;redraw();
+  }
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+  ['touchstart','touchmove'].forEach(function(t){cv.addEventListener(t,function(e){e.preventDefault()},{passive:false})});
+  cv.addEventListener('contextmenu',function(e){e.preventDefault()});
+
+  var toolIds=['leito','borda','peri','seta','borracha','mover'];
+  toolIds.forEach(function(t){$('t-'+t).addEventListener('click',function(){setTool(t)})});
+  function setTool(t){tool=t;toolIds.forEach(function(x){$('t-'+x).setAttribute('aria-pressed',x===t?'true':'false')})}
+  $('undo').addEventListener('click',function(){
+    var h=history.pop();if(!h)return;
+    Object.keys(masks).forEach(function(k){var c=masks[k].getContext('2d');c.clearRect(0,0,W,H);c.drawImage(h.masks[k],0,0)});
+    arrows=h.arrows;labels=h.labels;if(!byId(selId))selId=null;syncPanel();redraw();
+  });
+  $('clear').addEventListener('click',function(){
+    pushHistory();Object.keys(masks).forEach(function(k){masks[k].getContext('2d').clearRect(0,0,W,H)});arrows=[];labels=[];selId=null;syncPanel();redraw();
+  });
+
+  function loadImage(img,f){
+    var s=Math.min(1,1400/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height));
+    var iw=img.naturalWidth||img.width, ih=img.naturalHeight||img.height;
+    sizeAll(Math.round(iw*s),Math.round(ih*s));
+    base.getContext('2d').drawImage(img,0,0,W,H);
+    Object.keys(masks).forEach(function(k){masks[k].getContext('2d').clearRect(0,0,W,H)});
+    arrows=[];labels=[];history=[];selId=null;
+    $('origem').textContent='Foto carregada. Pinte as áreas e adicione os textos.';
+    syncPanel();redraw();
+  }
+  $('file').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0];if(!f)return;
+    $('origem').textContent='Abrindo a foto...';
+    var fail=function(){$('origem').textContent='Não foi possível abrir esta foto. Tente outra imagem (JPG ou PNG).'};
+    var rd=new FileReader();
+    rd.onerror=fail;
+    rd.onload=function(){
+      var img=new Image();
+      img.onload=function(){try{loadImage(img,f)}catch(err){fail()}};
+      img.onerror=function(){
+        if(window.createImageBitmap){createImageBitmap(f).then(function(bm){loadImage(bm,f)}).catch(fail)}else fail();
+      };
+      img.src=rd.result;
+    };
+    rd.readAsDataURL(f);
+    e.target.value='';
+  });
+
+  // ---- caixas de texto ----
+  function byId(id){for(var i=0;i<labels.length;i++)if(labels[i].id===id)return labels[i];return null}
+  function addLabel(text,color){
+    pushHistory();
+    var n=labels.length;
+    var l={id:nid(),x:W/2,y:H*0.14+(n%5)*H*0.08,text:text||'Texto',color:color,size:Math.max(24,Math.round(30)),step:'all'};
+    labels.push(l);selId=l.id;setTool('mover');syncPanel();redraw();
+    var t=$('lblText');if(t){t.focus();t.select&&t.select()}
+  }
+  ['leito','borda','peri'].forEach(function(k){$('add-'+k).addEventListener('click',function(){addLabel(NAMES[k],k)})});
+  $('addText').addEventListener('click',function(){var v=$('newText').value.trim();addLabel(v||'Produto','produto');$('newText').value=''});
+  $('newText').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('addText').click()}});
+  function syncPanel(){
+    var l=byId(selId),p=$('lblPanel');
+    p.hidden=!l;$('lblEmpty').hidden=!!l;
+    if(!l)return;
+    if(document.activeElement!==$('lblText'))$('lblText').value=l.text;
+    $('lblColor').value=l.color;$('lblSize').value=l.size;
+    var o='<option value="all">Todos os passos</option>'+steps.map(function(s,i){return '<option value="'+s.id+'">Passo '+(i+1)+': '+esc(s.title)+'</option>'}).join('');
+    $('lblStep').innerHTML=o;$('lblStep').value=l.step;
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  $('lblText').addEventListener('input',function(e){var l=byId(selId);if(l){l.text=e.target.value;redraw()}});
+  $('lblColor').addEventListener('change',function(e){var l=byId(selId);if(l){l.color=e.target.value;redraw()}});
+  $('lblSize').addEventListener('input',function(e){var l=byId(selId);if(l){l.size=+e.target.value;redraw()}});
+  $('lblStep').addEventListener('change',function(e){var l=byId(selId);if(l){l.step=e.target.value}});
+  $('lblDel').addEventListener('click',function(){pushHistory();labels=labels.filter(function(l){return l.id!==selId});selId=null;syncPanel();redraw()});
+  $('lblDone').addEventListener('click',function(){selId=null;syncPanel();redraw()});
+
+  // ---- passos ----
+  var list=$('steps');
+  function buildSteps(){
+    list.innerHTML='';
+    steps.forEach(function(s,i){
+      var li=document.createElement('li');li.className='step';
+      var opts=Object.keys(NAMES).map(function(k){return '<option value="'+k+'"'+(s.area===k?' selected':'')+'>'+NAMES[k]+'</option>'}).join('');
+      li.innerHTML='<span class="n">'+(i+1)+'</span><div class="fields">'+
+        '<input type="text" class="field" id="st-t-'+i+'" aria-label="Título do passo '+(i+1)+'" style="font-weight:700">'+
+        '<select class="field" id="st-a-'+i+'" aria-label="Área em destaque do passo '+(i+1)+'">'+opts+'</select>'+
+        '<textarea class="field" id="st-x-'+i+'" aria-label="Texto do passo '+(i+1)+'"></textarea></div>'+
+        '<button type="button" id="st-r-'+i+'" aria-label="Remover passo '+(i+1)+'">Remover</button>';
+      list.appendChild(li);
+      $('st-t-'+i).value=s.title;$('st-x-'+i).value=s.text;
+      $('st-t-'+i).addEventListener('input',function(e){s.title=e.target.value;syncPanel()});
+      $('st-x-'+i).addEventListener('input',function(e){s.text=e.target.value});
+      $('st-a-'+i).addEventListener('change',function(e){s.area=e.target.value});
+      $('st-r-'+i).addEventListener('click',function(){
+        labels.forEach(function(l){if(l.step===s.id)l.step='all'});
+        steps.splice(i,1);buildSteps();syncPanel();redraw();
+      });
+    });
+  }
+  function newSteps(){return DEFAULT_STEPS.map(function(s){return Object.assign({id:nid()},s)})}
+  $('addStep').addEventListener('click',function(){steps.push({id:nid(),title:'Novo passo',area:'nenhuma',text:''});buildSteps();syncPanel()});
+  $('resetSteps').addEventListener('click',function(){labels.forEach(function(l){l.step='all'});steps=newSteps();buildSteps();syncPanel()});
+
+  // ---- apresentação ----
+  var show=$('show');
+  function fit(){
+    var v=$('sView'),w=v.clientWidth-24,h=v.clientHeight-8;
+    if(w<=0||h<=0)return;
+    var s=Math.min(w/W,h/H);cv2.style.width=Math.floor(W*s)+'px';cv2.style.height=Math.floor(H*s)+'px';
+  }
+  function showStep(){
+    if(!steps.length)return;
+    cur=Math.max(0,Math.min(steps.length-1,cur));var s=steps[cur];
+    fit();
+    render(ctx2,{highlight:s.area,arrows:$('showArrows').checked,texts:$('showTexts').checked,stepId:s.id});
+    $('sCount').textContent='Passo '+(cur+1)+' de '+steps.length;
+    $('sTitle').textContent=s.title;$('sText').textContent=s.text;
+    $('sDots').innerHTML=steps.map(function(_,i){return '<i class="'+(i===cur?'on':'')+'"></i>'}).join('');
+    $('sPrev').disabled=cur===0;
+    $('sNext').textContent=cur===steps.length-1?'Concluir':'Próximo';
+  }
+  $('present').addEventListener('click',function(){selId=null;syncPanel();cur=0;show.hidden=false;showStep();requestAnimationFrame(showStep);$('sNext').focus()});
+  $('sClose').addEventListener('click',function(){show.hidden=true;redraw()});
+  $('sPrev').addEventListener('click',function(){cur--;showStep()});
+  $('sNext').addEventListener('click',function(){if(cur>=steps.length-1){show.hidden=true;redraw()}else{cur++;showStep()}});
+  window.addEventListener('resize',function(){if(!show.hidden)showStep()});
+  window.addEventListener('orientationchange',function(){setTimeout(function(){if(!show.hidden)showStep()},250)});
+  document.addEventListener('keydown',function(e){
+    if(show.hidden)return;
+    if(e.key==='ArrowRight'){$('sNext').click()}else if(e.key==='ArrowLeft'){$('sPrev').click()}else if(e.key==='Escape'){show.hidden=true}
+  });
+  $('showArrows').addEventListener('change',function(){if(!show.hidden)showStep()});
+  $('showTexts').addEventListener('change',function(){if(!show.hidden)showStep()});
+  $('makeImg').addEventListener('click',function(){
+    render(ctx2,{arrows:$('showArrows').checked,texts:$('showTexts').checked});
+    $('outImg').src=cv2.toDataURL('image/jpeg',0.9);
+    $('outBox').hidden=false;
+  });
+
+  makeSample();
+  steps=newSteps();sampleLabels();
+  buildSteps();syncPanel();redraw();
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){redraw()});
+})();
+</script>
+
+</body>
+</html>
