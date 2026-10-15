@@ -17,16 +17,16 @@
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
-    --ink:#2A3A33; --ink-soft:#43544c;
-    --salvia-soft:#5A7A6B22; --line:#5A7A6B44; --line-strong:#2A3A3326;
-    --cream-2:#efe7d6;
-    --serif-display:"Cormorant Garamond", Georgia, serif;
-    --serif-body:"EB Garamond", Georgia, serif;
-    --nav-h:74px;
+    --cipreste:#33421F; --salvia:#5F7A35; --terracota:#E07A3F; --pergaminho:#F6EFE2;
+    --ink:#33421F; --ink-soft:#4B5A33;
+    --salvia-soft:#5F7A3522; --line:#5F7A3544; --line-strong:#33421F26;
+    --cream-2:#EBE2CC;
+    --serif-display:"Playfair Display", Georgia, serif;
+    --serif-body:"Nunito Sans", Georgia, serif;
+    --nav-h:84px;
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; scroll-padding-top:var(--nav-h); }
@@ -43,7 +43,7 @@
 
   /* ---------- shared motifs ---------- */
   .diamond{ width:7px; height:7px; background:var(--terracota); transform:rotate(45deg); flex:none; display:inline-block; }
-  .kicker{ font-size:13px; letter-spacing:.26em; text-transform:uppercase; color:var(--terracota); font-weight:600; display:flex; align-items:center; gap:11px; }
+  .kicker{ font-size:13px; letter-spacing:.26em; text-transform:uppercase; color:var(--salvia); font-weight:600; display:flex; align-items:center; gap:11px; }
   .kicker.center{ justify-content:center; }
   .kicker .d{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); }
   h1,h2,h3{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); margin:0; line-height:1.05; letter-spacing:.005em; }
@@ -54,27 +54,27 @@
   .ph{
     position:relative; border:1px solid var(--line); border-radius:4px;
     background-color:var(--cream-2);
-    background-image:repeating-linear-gradient(45deg, #5A7A6B16 0 11px, transparent 11px 22px);
+    background-image:repeating-linear-gradient(45deg, #5F7A3516 0 11px, transparent 11px 22px);
     display:flex; align-items:flex-end; justify-content:flex-start; overflow:hidden;
   }
   .ph .cap{
-    font-family:"Courier New", monospace; font-size:11px; letter-spacing:.02em; line-height:1.45;
-    color:var(--salvia); background:#F7F2E8d9; padding:6px 10px; margin:11px; border-radius:3px; max-width:90%;
+    font-family:'Nunito Sans', Arial, sans-serif; font-size:11px; letter-spacing:.02em; line-height:1.45;
+    color:var(--salvia); background:#F6EFE2d9; padding:6px 10px; margin:11px; border-radius:3px; max-width:90%;
   }
 
   /* ---------- NAV ---------- */
   header.nav{
     position:fixed; top:0; left:0; right:0; height:var(--nav-h); z-index:100;
-    display:flex; align-items:center; background:#F7F2E8f2; backdrop-filter:blur(8px);
+    display:flex; align-items:center; background:#F6EFE2f2; backdrop-filter:blur(8px);
     border-bottom:1px solid transparent; transition:border-color .3s, box-shadow .3s;
   }
-  header.nav.scrolled{ border-bottom-color:var(--line); box-shadow:0 8px 30px rgba(42,58,51,.07); }
+  header.nav.scrolled{ border-bottom-color:var(--line); box-shadow:0 8px 30px rgba(51,66,31,.07); }
   .nav .wrap{ display:flex; align-items:center; justify-content:space-between; gap:20px; }
   .brand{ display:flex; align-items:center; gap:12px; }
-  .brand img{ height:38px; width:auto; }
+  .brand img{ height:68px; width:auto; }
   .brand .bt{ line-height:1; }
   .brand .bt .nm{ font-family:var(--serif-display); font-size:21px; font-weight:600; color:var(--cipreste); }
-  .brand .bt .rl{ font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin-top:3px; }
+  .brand .bt .rl{ font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin-top:3px; }
   .nav-links{ display:flex; align-items:center; gap:30px; }
   .nav-links a{ font-size:15px; letter-spacing:.04em; color:var(--ink-soft); position:relative; transition:color .2s; }
   .nav-links a:hover{ color:var(--cipreste); }
@@ -90,7 +90,7 @@
     border:1.5px solid var(--cipreste); background:var(--cipreste); color:var(--pergaminho);
     transition:transform .15s, box-shadow .2s, background .2s; white-space:nowrap;
   }
-  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(42,58,51,.22); }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(51,66,31,.22); }
   .btn.terra{ background:var(--terracota); border-color:var(--terracota); }
   .btn.ghost{ background:transparent; color:var(--cipreste); }
   .btn.ghost:hover{ background:var(--salvia-soft); }
@@ -103,7 +103,7 @@
   .hero{ padding:calc(var(--nav-h) + 64px) 0 80px; position:relative; overflow:hidden; }
   .hero::before{
     content:""; position:absolute; right:-180px; top:-120px; width:520px; height:520px; border-radius:50%;
-    background:radial-gradient(circle, #5A7A6B14, transparent 68%); pointer-events:none;
+    background:radial-gradient(circle, #5F7A3514, transparent 68%); pointer-events:none;
   }
   .hero .wrap{ display:grid; grid-template-columns:1.15fr .85fr; gap:64px; align-items:center; }
   .hero h1{ font-size:clamp(44px, 6.4vw, 82px); margin-top:20px; }
@@ -113,10 +113,10 @@
   .hero .creds .tag{ font-size:13px; letter-spacing:.04em; color:var(--salvia); border:1px solid var(--salvia); border-radius:30px; padding:5px 14px; }
   .hero .cta-row{ display:flex; flex-wrap:wrap; gap:14px; margin:36px 0 0; }
   .hero-figure{ position:relative; }
-  .hero-figure .shot{ width:100%; aspect-ratio:4/5; object-fit:cover; object-position:center 18%; border-radius:6px; border:1px solid var(--line); box-shadow:0 22px 55px rgba(42,58,51,.2); }
+  .hero-figure .shot{ width:100%; aspect-ratio:4/5; object-fit:cover; object-position:center 18%; border-radius:6px; border:1px solid var(--line); box-shadow:0 22px 55px rgba(51,66,31,.2); }
   .hero-figure .stamp{
     position:absolute; bottom:-22px; left:-22px; background:var(--pergaminho); border:1px solid var(--line);
-    border-radius:6px; padding:14px 18px; box-shadow:0 14px 34px rgba(42,58,51,.14); display:flex; gap:13px; align-items:center;
+    border-radius:6px; padding:14px 18px; box-shadow:0 14px 34px rgba(51,66,31,.14); display:flex; gap:13px; align-items:center;
   }
   .hero-figure .stamp .ic{ width:38px; height:38px; flex:none; border-radius:50%; background:var(--salvia-soft); display:flex; align-items:center; justify-content:center; }
   .hero-figure .stamp .ic svg{ width:21px; height:21px; stroke:var(--cipreste); fill:none; stroke-width:1.6; }
@@ -134,8 +134,8 @@
   /* ---------- SOBRE ---------- */
   .about-grid{ display:grid; grid-template-columns:.85fr 1.15fr; gap:60px; align-items:center; margin-top:8px; }
   .about-figure{ position:relative; margin-bottom:10px; }
-  .about-figure .shot-main{ display:block; width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:6px; border:1px solid var(--line); box-shadow:0 20px 50px rgba(42,58,51,.16); }
-  .about-figure .shot-inset{ position:absolute; width:44%; aspect-ratio:3/4; right:-16px; bottom:-26px; object-fit:cover; border-radius:6px; border:6px solid var(--cream-2); box-shadow:0 16px 40px rgba(42,58,51,.22); }
+  .about-figure .shot-main{ display:block; width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:6px; border:1px solid var(--line); box-shadow:0 20px 50px rgba(51,66,31,.16); }
+  .about-figure .shot-inset{ position:absolute; width:44%; aspect-ratio:3/4; right:-16px; bottom:-26px; object-fit:cover; border-radius:6px; border:6px solid var(--cream-2); box-shadow:0 16px 40px rgba(51,66,31,.22); }
   .about-body .kicker{ margin-bottom:0; }
   .about-body p{ margin:18px 0 0; color:var(--ink-soft); font-size:18.5px; text-wrap:pretty; }
   .about-body p .k{ color:var(--cipreste); font-weight:600; }
@@ -150,9 +150,9 @@
     background:var(--pergaminho); border:1px solid var(--line); border-radius:8px; padding:34px 30px 32px;
     display:flex; flex-direction:column; position:relative; overflow:hidden; transition:transform .2s, box-shadow .2s, border-color .2s;
   }
-  .block.cream .svc{ background:#F7F2E8; }
-  .svc:hover{ transform:translateY(-5px); box-shadow:0 18px 40px rgba(42,58,51,.12); border-color:var(--salvia); }
-  .svc .num{ font-family:var(--serif-display); font-size:15px; color:var(--terracota); font-weight:600; letter-spacing:.1em; }
+  .block.cream .svc{ background:#F6EFE2; }
+  .svc:hover{ transform:translateY(-5px); box-shadow:0 18px 40px rgba(51,66,31,.12); border-color:var(--salvia); }
+  .svc .num{ font-family:var(--serif-display); font-size:15px; color:var(--salvia); font-weight:600; letter-spacing:.1em; }
   .svc .ic{ width:54px; height:54px; border-radius:50%; background:var(--salvia-soft); display:flex; align-items:center; justify-content:center; margin:6px 0 20px; }
   .svc .ic svg{ width:28px; height:28px; stroke:var(--cipreste); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
   .svc h3{ font-size:27px; }
@@ -164,10 +164,10 @@
   /* ---------- DICAS ---------- */
   .dicas-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:52px; }
   .dica{ display:flex; flex-direction:column; background:var(--pergaminho); border-radius:8px; overflow:hidden; border:1px solid var(--line); transition:transform .2s, box-shadow .2s; }
-  .dica:hover{ transform:translateY(-5px); box-shadow:0 18px 40px rgba(42,58,51,.12); }
+  .dica:hover{ transform:translateY(-5px); box-shadow:0 18px 40px rgba(51,66,31,.12); }
   .dica .ph{ aspect-ratio:16/10; border:none; border-radius:0; }
   .dica .body{ padding:24px 24px 28px; display:flex; flex-direction:column; flex:1; }
-  .dica .meta{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--terracota); font-weight:600; }
+  .dica .meta{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--salvia); font-weight:600; }
   .dica h3{ font-size:23px; margin-top:11px; }
   .dica p{ margin:11px 0 0; font-size:15.5px; color:var(--ink-soft); flex:1; text-wrap:pretty; }
   .dica .more{ margin-top:18px; font-size:14px; font-weight:600; color:var(--salvia); letter-spacing:.04em; display:inline-flex; align-items:center; gap:7px; }
@@ -182,38 +182,38 @@
   }
   .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:48px; align-items:start; position:relative; z-index:2; }
   .contact-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px; }
-  .contact-list li a, .contact-list li .ci{ display:flex; gap:18px; align-items:center; padding:18px 4px; border-bottom:1px solid #F7F2E822; transition:padding-left .2s; }
+  .contact-list li a, .contact-list li .ci{ display:flex; gap:18px; align-items:center; padding:18px 4px; border-bottom:1px solid #F6EFE222; transition:padding-left .2s; }
   .contact-list li a:hover{ padding-left:12px; }
-  .contact-list .ic{ width:46px; height:46px; flex:none; border-radius:50%; border:1px solid #F7F2E833; display:flex; align-items:center; justify-content:center; }
+  .contact-list .ic{ width:46px; height:46px; flex:none; border-radius:50%; border:1px solid #F6EFE233; display:flex; align-items:center; justify-content:center; }
   .contact-list .ic svg{ width:22px; height:22px; stroke:var(--terracota); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
-  .contact-list .lab{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#F7F2E899; }
+  .contact-list .lab{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#F6EFE299; }
   .contact-list .val{ font-family:var(--serif-display); font-size:22px; font-weight:600; color:var(--pergaminho); line-height:1.15; margin-top:2px; }
-  .contact-side{ background:#ffffff0a; border:1px solid #F7F2E822; border-radius:10px; padding:36px 34px; }
+  .contact-side{ background:#ffffff0a; border:1px solid #F6EFE222; border-radius:10px; padding:36px 34px; }
   .contact-side h3{ font-size:28px; color:var(--pergaminho); }
-  .contact-side p{ color:#F7F2E8cc; margin:14px 0 0; font-size:17px; }
+  .contact-side p{ color:#F6EFE2cc; margin:14px 0 0; font-size:17px; }
   .contact-side .btn{ margin-top:26px; width:100%; justify-content:center; }
   .booking-opts{ display:flex; flex-direction:column; gap:13px; margin-top:24px; }
-  .bopt{ display:block; padding:21px 23px; border-radius:11px; border:1px solid #F7F2E826; background:#ffffff09; transition:transform .18s, background .2s, border-color .2s; }
+  .bopt{ display:block; padding:21px 23px; border-radius:11px; border:1px solid #F6EFE226; background:#ffffff09; transition:transform .18s, background .2s, border-color .2s; }
   .bopt:hover{ transform:translateY(-3px); background:#ffffff14; border-color:var(--salvia); }
   .bopt.primary{ background:var(--terracota); border-color:var(--terracota); }
-  .bopt.primary:hover{ background:#d2856f; border-color:#d2856f; }
-  .bopt-k{ display:block; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--terracota); font-weight:700; }
-  .bopt.primary .bopt-k{ color:#F7F2E8d9; }
+  .bopt.primary:hover{ background:#E89562; border-color:#E89562; }
+  .bopt-k{ display:block; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--salvia); font-weight:700; }
+  .bopt.primary .bopt-k{ color:#F6EFE2d9; }
   .bopt-t{ display:block; font-family:var(--serif-display); font-size:23px; font-weight:600; color:var(--pergaminho); line-height:1.12; margin-top:5px; }
-  .bopt-d{ display:block; font-size:14.5px; line-height:1.5; color:#F7F2E8b3; margin-top:8px; }
+  .bopt-d{ display:block; font-size:14.5px; line-height:1.5; color:#F6EFE2b3; margin-top:8px; }
   .bopt.primary .bopt-d{ color:#fff; opacity:.92; }
   .bopt-cta{ display:inline-block; margin-top:13px; font-size:14px; font-weight:700; letter-spacing:.03em; color:var(--salvia); }
   .bopt.primary .bopt-cta{ color:#fff; }
   .bopt:hover .bopt-cta{ color:var(--pergaminho); }
-  .contact-side .hours{ margin-top:28px; padding-top:24px; border-top:1px solid #F7F2E822; }
-  .contact-side .hours .row{ display:flex; justify-content:space-between; font-size:15px; color:#F7F2E8cc; padding:6px 0; }
+  .contact-side .hours{ margin-top:28px; padding-top:24px; border-top:1px solid #F6EFE222; }
+  .contact-side .hours .row{ display:flex; justify-content:space-between; font-size:15px; color:#F6EFE2cc; padding:6px 0; }
   .contact-side .hours .row b{ color:var(--pergaminho); font-weight:600; }
 
   /* ---------- FOOTER ---------- */
-  footer.site{ background:#212e28; color:#F7F2E8aa; padding:50px 0 38px; font-size:14px; }
+  footer.site{ background:#2A3719; color:#F6EFE2aa; padding:50px 0 38px; font-size:14px; }
   footer.site .wrap{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px; align-items:flex-end; }
   footer.site .fbrand{ display:flex; align-items:center; gap:13px; }
-  footer.site .fbrand img{ height:42px; width:auto; filter:brightness(0) invert(1) opacity(.85); }
+  footer.site .fbrand img{ height:76px; width:auto; }
   footer.site .fbrand .nm{ font-family:var(--serif-display); font-size:20px; color:var(--pergaminho); font-weight:600; }
   footer.site .fbrand .rl{ font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--terracota); margin-top:3px; }
   footer.site .legal{ text-align:right; line-height:1.7; font-size:13px; }
@@ -228,8 +228,8 @@
   /* ---------- PARA QUEM ---------- */
   .forwhom-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:52px; }
   .forwhom-card{ background:var(--pergaminho); border:1px solid var(--line); border-radius:8px; padding:34px 32px; }
-  .block.cream .forwhom-card{ background:#F7F2E8; }
-  .forwhom-card .tag{ display:inline-block; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--terracota); font-weight:600; }
+  .block.cream .forwhom-card{ background:#F6EFE2; }
+  .forwhom-card .tag{ display:inline-block; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--salvia); font-weight:600; }
   .forwhom-card h3{ font-size:25px; margin-top:9px; }
   .forwhom-card ul{ list-style:none; margin:19px 0 0; padding:0; display:flex; flex-direction:column; gap:13px; }
   .forwhom-card ul li{ display:flex; gap:12px; align-items:flex-start; font-size:15.5px; color:var(--ink-soft); line-height:1.5; }
@@ -261,7 +261,7 @@
   /* ---------- DEPOIMENTOS ---------- */
   .testim-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:26px; margin-top:52px; }
   .testim-card{ background:var(--pergaminho); border:1px solid var(--line); border-radius:8px; padding:32px 30px; display:flex; flex-direction:column; gap:18px; }
-  .block.cream .testim-card{ background:#F7F2E8; }
+  .block.cream .testim-card{ background:#F6EFE2; }
   .testim-stars{ display:flex; gap:4px; }
   .testim-stars svg{ width:15px; height:15px; fill:var(--terracota); }
   .testim-quote{ font-family:var(--serif-display); font-size:21px; font-style:italic; color:var(--cipreste); line-height:1.42; text-wrap:pretty; }
@@ -281,9 +281,9 @@
 
   /* ---------- footer areas column ---------- */
   footer.site .wrap{ align-items:flex-start; }
-  footer.site .fcol .ft{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#F7F2E899; margin-bottom:14px; }
+  footer.site .fcol .ft{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#F6EFE299; margin-bottom:14px; }
   footer.site .fcol ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
-  footer.site .fcol ul a{ font-size:13.5px; color:#F7F2E8cc; transition:color .2s; }
+  footer.site .fcol ul a{ font-size:13.5px; color:#F6EFE2cc; transition:color .2s; }
   footer.site .fcol ul a:hover{ color:var(--terracota); }
 
   /* ---------- RESPONSIVE ---------- */
@@ -303,7 +303,7 @@
     .menu-toggle{ display:block; }
     .nav-links.open{
       display:flex; position:absolute; top:var(--nav-h); left:0; right:0; flex-direction:column; gap:0;
-      background:#F7F2E8f7; backdrop-filter:blur(8px); border-bottom:1px solid var(--line); padding:8px 0; box-shadow:0 14px 30px rgba(42,58,51,.1);
+      background:#F6EFE2f7; backdrop-filter:blur(8px); border-bottom:1px solid var(--line); padding:8px 0; box-shadow:0 14px 30px rgba(51,66,31,.1);
     }
     .nav-links.open a{ padding:14px 7vw; width:100%; }
     .nav-links.open a::after{ display:none; }
@@ -321,12 +321,8 @@
 <!-- ============ NAV ============ -->
 <header class="nav" id="nav">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="Bruna Arguelles">
-      <img src="assets/monogram.png" alt="" />
-      <div class="bt">
-        <div class="nm">Bruna Arguelles</div>
-        <div class="rl" data-i="role">Enfermagem Especializada</div>
-      </div>
+    <a class="brand" href="#top" aria-label="Enfermagem Especializada por Bruna Arguelles">
+      <img src="assets/logo.png" alt="Enfermagem Especializada por Bruna Arguelles" />
     </a>
     <nav class="nav-links" id="navlinks">
       <a href="#sobre" data-i="nav_about">Sobre</a>
@@ -399,6 +395,7 @@
         <p data-i="about_p1">Sou <span class="k">Bruna Arguelles</span>, enfermeira com atuação dedicada ao tratamento de feridas agudas e de difícil cicatrização. Minha formação em terapia intensiva neonatal e adulto me ensinou a cuidar nos cenários mais delicados — e a olhar para cada paciente como uma história única.</p>
         <p data-i="about_p2">Hoje associo essa experiência a técnicas avançadas como <span class="k">laserterapia</span> e terapias regenerativas (<span class="k">PRP e PRF</span>), sempre fundamentada em ciência. Como mestranda em Enfermagem pela UFJF, mantenho meu cuidado atualizado com a melhor evidência disponível.</p>
         <ul class="cred-list">
+          <li><span class="d"></span><span data-i="cred0">Especialista em <b>Tratamento de Feridas</b></span></li>
           <li><span class="d"></span><span data-i="cred1">Especialista em <b>Intensivismo, Urgência e Emergência</b> adulto e neonatal</span></li>
           <li><span class="d"></span><span data-i="cred2">Pós-graduada em <b>Terapia Intensiva</b> Neonatal e Adulto</span></li>
           <li><span class="d"></span><span data-i="cred3"><b>Mestranda em Enfermagem</b> — UFJF</span></li>
@@ -556,7 +553,7 @@
     <div class="dicas-grid" id="dicas-grid">
       <p class="dicas-empty">Carregando dicas…</p>
     </div>
-    <p class="dicas-note" data-i="tips_note">Acompanhe conteúdos novos no Instagram <a href="https://instagram.com/cuidarpelabruna" target="_blank" rel="noopener" style="color:var(--terracota);font-weight:600;">@cuidarpelabruna</a></p>
+    <p class="dicas-note" data-i="tips_note">Acompanhe conteúdos novos no Instagram <a href="https://instagram.com/enfbruna.feridas" target="_blank" rel="noopener" style="color:var(--terracota);font-weight:600;">@enfbruna.feridas</a></p>
   </div>
 </section>
 
@@ -652,7 +649,7 @@
     <div class="sec-head reveal">
       <div class="kicker"><span class="d"></span><span data-i="ct_kicker">Contato & Agendamento</span></div>
       <h2 class="sec-title" data-i="ct_title">Vamos cuidar disso juntos</h2>
-      <p class="sec-intro" style="color:#F7F2E8cc;" data-i="ct_intro">Agende sua avaliação por WhatsApp. Atendimento em consultório e domiciliar em Juiz de Fora e região e teleconsulta para todo o Brasil.</p>
+      <p class="sec-intro" style="color:#F6EFE2cc;" data-i="ct_intro">Agende sua avaliação por WhatsApp. Atendimento em consultório e domiciliar em Juiz de Fora e região e teleconsulta para todo o Brasil.</p>
     </div>
     <div class="contact-grid">
       <ul class="contact-list reveal">
@@ -660,9 +657,9 @@
           <span class="ic"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
           <span><span class="lab">WhatsApp</span><span class="val">(32) 99102-7249</span></span>
         </a></li>
-        <li><a href="https://instagram.com/cuidarpelabruna" target="_blank" rel="noopener">
+        <li><a href="https://instagram.com/enfbruna.feridas" target="_blank" rel="noopener">
           <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></span>
-          <span><span class="lab">Instagram</span><span class="val">@cuidarpelabruna</span></span>
+          <span><span class="lab">Instagram</span><span class="val">@enfbruna.feridas</span></span>
         </a></li>
         <li><a href="mailto:contato@brunaarguelles.com.br">
           <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
@@ -704,11 +701,8 @@
 <footer class="site">
   <div class="wrap">
     <div class="fbrand">
-      <img src="assets/monogram.png" alt="" />
-      <div>
-        <div class="nm">Bruna Arguelles</div>
-        <div class="rl" data-i="role2">Enfermagem Especializada</div>
-      </div>
+      <img src="assets/logo-negativa.svg" alt="Enfermagem Especializada por Bruna Arguelles" />
+    </div>
     </div>
     <div class="fcol">
       <div class="ft" data-i="footer_areas_title">Áreas de atuação</div>
@@ -767,6 +761,7 @@
       about_kicker:"About me", about_title:"Nursing that unites evidence and warmth",
       about_p1:"I'm <span class='k'>Bruna Arguelles</span>, a nurse dedicated to the treatment of acute and hard-to-heal wounds. My training in neonatal and adult intensive care taught me to provide care in the most delicate scenarios — and to see every patient as a unique story.",
       about_p2:"Today I combine that experience with advanced techniques such as <span class='k'>laser therapy</span> and regenerative therapies (<span class='k'>PRP and PRF</span>), always grounded in science. As a Nursing MSc candidate at UFJF, I keep my practice aligned with the best available evidence.",
+      cred0:"Specialist in <b>Wound Care</b>",
       cred1:"Specialist in <b>Intensive, Urgent & Emergency Care</b>, adult and neonatal",
       cred2:"Postgraduate in <b>Intensive Care</b>, Neonatal & Adult",
       cred3:"<b>Nursing MSc candidate</b> — UFJF",
@@ -787,7 +782,7 @@
       d2_meta:"Healing", d2_t:"The role of nutrition in healing", d2_p:"Protein, vitamin C and zinc are allies of the skin. Learn how diet directly influences wound closure.",
       d3_meta:"Laser Therapy", d3_t:"Laser therapy: myths and facts", d3_p:"Is it safe? Does it hurt? Who is it for? I answer the main questions about this recovery-boosting technology.",
       more:"Coming soon →", more2:"Coming soon →", more3:"Coming soon →",
-      tips_note:"Follow new content on Instagram <a href='https://instagram.com/cuidarpelabruna' target='_blank' rel='noopener' style='color:var(--terracota);font-weight:600;'>@cuidarpelabruna</a>",
+      tips_note:"Follow new content on Instagram <a href='https://instagram.com/enfbruna.feridas' target='_blank' rel='noopener' style='color:var(--terracota);font-weight:600;'>@enfbruna.feridas</a>",
       ct_kicker:"Contact & Booking", ct_title:"Let's take care of this together",
       ct_intro:"Book your assessment via WhatsApp. Care at the clinic and at home in Juiz de Fora and surroundings.",
       ct_addr_lab:"Address · Juiz de Fora/MG",

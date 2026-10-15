@@ -5,13 +5,13 @@
 <title>Documentos & Termos — Bruna Arguelles</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
-    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B66; --bg:#e7ded0;
-    --serif-display:"Cormorant Garamond", Georgia, serif;
-    --serif-body:"EB Garamond", Georgia, serif;
+    --cipreste:#33421F; --salvia:#5F7A35; --terracota:#E07A3F; --pergaminho:#F6EFE2;
+    --ink:#33421F; --ink-soft:#4B5A33; --line:#5F7A3566; --bg:#E6DCC6;
+    --serif-display:"Playfair Display", Georgia, serif;
+    --serif-body:"Nunito Sans", Georgia, serif;
   }
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; }
@@ -19,12 +19,12 @@
 
   /* ---------- LOGIN ---------- */
   #login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
-  .login-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:400px; max-width:100%; overflow:hidden; }
+  .login-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(51,66,31,.18); width:400px; max-width:100%; overflow:hidden; }
   .login-card .topo{ height:3px; background:var(--cipreste); }
   .login-inner{ padding:44px 40px 40px; text-align:center; }
   .login-inner img{ height:64px; width:auto; margin:0 auto 24px; display:block; }
   .login-label{ display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; }
-  .login-label span{ font-size:10px; letter-spacing:.24em; color:var(--terracota); text-transform:uppercase; font-weight:600; }
+  .login-label span{ font-size:10px; letter-spacing:.24em; color:var(--salvia); text-transform:uppercase; font-weight:600; }
   .login-label .l{ width:24px; height:.5px; background:var(--terracota); opacity:.7; }
   .login-inner h1{ font-family:var(--serif-display); font-size:24px; font-weight:600; color:var(--cipreste); line-height:1.2; margin:0 0 6px; }
   .login-inner p{ font-size:12px; color:var(--ink-soft); margin:0; }
@@ -35,12 +35,12 @@
     outline:none; margin-bottom:10px;
   }
   .login-inner input[type=password].erro{ border-color:var(--terracota); }
-  .login-inner .msg-erro{ font-size:12px; color:var(--terracota); margin-bottom:8px; display:none; }
+  .login-inner .msg-erro{ font-size:12px; color:var(--salvia); margin-bottom:8px; display:none; }
   .login-inner button{
     width:100%; padding:13px; background:var(--cipreste); color:#fff; border:none;
     font-size:13px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer;
   }
-  .login-inner button:hover{ background:#3d5247; }
+  .login-inner button:hover{ background:#3F5228; }
 
   /* ---------- APP ---------- */
   #app{ display:none; min-height:100vh; }
@@ -48,7 +48,7 @@
   .header{ display:flex; align-items:center; justify-content:space-between; padding:20px 32px; border-bottom:.5px solid var(--line); flex-wrap:wrap; gap:12px; }
   .header-esq{ display:flex; align-items:center; gap:18px; }
   .header-esq img{ height:44px; width:auto; }
-  .header-info p.label-h{ font-size:9.5px; letter-spacing:.2em; color:var(--terracota); text-transform:uppercase; margin:0 0 3px; font-weight:600; }
+  .header-info p.label-h{ font-size:9.5px; letter-spacing:.2em; color:var(--salvia); text-transform:uppercase; margin:0 0 3px; font-weight:600; }
   .header-info h1{ font-family:var(--serif-display); font-size:19px; font-weight:600; color:var(--cipreste); margin:0; }
   .btn-sair{ background:none; border:1px solid var(--line); padding:9px 18px; font-size:11.5px; color:var(--ink-soft); font-family:inherit; letter-spacing:.06em; cursor:pointer; }
   .btn-sair:hover{ border-color:var(--terracota); color:var(--terracota); }
@@ -64,10 +64,10 @@
     display:block; background:#fff; border:1px solid var(--line); padding:20px 22px;
     text-decoration:none; color:inherit; position:relative; transition:border-color .15s, box-shadow .15s;
   }
-  .card:hover{ border-color:var(--terracota); box-shadow:0 8px 24px rgba(42,58,51,.1); }
+  .card:hover{ border-color:var(--terracota); box-shadow:0 8px 24px rgba(51,66,31,.1); }
   .card h2{ font-family:var(--serif-display); font-size:17px; font-weight:600; color:var(--cipreste); margin:0 0 6px; line-height:1.25; }
   .card p{ font-size:12px; color:var(--ink-soft); margin:0; line-height:1.5; }
-  .card .abrir{ display:inline-flex; align-items:center; gap:5px; margin-top:12px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--terracota); font-weight:600; }
+  .card .abrir{ display:inline-flex; align-items:center; gap:5px; margin-top:12px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--salvia); font-weight:600; }
 
   footer.foot{ text-align:center; font-size:11px; color:var(--salvia); margin-top:8px; }
 
