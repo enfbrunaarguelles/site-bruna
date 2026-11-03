@@ -6,17 +6,17 @@
 <title>Ficha de Anamnese — Avaliação de Feridas</title>
 <style>
   :root{
-    --green:#3f6a5c;
-    --green-dark:#2c4b40;
+    --green:#5F7A35;
+    --green-dark:#33421F;
     --red:#c0584a;
-    --bg:#faf6f1;
+    --bg:#FAF5EA;
     --panel:#fffdfb;
     --line:#d9cfc2;
     --text:#2b2b2b;
   }
   *{box-sizing:border-box;}
   body{
-    font-family:Georgia, 'Times New Roman', serif;
+    font-family:'Nunito Sans', Arial, sans-serif;
     background:var(--bg);
     color:var(--text);
     margin:0;
@@ -77,7 +77,7 @@
     display:inline-flex;
     align-items:center;justify-content:center;
     font-size:12px;
-    font-family:Arial, sans-serif;
+    font-family:'Nunito Sans', Arial, sans-serif;
   }
   .grid{display:grid;gap:12px 18px;}
   .g2{grid-template-columns:1fr 1fr;}
@@ -86,7 +86,7 @@
   label.field{display:flex;flex-direction:column;font-size:11px;letter-spacing:.5px;color:#555;text-transform:uppercase;}
   label.field input[type=text], label.field input[type=number], label.field input[type=date], label.field textarea{
     margin-top:4px;
-    font-family:Georgia, serif;
+    font-family:'Nunito Sans', Arial, sans-serif;
     font-size:14px;
     color:var(--text);
     border:none;
@@ -106,16 +106,16 @@
   fieldset legend{font-size:11px;letter-spacing:.5px;color:#555;text-transform:uppercase;margin-bottom:4px;padding:0;}
   table.scale{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px;}
   table.scale th, table.scale td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;}
-  table.scale th{background:#f1ece3;font-size:11px;text-transform:uppercase;color:var(--green-dark);}
-  table.scale textarea{width:100%;border:none;font-family:Georgia,serif;font-size:13px;min-height:38px;resize:vertical;}
+  table.scale th{background:#F1EADA;font-size:11px;text-transform:uppercase;color:var(--green-dark);}
+  table.scale textarea{width:100%;border:none;font-family:'Nunito Sans', Arial, sans-serif;font-size:13px;min-height:38px;resize:vertical;}
   .eva-scale{display:flex;justify-content:space-between;margin-top:6px;}
   .eva-scale label{display:flex;flex-direction:column;align-items:center;font-size:12px;cursor:pointer;}
   .eva-scale input{margin-top:3px;}
   .followup-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
   .followup-table th,.followup-table td{border:1px solid var(--line);padding:6px;}
-  .followup-table th{background:#f1ece3;font-size:11px;text-transform:uppercase;}
-  .followup-table input,.followup-table textarea{width:100%;border:none;font-family:Georgia,serif;font-size:13px;}
-  .note{font-size:11px;color:#777;background:#f1ece3;padding:8px 10px;border-radius:4px;margin-bottom:10px;}
+  .followup-table th{background:#F1EADA;font-size:11px;text-transform:uppercase;}
+  .followup-table input,.followup-table textarea{width:100%;border:none;font-family:'Nunito Sans', Arial, sans-serif;font-size:13px;}
+  .note{font-size:11px;color:#777;background:#F1EADA;padding:8px 10px;border-radius:4px;margin-bottom:10px;}
   .actions{
     position:sticky;bottom:0;
     background:var(--panel);
@@ -132,11 +132,11 @@
     font-size:15px;
     border-radius:5px;
     cursor:pointer;
-    font-family:Arial, sans-serif;
+    font-family:'Nunito Sans', Arial, sans-serif;
     letter-spacing:.5px;
   }
   button:hover{background:var(--green);}
-  .hint{font-size:12px;color:#777;margin-top:8px;font-family:Arial, sans-serif;}
+  .hint{font-size:12px;color:#777;margin-top:8px;font-family:'Nunito Sans', Arial, sans-serif;}
   footer.foot{text-align:center;font-size:11px;color:#999;margin-top:18px;}
   @media(max-width:700px){
     .g2,.g3,.g4{grid-template-columns:1fr;}
@@ -144,45 +144,45 @@
   }
 
   /* ---------- TIMERS ---------- */
-  .timers-block{margin-bottom:22px;padding:16px 18px;border-left:4px solid var(--green-dark);background:#f6f2ea;border-radius:0 6px 6px 0;}
+  .timers-block{margin-bottom:22px;padding:16px 18px;border-left:4px solid var(--green-dark);background:#F6EFE2;border-radius:0 6px 6px 0;}
   .timers-head{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
-  .timers-letter{background:var(--green-dark);color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;font-weight:bold;font-size:14px;flex-shrink:0;}
+  .timers-letter{background:var(--green-dark);color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:'Nunito Sans', Arial, sans-serif;font-weight:bold;font-size:14px;flex-shrink:0;}
   .timers-title{font-variant:small-caps;font-size:16px;color:var(--green-dark);font-weight:bold;}
-  .timers-sub{font-size:11.5px;color:#777;margin:0 0 14px 38px;font-family:Arial,sans-serif;line-height:1.5;}
+  .timers-sub{font-size:11.5px;color:#777;margin:0 0 14px 38px;font-family:'Nunito Sans', Arial, sans-serif;line-height:1.5;}
   .impact-box{background:#fff;border:1px solid var(--red);border-radius:4px;padding:12px 14px;margin-bottom:14px;}
   .impact-box label.field{color:var(--red);font-weight:bold;}
   .impact-box textarea{min-height:70px;}
   fieldset.timers-fieldset{margin-top:14px;}
 
   /* ---------- SAE ---------- */
-  .sae-grupo-titulo{font-family:Arial,sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:bold;margin:16px 0 8px;}
+  .sae-grupo-titulo{font-family:'Playfair Display', Georgia, serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);font-weight:bold;margin:16px 0 8px;}
   .sae-grupo-titulo:first-child{margin-top:0;}
   .sae-dx{border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:8px;background:#fffdfb;}
   .sae-dx-head{display:flex;align-items:flex-start;gap:8px;}
   .sae-dx-head input{margin-top:4px;width:15px;height:15px;accent-color:var(--green-dark);cursor:pointer;flex-shrink:0;}
   .sae-dx-head label{font-size:14px;font-weight:bold;color:var(--green-dark);cursor:pointer;}
-  .sae-dx-tipo{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:#999;font-family:Arial,sans-serif;margin-left:6px;font-weight:normal;}
+  .sae-dx-tipo{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:#999;font-family:'Nunito Sans', Arial, sans-serif;margin-left:6px;font-weight:normal;}
   .sae-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
   .sae-detail.show{display:block;}
   .sae-def{font-size:12px;color:#666;font-style:italic;margin-bottom:8px;}
-  .sae-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--green-dark);font-weight:bold;margin:10px 0 5px;font-family:Arial,sans-serif;}
+  .sae-sub{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--green-dark);font-weight:bold;margin:10px 0 5px;font-family:'Nunito Sans', Arial, sans-serif;}
   .sae-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
-  .sae-tag{background:#f1ece3;border-radius:3px;padding:2px 7px;font-size:11px;color:#666;}
+  .sae-tag{background:#F1EADA;border-radius:3px;padding:2px 7px;font-size:11px;color:#666;}
   .sae-nic-item{display:flex;align-items:flex-start;gap:6px;font-size:12.5px;margin-bottom:4px;}
   .sae-nic-item input{margin-top:3px;accent-color:var(--green-dark);cursor:pointer;flex-shrink:0;}
-  .sae-noc{background:#eef4f1;border-left:3px solid var(--green);padding:8px 10px;font-size:12.5px;margin-top:6px;}
+  .sae-noc{background:#EEF2E3;border-left:3px solid var(--green);padding:8px 10px;font-size:12.5px;margin-top:6px;}
   .sae-noc b{color:var(--green-dark);}
 
   /* ---------- ACCESS GATE ---------- */
-  #gate-login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:#e7ded0; }
-  .gate-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(42,58,51,.18); width:380px; max-width:100%; overflow:hidden; }
+  #gate-login{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:#E6DCC6; }
+  .gate-card{ background:#fff; border:1px solid var(--line); box-shadow:0 18px 50px rgba(51,66,31,.18); width:380px; max-width:100%; overflow:hidden; }
   .gate-card .topo{ height:3px; background:var(--green-dark); }
   .gate-inner{ padding:40px 36px 36px; text-align:center; }
   .gate-inner img{ height:56px; width:auto; margin:0 auto 20px; display:block; }
   .gate-label{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; }
   .gate-label span{ font-size:9.5px; letter-spacing:.24em; color:var(--red); text-transform:uppercase; font-weight:600; }
   .gate-label .l{ width:20px; height:.5px; background:var(--red); opacity:.7; }
-  .gate-inner h1{ font-family:Georgia, serif; font-size:19px; font-weight:600; color:var(--green-dark); line-height:1.2; margin:0 0 5px; }
+  .gate-inner h1{ font-family:'Playfair Display', Georgia, serif; font-size:19px; font-weight:600; color:var(--green-dark); line-height:1.2; margin:0 0 5px; }
   .gate-inner p{ font-size:11px; color:#555; margin:0; }
   .gate-divisor{ height:.5px; background:var(--green-dark); opacity:.12; margin:22px 0; }
   .gate-inner input[type=password]{
@@ -199,6 +199,7 @@
   .gate-inner button:hover{ background:var(--green); }
   @media print{ #gate-login{ display:none !important; } }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap" rel="stylesheet" />
 </head>
 <body>
 <div id="gate-login">
@@ -1027,7 +1028,7 @@
       const result = await resp.json();
 
       if (result.status === 'ok') {
-        hint.style.color = '#3f6a5c';
+        hint.style.color = '#5F7A35';
         hint.innerHTML = `Evolução salva no Drive com sucesso. <a href="${result.url}" target="_blank" rel="noopener">Abrir documento</a>`;
         btn.textContent = 'Salvar evolução no Drive';
         btn.disabled = false;
@@ -1067,11 +1068,11 @@
       } else if (!copiarFallback(texto)) {
         throw new Error('fallback falhou');
       }
-      hint.style.color = '#3f6a5c';
+      hint.style.color = '#5F7A35';
       hint.textContent = 'Evolução copiada para a área de transferência.';
     } catch (err) {
       if (copiarFallback(texto)) {
-        hint.style.color = '#3f6a5c';
+        hint.style.color = '#5F7A35';
         hint.textContent = 'Evolução copiada para a área de transferência.';
       } else {
         hint.style.color = '#c0584a';

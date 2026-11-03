@@ -16,15 +16,15 @@
 <link rel="icon" type="image/png" href="assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
-    --ink:#2A3A33; --ink-soft:#43544c;
-    --salvia-soft:#5A7A6B1a; --line:#5A7A6B44; --line-strong:#2A3A3326;
-    --cream-2:#efe7d6;
-    --serif-display:"Cormorant Garamond", Georgia, serif;
-    --serif-body:"EB Garamond", Georgia, serif;
+    --cipreste:#33421F; --salvia:#5F7A35; --terracota:#E07A3F; --pergaminho:#F6EFE2;
+    --ink:#33421F; --ink-soft:#4B5A33;
+    --salvia-soft:#5F7A351a; --line:#5F7A3544; --line-strong:#33421F26;
+    --cream-2:#EBE2CC;
+    --serif-display:"Playfair Display", Georgia, serif;
+    --serif-body:"Nunito Sans", Georgia, serif;
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
@@ -38,7 +38,7 @@
   a{ color:inherit; text-decoration:none; }
   .wrap{ width:min(760px, 92vw); margin:0 auto; }
 
-  .kicker{ font-size:12.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--terracota); font-weight:600; display:flex; align-items:center; justify-content:center; gap:10px; }
+  .kicker{ font-size:12.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--salvia); font-weight:600; display:flex; align-items:center; justify-content:center; gap:10px; }
   .kicker .d{ width:5px; height:5px; background:var(--terracota); transform:rotate(45deg); flex:none; }
   h1,h2{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); margin:0; line-height:1.08; }
 
@@ -48,7 +48,7 @@
     border:1.5px solid var(--terracota); background:var(--terracota); color:#fff;
     transition:transform .15s, box-shadow .2s; white-space:nowrap;
   }
-  .btn:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(201,120,98,.35); }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(224,122,63,.35); }
   .btn.ghost{ background:transparent; color:var(--cipreste); border-color:var(--cipreste); }
   .btn svg{ width:19px; height:19px; flex:none; }
   .btn-wrap{ text-align:center; }
@@ -68,7 +68,7 @@
   .hero{ padding:56px 0 44px; text-align:center; position:relative; overflow:hidden; }
   .hero::before{
     content:""; position:absolute; right:-160px; top:-140px; width:440px; height:440px; border-radius:50%;
-    background:radial-gradient(circle, #5A7A6B1f, transparent 68%); pointer-events:none;
+    background:radial-gradient(circle, #5F7A351f, transparent 68%); pointer-events:none;
   }
   .hero .wrap{ position:relative; }
   .hero .kicker{ margin-bottom:18px; }
@@ -82,7 +82,7 @@
 
   .ph-hero{
     margin:36px auto 0; max-width:320px; border-radius:12px; overflow:hidden;
-    border:1px solid var(--line); box-shadow:0 18px 40px rgba(42,58,51,.16);
+    border:1px solid var(--line); box-shadow:0 18px 40px rgba(51,66,31,.16);
   }
   .ph-hero img{ width:100%; height:auto; display:block; }
 
@@ -129,9 +129,9 @@
 
   .cta-final{ background:var(--cipreste); color:var(--pergaminho); text-align:center; padding:60px 0; }
   .cta-final h2{ color:#fff; font-size:clamp(26px, 4.6vw, 38px); margin-bottom:14px; }
-  .cta-final p{ font-size:16px; color:#F7F2E8cc; max-width:48ch; margin:0 auto 30px; }
+  .cta-final p{ font-size:16px; color:#F6EFE2cc; max-width:48ch; margin:0 auto 30px; }
   .cta-final .btn{ background:var(--terracota); border-color:var(--terracota); }
-  .cta-final .btn.ghost{ background:transparent; color:#fff; border-color:#F7F2E855; }
+  .cta-final .btn.ghost{ background:transparent; color:#fff; border-color:#F6EFE255; }
 
   footer{ padding:32px 0 100px; text-align:center; }
   footer p{ font-size:12px; color:var(--ink-soft); opacity:.75; line-height:1.7; margin:0; }
@@ -139,7 +139,7 @@
 
   .sticky-cta{
     position:fixed; left:0; right:0; bottom:0; z-index:999; background:#fff;
-    border-top:1px solid var(--line); padding:12px 16px; box-shadow:0 -6px 20px rgba(42,58,51,.1);
+    border-top:1px solid var(--line); padding:12px 16px; box-shadow:0 -6px 20px rgba(51,66,31,.1);
     display:none;
   }
   .sticky-cta .btn{ width:100%; justify-content:center; padding:15px; font-size:16px; }
@@ -227,6 +227,7 @@
     <div class="wrap">
       <p class="sec-titulo">Cuidado <em>técnico</em>, com ciência e presença</p>
       <div class="cred-grid">
+        <div class="cred-item"><span class="d"></span><span>Especialista em <b>Tratamento de Feridas</b></span></div>
         <div class="cred-item"><span class="d"></span><span>Especialista em <b>Intensivismo, Urgência e Emergência</b> adulto e neonatal</span></div>
         <div class="cred-item"><span class="d"></span><span>Pós-graduada em <b>Terapia Intensiva</b> Neonatal e Adulto</span></div>
         <div class="cred-item"><span class="d"></span><span><b>Mestranda em Enfermagem</b> — UFJF</span></div>
@@ -295,7 +296,7 @@
     <div class="wrap">
       <p>
         Bruna Arguelles — Enfermagem Especializada · COREN/MG 761268-ENF · CNPJ 66.913.603/0001-92<br>
-        Juiz de Fora/MG · @cuidarpelabruna
+        Juiz de Fora/MG · @enfbruna.feridas
       </p>
       <a class="home" href="index.html">← Voltar para o site</a>
     </div>

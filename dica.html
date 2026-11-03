@@ -7,13 +7,13 @@
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --cipreste:#2A3A33; --salvia:#5A7A6B; --terracota:#C97862; --pergaminho:#F7F2E8;
-    --ink:#2A3A33; --ink-soft:#43544c; --line:#5A7A6B44; --cream-2:#efe7d6;
-    --serif-display:"Cormorant Garamond", Georgia, serif;
-    --serif-body:"EB Garamond", Georgia, serif;
+    --cipreste:#33421F; --salvia:#5F7A35; --terracota:#E07A3F; --pergaminho:#F6EFE2;
+    --ink:#33421F; --ink-soft:#4B5A33; --line:#5F7A3544; --cream-2:#EBE2CC;
+    --serif-display:"Playfair Display", Georgia, serif;
+    --serif-body:"Nunito Sans", Georgia, serif;
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
@@ -22,22 +22,22 @@
   a{ color:inherit; }
 
   /* topbar */
-  .topbar{ height:74px; display:flex; align-items:center; border-bottom:1px solid var(--line); position:sticky; top:0; background:#F7F2E8f2; backdrop-filter:blur(8px); z-index:10; }
+  .topbar{ height:74px; display:flex; align-items:center; border-bottom:1px solid var(--line); position:sticky; top:0; background:#F6EFE2f2; backdrop-filter:blur(8px); z-index:10; }
   .topbar .in{ width:min(900px,92vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
   .brand{ display:flex; align-items:center; gap:12px; }
   .brand img{ height:36px; }
   .brand .nm{ font-family:var(--serif-display); font-size:20px; font-weight:600; color:var(--cipreste); line-height:1; }
-  .brand .rl{ font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--terracota); font-weight:600; margin-top:3px; }
+  .brand .rl{ font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin-top:3px; }
   .back{ font-size:15px; color:var(--ink-soft); display:inline-flex; align-items:center; gap:7px; transition:color .2s; }
   .back:hover{ color:var(--cipreste); }
 
   /* article */
   .article{ width:min(760px,90vw); margin:0 auto; padding:56px 0 40px; }
-  .kicker{ font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--terracota); font-weight:600; display:flex; align-items:center; gap:10px; }
+  .kicker{ font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--salvia); font-weight:600; display:flex; align-items:center; gap:10px; }
   .kicker .d{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); }
   .kicker .date{ color:var(--salvia); letter-spacing:.1em; }
   h1.title{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); font-size:clamp(34px,5.5vw,52px); line-height:1.06; margin:16px 0 0; letter-spacing:.005em; }
-  .cover{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; border:1px solid var(--line); margin:34px 0 8px; box-shadow:0 18px 45px rgba(42,58,51,.14); }
+  .cover{ width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; border:1px solid var(--line); margin:34px 0 8px; box-shadow:0 18px 45px rgba(51,66,31,.14); }
   .content{ margin-top:30px; }
   .content h2{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); font-size:30px; line-height:1.1; margin:38px 0 10px; }
   .content h3{ font-family:var(--serif-display); font-weight:600; color:var(--cipreste); font-size:24px; margin:28px 0 8px; }
@@ -54,7 +54,7 @@
   .cta{ margin-top:48px; padding-top:34px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; }
   .cta .msg{ font-family:var(--serif-display); font-size:23px; color:var(--cipreste); font-weight:600; }
   .btn{ display:inline-flex; align-items:center; gap:9px; font-family:var(--serif-body); font-weight:600; font-size:16px; padding:12px 24px; border-radius:34px; border:1.5px solid var(--terracota); background:var(--terracota); color:#fff; transition:transform .15s, box-shadow .2s; }
-  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(201,120,98,.3); }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(224,122,63,.3); }
   .btn svg{ width:18px; height:18px; }
   .notfound{ text-align:center; padding:80px 0; }
   .notfound h1{ font-family:var(--serif-display); color:var(--cipreste); font-size:38px; }
