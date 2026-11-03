@@ -311,6 +311,14 @@
       </div>
       <p class="instrucao">Marque os materiais utilizados, ajuste o custo unitário e a quantidade.<br>O total atualiza automaticamente. Terminou a seleção do atendimento de hoje? Clique em "Enviar pro Controle Financeiro" e ele já aparece pronto por lá.</p>
       <p class="instrucao" id="msg-enviar-financeiro" style="display:none;color:var(--salvia);font-weight:600;"></p>
+      <div class="exportar-barra">
+        <div class="exportar-campo">
+          <label for="nome-familiar">Nome do paciente ou familiar (opcional)</label>
+          <input type="text" id="nome-familiar" placeholder="Ex: Maria da Silva" />
+        </div>
+        <button class="btn-exportar" id="btn-exportar-materiais">↓ Exportar materiais PDF (com Pix)</button>
+      </div>
+      <p class="instrucao" id="msg-exportar-materiais" style="display:none;color:var(--terracota);font-weight:600;"></p>
       <div id="lista-materiais"></div>
     </div>
 
@@ -1013,15 +1021,151 @@ function renderizarTabelas() {
 }
 
 // ── Exportar PDF ─────────────────────────────────────────────────────────────
+// Paleta da nova identidade (musgo, salvia, por do sol, pergaminho)
+const PDF_CORES = {
+  CIP:   [51, 66, 31],
+  SAL:   [95, 122, 53],
+  TER:   [224, 122, 63],
+  PERG:  [246, 239, 226],
+  BORDA: [212, 205, 184],
+}
+const PIX_CNPJ = '66.913.603/0001-92'
+
+// Logo carregada com antecedencia para o PDF sair na hora do clique (sem esperar rede)
+let LOGO_DATA = null
+fetch('/assets/logo.png')
+  .then(r => r.ok ? r.blob() : Promise.reject())
+  .then(b => new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(b) }))
+  .then(d => { LOGO_DATA = d })
+  .catch(() => {})
+
+function exportarMateriaisPDF() {
+  const msg = document.getElementById('msg-exportar-materiais')
+  const itens = []
+  let total = 0
+  MATERIAIS.forEach(m => {
+    const s = selecao[m.id]
+    if (!s || !s.ativo) return
+    const sub = calcSubtotal(m, s)
+    if (sub == null) return
+    total += sub
+    const descQtd = m.embalagem ? `${s.uso || 0} ${m.unidade}` : `${s.qtd || 1} un.`
+    itens.push([m.item, descQtd, fmt(sub)])
+  })
+  if (!itens.length) {
+    msg.textContent = 'Marque os materiais (e a quantidade usada) antes de exportar.'
+    msg.style.display = 'block'
+    return
+  }
+  msg.style.display = 'none'
+
+  const { jsPDF } = window.jspdf
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+  const { CIP, SAL, TER, PERG, BORDA } = PDF_CORES
+  const W = 210, M = 18
+  const nome = document.getElementById('nome-familiar').value.trim()
+  const data = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
+
+  // Faixa e cabeçalho
+  doc.setFillColor(...CIP); doc.rect(0, 0, W, 4, 'F')
+  doc.setFillColor(...PERG); doc.rect(0, 4, W, 38, 'F')
+  if (LOGO_DATA) {
+    doc.addImage(LOGO_DATA, 'PNG', M, 8, 56, 22.1)
+  } else {
+    doc.setFont('times', 'bolditalic'); doc.setFontSize(20); doc.setTextColor(...CIP)
+    doc.text('Enfermagem Especializada', M, 20)
+    doc.setFont('times', 'italic'); doc.setFontSize(12); doc.setTextColor(...SAL)
+    doc.text('por Bruna Arguelles', M, 27)
+  }
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...SAL)
+  doc.text(`CNPJ ${PIX_CNPJ}`, M, 37)
+  doc.setTextColor(...CIP)
+  doc.text(data, W - M, 16, { align: 'right' })
+  if (nome) {
+    doc.setFontSize(7.5); doc.setTextColor(...SAL); doc.setCharSpace(1)
+    doc.text('PARA', W - M, 24, { align: 'right' }); doc.setCharSpace(0)
+    doc.setFont('times', 'bolditalic'); doc.setFontSize(13); doc.setTextColor(...CIP)
+    doc.text(nome, W - M, 32, { align: 'right' })
+  }
+  doc.setDrawColor(...TER); doc.setLineWidth(0.5); doc.line(M, 42, W - M, 42)
+
+  // Título
+  doc.setFont('times', 'bolditalic'); doc.setFontSize(19); doc.setTextColor(...CIP)
+  doc.text('Materiais à parte', M, 55)
+  doc.setFont('times', 'italic'); doc.setFontSize(9.5); doc.setTextColor(...SAL)
+  doc.text('Valores dos materiais utilizados no atendimento, cobrados além do cuidado combinado.', M, 61)
+
+  // Tabela
+  doc.autoTable({
+    startY: 68,
+    head: [['Material', 'Qtd / uso', 'Valor']],
+    body: itens,
+    margin: { left: M, right: M },
+    styles: {
+      font: 'helvetica', fontSize: 9,
+      cellPadding: { top: 3.5, bottom: 3.5, left: 5, right: 5 },
+      textColor: CIP, lineColor: BORDA, lineWidth: 0.2,
+    },
+    headStyles: { fillColor: CIP, textColor: [255,255,255], fontSize: 7.5, fontStyle: 'normal' },
+    alternateRowStyles: { fillColor: PERG },
+    columnStyles: {
+      0: { cellWidth: 'auto' },
+      1: { cellWidth: 30, halign: 'center' },
+      2: { cellWidth: 30, halign: 'right', fontStyle: 'bold' },
+    },
+  })
+
+  let y = doc.lastAutoTable.finalY + 8
+  const precisa = h => { if (y + h > 270) { doc.addPage(); doc.setFillColor(...CIP); doc.rect(0, 0, W, 4, 'F'); y = 18 } }
+
+  // Total
+  precisa(16)
+  doc.setFillColor(...CIP); doc.rect(M, y, W - 2*M, 14, 'F')
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(255, 255, 255); doc.setCharSpace(1)
+  doc.text('TOTAL DOS MATERIAIS', M + 5, y + 8.5); doc.setCharSpace(0)
+  doc.setFont('times', 'bolditalic'); doc.setFontSize(17)
+  doc.text(fmt(total), W - M - 5, y + 10, { align: 'right' })
+  y += 24
+
+  // Pix
+  precisa(36)
+  doc.setFillColor(...PERG); doc.rect(M, y, W - 2*M, 30, 'F')
+  doc.setDrawColor(...TER); doc.setLineWidth(1); doc.line(M, y, M, y + 30)
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...TER); doc.setCharSpace(1.5)
+  doc.text('PAGAMENTO VIA PIX', M + 8, y + 8); doc.setCharSpace(0)
+  doc.setFontSize(8.5); doc.setTextColor(...SAL)
+  doc.text('Chave Pix (CNPJ)', M + 8, y + 15)
+  doc.setFont('times', 'bolditalic'); doc.setFontSize(17); doc.setTextColor(...CIP)
+  doc.text(PIX_CNPJ, M + 8, y + 23)
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...SAL)
+  doc.text('Favorecido: Bruna Arguelles, Enfermagem Especializada', W - M - 5, y + 23, { align: 'right' })
+  y += 38
+
+  // Observação
+  precisa(14)
+  doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(...SAL)
+  doc.text(doc.splitTextToSize('Os valores correspondem ao material efetivamente utilizado. Após o pagamento, envie o comprovante pelo WhatsApp.', W - 2*M), M, y)
+
+  // Rodapé
+  doc.setDrawColor(...TER); doc.setLineWidth(0.4); doc.line(M, 277, W - M, 277)
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...SAL)
+  doc.text(`Enfermagem Especializada por Bruna Arguelles · CNPJ ${PIX_CNPJ}`, M, 282)
+  doc.setTextColor(...BORDA)
+  doc.text('@enfbruna.feridas', W - M, 282, { align: 'right' })
+
+  const nomeArq = nome
+    ? `materiais_${nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`
+    : `materiais_${new Date().toISOString().slice(0,10)}.pdf`
+  doc.setProperties({ title: nomeArq })
+  const janela = window.open(doc.output('bloburl'), '_blank')
+  if (!janela) doc.save(nomeArq)
+}
+
 function exportarPDF() {
   const { jsPDF } = window.jspdf
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
 
-  const CIP   = [42, 58, 51]
-  const SAL   = [90, 122, 107]
-  const TER   = [201, 120, 98]
-  const PERG  = [247, 242, 232]
-  const BORDA = [212, 205, 184]
+  const { CIP, SAL, TER, PERG, BORDA } = PDF_CORES
   const W = 210, M = 18
 
   const paciente = document.getElementById('nome-paciente').value.trim()
@@ -1323,6 +1467,7 @@ function renderizarTudo() {
 
 renderizarTudo()
 document.getElementById('btn-exportar').addEventListener('click', exportarPDF)
+document.getElementById('btn-exportar-materiais').addEventListener('click', exportarMateriaisPDF)
 </script>
 
 </div>
