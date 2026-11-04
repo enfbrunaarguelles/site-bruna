@@ -273,6 +273,26 @@
   .testim-cta a{ font-size:14px; font-weight:600; color:var(--cipreste); border:1px solid var(--line); border-radius:30px; padding:10px 20px; transition:background .2s, border-color .2s; display:inline-flex; align-items:center; gap:8px; }
   .testim-cta a:hover{ background:var(--salvia-soft); border-color:var(--salvia); }
 
+
+  /* ---------- O QUE EU CUIDO ---------- */
+  .cat-list{ max-width:900px; margin:48px auto 0; display:flex; flex-direction:column; gap:14px; }
+  .cat{ background:#F6EFE2; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .cat.destaque{ border-color:var(--terracota); border-width:1.5px; background:#fffcf6; }
+  .cat summary{ cursor:pointer; list-style:none; display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; padding:22px 58px 22px 26px; position:relative; }
+  .cat summary::-webkit-details-marker{ display:none; }
+  .cat summary::after{ content:"+"; position:absolute; right:24px; top:50%; transform:translateY(-50%); font-size:28px; color:var(--terracota); transition:transform .2s; }
+  .cat[open] summary::after{ transform:translateY(-50%) rotate(45deg); }
+  .cat-name{ font-family:var(--serif-display); font-size:25px; font-weight:600; color:var(--cipreste); line-height:1.2; }
+  .cat-badge{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:700; background:var(--cipreste); color:#F6EFE2; border-radius:30px; padding:6px 13px; }
+  .cat-body{ padding:0 26px 26px; }
+  .cat-lead{ font-size:16.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 6px; }
+  .cat-body h4{ font-family:var(--serif-display); font-size:18px; color:var(--salvia); margin:20px 0 4px; font-weight:600; letter-spacing:.02em; }
+  .cat-body ul{ list-style:none; margin:10px 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; }
+  .cat-body li{ display:flex; gap:11px; align-items:flex-start; font-size:15.5px; color:var(--ink-soft); line-height:1.45; }
+  .cat-body li .d{ width:6px; height:6px; background:var(--terracota); transform:rotate(45deg); flex:none; margin-top:8px; }
+  .cat-note{ font-size:14px; color:var(--ink-soft); font-style:italic; line-height:1.6; margin:20px 0 0; padding-top:16px; border-top:1px solid var(--line); }
+  @media (max-width:760px){ .cat-body ul{ grid-template-columns:1fr; } .cat-name{ font-size:22px; } }
+
   /* ---------- svc links row ---------- */
   .svc-links{ margin-top:44px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:11px 14px; text-align:center; }
   .svc-links span{ font-size:14px; color:var(--ink-soft); font-style:italic; }
@@ -399,7 +419,7 @@
           <li><span class="d"></span><span data-i="cred1">Especialista em <b>Intensivismo, Urgência e Emergência</b> adulto e neonatal</span></li>
           <li><span class="d"></span><span data-i="cred2">Pós-graduada em <b>Terapia Intensiva</b> Neonatal e Adulto</span></li>
           <li><span class="d"></span><span data-i="cred3"><b>Mestranda em Enfermagem</b> — UFJF</span></li>
-          <li><span class="d"></span><span data-i="cred4">Habilitada em <b>Laserterapia</b></span></li>
+          <li><span class="d"></span><span data-i="cred4">Habilitada em <b>Laserterapia</b> (junho de 2026)</span></li>
           <li><span class="d"></span><span data-i="cred5">Habilitada em <b>Terapia Regenerativa</b></span></li>
           <li><span class="d"></span><span data-i="cred6">Atendimento em <b>consultório, domiciliar e teleconsulta</b></span></li>
         </ul>
@@ -498,6 +518,40 @@
     </div>
   </div>
 </section>
+
+<!-- ============ O QUE EU CUIDO ============ -->
+<section class="block" id="o-que-cuido">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="kicker center"><span class="d"></span><span data-i="cat_kicker">O que eu cuido</span><span class="d"></span></div>
+      <h2 class="sec-title" data-i="cat_title">Do recém-nascido ao idoso</h2>
+      <p class="sec-intro" style="margin-left:auto;margin-right:auto;" data-i="cat_intro">Cada pessoa recebe uma avaliação individual antes de qualquer conduta. Veja o que posso cuidar e, se não encontrar o seu caso, me chame para conversar.</p>
+    </div>
+    <div class="cat-list reveal">
+      <details class="cat destaque" open>
+        <summary><span class="cat-name" data-i="cat1_t">Materno-infantil: mães e bebês</span><span class="cat-badge" data-i="cat_badge">Formação em terapia intensiva neonatal</span></summary>
+        <div class="cat-body"><p class="cat-lead" data-i="cat1_lead">Cuidado com a pele e as feridas de mães e bebês, com o olhar de quem trabalha com recém-nascidos. Atendo bebês e crianças em consultório e em casa.</p><h4 data-i="cat1_s0">Pós-parto</h4><ul><li><span class="d"></span><span data-i="cat1_i1">Cuidado da cicatriz da cesárea</span></li><li><span class="d"></span><span data-i="cat1_i2">Episiotomia e laceração</span></li><li><span class="d"></span><span data-i="cat1_i3">Fissuras de amamentação</span></li><li><span class="d"></span><span data-i="cat1_i4">Mastite e ingurgitamento mamário</span></li><li><span class="d"></span><span data-i="cat1_i5">Orientação sobre amamentação</span></li></ul><h4 data-i="cat1_s5">Recém-nascido e bebê</h4><ul><li><span class="d"></span><span data-i="cat1_i6">Pele do recém-nascido e do prematuro após a alta</span></li><li><span class="d"></span><span data-i="cat1_i7">Coto umbilical</span></li><li><span class="d"></span><span data-i="cat1_i8">Dermatite de fralda</span></li><li><span class="d"></span><span data-i="cat1_i9">Lesões por adesivos</span></li><li><span class="d"></span><span data-i="cat1_i10">Queimaduras e feridas na infância</span></li><li><span class="d"></span><span data-i="cat1_i11">Pós-operatório pediátrico</span></li></ul></div>
+      </details>
+      <details class="cat">
+        <summary><span class="cat-name" data-i="cat2_t">Feridas e cicatrização</span></summary>
+        <div class="cat-body"><ul><li><span class="d"></span><span data-i="cat2_i1">Feridas agudas e crônicas</span></li><li><span class="d"></span><span data-i="cat2_i2">Úlceras venosas e arteriais</span></li><li><span class="d"></span><span data-i="cat2_i3">Pé diabético</span></li><li><span class="d"></span><span data-i="cat2_i4">Lesão por pressão</span></li><li><span class="d"></span><span data-i="cat2_i5">Feridas ortopédicas</span></li><li><span class="d"></span><span data-i="cat2_i6">Cicatriz hipertrófica e queloide</span></li><li><span class="d"></span><span data-i="cat2_i7">Coberturas específicas</span></li><li><span class="d"></span><span data-i="cat2_i8">Queimaduras</span></li><li><span class="d"></span><span data-i="cat2_i9">Feridas cirúrgicas com deiscência ou infecção</span></li><li><span class="d"></span><span data-i="cat2_i10">Feridas traumáticas e lacerações</span></li><li><span class="d"></span><span data-i="cat2_i11">Lesões por fricção e pele frágil do idoso</span></li><li><span class="d"></span><span data-i="cat2_i12">Dermatite associada à incontinência</span></li><li><span class="d"></span><span data-i="cat2_i13">Terapia compressiva em úlcera venosa</span></li><li><span class="d"></span><span data-i="cat2_i14">Feridas oncológicas e radiodermite</span></li><li><span class="d"></span><span data-i="cat2_i15">Desbridamento conservador</span></li></ul></div>
+      </details>
+      <details class="cat">
+        <summary><span class="cat-name" data-i="cat3_t">Laserterapia e ILIB</span></summary>
+        <div class="cat-body"><ul><li><span class="d"></span><span data-i="cat3_i1">Pós-operatório: cicatriz, dor e edema</span></li><li><span class="d"></span><span data-i="cat3_i2">Dores articulares e lombares</span></li><li><span class="d"></span><span data-i="cat3_i3">Herpes simples e zóster</span></li><li><span class="d"></span><span data-i="cat3_i4">Dor após herpes-zóster (neuralgia pós-herpética)</span></li><li><span class="d"></span><span data-i="cat3_i5">Mucosite e afta</span></li><li><span class="d"></span><span data-i="cat3_i6">Mucosite oral e radiodermite em tratamento oncológico</span></li><li><span class="d"></span><span data-i="cat3_i7">Pós-operatório de cirurgia plástica: edema, equimose e fibrose</span></li><li><span class="d"></span><span data-i="cat3_i8">Fissura mamilar</span></li><li><span class="d"></span><span data-i="cat3_i9">Sono, humor, ansiedade, TPM e estresse</span></li></ul><p class="cat-note" data-i="cat3_note">Habilitação em laserterapia concluída em junho de 2026. O laser é um recurso de apoio, indicado após avaliação individual, e não substitui o acompanhamento médico. O ILIB para sono, humor e ansiedade é complementar e não substitui o acompanhamento médico ou psicológico.</p></div>
+      </details>
+      <details class="cat">
+        <summary><span class="cat-name" data-i="cat4_t">Pés e pele</span></summary>
+        <div class="cat-body"><ul><li><span class="d"></span><span data-i="cat4_i1">Onicomicose</span></li><li><span class="d"></span><span data-i="cat4_i2">Micoses</span></li><li><span class="d"></span><span data-i="cat4_i3">Pé de atleta (frieira)</span></li></ul><p class="cat-note" data-i="cat4_note">O diagnóstico e os medicamentos são do médico. Aqui entram a avaliação, o cuidado com a pele e as unhas e a laserterapia como apoio.</p></div>
+      </details>
+      <details class="cat">
+        <summary><span class="cat-name" data-i="cat5_t">Cuidado em casa e prevenção</span></summary>
+        <div class="cat-body"><ul><li><span class="d"></span><span data-i="cat5_i1">Curativo domiciliar</span></li><li><span class="d"></span><span data-i="cat5_i2">Prevenção de lesão por pressão em acamados</span></li><li><span class="d"></span><span data-i="cat5_i3">Orientação a cuidadores e família</span></li><li><span class="d"></span><span data-i="cat5_i4">Teleconsulta de avaliação de ferida</span></li></ul></div>
+      </details>
+    </div>
+  </div>
+</section>
+
 
 <!-- ============ COMO FUNCIONA ============ -->
 <section class="block" id="como-funciona">
@@ -799,7 +853,7 @@
       cred1:"Specialist in <b>Intensive, Urgent & Emergency Care</b>, adult and neonatal",
       cred2:"Postgraduate in <b>Intensive Care</b>, Neonatal & Adult",
       cred3:"<b>Nursing MSc candidate</b> — UFJF",
-      cred4:"Certified in <b>Laser Therapy</b>",
+      cred4:"Qualified in <b>Laser Therapy</b> (June 2026)",
       cred5:"Certified in <b>Regenerative Therapy</b>",
       cred6:"Care at the <b>clinic and at home</b>",
       svc_kicker:"Services", svc_title:"How I can care for you",
@@ -876,6 +930,62 @@
       testim3_s:"Google review",
       testim4_q:"\"A very competent, dedicated professional, caring with all her patients. She does excellent work every day. Thank you so much!\"",
       testim4_s:"Google review",
+      cat1_t:"Maternal and child care: mothers and babies",
+      cat_badge:"Trained in neonatal intensive care",
+      cat1_lead:"Skin and wound care for mothers and babies, from the point of view of someone who works with newborns. I see babies and children at the office and at home.",
+      cat1_s0:"Postpartum",
+      cat1_i1:"Cesarean scar care",
+      cat1_i2:"Episiotomy and perineal tears",
+      cat1_i3:"Nipple fissures from breastfeeding",
+      cat1_i4:"Mastitis and breast engorgement",
+      cat1_i5:"Breastfeeding guidance",
+      cat1_s5:"Newborn and baby",
+      cat1_i6:"Skin care for newborns and preterm babies after discharge",
+      cat1_i7:"Umbilical cord stump",
+      cat1_i8:"Diaper dermatitis",
+      cat1_i9:"Adhesive-related skin injuries",
+      cat1_i10:"Burns and wounds in childhood",
+      cat1_i11:"Pediatric post-operative care",
+      cat2_t:"Wounds and healing",
+      cat2_i1:"Acute and chronic wounds",
+      cat2_i2:"Venous and arterial ulcers",
+      cat2_i3:"Diabetic foot",
+      cat2_i4:"Pressure injury",
+      cat2_i5:"Orthopedic wounds",
+      cat2_i6:"Hypertrophic scars and keloids",
+      cat2_i7:"Specific wound dressings",
+      cat2_i8:"Burns",
+      cat2_i9:"Surgical wounds with dehiscence or infection",
+      cat2_i10:"Traumatic wounds and lacerations",
+      cat2_i11:"Skin tears and fragile skin in older adults",
+      cat2_i12:"Incontinence-associated dermatitis",
+      cat2_i13:"Compression therapy for venous ulcers",
+      cat2_i14:"Oncology wounds and radiodermatitis",
+      cat2_i15:"Conservative debridement",
+      cat3_t:"Laser therapy and ILIB",
+      cat3_i1:"Post-operative care: scar, pain and swelling",
+      cat3_i2:"Joint and lower back pain",
+      cat3_i3:"Herpes simplex and zoster",
+      cat3_i4:"Pain after shingles (postherpetic neuralgia)",
+      cat3_i5:"Mucositis and canker sores",
+      cat3_i6:"Oral mucositis and radiodermatitis during cancer treatment",
+      cat3_i7:"Plastic surgery recovery: swelling, bruising and fibrosis",
+      cat3_i8:"Nipple fissures",
+      cat3_i9:"Sleep, mood, anxiety, PMS and stress",
+      cat3_note:"Laser therapy qualification completed in June 2026. Laser is a supportive resource, used after an individual assessment, and does not replace medical care. ILIB for sleep, mood and anxiety is complementary and does not replace medical or psychological follow-up.",
+      cat4_t:"Feet and skin",
+      cat4_i1:"Onychomycosis (nail fungus)",
+      cat4_i2:"Fungal skin infections",
+      cat4_i3:"Athlete's foot",
+      cat4_note:"Diagnosis and medication are the doctor's role. Here I offer assessment, skin and nail care, and laser therapy as support.",
+      cat5_t:"Home care and prevention",
+      cat5_i1:"Home dressing changes",
+      cat5_i2:"Pressure injury prevention for bedridden patients",
+      cat5_i3:"Guidance for caregivers and family",
+      cat5_i4:"Wound assessment by teleconsultation",
+      cat_kicker:"What I care for",
+      cat_title:"From newborns to older adults",
+      cat_intro:"Everyone gets an individual assessment before any decision is made. See what I can care for, and if you don't find your case, get in touch.",
       testim_cta:"See all reviews on Google →",
 
       footer_areas_title:"Areas of care"
