@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>Cartão de Avaliação no Google — Bruna Arguelles</title>
+<link rel="icon" type="image/png" href="assets/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet" />
+<style>
+  /*
+    Cartão de avaliação no Google — para imprimir e plastificar.
+    Formato: 10 x 15 cm (frente + verso lado a lado numa folha A4 deitada).
+    Imprimir em 100% (tamanho real), sem margens/cabeçalhos do navegador.
+  */
+  :root{
+    --cipreste:#33421F; --salvia:#5F7A35; --salvia-clara:#A8C27A;
+    --terracota:#E07A3F; --ambar:#E9B44C; --pergaminho:#F6EFE2;
+    --ink:#33421F; --ink-soft:#4B5A33;
+    --display:"Playfair Display", Georgia, serif;
+    --body:"Nunito Sans", Arial, sans-serif;
+  }
+  @page{ size:A4 landscape; margin:0; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:#e9e4d8; font-family:var(--body); color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+
+  /* ---------- barra de instruções (só na tela) ---------- */
+  .toolbar{
+    max-width:760px; margin:24px auto 0; padding:16px 20px; background:#fffdf8;
+    border:1px solid #5F7A3544; border-radius:12px; font-size:15px; line-height:1.5;
+  }
+  .toolbar b{ color:var(--cipreste); }
+  .toolbar button{
+    margin-top:10px; font:600 15px var(--body); background:var(--terracota); color:#fff;
+    border:0; border-radius:999px; padding:10px 22px; cursor:pointer;
+  }
+
+  /* ---------- folha ---------- */
+  .sheet{
+    width:297mm; height:210mm; margin:24px auto; background:#fff; position:relative;
+    display:flex; align-items:center; justify-content:center; gap:14mm;
+    box-shadow:0 10px 40px rgba(51,66,31,.15);
+  }
+
+  .card{
+    width:100mm; height:150mm; position:relative; overflow:hidden; flex:none;
+    border-radius:4mm;
+  }
+  /* marcas de corte */
+  .cut{ position:relative; }
+  .cut::before{
+    content:""; position:absolute; inset:-3mm; border:0.2mm dashed #b9b2a2; border-radius:6mm; pointer-events:none;
+  }
+  .cut-label{
+    position:absolute; left:0; right:0; bottom:-9mm; text-align:center;
+    font-size:8pt; color:#9a937f; letter-spacing:.08em; text-transform:uppercase;
+  }
+
+  /* ---------- FRENTE ---------- */
+  .front{
+    background:var(--pergaminho);
+    background-image:
+      radial-gradient(circle at 0% 0%, #5F7A3520, transparent 45%),
+      radial-gradient(circle at 100% 100%, #E07A3F1f, transparent 45%);
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    padding:7mm 8mm 6mm;
+  }
+  .front .logo{ width:46mm; height:auto; }
+  .front .eyebrow{
+    margin-top:4.5mm; font-size:7.5pt; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--salvia);
+  }
+  .front h1{
+    font-family:var(--display); font-weight:500; font-size:19pt; line-height:1.08; color:var(--cipreste);
+    margin:2mm 0 0;
+  }
+  .front h1 em{ font-style:italic; color:var(--terracota); }
+  .front .lead{
+    font-size:9pt; line-height:1.45; color:var(--ink-soft); margin:3mm 2mm 0;
+  }
+  .stars{ display:flex; gap:1.6mm; margin-top:3mm; }
+  .stars svg{ width:5.6mm; height:5.6mm; fill:var(--ambar); }
+
+  .qr-box{
+    margin-top:3mm; background:#fff; border-radius:4mm; padding:2.5mm;
+    box-shadow:0 0 0 0.35mm #5F7A3540;
+    position:relative;
+  }
+  .qr-box svg.qr{ display:block; width:42mm; height:42mm; }
+  .qr-center{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:11mm; height:11mm; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .qr-center img{ width:8.6mm; height:auto; }
+
+  .how{
+    margin-top:3mm; font-size:8.5pt; font-weight:600; color:var(--cipreste);
+    display:flex; align-items:center; gap:1.8mm;
+  }
+  .how svg{ width:4.6mm; height:4.6mm; stroke:var(--terracota); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .thanks{
+    margin-top:auto; padding-top:2mm; font-family:var(--display); font-style:italic; font-size:11pt; color:var(--salvia);
+  }
+
+  /* ---------- VERSO ---------- */
+  .back{
+    background:var(--cipreste) url("assets/pattern-musgo.png") center/120mm auto;
+    color:var(--pergaminho); display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:12mm 9mm;
+  }
+  .back .logo{ width:70mm; height:auto; }
+  .back .rule{ width:14mm; height:0.5mm; background:var(--terracota); border-radius:1mm; margin:8mm 0 6mm; }
+  .back h2{
+    font-family:var(--display); font-weight:500; font-size:15pt; line-height:1.2; margin:0; color:var(--pergaminho);
+  }
+  .back h2 em{ color:var(--ambar); }
+  .back p{ font-size:9pt; line-height:1.5; color:#F6EFE2d9; margin:3mm 0 0; }
+  .back .contacts{
+    margin-top:10mm; font-size:9pt; line-height:1.9; color:var(--pergaminho);
+  }
+  .back .contacts span{ display:flex; align-items:center; justify-content:center; gap:2mm; }
+  .back .contacts svg{ width:3.8mm; height:3.8mm; fill:var(--salvia-clara); }
+  .back .coren{ margin-top:7mm; font-size:7pt; letter-spacing:.14em; text-transform:uppercase; color:#F6EFE2a6; }
+
+  @media print{
+    body{ background:#fff; }
+    .toolbar{ display:none; }
+    .sheet{ margin:0; box-shadow:none; }
+  }
+  @media screen and (max-width:1150px){
+    .sheet{ transform-origin:top center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <b>Como imprimir:</b> clique em “Imprimir”, escolha <b>A4 deitado (paisagem)</b>, escala <b>100% / tamanho real</b>,
+  margens <b>nenhuma</b> e marque <b>“Gráficos de fundo”</b>. O cartão sai com 10 × 15 cm — recorte na linha
+  tracejada, cole frente e verso e plastifique.<br>
+  Para fazer vários, é só imprimir quantas folhas quiser.
+  <br><button type="button" onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="sheet">
+
+  <!-- FRENTE -->
+  <div class="cut">
+    <section class="card front" aria-label="Frente do cartão">
+      <img class="logo" src="assets/logo.svg" alt="Enfermagem Especializada por Bruna Arguelles" />
+
+      <div class="eyebrow">Sua opinião importa</div>
+      <h1>Como foi o seu<br><em>cuidado</em> comigo?</h1>
+      <p class="lead">
+        Se a laserterapia fez diferença para você, conte no Google.
+        Leva menos de 1 minuto e ajuda outros pacientes a encontrarem esse cuidado.
+      </p>
+
+      <div class="stars" aria-label="5 estrelas">
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z"/></svg>
+      </div>
+
+      <div class="qr-box">
+        <!-- QR Code: https://g.page/r/CU0Rkp8RvjhqEAE/review (correção de erro nível H) -->
+        <svg class="qr" viewBox="-2 -2 41 41" shape-rendering="crispEdges" role="img" aria-label="QR Code para avaliar no Google">
+          <path fill="#33421F" d="M0 0h7v1h-7zM8 0h1v1h-1zM10 0h1v1h-1zM13 0h2v1h-2zM16 0h3v1h-3zM20 0h1v1h-1zM22 0h1v1h-1zM24 0h2v1h-2zM27 0h1v1h-1zM30 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM10 1h2v1h-2zM13 1h1v1h-1zM17 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM30 1h1v1h-1zM36 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h5v1h-5zM14 2h1v1h-1zM21 2h3v1h-3zM26 2h1v1h-1zM30 2h1v1h-1zM32 2h3v1h-3zM36 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM11 3h4v1h-4zM16 3h1v1h-1zM23 3h1v1h-1zM28 3h1v1h-1zM30 3h1v1h-1zM32 3h3v1h-3zM36 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h1v1h-1zM10 4h1v1h-1zM12 4h3v1h-3zM16 4h1v1h-1zM18 4h1v1h-1zM20 4h4v1h-4zM25 4h1v1h-1zM30 4h1v1h-1zM32 4h3v1h-3zM36 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h3v1h-3zM13 5h1v1h-1zM15 5h1v1h-1zM17 5h2v1h-2zM21 5h2v1h-2zM25 5h2v1h-2zM28 5h1v1h-1zM30 5h1v1h-1zM36 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM28 6h1v1h-1zM30 6h7v1h-7zM8 7h5v1h-5zM15 7h1v1h-1zM17 7h1v1h-1zM19 7h3v1h-3zM23 7h3v1h-3zM27 7h2v1h-2zM5 8h2v1h-2zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM19 8h2v1h-2zM23 8h2v1h-2zM26 8h1v1h-1zM30 8h1v1h-1zM32 8h1v1h-1zM34 8h1v1h-1zM36 8h1v1h-1zM0 9h1v1h-1zM2 9h3v1h-3zM9 9h1v1h-1zM11 9h1v1h-1zM13 9h1v1h-1zM15 9h2v1h-2zM19 9h3v1h-3zM25 9h2v1h-2zM28 9h1v1h-1zM31 9h2v1h-2zM34 9h2v1h-2zM1 10h1v1h-1zM4 10h1v1h-1zM6 10h2v1h-2zM10 10h2v1h-2zM13 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM24 10h4v1h-4zM30 10h2v1h-2zM33 10h4v1h-4zM0 11h1v1h-1zM2 11h3v1h-3zM8 11h2v1h-2zM11 11h7v1h-7zM23 11h2v1h-2zM26 11h1v1h-1zM30 11h1v1h-1zM32 11h2v1h-2zM35 11h1v1h-1zM2 12h1v1h-1zM6 12h1v1h-1zM11 12h1v1h-1zM14 12h1v1h-1zM18 12h1v1h-1zM20 12h1v1h-1zM27 12h1v1h-1zM30 12h1v1h-1zM33 12h1v1h-1zM35 12h1v1h-1zM0 13h1v1h-1zM4 13h1v1h-1zM9 13h1v1h-1zM11 13h9v1h-9zM27 13h3v1h-3zM31 13h1v1h-1zM34 13h1v1h-1zM2 14h1v1h-1zM5 14h5v1h-5zM12 14h1v1h-1zM14 14h2v1h-2zM18 14h2v1h-2zM21 14h2v1h-2zM24 14h1v1h-1zM26 14h2v1h-2zM29 14h1v1h-1zM32 14h2v1h-2zM35 14h2v1h-2zM2 15h2v1h-2zM5 15h1v1h-1zM9 15h2v1h-2zM12 15h2v1h-2zM15 15h1v1h-1zM17 15h1v1h-1zM22 15h2v1h-2zM28 15h2v1h-2zM32 15h3v1h-3zM36 15h1v1h-1zM1 16h2v1h-2zM4 16h4v1h-4zM9 16h2v1h-2zM12 16h2v1h-2zM15 16h1v1h-1zM17 16h1v1h-1zM19 16h2v1h-2zM22 16h2v1h-2zM25 16h1v1h-1zM29 16h2v1h-2zM32 16h1v1h-1zM34 16h1v1h-1zM36 16h1v1h-1zM3 17h1v1h-1zM5 17h1v1h-1zM7 17h1v1h-1zM9 17h7v1h-7zM20 17h3v1h-3zM24 17h1v1h-1zM26 17h1v1h-1zM28 17h2v1h-2zM2 18h2v1h-2zM6 18h3v1h-3zM10 18h2v1h-2zM15 18h1v1h-1zM19 18h1v1h-1zM22 18h4v1h-4zM27 18h1v1h-1zM30 18h1v1h-1zM32 18h1v1h-1zM34 18h1v1h-1zM36 18h1v1h-1zM2 19h1v1h-1zM7 19h3v1h-3zM13 19h1v1h-1zM15 19h4v1h-4zM20 19h2v1h-2zM26 19h3v1h-3zM31 19h1v1h-1zM33 19h1v1h-1zM35 19h1v1h-1zM1 20h1v1h-1zM4 20h5v1h-5zM11 20h2v1h-2zM15 20h2v1h-2zM21 20h1v1h-1zM23 20h2v1h-2zM26 20h1v1h-1zM29 20h8v1h-8zM0 21h3v1h-3zM4 21h2v1h-2zM13 21h1v1h-1zM17 21h3v1h-3zM23 21h1v1h-1zM26 21h3v1h-3zM31 21h2v1h-2zM34 21h2v1h-2zM0 22h1v1h-1zM6 22h1v1h-1zM8 22h4v1h-4zM14 22h1v1h-1zM18 22h3v1h-3zM22 22h1v1h-1zM24 22h1v1h-1zM27 22h1v1h-1zM29 22h2v1h-2zM33 22h1v1h-1zM35 22h2v1h-2zM0 23h2v1h-2zM5 23h1v1h-1zM7 23h1v1h-1zM11 23h2v1h-2zM17 23h4v1h-4zM23 23h1v1h-1zM26 23h2v1h-2zM29 23h3v1h-3zM35 23h1v1h-1zM1 24h1v1h-1zM3 24h2v1h-2zM6 24h1v1h-1zM8 24h2v1h-2zM11 24h3v1h-3zM16 24h1v1h-1zM18 24h1v1h-1zM25 24h2v1h-2zM28 24h1v1h-1zM30 24h2v1h-2zM0 25h1v1h-1zM3 25h3v1h-3zM9 25h1v1h-1zM12 25h1v1h-1zM15 25h4v1h-4zM20 25h2v1h-2zM24 25h1v1h-1zM26 25h1v1h-1zM29 25h1v1h-1zM31 25h1v1h-1zM33 25h1v1h-1zM0 26h1v1h-1zM4 26h3v1h-3zM11 26h1v1h-1zM14 26h1v1h-1zM16 26h1v1h-1zM18 26h1v1h-1zM21 26h2v1h-2zM25 26h4v1h-4zM30 26h1v1h-1zM32 26h1v1h-1zM35 26h2v1h-2zM0 27h1v1h-1zM2 27h1v1h-1zM4 27h1v1h-1zM9 27h1v1h-1zM13 27h1v1h-1zM18 27h3v1h-3zM24 27h1v1h-1zM27 27h1v1h-1zM29 27h1v1h-1zM31 27h4v1h-4zM0 28h1v1h-1zM2 28h2v1h-2zM6 28h3v1h-3zM13 28h1v1h-1zM15 28h1v1h-1zM17 28h5v1h-5zM24 28h2v1h-2zM27 28h6v1h-6zM34 28h1v1h-1zM36 28h1v1h-1zM8 29h2v1h-2zM11 29h2v1h-2zM15 29h1v1h-1zM17 29h2v1h-2zM20 29h2v1h-2zM23 29h2v1h-2zM28 29h1v1h-1zM32 29h2v1h-2zM35 29h1v1h-1zM0 30h7v1h-7zM9 30h2v1h-2zM13 30h2v1h-2zM16 30h2v1h-2zM19 30h1v1h-1zM21 30h1v1h-1zM23 30h1v1h-1zM25 30h2v1h-2zM28 30h1v1h-1zM30 30h1v1h-1zM32 30h3v1h-3zM36 30h1v1h-1zM0 31h1v1h-1zM6 31h1v1h-1zM8 31h1v1h-1zM11 31h1v1h-1zM14 31h1v1h-1zM16 31h1v1h-1zM18 31h1v1h-1zM20 31h1v1h-1zM22 31h1v1h-1zM27 31h2v1h-2zM32 31h2v1h-2zM0 32h1v1h-1zM2 32h3v1h-3zM6 32h1v1h-1zM10 32h1v1h-1zM12 32h1v1h-1zM14 32h2v1h-2zM19 32h4v1h-4zM24 32h1v1h-1zM26 32h7v1h-7zM34 32h2v1h-2zM0 33h1v1h-1zM2 33h3v1h-3zM6 33h1v1h-1zM10 33h4v1h-4zM16 33h2v1h-2zM19 33h2v1h-2zM30 33h5v1h-5zM0 34h1v1h-1zM2 34h3v1h-3zM6 34h1v1h-1zM9 34h4v1h-4zM14 34h2v1h-2zM17 34h2v1h-2zM20 34h5v1h-5zM27 34h3v1h-3zM31 34h1v1h-1zM34 34h1v1h-1zM36 34h1v1h-1zM0 35h1v1h-1zM6 35h1v1h-1zM9 35h1v1h-1zM11 35h6v1h-6zM19 35h1v1h-1zM21 35h3v1h-3zM26 35h1v1h-1zM28 35h1v1h-1zM30 35h1v1h-1zM33 35h1v1h-1zM36 35h1v1h-1zM0 36h7v1h-7zM9 36h1v1h-1zM13 36h1v1h-1zM18 36h4v1h-4zM24 36h2v1h-2zM27 36h3v1h-3zM31 36h1v1h-1zM33 36h1v1h-1zM36 36h1v1h-1z"/>
+        </svg>
+        <div class="qr-center"><img src="assets/simbolo.svg" alt="" /></div>
+      </div>
+
+      <div class="how">
+        <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+        Aponte a câmera do celular para o código
+      </div>
+
+      <div class="thanks">Obrigada pela confiança! — Bruna</div>
+    </section>
+    <div class="cut-label">Frente</div>
+  </div>
+
+  <!-- VERSO -->
+  <div class="cut">
+    <section class="card back" aria-label="Verso do cartão">
+      <img class="logo" src="assets/logo-negativa.svg" alt="Enfermagem Especializada por Bruna Arguelles" />
+      <div class="rule"></div>
+      <h2>Laserterapia na<br><em>mucosite oral</em></h2>
+      <p>Fotobiomodulação para prevenir e aliviar as feridas na boca durante o tratamento oncológico.</p>
+
+      <div class="contacts">
+        <span><svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24z"/></svg>(32) 99102-7249</span>
+        <span><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zm0 4.8a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm5.2-9.6a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>@enfbruna.feridas</span>
+        <span><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-2.9a15.7 15.7 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8zM12 4c.8 1.2 1.5 2.5 1.9 4h-3.8c.4-1.5 1.1-2.8 1.9-4zM4.3 14a8.2 8.2 0 0 1 0-4h3.4a16.5 16.5 0 0 0 0 4H4.3zm.8 2h2.9c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16zM8 8H5.1a8 8 0 0 1 4.3-3.6C8.8 5.5 8.3 6.7 8 8zm4 12c-.8-1.2-1.5-2.5-1.9-4h3.8c-.4 1.5-1.1 2.8-1.9 4zm2.3-6H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4zm.3 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.9a8 8 0 0 1-4.3 3.6zm1.7-5.6a16.5 16.5 0 0 0 0-4h3.4a8.2 8.2 0 0 1 0 4h-3.4z"/></svg>brunaarguelles.com.br</span>
+      </div>
+
+      <div class="coren">Enf. Bruna Arguelles · COREN/MG 761268-ENF</div>
+    </section>
+    <div class="cut-label">Verso</div>
+  </div>
+
+</div>
+
+</body>
+</html>
