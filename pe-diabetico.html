@@ -8,6 +8,14 @@
   gtag('js', new Date());
 
   gtag('config', 'G-EBCS94LR4T');
+  gtag('config', 'AW-18356889413');
+  // Conversao Google Ads: clique em qualquer link do WhatsApp
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
+    if (!a) return;
+    gtag('event', 'conversion', { 'send_to': 'AW-18356889413/GJ1GCJfDk7QdEMXOn7FE', 'value': 1.0, 'currency': 'BRL' });
+    gtag('event', 'whatsapp_click', { 'link_url': a.href, 'page_path': location.pathname });
+  });
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

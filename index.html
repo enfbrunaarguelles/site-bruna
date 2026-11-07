@@ -9,6 +9,14 @@
   gtag('js', new Date());
 
   gtag('config', 'G-EBCS94LR4T');
+  gtag('config', 'AW-18356889413');
+  // Conversao Google Ads: clique em qualquer link do WhatsApp
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
+    if (!a) return;
+    gtag('event', 'conversion', { 'send_to': 'AW-18356889413/GJ1GCJfDk7QdEMXOn7FE', 'value': 1.0, 'currency': 'BRL' });
+    gtag('event', 'whatsapp_click', { 'link_url': a.href, 'page_path': location.pathname });
+  });
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -515,6 +523,8 @@
       <a href="feridas-pos-cirurgicas.html" data-i="svc_links_4">Feridas pós-cirúrgicas</a>
       <a href="curativo-domiciliar.html" data-i="svc_links_5">Curativo domiciliar</a>
       <a href="terapia-regenerativa-feridas.html" data-i="svc_links_6">Terapia regenerativa (PRP e PRF)</a>
+      <a href="laserterapia-juiz-de-fora.html">Laserterapia em Juiz de Fora</a>
+      <a href="materno-infantil-juiz-de-fora.html">Cuidado materno-infantil</a>
     </div>
   </div>
 </section>
@@ -801,6 +811,8 @@
         <li><a href="feridas-pos-cirurgicas.html" data-i="svc_links_4">Feridas pós-cirúrgicas</a></li>
         <li><a href="curativo-domiciliar.html" data-i="svc_links_5">Curativo domiciliar</a></li>
         <li><a href="terapia-regenerativa-feridas.html" data-i="svc_links_6b">Terapia regenerativa (PRP e PRF)</a></li>
+        <li><a href="laserterapia-juiz-de-fora.html">Laserterapia em Juiz de Fora</a></li>
+        <li><a href="materno-infantil-juiz-de-fora.html">Cuidado materno-infantil</a></li>
       </ul>
     </div>
     <div class="legal">
