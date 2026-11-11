@@ -324,6 +324,7 @@
       <div id="sec-preco" style="display:none">
         <div class="grupo">
           <div class="grupo-label"><span class="d"></span><span>Tabela de preços</span></div>
+          <div class="nota-preco" id="aviso-imposto" style="display:none">O imposto ainda não foi preenchido, então os preços sugeridos estão sem imposto. Preencha em Parâmetros quando souber a sua alíquota.</div>
           <div class="tabela-mensal" id="tabela-precos"><div class="vazio">Carregando…</div></div>
           <p class="dica-tab">Sugerido é o preço calculado pelos parâmetros lá embaixo. Piso é o mínimo da tabela de procedimentos de enfermagem (Resolução Cofen 673/2021) com a URTE atualizada.</p>
         </div>
@@ -347,8 +348,8 @@
             <div id="calc-materiais-lista"></div>
             <button type="button" class="btn-preco sec" id="calc-add-material">+ adicionar material</button>
             <div class="grid-2">
-              <div><label>Distância ida e volta (km)</label><input type="number" id="calc-km" min="0" step="0.1" value="0"></div>
-              <div><label>Outros custos de deslocamento (R$)</label><input type="number" id="calc-outros" min="0" step="0.01" value="0"></div>
+              <div><label>Onde é o atendimento</label><select id="calc-regiao"></select></div>
+              <div><label>Deslocamento: Uber ida e volta (R$)</label><input type="number" id="calc-desloc" min="0" step="0.01" value="0"></div>
             </div>
             <div class="resultado-preco" id="calc-resultado"></div>
           </div>
@@ -365,7 +366,7 @@
 
         <div class="grupo">
           <div class="grupo-label"><span class="d"></span><span>Parâmetros</span></div>
-          <div class="nota-preco">Valores provisórios: custo fixo mensal, atendimentos por mês e imposto vieram do modelo da mentoria. Confirme os seus e salve.</div>
+          <div class="nota-preco">Valores provisórios: custo fixo mensal e atendimentos por mês vieram do modelo da mentoria. Confirme os seus e salve. O imposto está zerado até você preencher.</div>
           <div class="form-preco" id="form-params"></div>
           <button type="button" class="btn-preco" id="params-salvar">Salvar parâmetros</button>
           <p class="form-msg" id="params-msg"></p>
@@ -856,9 +857,16 @@ const CATEGORIAS_ENTRADA = ['Consulta', 'Retorno', 'Procedimento', 'Pacote de Se
 
 const CONFIG_PRECO_PADRAO = {
   hora_avaliacao: 189.75, hora_pontual: 189.75, hora_baixa: 88.55, hora_media: 113.85, hora_alta: 151.8, hora_laser: 126.5,
-  urte: 12.65, atend_mes: 20, custo_fixo: 350, margem: 0.2, imposto: 0.06,
-  combustivel: 0, rendimento: 0, manutencao_km: 0, desc_5: 0, desc_10: 0, desc_15: 0,
+  urte: 12.65, atend_mes: 20, custo_fixo: 350, margem: 0.2, imposto: 0,
+  uber_proxima: 0, uber_intermediaria: 0, uber_distante: 0, desc_5: 0, desc_10: 0, desc_15: 0,
 };
+const REGIOES_DESLOC = [
+  { k: '', label: 'Consultório (sem deslocamento)' },
+  { k: 'uber_proxima', label: 'Domicílio: região próxima' },
+  { k: 'uber_intermediaria', label: 'Domicílio: região intermediária' },
+  { k: 'uber_distante', label: 'Domicílio: região distante' },
+  { k: 'outro', label: 'Outro valor' },
+];
 const PARAMS_PRECO = [
   { k: 'hora_avaliacao', label: 'Hora: consulta de avaliação (R$)', t: 'num' },
   { k: 'hora_pontual', label: 'Hora: consulta pontual (R$)', t: 'num' },
@@ -870,10 +878,10 @@ const PARAMS_PRECO = [
   { k: 'atend_mes', label: 'Atendimentos por mês', t: 'num', dica: 'Divide o custo fixo entre os atendimentos.' },
   { k: 'custo_fixo', label: 'Custo fixo mensal (R$)', t: 'num' },
   { k: 'margem', label: 'Margem (%)', t: 'pct', dica: 'Aplicada sobre honorário, custo fixo, insumos e deslocamento.' },
-  { k: 'imposto', label: 'Imposto estimado (%)', t: 'pct' },
-  { k: 'combustivel', label: 'Combustível por litro (R$)', t: 'num' },
-  { k: 'rendimento', label: 'Rendimento do veículo (km por litro)', t: 'num' },
-  { k: 'manutencao_km', label: 'Reserva de manutenção por km (R$)', t: 'num' },
+  { k: 'imposto', label: 'Imposto estimado (%)', t: 'pct', dica: 'Deixe 0 até saber a sua alíquota. Confirme com o contador.' },
+  { k: 'uber_proxima', label: 'Uber ida e volta: região próxima (R$)', t: 'num', dica: 'Quanto você paga de corrida, ida e volta.' },
+  { k: 'uber_intermediaria', label: 'Uber ida e volta: região intermediária (R$)', t: 'num' },
+  { k: 'uber_distante', label: 'Uber ida e volta: região distante (R$)', t: 'num' },
   { k: 'desc_5', label: 'Desconto no plano de 5 (%)', t: 'pct' },
   { k: 'desc_10', label: 'Desconto no plano de 10 (%)', t: 'pct' },
   { k: 'desc_15', label: 'Desconto no plano de 15 (%)', t: 'pct' },
@@ -941,10 +949,6 @@ async function carregarPreco() {
   }
 }
 
-function custoPorKm() {
-  return (configPreco.rendimento > 0 ? configPreco.combustivel / configPreco.rendimento : 0) + (configPreco.manutencao_km || 0);
-}
-
 function horaDoTipo(label) {
   const t = TIPOS_HORA.find(x => x.label === label);
   return t ? (configPreco[t.k] || 0) : 0;
@@ -956,10 +960,11 @@ function calcularPreco({ tipo, tempo, insumos, desloc }) {
   const base = honorario + fixo + (insumos || 0) + (desloc || 0);
   const margem = base * configPreco.margem;
   const final = arredCima((base + margem) / (1 - configPreco.imposto));
-  return { honorario, fixo, insumos: insumos || 0, deslocamento: desloc || 0, base, margem, imposto: final - base - margem, final };
+  return { honorario, fixo, insumos: insumos || 0, deslocamento: desloc || 0, base, margem, imposto: Math.max(0, Math.round((final - base - margem) * 100) / 100), final };
 }
 
 function renderTabelaPrecos() {
+  document.getElementById('aviso-imposto').style.display = configPreco.imposto > 0 ? 'none' : 'block';
   const el = document.getElementById('tabela-precos');
   if (!tabelaPreco.length) { el.innerHTML = '<div class="vazio">Nenhum serviço cadastrado.</div>'; return; }
   el.innerHTML = `
@@ -1026,7 +1031,9 @@ function lerNumero(id) { return parseFloat(document.getElementById(id).value) ||
 function renderCalculadora() {
   const sel = document.getElementById('calc-tipo');
   if (!sel.options.length) sel.innerHTML = TIPOS_HORA.map(t => `<option>${esc(t.label)}</option>`).join('');
-  const desloc = lerNumero('calc-km') * custoPorKm() + lerNumero('calc-outros');
+  const reg = document.getElementById('calc-regiao');
+  if (!reg.options.length) reg.innerHTML = REGIOES_DESLOC.map(r => `<option value="${r.k}">${esc(r.label)}</option>`).join('');
+  const desloc = lerNumero('calc-desloc');
   const r = calcularPreco({ tipo: sel.value, tempo: lerNumero('calc-tempo'), insumos: lerNumero('calc-insumos'), desloc });
   document.getElementById('calc-resultado').innerHTML = `
     <p class="rp-rot">Preço final sugerido</p>
@@ -1140,8 +1147,16 @@ document.querySelectorAll('#nav-sec button').forEach(b => b.addEventListener('cl
   document.getElementById('sec-preco').style.display = b.dataset.sec === 'preco' ? 'block' : 'none';
 }));
 
-['calc-tipo', 'calc-tempo', 'calc-insumos', 'calc-km', 'calc-outros'].forEach(id =>
+['calc-tipo', 'calc-tempo', 'calc-insumos', 'calc-desloc'].forEach(id =>
   document.getElementById(id).addEventListener('input', renderCalculadora));
+
+function aplicarRegiao() {
+  const k = document.getElementById('calc-regiao').value;
+  if (k === '') document.getElementById('calc-desloc').value = '0';
+  else if (k !== 'outro') document.getElementById('calc-desloc').value = String(configPreco[k] || 0);
+  renderCalculadora();
+}
+document.getElementById('calc-regiao').addEventListener('input', aplicarRegiao);
 document.getElementById('calc-add-material').addEventListener('click', criarLinhaMaterialCalc);
 
 document.getElementById('serv-add').addEventListener('click', () => {
@@ -1174,7 +1189,7 @@ document.getElementById('params-salvar').addEventListener('click', async (e) => 
       configPreco[inp.dataset.p] = isNaN(v) ? 0 : (inp.dataset.t === 'pct' ? v / 100 : v);
     });
     await salvarConfigPreco();
-    renderPreco(); renderParametros();
+    renderPreco(); renderParametros(); aplicarRegiao();
     mostrarMsg('params-msg', 'Parâmetros salvos!', true);
   } catch (err) { mostrarMsg('params-msg', 'Erro: ' + err.message, false); }
   finally { btn.disabled = false; }
