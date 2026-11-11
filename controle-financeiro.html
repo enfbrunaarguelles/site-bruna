@@ -134,12 +134,46 @@
   .link-planilha{ display:inline-block; margin-top:10px; font-size:11px; color:var(--salvia); text-decoration:underline; }
   .carregando{ text-align:center; padding:60px 20px; color:var(--salvia); font-size:13px; }
 
+  .nav-sec{ display:flex; gap:8px; margin-bottom:28px; }
+  .nav-sec button{ flex:1; padding:12px; border:1px solid var(--line); background:#fff; font-family:inherit; font-size:12px; font-weight:600; letter-spacing:.1em; color:var(--ink-soft); cursor:pointer; text-transform:uppercase; }
+  .nav-sec button.ativa{ background:var(--cipreste); color:#fff; border-color:var(--cipreste); }
+
+  .form-preco{ background:#fff; border:1px solid var(--line); padding:20px; }
+  .form-preco label{ display:block; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); margin:14px 0 6px; }
+  .form-preco > label:first-child{ margin-top:0; }
+  .form-preco input, .form-preco select{ width:100%; padding:11px 12px; font-size:14px; font-family:inherit; border:1px solid var(--line); background:#fff; color:var(--ink); outline:none; }
+  .form-preco .dica{ font-size:11.5px; color:var(--ink-soft); margin:6px 0 0; line-height:1.5; }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:0 12px; }
+  .btn-preco{ width:100%; margin-top:20px; padding:13px; background:var(--cipreste); color:#fff; border:none; font-size:13px; font-weight:600; font-family:inherit; letter-spacing:.08em; cursor:pointer; }
+  .btn-preco:hover{ background:#3F5228; }
+  .btn-preco:disabled{ opacity:.6; cursor:default; }
+  .btn-preco.sec{ background:none; color:var(--salvia); border:1px dashed var(--line); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; margin-top:10px; }
+  .btn-preco.sec:hover{ border-color:var(--terracota); color:var(--terracota); }
+  .btn-remover-serv{ background:none; border:1px solid var(--line); color:var(--terracota); cursor:pointer; font-family:inherit; font-size:11px; letter-spacing:.06em; text-transform:uppercase; padding:8px 12px; margin-top:14px; }
+
+  .resultado-preco{ background:var(--cipreste); color:#fff; padding:20px 22px; margin-top:18px; }
+  .resultado-preco .rp-rot{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#c9d6ce; margin:0 0 4px; }
+  .resultado-preco .rp-final{ font-family:var(--serif-display); font-size:34px; font-weight:600; margin:0 0 12px; }
+  .rp-linha{ display:flex; justify-content:space-between; gap:12px; font-size:13px; padding:7px 0; border-top:.5px solid rgba(255,255,255,.2); }
+  .rp-linha span:last-child{ white-space:nowrap; }
+
+  .tp-row{ grid-template-columns:1.5fr .9fr .9fr .8fr .9fr; }
+  .tp-plano{ grid-template-columns:1fr .6fr 1fr 1.6fr; }
+  .tm-mes small{ display:block; font-weight:400; font-size:10.5px; color:var(--salvia); margin-top:2px; }
+  .tm-num small{ display:block; font-size:10px; color:var(--terracota); margin-top:2px; white-space:normal; }
+  .nota-preco{ background:var(--pergaminho); border:1px solid var(--line); padding:12px 14px; font-size:12px; color:var(--ink-soft); line-height:1.6; margin-bottom:14px; }
+  .dica-tab{ font-size:11.5px; color:var(--ink-soft); line-height:1.6; margin:10px 0 0; }
+  .edit-serv{ margin-bottom:12px; }
+
   @media (max-width:600px){
     .login-card{ width:100%; }
     .header{ padding:16px 20px; }
     main{ padding:24px 16px 80px; }
     .tm-row{ padding:10px 14px; gap:4px; }
     .tm-mes, .tm-num{ font-size:11.5px; }
+    .tm-row.tm-cab .tm-mes, .tm-row.tm-cab .tm-num{ font-size:9px; letter-spacing:.03em; }
+    .tp-row{ grid-template-columns:1.3fr .8fr .9fr .9fr .9fr; }
+    .tp-plano{ grid-template-columns:.9fr .6fr 1fr 1.4fr; }
   }
 </style>
 </head>
@@ -181,6 +215,12 @@
     <div id="carregando" class="carregando">Carregando seus dados…</div>
 
     <div id="conteudo" style="display:none">
+      <div class="nav-sec" id="nav-sec">
+        <button type="button" class="ativa" data-sec="financeiro">Financeiro</button>
+        <button type="button" data-sec="preco">Precificação</button>
+      </div>
+
+      <div id="sec-financeiro">
       <div class="grupo">
         <div class="grupo-label"><span class="d"></span><span>Painel</span></div>
         <div class="kpis">
@@ -278,6 +318,58 @@
       <div class="grupo">
         <div class="grupo-label"><span class="d"></span><span>Lançamentos recentes</span></div>
         <div class="lista" id="lista-recentes"><div class="vazio">Nenhum lançamento ainda.</div></div>
+      </div>
+      </div>
+
+      <div id="sec-preco" style="display:none">
+        <div class="grupo">
+          <div class="grupo-label"><span class="d"></span><span>Tabela de preços</span></div>
+          <div class="tabela-mensal" id="tabela-precos"><div class="vazio">Carregando…</div></div>
+          <p class="dica-tab">Sugerido é o preço calculado pelos parâmetros lá embaixo. Piso é o mínimo da tabela de procedimentos de enfermagem (Resolução Cofen 673/2021) com a URTE atualizada.</p>
+        </div>
+
+        <div class="grupo">
+          <div class="grupo-label"><span class="d"></span><span>Planejado x recebido</span></div>
+          <div class="tabela-mensal" id="tabela-realidade"><div class="vazio">Nenhum lançamento ainda.</div></div>
+          <p class="dica-tab">Compara, por categoria do financeiro, o que você recebeu em média com o preço sugerido dos serviços ligados àquela categoria.</p>
+        </div>
+
+        <div class="grupo">
+          <div class="grupo-label"><span class="d"></span><span>Calculadora de preço</span></div>
+          <div class="form-preco">
+            <label>Tipo de atendimento</label>
+            <select id="calc-tipo"></select>
+            <div class="grid-2">
+              <div><label>Tempo (min)</label><input type="number" id="calc-tempo" min="0" step="5" value="60"></div>
+              <div><label>Insumos (R$)</label><input type="number" id="calc-insumos" min="0" step="0.01" value="0"></div>
+            </div>
+            <label>Montar insumos pelo catálogo (opcional)</label>
+            <div id="calc-materiais-lista"></div>
+            <button type="button" class="btn-preco sec" id="calc-add-material">+ adicionar material</button>
+            <div class="grid-2">
+              <div><label>Distância ida e volta (km)</label><input type="number" id="calc-km" min="0" step="0.1" value="0"></div>
+              <div><label>Outros custos de deslocamento (R$)</label><input type="number" id="calc-outros" min="0" step="0.01" value="0"></div>
+            </div>
+            <div class="resultado-preco" id="calc-resultado"></div>
+          </div>
+          <div class="tabela-mensal" id="calc-planos" style="margin-top:14px"></div>
+        </div>
+
+        <div class="grupo">
+          <div class="grupo-label"><span class="d"></span><span>Editar serviços</span></div>
+          <div id="editor-servicos"></div>
+          <button type="button" class="btn-preco sec" id="serv-add">+ novo serviço</button>
+          <button type="button" class="btn-preco" id="serv-salvar">Salvar tabela de serviços</button>
+          <p class="form-msg" id="serv-msg"></p>
+        </div>
+
+        <div class="grupo">
+          <div class="grupo-label"><span class="d"></span><span>Parâmetros</span></div>
+          <div class="nota-preco">Valores provisórios: custo fixo mensal, atendimentos por mês e imposto vieram do modelo da mentoria. Confirme os seus e salve.</div>
+          <div class="form-preco" id="form-params"></div>
+          <button type="button" class="btn-preco" id="params-salvar">Salvar parâmetros</button>
+          <p class="form-msg" id="params-msg"></p>
+        </div>
       </div>
     </div>
   </main>
@@ -745,6 +837,358 @@ function renderRentabilidade() {
   `).join('');
 }
 
+// ── Precificação ─────────────────────────────────────────────────────────────
+// Dados em duas abas da mesma planilha do financeiro: ConfigPreco (parâmetros) e
+// TabelaPrecos (serviços). Conta: (honorário + custo fixo rateado + insumos +
+// deslocamento) mais a margem, dividido por (1 - imposto).
+const SHEET_CONFIG_PRECO = 'ConfigPreco';
+const SHEET_TABELA_PRECO = 'TabelaPrecos';
+
+const TIPOS_HORA = [
+  { k: 'hora_avaliacao', label: 'Consulta de avaliação' },
+  { k: 'hora_pontual', label: 'Consulta unitária ou pontual' },
+  { k: 'hora_baixa', label: 'Acompanhamento | Baixa complexidade' },
+  { k: 'hora_media', label: 'Acompanhamento | Média complexidade' },
+  { k: 'hora_alta', label: 'Acompanhamento | Alta complexidade' },
+  { k: 'hora_laser', label: 'Laserterapia' },
+];
+const CATEGORIAS_ENTRADA = ['Consulta', 'Retorno', 'Procedimento', 'Pacote de Sessões', 'Produto/Curso', 'Outro'];
+
+const CONFIG_PRECO_PADRAO = {
+  hora_avaliacao: 189.75, hora_pontual: 189.75, hora_baixa: 88.55, hora_media: 113.85, hora_alta: 151.8, hora_laser: 126.5,
+  urte: 12.65, atend_mes: 20, custo_fixo: 350, margem: 0.2, imposto: 0.06,
+  combustivel: 0, rendimento: 0, manutencao_km: 0, desc_5: 0, desc_10: 0, desc_15: 0,
+};
+const PARAMS_PRECO = [
+  { k: 'hora_avaliacao', label: 'Hora: consulta de avaliação (R$)', t: 'num' },
+  { k: 'hora_pontual', label: 'Hora: consulta pontual (R$)', t: 'num' },
+  { k: 'hora_baixa', label: 'Hora: acompanhamento baixa (R$)', t: 'num' },
+  { k: 'hora_media', label: 'Hora: acompanhamento média (R$)', t: 'num' },
+  { k: 'hora_alta', label: 'Hora: acompanhamento alta (R$)', t: 'num' },
+  { k: 'hora_laser', label: 'Hora: laserterapia (R$)', t: 'num' },
+  { k: 'urte', label: 'Valor da URTE (R$)', t: 'num', dica: 'Referência do Cofen, corrigida. Atualize uma vez por ano.' },
+  { k: 'atend_mes', label: 'Atendimentos por mês', t: 'num', dica: 'Divide o custo fixo entre os atendimentos.' },
+  { k: 'custo_fixo', label: 'Custo fixo mensal (R$)', t: 'num' },
+  { k: 'margem', label: 'Margem (%)', t: 'pct', dica: 'Aplicada sobre honorário, custo fixo, insumos e deslocamento.' },
+  { k: 'imposto', label: 'Imposto estimado (%)', t: 'pct' },
+  { k: 'combustivel', label: 'Combustível por litro (R$)', t: 'num' },
+  { k: 'rendimento', label: 'Rendimento do veículo (km por litro)', t: 'num' },
+  { k: 'manutencao_km', label: 'Reserva de manutenção por km (R$)', t: 'num' },
+  { k: 'desc_5', label: 'Desconto no plano de 5 (%)', t: 'pct' },
+  { k: 'desc_10', label: 'Desconto no plano de 10 (%)', t: 'pct' },
+  { k: 'desc_15', label: 'Desconto no plano de 15 (%)', t: 'pct' },
+];
+const TABELA_PRECO_PADRAO = [
+  { servico: 'Consulta inicial', tipo: 'Consulta de avaliação', tempo: 75, insumos: 30, desloc: 0, atual: 350, categoria: 'Consulta', urtes: 15 },
+  { servico: 'Consulta de retorno', tipo: 'Consulta unitária ou pontual', tempo: 45, insumos: 0, desloc: 0, atual: 220, categoria: 'Retorno', urtes: 15 },
+  { servico: 'Curativo simples', tipo: 'Acompanhamento | Baixa complexidade', tempo: 45, insumos: 25, desloc: 0, atual: 150, categoria: 'Procedimento', urtes: 7 },
+  { servico: 'Curativo intermediário', tipo: 'Acompanhamento | Média complexidade', tempo: 60, insumos: 70, desloc: 0, atual: 260, categoria: 'Procedimento', urtes: 9 },
+  { servico: 'Curativo complexo', tipo: 'Acompanhamento | Alta complexidade', tempo: 60, insumos: 150, desloc: 0, atual: 450, categoria: 'Procedimento', urtes: 12 },
+  { servico: 'Laserterapia avulsa', tipo: 'Laserterapia', tempo: 30, insumos: 0, desloc: 0, atual: 140, categoria: 'Procedimento', urtes: 10 },
+];
+
+let configPreco = { ...CONFIG_PRECO_PADRAO };
+let tabelaPreco = [];
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtN = v => (v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const numPreco = v => (typeof v === 'number' ? v : parseFloat(String(v ?? '').replace(',', '.')) || 0);
+const arredCima = v => Math.ceil(v * 100 - 1e-6) / 100;
+
+async function salvarConfigPreco() {
+  const values = [['Chave', 'Valor'], ...Object.keys(CONFIG_PRECO_PADRAO).map(k => [k, configPreco[k]])];
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_CONFIG_PRECO}'!A1:B${values.length}`)}?valueInputOption=RAW`, {
+    method: 'PUT', body: JSON.stringify({ values }),
+  });
+}
+
+async function salvarTabelaPreco() {
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_TABELA_PRECO}'!A2:H500`)}:clear`, { method: 'POST', body: '{}' });
+  const values = [
+    ['Serviço', 'Tipo de atendimento', 'Tempo (min)', 'Insumos (R$)', 'Deslocamento (R$)', 'Preço atual (R$)', 'Categoria no financeiro', 'URTEs (piso Cofen)'],
+    ...tabelaPreco.map(r => [r.servico, r.tipo, r.tempo, r.insumos, r.desloc, r.atual, r.categoria, r.urtes]),
+  ];
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_TABELA_PRECO}'!A1:H${values.length}`)}?valueInputOption=RAW`, {
+    method: 'PUT', body: JSON.stringify({ values }),
+  });
+}
+
+async function carregarPreco() {
+  const meta = await sheetsFetch(`${spreadsheetId}?fields=sheets.properties.title`);
+  const titulos = meta.sheets.map(s => s.properties.title);
+  const faltando = [SHEET_CONFIG_PRECO, SHEET_TABELA_PRECO].filter(t => !titulos.includes(t));
+  if (faltando.length) {
+    await sheetsFetch(`${spreadsheetId}:batchUpdate`, {
+      method: 'POST', body: JSON.stringify({ requests: faltando.map(title => ({ addSheet: { properties: { title } } })) }),
+    });
+  }
+  const ranges = [`'${SHEET_CONFIG_PRECO}'!A2:B200`, `'${SHEET_TABELA_PRECO}'!A2:H500`].map(r => `ranges=${encodeURIComponent(r)}`).join('&');
+  const data = await sheetsFetch(`${spreadsheetId}/values:batchGet?${ranges}&valueRenderOption=UNFORMATTED_VALUE`);
+  const cfgRows = (data.valueRanges[0].values || []).filter(r => r && r[0]);
+  const tabRows = (data.valueRanges[1].values || []).filter(r => r && r[0]);
+
+  configPreco = { ...CONFIG_PRECO_PADRAO };
+  cfgRows.forEach(r => { if (r[0] in CONFIG_PRECO_PADRAO) configPreco[r[0]] = numPreco(r[1]); });
+  tabelaPreco = tabRows.map(r => ({
+    servico: String(r[0]), tipo: r[1] || TIPOS_HORA[0].label, tempo: numPreco(r[2]), insumos: numPreco(r[3]),
+    desloc: numPreco(r[4]), atual: numPreco(r[5]), categoria: r[6] || '', urtes: numPreco(r[7]),
+  }));
+
+  if (!cfgRows.length) await salvarConfigPreco();
+  if (!tabelaPreco.length) {
+    tabelaPreco = TABELA_PRECO_PADRAO.map(r => ({ ...r }));
+    await salvarTabelaPreco();
+  }
+}
+
+function custoPorKm() {
+  return (configPreco.rendimento > 0 ? configPreco.combustivel / configPreco.rendimento : 0) + (configPreco.manutencao_km || 0);
+}
+
+function horaDoTipo(label) {
+  const t = TIPOS_HORA.find(x => x.label === label);
+  return t ? (configPreco[t.k] || 0) : 0;
+}
+
+function calcularPreco({ tipo, tempo, insumos, desloc }) {
+  const honorario = horaDoTipo(tipo) * (tempo || 0) / 60;
+  const fixo = configPreco.atend_mes > 0 ? configPreco.custo_fixo / configPreco.atend_mes : 0;
+  const base = honorario + fixo + (insumos || 0) + (desloc || 0);
+  const margem = base * configPreco.margem;
+  const final = arredCima((base + margem) / (1 - configPreco.imposto));
+  return { honorario, fixo, insumos: insumos || 0, deslocamento: desloc || 0, base, margem, imposto: final - base - margem, final };
+}
+
+function renderTabelaPrecos() {
+  const el = document.getElementById('tabela-precos');
+  if (!tabelaPreco.length) { el.innerHTML = '<div class="vazio">Nenhum serviço cadastrado.</div>'; return; }
+  el.innerHTML = `
+    <div class="tm-row tp-row tm-cab">
+      <div class="tm-mes">Serviço</div><div class="tm-num">Sugerido</div><div class="tm-num">Atual</div><div class="tm-num">Dif.</div><div class="tm-num">Piso</div>
+    </div>
+  ` + tabelaPreco.map(r => {
+    const sug = calcularPreco(r).final;
+    const dif = r.atual - sug;
+    const piso = r.urtes * configPreco.urte;
+    const abaixo = r.atual > 0 && piso > 0 && r.atual < piso;
+    return `
+    <div class="tm-row tp-row">
+      <div class="tm-mes">${esc(r.servico)}<small>${r.tempo} min</small></div>
+      <div class="tm-num">${fmtN(sug)}</div>
+      <div class="tm-num">${fmtN(r.atual)}${abaixo ? '<small>abaixo do piso</small>' : ''}</div>
+      <div class="tm-num ${dif >= 0 ? 'pos' : 'neg'}">${dif >= 0 ? '+' : ''}${fmtN(dif)}</div>
+      <div class="tm-num">${piso > 0 ? fmtN(piso) : '-'}</div>
+    </div>`;
+  }).join('');
+}
+
+function calcularRealidade() {
+  const custoPorId = {};
+  consumo.forEach(c => { if (c.atendimentoId) custoPorId[c.atendimentoId] = (custoPorId[c.atendimentoId] || 0) + c.custoTotal; });
+  const media = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+  const cats = new Set([...tabelaPreco.map(r => r.categoria).filter(Boolean), ...entradas.map(e => e.categoria).filter(Boolean)]);
+  return [...cats].map(cat => {
+    const es = entradas.filter(e => e.categoria === cat);
+    const servs = tabelaPreco.filter(r => r.categoria === cat);
+    return {
+      cat,
+      n: es.length,
+      recebido: media(es.map(e => e.valor)),
+      material: media(es.filter(e => e.id && custoPorId[e.id] !== undefined).map(e => custoPorId[e.id])),
+      sugerido: media(servs.map(r => calcularPreco(r).final)),
+    };
+  }).filter(r => r.n > 0).sort((a, b) => b.n - a.n);
+}
+
+function renderRealidade() {
+  const el = document.getElementById('tabela-realidade');
+  const linhas = calcularRealidade();
+  if (!linhas.length) { el.innerHTML = '<div class="vazio">Nenhum lançamento ainda.</div>'; return; }
+  el.innerHTML = `
+    <div class="tm-row tp-row tm-cab">
+      <div class="tm-mes">Categoria</div><div class="tm-num">Atend.</div><div class="tm-num">Recebido</div><div class="tm-num">Sugerido</div><div class="tm-num">Dif.</div>
+    </div>
+  ` + linhas.map(l => {
+    const dif = l.sugerido !== null ? l.recebido - l.sugerido : null;
+    return `
+    <div class="tm-row tp-row">
+      <div class="tm-mes">${esc(l.cat)}${l.material !== null ? `<small>material médio ${fmtN(l.material)}</small>` : ''}</div>
+      <div class="tm-num">${l.n}</div>
+      <div class="tm-num">${fmtN(l.recebido)}</div>
+      <div class="tm-num">${l.sugerido !== null ? fmtN(l.sugerido) : '-'}</div>
+      <div class="tm-num ${dif === null ? '' : (dif >= 0 ? 'pos' : 'neg')}">${dif === null ? '-' : (dif >= 0 ? '+' : '') + fmtN(dif)}</div>
+    </div>`;
+  }).join('');
+}
+
+function lerNumero(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+function renderCalculadora() {
+  const sel = document.getElementById('calc-tipo');
+  if (!sel.options.length) sel.innerHTML = TIPOS_HORA.map(t => `<option>${esc(t.label)}</option>`).join('');
+  const desloc = lerNumero('calc-km') * custoPorKm() + lerNumero('calc-outros');
+  const r = calcularPreco({ tipo: sel.value, tempo: lerNumero('calc-tempo'), insumos: lerNumero('calc-insumos'), desloc });
+  document.getElementById('calc-resultado').innerHTML = `
+    <p class="rp-rot">Preço final sugerido</p>
+    <p class="rp-final">${fmtBRL(r.final)}</p>
+    <div class="rp-linha"><span>Honorário (${fmtBRL(horaDoTipo(sel.value))}/h)</span><span>${fmtBRL(r.honorario)}</span></div>
+    <div class="rp-linha"><span>Custo fixo rateado</span><span>${fmtBRL(r.fixo)}</span></div>
+    <div class="rp-linha"><span>Insumos</span><span>${fmtBRL(r.insumos)}</span></div>
+    <div class="rp-linha"><span>Deslocamento</span><span>${fmtBRL(r.deslocamento)}</span></div>
+    <div class="rp-linha"><span>Margem (${Math.round(configPreco.margem * 1000) / 10}%)</span><span>${fmtBRL(r.margem)}</span></div>
+    <div class="rp-linha"><span>Imposto (${Math.round(configPreco.imposto * 1000) / 10}%)</span><span>${fmtBRL(r.imposto)}</span></div>
+  `;
+  const linhas = [5, 10, 15].map(n => {
+    const desc = configPreco['desc_' + n] || 0;
+    const porAtend = r.final * (1 - desc);
+    const sobra = porAtend - porAtend * configPreco.imposto - r.base;
+    let msg;
+    if (sobra < 0) msg = `Abaixo do custo: perde ${fmtBRL(-sobra)} por atend.`;
+    else if (sobra < r.margem * 0.05) msg = 'Sem margem: o desconto consumiu tudo';
+    else msg = `Sobra ${fmtBRL(sobra)} por atend.`;
+    return `
+    <div class="tm-row tp-plano">
+      <div class="tm-mes">${n} atend.</div>
+      <div class="tm-num">${Math.round(desc * 1000) / 10}%</div>
+      <div class="tm-num">${fmtBRL(arredCima(r.final * n * (1 - desc)))}</div>
+      <div class="tm-num ${sobra < 0 ? 'neg' : ''}" style="white-space:normal">${msg}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('calc-planos').innerHTML = `
+    <div class="tm-row tp-plano tm-cab">
+      <div class="tm-mes">Plano</div><div class="tm-num">Desc.</div><div class="tm-num">Total</div><div class="tm-num">Margem depois</div>
+    </div>` + linhas;
+}
+
+function somarInsumosCalculadora() {
+  let total = 0;
+  document.querySelectorAll('#calc-materiais-lista .material-row').forEach(row => {
+    const nome = row.querySelector('.mat-item').value.trim();
+    const qtd = parseFloat(row.querySelector('.mat-qtd').value) || 0;
+    if (!nome || qtd <= 0) return;
+    const noEstoque = encontrarItemEstoque(nome);
+    total += (noEstoque ? noEstoque.custoUnitario : (buscarCustoCatalogo(nome) ?? 0)) * qtd;
+  });
+  document.getElementById('calc-insumos').value = (Math.round(total * 100) / 100).toString();
+  renderCalculadora();
+}
+
+function criarLinhaMaterialCalc() {
+  const row = document.createElement('div');
+  row.className = 'material-row';
+  row.innerHTML = `
+    <input type="text" class="mat-item" list="lista-itens-estoque" placeholder="Item">
+    <input type="number" class="mat-qtd" step="0.01" min="0" placeholder="Qtd">
+    <button type="button" class="btn-remover">×</button>
+  `;
+  row.querySelector('.btn-remover').addEventListener('click', () => { row.remove(); somarInsumosCalculadora(); });
+  row.querySelectorAll('input').forEach(i => i.addEventListener('input', somarInsumosCalculadora));
+  document.getElementById('calc-materiais-lista').appendChild(row);
+}
+
+function renderEditorServicos() {
+  document.getElementById('editor-servicos').innerHTML = tabelaPreco.map((r, i) => `
+    <div class="form-preco edit-serv" data-i="${i}">
+      <label>Serviço</label>
+      <input type="text" data-f="servico" value="${esc(r.servico)}">
+      <label>Tipo de atendimento (valor da hora)</label>
+      <select data-f="tipo">${TIPOS_HORA.map(t => `<option ${t.label === r.tipo ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}</select>
+      <div class="grid-2">
+        <div><label>Tempo (min)</label><input type="number" data-f="tempo" min="0" step="5" value="${r.tempo}"></div>
+        <div><label>Insumos (R$)</label><input type="number" data-f="insumos" min="0" step="0.01" value="${r.insumos}"></div>
+        <div><label>Deslocamento (R$)</label><input type="number" data-f="desloc" min="0" step="0.01" value="${r.desloc}"></div>
+        <div><label>Preço atual (R$)</label><input type="number" data-f="atual" min="0" step="0.01" value="${r.atual}"></div>
+        <div><label>Categoria no financeiro</label><select data-f="categoria">${CATEGORIAS_ENTRADA.map(c => `<option ${c === r.categoria ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select></div>
+        <div><label>URTEs (piso Cofen)</label><input type="number" data-f="urtes" min="0" step="1" value="${r.urtes}"></div>
+      </div>
+      <button type="button" class="btn-remover-serv" data-rem="${i}">Remover serviço</button>
+    </div>
+  `).join('');
+}
+
+function lerEditorServicos() {
+  return Array.from(document.querySelectorAll('#editor-servicos .edit-serv')).map(div => {
+    const g = f => div.querySelector(`[data-f="${f}"]`).value;
+    const n = f => numPreco(g(f));
+    return { servico: g('servico').trim(), tipo: g('tipo'), tempo: n('tempo'), insumos: n('insumos'), desloc: n('desloc'), atual: n('atual'), categoria: g('categoria'), urtes: n('urtes') };
+  }).filter(r => r.servico);
+}
+
+function renderParametros() {
+  document.getElementById('form-params').innerHTML = `<div class="grid-2">` + PARAMS_PRECO.map(p => {
+    const v = p.t === 'pct' ? Math.round(configPreco[p.k] * 10000) / 100 : configPreco[p.k];
+    return `<div><label>${esc(p.label)}</label><input type="number" data-p="${p.k}" data-t="${p.t}" step="0.01" min="0" value="${v}">${p.dica ? `<p class="dica">${esc(p.dica)}</p>` : ''}</div>`;
+  }).join('') + `</div>`;
+}
+
+function renderPreco() {
+  renderTabelaPrecos();
+  renderRealidade();
+  renderCalculadora();
+}
+
+function mostrarMsg(id, texto, ok) {
+  const el = document.getElementById(id);
+  el.textContent = texto;
+  el.className = 'form-msg ' + (ok ? 'ok' : 'erro');
+}
+
+document.querySelectorAll('#nav-sec button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#nav-sec button').forEach(x => x.classList.remove('ativa'));
+  b.classList.add('ativa');
+  document.getElementById('sec-financeiro').style.display = b.dataset.sec === 'financeiro' ? 'block' : 'none';
+  document.getElementById('sec-preco').style.display = b.dataset.sec === 'preco' ? 'block' : 'none';
+}));
+
+['calc-tipo', 'calc-tempo', 'calc-insumos', 'calc-km', 'calc-outros'].forEach(id =>
+  document.getElementById(id).addEventListener('input', renderCalculadora));
+document.getElementById('calc-add-material').addEventListener('click', criarLinhaMaterialCalc);
+
+document.getElementById('serv-add').addEventListener('click', () => {
+  tabelaPreco = lerEditorServicos();
+  tabelaPreco.push({ servico: 'Novo serviço', tipo: TIPOS_HORA[0].label, tempo: 60, insumos: 0, desloc: 0, atual: 0, categoria: 'Procedimento', urtes: 0 });
+  renderEditorServicos();
+});
+document.getElementById('editor-servicos').addEventListener('click', e => {
+  const i = e.target.dataset && e.target.dataset.rem;
+  if (i === undefined) return;
+  tabelaPreco = lerEditorServicos();
+  tabelaPreco.splice(Number(i), 1);
+  renderEditorServicos();
+});
+document.getElementById('serv-salvar').addEventListener('click', async (e) => {
+  const btn = e.target; btn.disabled = true;
+  try {
+    tabelaPreco = lerEditorServicos();
+    await salvarTabelaPreco();
+    renderEditorServicos(); renderPreco();
+    mostrarMsg('serv-msg', 'Tabela de serviços salva!', true);
+  } catch (err) { mostrarMsg('serv-msg', 'Erro: ' + err.message, false); }
+  finally { btn.disabled = false; }
+});
+document.getElementById('params-salvar').addEventListener('click', async (e) => {
+  const btn = e.target; btn.disabled = true;
+  try {
+    document.querySelectorAll('#form-params [data-p]').forEach(inp => {
+      const v = parseFloat(inp.value);
+      configPreco[inp.dataset.p] = isNaN(v) ? 0 : (inp.dataset.t === 'pct' ? v / 100 : v);
+    });
+    await salvarConfigPreco();
+    renderPreco(); renderParametros();
+    mostrarMsg('params-msg', 'Parâmetros salvos!', true);
+  } catch (err) { mostrarMsg('params-msg', 'Erro: ' + err.message, false); }
+  finally { btn.disabled = false; }
+});
+
+async function iniciarPreco() {
+  try {
+    await carregarPreco();
+    renderEditorServicos(); renderParametros(); renderPreco();
+  } catch (e) {
+    document.getElementById('tabela-precos').innerHTML = `<div class="vazio">Erro ao carregar a precificação: ${esc(e.message)}</div>`;
+  }
+}
+
 async function entrarNoApp() {
   document.getElementById('login').style.display = 'none';
   document.getElementById('app').style.display = 'block';
@@ -761,6 +1205,7 @@ async function entrarNoApp() {
     document.getElementById('carregando').style.display = 'none';
     document.getElementById('conteudo').style.display = 'block';
     importarMateriaisPendentes();
+    await iniciarPreco();
   } catch (e) {
     document.getElementById('carregando').textContent = 'Erro ao carregar dados: ' + e.message;
   }
@@ -769,6 +1214,7 @@ async function entrarNoApp() {
 async function atualizarTudo() {
   await carregarDados();
   renderKPIs(); renderResumoMensal(); renderEstoque(); renderRentabilidade(); renderRecentes(); atualizarListaItensEstoque();
+  renderRealidade();
 }
 
 document.querySelectorAll('.aba-btn').forEach(btn => {
