@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
   :root{
     --cipreste:#33421F; --salvia:#5F7A35; --terracota:#E07A3F; --pergaminho:#F6EFE2;
@@ -164,6 +166,36 @@
   .nota-preco{ background:var(--pergaminho); border:1px solid var(--line); padding:12px 14px; font-size:12px; color:var(--ink-soft); line-height:1.6; margin-bottom:14px; }
   .dica-tab{ font-size:11.5px; color:var(--ink-soft); line-height:1.6; margin:10px 0 0; }
   .edit-serv{ margin-bottom:12px; }
+
+  .sub-nav{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px; }
+  .sub-nav button{ flex:1 1 auto; padding:9px 12px; border:1px solid var(--line); background:#fff; font-family:inherit; font-size:11px; font-weight:600; letter-spacing:.08em; color:var(--ink-soft); cursor:pointer; text-transform:uppercase; }
+  .sub-nav button.ativa{ background:var(--salvia); color:#fff; border-color:var(--salvia); }
+  .btn-linha{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; }
+  .btn-linha .btn-preco{ margin-top:0; }
+
+  .sel-cat{ display:flex; align-items:center; gap:12px; margin:24px 0 10px; }
+  .sel-cat span{ font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--salvia); font-weight:600; }
+  .sel-cat .l{ flex:1; height:.5px; background:var(--line); }
+  .sel-item{ display:grid; grid-template-columns:22px 1fr 100px 84px 84px; grid-template-areas:"c n custo qtd sub"; gap:10px; align-items:center; padding:9px 12px; border-bottom:.5px solid var(--line); background:#fff; border-left:3px solid transparent; }
+  .sel-item.ativo{ background:#EEF3E3; border-left-color:var(--salvia); }
+  .sel-item .c{ grid-area:c; width:16px; height:16px; accent-color:var(--salvia); }
+  .sel-item .n{ grid-area:n; font-size:13px; color:var(--ink); line-height:1.3; }
+  .sel-item .custo{ grid-area:custo; } .sel-item .qtd{ grid-area:qtd; }
+  .sel-item .sub{ grid-area:sub; text-align:right; font-size:13px; font-weight:600; white-space:nowrap; }
+  .sel-item input[type=number]{ width:100%; padding:7px 8px; font-size:13px; border:1px solid var(--line); font-family:inherit; background:#fff; color:var(--ink); outline:none; }
+  .sel-item .com-un{ display:flex; align-items:center; gap:4px; }
+  .sel-item .com-un span{ font-size:11px; color:var(--salvia); }
+  .sim-sep{ height:.5px; background:var(--line); margin:18px 0 0; }
+  .tp3{ grid-template-columns:1.8fr 1fr .9fr; }
+  .tp4{ grid-template-columns:1.6fr .8fr .8fr .8fr; }
+  .tm-sub{ padding:8px 18px; background:var(--pergaminho); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--salvia); font-weight:600; border-bottom:.5px solid var(--line); }
+  .edit-serv .chk{ display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:var(--ink-soft); }
+  .edit-serv .chk input{ width:auto; }
+  @media (max-width:600px){
+    .sel-item{ grid-template-columns:22px 1fr 1fr 1fr; grid-template-areas:"c n n n" ". custo qtd sub"; row-gap:8px; }
+    .tp3{ grid-template-columns:1.6fr 1fr .9fr; }
+    .tp4{ grid-template-columns:1.5fr .8fr .8fr .8fr; }
+  }
 
   @media (max-width:600px){
     .login-card{ width:100%; }
@@ -322,54 +354,136 @@
       </div>
 
       <div id="sec-preco" style="display:none">
-        <div class="grupo">
-          <div class="grupo-label"><span class="d"></span><span>Tabela de preços</span></div>
-          <div class="nota-preco" id="aviso-imposto" style="display:none">O imposto ainda não foi preenchido, então os preços sugeridos estão sem imposto. Preencha em Parâmetros quando souber a sua alíquota.</div>
-          <div class="tabela-mensal" id="tabela-precos"><div class="vazio">Carregando…</div></div>
-          <p class="dica-tab">Sugerido é o preço calculado pelos parâmetros lá embaixo. Piso é o mínimo da tabela de procedimentos de enfermagem (Resolução Cofen 673/2021) com a URTE atualizada.</p>
+        <div class="sub-nav" id="sub-nav">
+          <button type="button" class="ativa" data-sub="resumo">Resumo</button>
+          <button type="button" data-sub="calc">Calculadora</button>
+          <button type="button" data-sub="mat">Materiais</button>
+          <button type="button" data-sub="orc">Orçamento</button>
+          <button type="button" data-sub="tab">Tabelas</button>
+          <button type="button" data-sub="aj">Ajustes</button>
         </div>
 
-        <div class="grupo">
-          <div class="grupo-label"><span class="d"></span><span>Planejado x recebido</span></div>
-          <div class="tabela-mensal" id="tabela-realidade"><div class="vazio">Nenhum lançamento ainda.</div></div>
-          <p class="dica-tab">Compara, por categoria do financeiro, o que você recebeu em média com o preço sugerido dos serviços ligados àquela categoria.</p>
-        </div>
-
-        <div class="grupo">
-          <div class="grupo-label"><span class="d"></span><span>Calculadora de preço</span></div>
-          <div class="form-preco">
-            <label>Tipo de atendimento</label>
-            <select id="calc-tipo"></select>
-            <div class="grid-2">
-              <div><label>Tempo (min)</label><input type="number" id="calc-tempo" min="0" step="5" value="60"></div>
-              <div><label>Insumos (R$)</label><input type="number" id="calc-insumos" min="0" step="0.01" value="0"></div>
-            </div>
-            <label>Montar insumos pelo catálogo (opcional)</label>
-            <div id="calc-materiais-lista"></div>
-            <button type="button" class="btn-preco sec" id="calc-add-material">+ adicionar material</button>
-            <div class="grid-2">
-              <div><label>Onde é o atendimento</label><select id="calc-regiao"></select></div>
-              <div><label>Deslocamento: Uber ida e volta (R$)</label><input type="number" id="calc-desloc" min="0" step="0.01" value="0"></div>
-            </div>
-            <div class="resultado-preco" id="calc-resultado"></div>
+        <div class="sub-panel" id="sub-resumo">
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Tabela de preços</span></div>
+            <div class="nota-preco" id="aviso-imposto" style="display:none">O imposto ainda não foi preenchido, então os preços sugeridos estão sem imposto. Preencha em Ajustes quando souber a sua alíquota.</div>
+            <div class="tabela-mensal" id="tabela-precos"><div class="vazio">Carregando…</div></div>
+            <p class="dica-tab">Sugerido é o preço calculado pelos parâmetros em Ajustes. Piso é o mínimo da tabela de procedimentos de enfermagem (Resolução Cofen 673/2021) com a URTE atualizada.</p>
           </div>
-          <div class="tabela-mensal" id="calc-planos" style="margin-top:14px"></div>
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Planejado x recebido</span></div>
+            <div class="tabela-mensal" id="tabela-realidade"><div class="vazio">Nenhum lançamento ainda.</div></div>
+            <p class="dica-tab">Compara, por categoria do financeiro, o que você recebeu em média com o preço sugerido dos serviços ligados àquela categoria.</p>
+          </div>
         </div>
 
-        <div class="grupo">
-          <div class="grupo-label"><span class="d"></span><span>Editar serviços</span></div>
-          <div id="editor-servicos"></div>
-          <button type="button" class="btn-preco sec" id="serv-add">+ novo serviço</button>
-          <button type="button" class="btn-preco" id="serv-salvar">Salvar tabela de serviços</button>
-          <p class="form-msg" id="serv-msg"></p>
+        <div class="sub-panel" id="sub-calc" style="display:none">
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Calculadora de preço</span></div>
+            <div class="form-preco">
+              <label>Tipo de atendimento</label>
+              <select id="calc-tipo"></select>
+              <div class="grid-2">
+                <div><label>Tempo (min)</label><input type="number" id="calc-tempo" min="0" step="5" value="60"></div>
+                <div><label>Insumos (R$)</label><input type="number" id="calc-insumos" min="0" step="0.01" value="0"></div>
+              </div>
+              <label>Montar insumos pelo catálogo (opcional)</label>
+              <div id="calc-materiais-lista"></div>
+              <button type="button" class="btn-preco sec" id="calc-add-material">+ adicionar material</button>
+              <div class="grid-2">
+                <div><label>Onde é o atendimento</label><select id="calc-regiao"></select></div>
+                <div><label>Deslocamento: Uber ida e volta (R$)</label><input type="number" id="calc-desloc" min="0" step="0.01" value="0"></div>
+              </div>
+              <div class="resultado-preco" id="calc-resultado"></div>
+            </div>
+            <div class="tabela-mensal" id="calc-planos" style="margin-top:14px"></div>
+          </div>
         </div>
 
-        <div class="grupo">
-          <div class="grupo-label"><span class="d"></span><span>Parâmetros</span></div>
-          <div class="nota-preco">Valores provisórios: custo fixo mensal e atendimentos por mês vieram do modelo da mentoria. Confirme os seus e salve. O imposto está zerado até você preencher.</div>
-          <div class="form-preco" id="form-params"></div>
-          <button type="button" class="btn-preco" id="params-salvar">Salvar parâmetros</button>
-          <p class="form-msg" id="params-msg"></p>
+        <div class="sub-panel" id="sub-mat" style="display:none">
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Seletor de materiais</span></div>
+            <div class="kpi destaque" style="margin-bottom:12px">
+              <p class="rotulo">Total de materiais selecionados</p>
+              <p class="valor" id="total-valor">R$ 0,00</p>
+              <p class="rotulo" id="total-count" style="margin:6px 0 0">0 itens selecionados</p>
+            </div>
+            <p class="dica-tab" style="margin:0 0 12px">Marque o que usou no atendimento, ajuste custo e quantidade. Depois escolha para onde mandar a seleção.</p>
+            <div class="btn-linha">
+              <button type="button" class="btn-preco sec" id="mat-usar-calc">Usar na calculadora</button>
+              <button type="button" class="btn-preco sec" id="mat-usar-sim">Usar no orçamento</button>
+              <button type="button" class="btn-preco" id="mat-lancar">Lançar no financeiro</button>
+            </div>
+            <p class="form-msg" id="mat-msg"></p>
+            <div class="form-preco" style="margin:14px 0">
+              <label>Nome do paciente ou familiar (opcional)</label>
+              <input type="text" id="nome-familiar" placeholder="Ex: Maria da Silva">
+              <button type="button" class="btn-preco" id="btn-exportar-materiais">Exportar materiais em PDF (com Pix)</button>
+              <p class="form-msg" id="msg-exportar-materiais"></p>
+            </div>
+            <div class="btn-linha" style="margin-bottom:6px">
+              <button type="button" class="btn-preco sec" id="btn-limpar">Limpar seleção</button>
+              <button type="button" class="btn-preco sec" id="btn-restaurar-custos">Restaurar custos padrão</button>
+            </div>
+            <div id="lista-materiais"></div>
+          </div>
+        </div>
+
+        <div class="sub-panel" id="sub-orc" style="display:none">
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Orçamento para o paciente</span></div>
+            <div class="nota-preco">Fórmula: honorário + (material x multiplicador) + deslocamento + laser. O multiplicador cobre aquisição, transporte e armazenamento do material especial e não é lucro sobre o produto. O PDF do paciente mostra só "materiais especiais e insumos", sem multiplicador nem fórmula.</div>
+            <div class="form-preco" id="sim-campos"></div>
+            <div class="resultado-preco">
+              <p class="rp-rot">Valor final calculado</p>
+              <p class="rp-final" id="sim-total">R$ 0,00</p>
+              <p class="rp-rot" id="sim-formula" style="margin:0;text-transform:none;letter-spacing:0"></p>
+            </div>
+            <button type="button" class="btn-preco sec" id="btn-restaurar">Restaurar valores padrão</button>
+            <div class="form-preco" style="margin-top:14px">
+              <label>Nome do paciente</label>
+              <input type="text" id="nome-paciente" placeholder="Ex: Maria da Silva">
+              <button type="button" class="btn-preco" id="btn-exportar">Exportar orçamento em PDF</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-panel" id="sub-tab" style="display:none">
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Presencial</span></div>
+            <div class="tabela-mensal" id="tabela-presencial"></div>
+          </div>
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Domiciliar</span></div>
+            <div class="tabela-mensal" id="tabela-domiciliar"></div>
+          </div>
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Deslocamento</span></div>
+            <div class="tabela-mensal" id="tabela-desloc"></div>
+            <p class="dica-tab">Taxa é o que você cobra do paciente. Seu custo é o Uber ida e volta que você informou em Ajustes.</p>
+          </div>
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Pacotes</span></div>
+            <div class="tabela-mensal" id="tabela-pacotes"></div>
+            <p class="dica-tab">Avulso soma os serviços do pacote pelos preços da tabela. O desconto mostra quanto o pacote abre mão em relação a isso.</p>
+          </div>
+        </div>
+
+        <div class="sub-panel" id="sub-aj" style="display:none">
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Editar serviços</span></div>
+            <div id="editor-servicos"></div>
+            <button type="button" class="btn-preco sec" id="serv-add">+ novo serviço</button>
+            <button type="button" class="btn-preco" id="serv-salvar">Salvar tabela de serviços</button>
+            <p class="form-msg" id="serv-msg"></p>
+          </div>
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Parâmetros</span></div>
+            <div class="nota-preco">Valores provisórios: custo fixo mensal e atendimentos por mês vieram do modelo da mentoria. Confirme os seus e salve. O imposto está zerado até você preencher.</div>
+            <div class="form-preco" id="form-params"></div>
+            <button type="button" class="btn-preco" id="params-salvar">Salvar parâmetros</button>
+            <p class="form-msg" id="params-msg"></p>
+          </div>
         </div>
       </div>
     </div>
@@ -392,94 +506,94 @@ let saidas = [];
 let estoque = [];
 let consumo = [];
 
-// Catálogo de materiais — precisa espelhar o custo por unidade (un/ml/cm/g) de
-// cada item de MATERIAIS_BASE em precificacao.html (custo da embalagem ÷ embalagem).
-// Sempre que um item for adicionado/renomeado/reprecificado lá, atualize aqui também —
-// é essa lista que dá o preço quando "Enviar pro Controle Financeiro" importa os itens
-// (só manda nome + quantidade; o custo é sempre buscado por aqui, ou no Estoque se já
-// houver compra registrada para o item).
-const CATALOGO_MATERIAIS = [
-  { item: 'Luva de procedimento', unidade: 'un', custo: 0.2115 },
-  { item: 'Luva estéril', unidade: 'un', custo: 2.89 },
-  { item: 'Máscara cirúrgica', unidade: 'un', custo: 0.64 },
-  { item: 'Máscara PFF2/N95', unidade: 'un', custo: 8.00 },
-  { item: 'Avental descartável', unidade: 'un', custo: 2.40 },
-  { item: 'Touca descartável', unidade: 'un', custo: 0.20 },
-  { item: 'Propé descartável', unidade: 'un', custo: 0.25 },
-  { item: 'Óculos ou protetor facial', unidade: 'un', custo: 10.00 },
-  { item: 'Campo estéril', unidade: 'un', custo: 6.21 },
-  { item: 'Saco para descarte', unidade: 'un', custo: 0.21 },
-  { item: 'Luva nitrílica preta P, sem pó', unidade: 'un', custo: 0.40 },
-  { item: 'Soro fisiológico 0,9% 100 ml', unidade: 'ml', custo: 0.03486 },
-  { item: 'Soro fisiológico 0,9% 250 ml', unidade: 'ml', custo: 0.030 },
-  { item: 'Soro fisiológico 0,9% 500 ml', unidade: 'ml', custo: 0.024 },
-  { item: 'Clorexidina aquosa', unidade: 'ml', custo: 0 },
-  { item: 'PVPI, se aplicável', unidade: 'ml', custo: 0 },
-  { item: 'Água destilada / solução de limpeza', unidade: 'ml', custo: 0 },
-  { item: 'Seringa para irrigação 20 ml', unidade: 'un', custo: 0.791 },
-  { item: 'Agulha para aspiração/irrigação', unidade: 'un', custo: 0.21 },
-  { item: 'Seringa 3 mL Luer Slip', unidade: 'un', custo: 0.37 },
-  { item: 'Seringa 1 mL Luer Slip', unidade: 'un', custo: 0.69 },
-  { item: 'PHMB líquido (solução, frasco 350 ml)', unidade: 'ml', custo: 0.3051 },
-  { item: 'Cuba rim descartável ou bandeja', unidade: 'un', custo: 0 },
-  { item: 'Compressa para limpeza (gaze não estéril)', unidade: 'un', custo: 0.0643 },
-  { item: 'Gaze estéril', unidade: 'un', custo: 0.0695 },
-  { item: 'Compressa estéril', unidade: 'un', custo: 0 },
-  { item: 'Compressa não aderente', unidade: 'un', custo: 0 },
-  { item: 'Atadura crepom 6cm x 1,20m (rolo)', unidade: 'un', custo: 0.56 },
-  { item: 'Atadura crepom 15cm x 1,80m (rolo)', unidade: 'un', custo: 0.814 },
-  { item: 'Atadura de rayon 7,5 cm x 5 m estéril', unidade: 'cm', custo: 0.026 },
-  { item: 'Atadura elástica Nevada 15cm x 2,2m', unidade: 'un', custo: 3.44 },
-  { item: 'Curativo Kerlix rolo 11,4 cm x 3,7 m', unidade: 'cm', custo: 0.105 },
-  { item: 'Curativo não tecido em rolo Upperfix 10cm x 10m (Skinupper)', unidade: 'cm', custo: 0.0632 },
-  { item: 'Algodão ortopédico, se aplicável', unidade: 'g', custo: 0 },
-  { item: 'Esparadrapo', unidade: 'cm', custo: 0 },
-  { item: 'Esparadrapo 5 cm x 4,5 m', unidade: 'cm', custo: 0.015 },
-  { item: 'Esparadrapo Cremer impermeável 10cm x 4,5m', unidade: 'cm', custo: 0.0591 },
-  { item: 'Fita microporosa Cremer 4,5m (pacote 5 rolos)', unidade: 'cm', custo: 0.0242 },
-  { item: 'Micropore 25 mm x 10 m', unidade: 'cm', custo: 0.0074 },
-  { item: 'Filme transparente (rolo 10 cm x 10 m)', unidade: 'cm', custo: 0.0959 },
-  { item: 'Lençol absorvente descartável', unidade: 'un', custo: 3.00 },
-  { item: 'Fixador adesivo', unidade: 'un', custo: 0 },
-  { item: 'Faixa tubular', unidade: 'cm', custo: 0 },
-  { item: 'Malha tubular', unidade: 'cm', custo: 0 },
-  { item: 'Tesoura (depreciação)', unidade: 'un', custo: 0 },
-  { item: 'Pinça (depreciação)', unidade: 'un', custo: 0 },
-  { item: 'Hidrogel (tubo 30 g)', unidade: 'g', custo: 1.803 },
-  { item: 'Hidrocoloide (placa 10x10)', unidade: 'un', custo: 32.60 },
-  { item: 'Alginato de cálcio (placa 10x10)', unidade: 'un', custo: 38.60 },
-  { item: 'Hidrofibra sem prata (placa grande, ~15x15)', unidade: 'un', custo: 49.00 },
-  { item: 'Alginato com prata', unidade: 'un', custo: 0 },
-  { item: 'Espuma de poliuretano (10x10)', unidade: 'un', custo: 69.00 },
-  { item: 'Espuma com prata (10x10)', unidade: 'un', custo: 47.00 },
-  { item: 'Carvão ativado (sem prata)', unidade: 'un', custo: 0 },
-  { item: 'Carvão ativado com prata (10x10)', unidade: 'un', custo: 53.57 },
-  { item: 'Tela não aderente', unidade: 'un', custo: 0 },
-  { item: 'Tela com petrolatum 7,6x7,6 cm', unidade: 'un', custo: 11.70 },
-  { item: 'Tela com silicone', unidade: 'un', custo: 0 },
-  { item: 'Cobertura antimicrobiana', unidade: 'un', custo: 0 },
-  { item: 'Cobertura com PHMB (10,2x10,2 cm)', unidade: 'un', custo: 41.90 },
-  { item: 'Cobertura com prata nanocristalina', unidade: 'un', custo: 0 },
-  { item: 'Cobertura absorvente', unidade: 'un', custo: 0 },
-  { item: 'Cobertura superabsorvente', unidade: 'un', custo: 0 },
-  { item: 'Placa de colágeno', unidade: 'un', custo: 0 },
-  { item: 'Barreira protetora de pele (spray 28 ml)', unidade: 'ml', custo: 1.6161 },
-  { item: 'Creme barreira (tubo 92-100 g)', unidade: 'g', custo: 1.049 },
-  { item: 'Protetor cutâneo spray (28 ml)', unidade: 'ml', custo: 1.6161 },
-  { item: 'Pielsana sachet 7,5 cm x 15 cm (5 ml)', unidade: 'un', custo: 14.30 },
-  { item: 'Spray Removedor de Curativos (40 ml)', unidade: 'ml', custo: 1.1125 },
-  { item: 'Flaminal Hydro (50 g)', unidade: 'ml', custo: 5.80 },
-  { item: 'Flaminal Forte (50 g)', unidade: 'ml', custo: 5.80 },
-  { item: 'Flaminal Activ (50 g)', unidade: 'ml', custo: 3.10 },
-  { item: 'Lâmina de bisturi nº 20', unidade: 'un', custo: 0.36 },
-  { item: 'Cabo de bisturi (depreciação)', unidade: 'un', custo: 0 },
-  { item: 'Curativo Mesalt com cloreto de sódio 10x10cm (Mölnlycke)', unidade: 'un', custo: 21.00 },
-  { item: 'Cutimed Sorbact Contact 10 cm x 100 cm', unidade: 'cm', custo: 2.6387 },
-  { item: 'Cutimed Sorbact 4 cm x 6 cm', unidade: 'un', custo: 77.31 },
-  { item: 'Swab para coleta estéril, haste plástica (caixa c/ 100, Absorve)', unidade: 'un', custo: 0.295 },
-  { item: 'Pinça anatômica descartável em resina estéril (caixa c/ 10, Kolplast)', unidade: 'un', custo: 17.591 },
-  { item: 'Lâmina de bisturi nº 15 (caixa c/ 100)', unidade: 'un', custo: 0.5024 },
-];
+// Lista de materiais (veio da antiga página de precificação). É a única fonte: o seletor de
+// materiais, os campos de item e o custo do consumo no financeiro usam esta lista.
+// Para cadastrar um produto novo, copie uma linha, cole no final e troque cat, item e custo.
+// Itens vendidos em embalagem fracionada ganham embalagem (tamanho) e unidade ('ml', 'g', 'cm').
+const MATERIAIS_BASE = [
+  { cat:'EPIs e biossegurança',                   item:'Luva de procedimento',                       custo:0.2115  },
+  { cat:'EPIs e biossegurança',                   item:'Luva estéril',                               custo:2.89  },
+  { cat:'EPIs e biossegurança',                   item:'Máscara cirúrgica',                          custo:0.64  },
+  { cat:'EPIs e biossegurança',                   item:'Máscara PFF2/N95',                           custo:8.00  },
+  { cat:'EPIs e biossegurança',                   item:'Avental descartável',                        custo:2.40  },
+  { cat:'EPIs e biossegurança',                   item:'Touca descartável',                          custo:0.20  },
+  { cat:'EPIs e biossegurança',                   item:'Propé descartável',                          custo:0.25  },
+  { cat:'EPIs e biossegurança',                   item:'Óculos ou protetor facial',                  custo:10.00 },
+  { cat:'EPIs e biossegurança',                   item:'Campo estéril',                              custo:6.21  },
+  { cat:'EPIs e biossegurança',                   item:'Saco para descarte',                         custo:0.21  },
+  { cat:'EPIs e biossegurança',                   item:'Luva nitrílica preta P, sem pó',             custo:0.40  },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 100 ml',               custo:3.486, embalagem:100, unidade:'ml' },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 250 ml',               custo:7.52,  embalagem:250, unidade:'ml' },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Soro fisiológico 0,9% 500 ml',               custo:12.12, embalagem:500, unidade:'ml' },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Seringa para irrigação 20 ml',               custo:0.791 },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Agulha para aspiração/irrigação',            custo:0.21  },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Compressa para limpeza (gaze não estéril)',  custo:0.0643 },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Seringa 3 mL Luer Slip',                     custo:0.37  },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'Seringa 1 mL Luer Slip',                     custo:0.69  },
+  { cat:'Limpeza, irrigação e antissepsia',       item:'PHMB líquido (solução, frasco 350 ml)',      custo:106.79, embalagem:350, unidade:'ml' },
+  { cat:'Materiais básicos de curativo',          item:'Gaze estéril',                               custo:0.0695 },
+  { cat:'Materiais básicos de curativo',          item:'Atadura crepom 6cm x 1,20m (rolo)',          custo:0.56  },
+  { cat:'Materiais básicos de curativo',          item:'Atadura crepom 15cm x 1,80m (rolo)',         custo:0.814 },
+  { cat:'Materiais básicos de curativo',          item:'Atadura de rayon 7,5 cm x 5 m estéril',     custo:13.00, embalagem:500,  unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Atadura elástica Nevada 15cm x 2,2m',        custo:3.44  },
+  { cat:'Materiais básicos de curativo',          item:'Curativo Kerlix rolo 11,4 cm x 3,7 m',      custo:39.00, embalagem:370,  unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Curativo não tecido em rolo Upperfix 10cm x 10m (Skinupper)', custo:63.19, embalagem:1000, unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Esparadrapo 5 cm x 4,5 m',                  custo:15.00, embalagem:1000, unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Esparadrapo Cremer impermeável 10cm x 4,5m', custo:26.60, embalagem:450,  unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Fita microporosa Cremer 4,5m (pacote 5 rolos)', custo:54.44, embalagem:2250, unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Micropore 25 mm x 10 m',                    custo:7.43,  embalagem:1000, unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Filme transparente (rolo 10 cm x 10 m)',    custo:95.90, embalagem:1000, unidade:'cm' },
+  { cat:'Materiais básicos de curativo',          item:'Lençol absorvente descartável',              custo:90.00, embalagem:30,   unidade:'un' },
+  { cat:'Materiais básicos de curativo',          item:'Lanterna de cabeça (depreciação)',           custo:null  },
+  { cat:'Coberturas primárias e especiais',       item:'Hidrogel (tubo 30 g)',                       custo:54.10, embalagem:30,  unidade:'g'  },
+  { cat:'Coberturas primárias e especiais',       item:'Hidrocoloide (placa 10x10)',                 custo:32.60 },
+  { cat:'Coberturas primárias e especiais',       item:'Alginato de cálcio (placa 10x10)',           custo:38.60 },
+  { cat:'Coberturas primárias e especiais',       item:'Hidrofibra sem prata (placa grande, ~15x15)', custo:49.00 },
+  { cat:'Coberturas primárias e especiais',       item:'Espuma de poliuretano (10x10)',              custo:69.00 },
+  { cat:'Coberturas primárias e especiais',       item:'Espuma com prata (10x10)',                   custo:47.00 },
+  { cat:'Coberturas primárias e especiais',       item:'Carvão ativado com prata (10x10)',           custo:53.57 },
+  { cat:'Coberturas primárias e especiais',       item:'Tela com petrolatum 7,6x7,6 cm',            custo:11.70 },
+  { cat:'Coberturas primárias e especiais',       item:'Cobertura com PHMB (10,2x10,2 cm)',         custo:41.90 },
+  { cat:'Coberturas primárias e especiais',       item:'Creme barreira (tubo 92-100 g)',            custo:100.72, embalagem:96,  unidade:'g'  },
+  { cat:'Coberturas primárias e especiais',       item:'Protetor cutâneo spray (28 ml)',            custo: 45.25, embalagem:28,  unidade:'ml' },
+  { cat:'Coberturas primárias e especiais',       item:'Pielsana sachet 7,5 cm x 15 cm (5 ml)',     custo:14.30 },
+  { cat:'Materiais para desbridamento',           item:'Lâmina de bisturi nº 20',                    custo:0.36  },
+  { cat:'Coberturas primárias e especiais',       item:'Spray Removedor de Curativos (40 ml)',      custo:44.50, embalagem:40,  unidade:'ml' },
+  { cat:'Coberturas primárias e especiais',       item:'Flaminal Hydro (50 g)',                     custo:290.00, embalagem:50,  unidade:'ml' },
+  { cat:'Coberturas primárias e especiais',       item:'Flaminal Forte (50 g)',                     custo:290.00, embalagem:50,  unidade:'ml' },
+  { cat:'Coberturas primárias e especiais',       item:'Flaminal Activ (50 g)',                     custo:155.00, embalagem:50,  unidade:'ml' },
+  { cat:'Coberturas primárias e especiais',       item:'Curativo Mesalt com cloreto de sódio 10x10cm (Mölnlycke)', custo:21.00 },
+  { cat:'Coberturas primárias e especiais',       item:'Cutimed Sorbact Contact 10 cm x 100 cm',    custo:263.87, embalagem:100, unidade:'cm' },
+  { cat:'Coberturas primárias e especiais',       item:'Cutimed Sorbact 4 cm x 6 cm',               custo:77.31 },
+  { cat:'Materiais básicos de curativo',          item:'Swab para coleta estéril, haste plástica (caixa c/ 100, Absorve)', custo:29.50, embalagem:100, unidade:'un' },
+  { cat:'Materiais básicos de curativo',          item:'Pinça anatômica descartável em resina estéril (caixa c/ 10, Kolplast)', custo:175.91, embalagem:10, unidade:'un' },
+  { cat:'Materiais para desbridamento',           item:'Lâmina de bisturi nº 15 (caixa c/ 100)',    custo:50.24, embalagem:100, unidade:'un' },
+]
+
+function slugify(txt) {
+  const semAcento = Array.from(txt.normalize("NFD")).filter(function (ch) {
+    const cp = ch.codePointAt(0)
+    return cp < 0x0300 || cp > 0x036f
+  }).join("")
+  return semAcento.toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+}
+
+const _idsUsados = new Set()
+const MATERIAIS = MATERIAIS_BASE.map((m, i) => {
+  let id = slugify(m.cat + "-" + m.item) || ("m" + i)
+  if (_idsUsados.has(id)) id = id + "-" + i
+  _idsUsados.add(id)
+  return Object.assign({ id }, m)
+})
+
+// Custo por unidade (un/ml/cm/g): custo da embalagem dividido pela embalagem.
+const CATALOGO_MATERIAIS = MATERIAIS.map(m => ({
+  item: m.item,
+  unidade: m.unidade || 'un',
+  custo: m.custo == null ? 0 : (m.embalagem ? m.custo / m.embalagem : m.custo),
+}));
 
 function buscarUnidadeCatalogo(nome) {
   const alvo = (nome || '').trim().toLowerCase();
@@ -854,6 +968,9 @@ const TIPOS_HORA = [
   { k: 'hora_laser', label: 'Laserterapia' },
 ];
 const CATEGORIAS_ENTRADA = ['Consulta', 'Retorno', 'Procedimento', 'Pacote de Sessões', 'Produto/Curso', 'Outro'];
+const MODALIDADES = ['Presencial', 'Domiciliar'];
+const REGIOES = ['', 'Próxima', 'Intermediária', 'Distante'];
+const REGIAO_CHAVE = { 'Próxima': 'uber_proxima', 'Intermediária': 'uber_intermediaria', 'Distante': 'uber_distante' };
 
 const CONFIG_PRECO_PADRAO = {
   hora_avaliacao: 189.75, hora_pontual: 189.75, hora_baixa: 88.55, hora_media: 113.85, hora_alta: 151.8, hora_laser: 126.5,
@@ -886,14 +1003,56 @@ const PARAMS_PRECO = [
   { k: 'desc_10', label: 'Desconto no plano de 10 (%)', t: 'pct' },
   { k: 'desc_15', label: 'Desconto no plano de 15 (%)', t: 'pct' },
 ];
+
+const CABECALHO_TABELA = ['Cód', 'Serviço', 'Modalidade', 'Tipo de atendimento', 'Tempo (min)', 'Insumos (R$)', 'Região do deslocamento', 'Preço atual (R$)', 'Categoria no financeiro', 'URTEs (piso Cofen)', 'Adicional ao curativo', 'Material incluído', 'Observações'];
 const TABELA_PRECO_PADRAO = [
-  { servico: 'Consulta inicial', tipo: 'Consulta de avaliação', tempo: 75, insumos: 30, desloc: 0, atual: 350, categoria: 'Consulta', urtes: 15 },
-  { servico: 'Consulta de retorno', tipo: 'Consulta unitária ou pontual', tempo: 45, insumos: 0, desloc: 0, atual: 220, categoria: 'Retorno', urtes: 15 },
-  { servico: 'Curativo simples', tipo: 'Acompanhamento | Baixa complexidade', tempo: 45, insumos: 25, desloc: 0, atual: 150, categoria: 'Procedimento', urtes: 7 },
-  { servico: 'Curativo intermediário', tipo: 'Acompanhamento | Média complexidade', tempo: 60, insumos: 70, desloc: 0, atual: 260, categoria: 'Procedimento', urtes: 9 },
-  { servico: 'Curativo complexo', tipo: 'Acompanhamento | Alta complexidade', tempo: 60, insumos: 150, desloc: 0, atual: 450, categoria: 'Procedimento', urtes: 12 },
-  { servico: 'Laserterapia avulsa', tipo: 'Laserterapia', tempo: 30, insumos: 0, desloc: 0, atual: 140, categoria: 'Procedimento', urtes: 10 },
+  { cod: 'C01', servico: 'Avaliação inicial + primeiro curativo básico', modalidade: 'Presencial', tipo: 'Consulta de avaliação', tempo: 75, insumos: 30, regiao: '', atual: 350, categoria: 'Consulta', urtes: 15, adicional: false, mat: 'Incluso', obs: 'Avaliação completa, plano terapêutico e primeiro curativo básico' },
+  { cod: 'C02', servico: 'Reavaliação sem curativo', modalidade: 'Presencial', tipo: 'Consulta unitária ou pontual', tempo: 45, insumos: 0, regiao: '', atual: 180, categoria: 'Retorno', urtes: 15, adicional: false, mat: '-', obs: 'Reavaliação e ajuste de conduta' },
+  { cod: 'CU01', servico: 'Curativo simples', modalidade: 'Presencial', tipo: 'Acompanhamento | Baixa complexidade', tempo: 45, insumos: 25, regiao: '', atual: 150, categoria: 'Procedimento', urtes: 7, adicional: false, mat: 'Incluso', obs: 'Materiais básicos, menor complexidade técnica' },
+  { cod: 'CU02', servico: 'Curativo intermediário', modalidade: 'Presencial', tipo: 'Acompanhamento | Média complexidade', tempo: 60, insumos: 70, regiao: '', atual: 230, categoria: 'Procedimento', urtes: 9, adicional: false, mat: 'Incluso', obs: 'Coberturas específicas de custo moderado' },
+  { cod: 'CU03', servico: 'Curativo complexo', modalidade: 'Presencial', tipo: 'Acompanhamento | Alta complexidade', tempo: 60, insumos: 150, regiao: '', atual: 350, categoria: 'Procedimento', urtes: 12, adicional: false, mat: 'Incluso', obs: 'Maior complexidade técnica e materiais mais específicos' },
+  { cod: 'CU04', servico: 'Curativo especial', modalidade: 'Presencial', tipo: 'Acompanhamento | Alta complexidade', tempo: 60, insumos: 0, regiao: '', atual: 0, categoria: 'Procedimento', urtes: 12, adicional: false, mat: 'Sob avaliação', obs: 'Materiais de alto custo cobrados conforme utilização' },
+  { cod: 'L01', servico: 'Laserterapia avulsa', modalidade: 'Presencial', tipo: 'Laserterapia', tempo: 30, insumos: 0, regiao: '', atual: 120, categoria: 'Procedimento', urtes: 10, adicional: false, mat: '-', obs: 'Sessão isolada' },
+  { cod: 'L02', servico: 'Laser associada ao curativo', modalidade: 'Presencial', tipo: 'Laserterapia', tempo: 20, insumos: 0, regiao: '', atual: 70, categoria: 'Procedimento', urtes: 10, adicional: true, mat: '-', obs: 'Adicional ao curativo' },
+  { cod: 'D01', servico: 'Avaliação inicial domiciliar + primeiro curativo básico', modalidade: 'Domiciliar', tipo: 'Consulta de avaliação', tempo: 75, insumos: 30, regiao: 'Próxima', atual: 350, categoria: 'Consulta', urtes: 15, adicional: false, mat: 'Incluso', obs: 'Inclui deslocamento em região próxima' },
+  { cod: 'DCU01', servico: 'Curativo simples domiciliar', modalidade: 'Domiciliar', tipo: 'Acompanhamento | Baixa complexidade', tempo: 45, insumos: 25, regiao: 'Próxima', atual: 190, categoria: 'Procedimento', urtes: 7, adicional: false, mat: 'Incluso', obs: 'Com deslocamento e estrutura fora do consultório' },
+  { cod: 'DCU02', servico: 'Curativo intermediário domiciliar', modalidade: 'Domiciliar', tipo: 'Acompanhamento | Média complexidade', tempo: 60, insumos: 70, regiao: 'Próxima', atual: 290, categoria: 'Procedimento', urtes: 9, adicional: false, mat: 'Incluso', obs: 'Com deslocamento e maior tempo reservado' },
+  { cod: 'DCU03', servico: 'Curativo complexo domiciliar', modalidade: 'Domiciliar', tipo: 'Acompanhamento | Alta complexidade', tempo: 60, insumos: 150, regiao: 'Próxima', atual: 420, categoria: 'Procedimento', urtes: 12, adicional: false, mat: 'Incluso', obs: 'Com deslocamento e maior complexidade' },
+  { cod: 'DCU04', servico: 'Curativo especial domiciliar', modalidade: 'Domiciliar', tipo: 'Acompanhamento | Alta complexidade', tempo: 60, insumos: 0, regiao: 'Próxima', atual: 0, categoria: 'Procedimento', urtes: 12, adicional: false, mat: 'Sob avaliação', obs: 'Materiais de alto custo cobrados conforme utilização' },
+  { cod: 'DL01', servico: 'Laserterapia associada no domicílio', modalidade: 'Domiciliar', tipo: 'Laserterapia', tempo: 20, insumos: 0, regiao: '', atual: 80, categoria: 'Procedimento', urtes: 10, adicional: true, mat: '-', obs: 'Adicional ao curativo domiciliar' },
 ];
+// Assinatura da primeira versão da tabela (6 linhas), para migrar quem ainda não editou nada.
+const ASSINATURA_TABELA_V1 = 'Consulta inicial|75|30|350;Consulta de retorno|45|0|220;Curativo simples|45|25|150;Curativo intermediário|60|70|260;Curativo complexo|60|150|450;Laserterapia avulsa|30|0|140';
+
+const DESLOCAMENTO_TAXAS = [
+  { regiao: 'Bom Pastor, São Mateus, Alto dos Passos, Centro, Santa Helena, Granbery', taxa: 'Incluso ou + R$ 50', tipo: 'Região próxima', chave: 'uber_proxima' },
+  { regiao: 'Cascatinha, Estrela Sul, Teixeiras, Manoel Honório, Mariano Procópio', taxa: '+ R$ 70 a R$ 100', tipo: 'Região intermediária', chave: 'uber_intermediaria' },
+  { regiao: 'Benfica, Santa Cruz, Linhares, Grama, Retiro, São Pedro, Nova Era', taxa: '+ R$ 120 a R$ 180', tipo: 'Região distante', chave: 'uber_distante' },
+  { regiao: 'Distritos ou cidades próximas', taxa: 'Sob consulta', tipo: 'Avaliar caso a caso', chave: '' },
+];
+const PACOTES = [
+  { grupo: 'Com avaliação inicial', cod: 'PI01', nome: 'Início Simples', inclui: 'Avaliação inicial + primeiro curativo básico + 3 curativos simples', val: 650, itens: [['C01', 1], ['CU01', 3]] },
+  { grupo: 'Com avaliação inicial', cod: 'PI02', nome: 'Início Intermediário', inclui: 'Avaliação inicial + primeiro curativo básico + 3 curativos intermediários', val: 865, itens: [['C01', 1], ['CU02', 3]] },
+  { grupo: 'Com avaliação inicial', cod: 'PI03', nome: 'Início Complexo', inclui: 'Avaliação inicial + primeiro curativo básico + 3 curativos complexos', val: 1200, itens: [['C01', 1], ['CU03', 3]] },
+  { grupo: 'Curativos de seguimento', cod: 'PS01', nome: '4 Curativos Simples', inclui: '4 sessões de curativo simples', val: 550, itens: [['CU01', 4]] },
+  { grupo: 'Curativos de seguimento', cod: 'PS02', nome: '4 Curativos Intermediários', inclui: '4 sessões de curativo intermediário', val: 850, itens: [['CU02', 4]] },
+  { grupo: 'Curativos de seguimento', cod: 'PS03', nome: '4 Curativos Complexos', inclui: '4 sessões de curativo complexo', val: 1290, itens: [['CU03', 4]] },
+];
+
+const NOTA_DOMICILIAR = ' Atendimento realizado no domicílio, com deslocamento incluso conforme a região.'
+const DESCRICAO_TIPO = {
+  'Avaliação inicial + primeiro curativo básico': 'A primeira avaliação é o momento mais importante do tratamento. Nela, são analisados o tipo de ferida, tempo de evolução, características do leito da ferida, pele ao redor, presença de exsudato, sinais locais, histórico de saúde, cuidados já realizados e materiais mais indicados para cada caso.',
+  'Avaliação inicial domiciliar + primeiro curativo básico': 'A primeira avaliação é o momento mais importante do tratamento. Nela, são analisados o tipo de ferida, tempo de evolução, características do leito da ferida, pele ao redor, presença de exsudato, sinais locais, histórico de saúde, cuidados já realizados e materiais mais indicados para cada caso.' + NOTA_DOMICILIAR,
+  'Reavaliação sem curativo': 'Reavaliação da evolução da ferida e ajuste do plano de cuidado, sem necessidade de troca de curativo nesta visita.',
+  'Curativo simples': 'Indicado quando o cuidado exige materiais básicos e menor complexidade técnica.',
+  'Curativo simples domiciliar': 'Indicado quando o cuidado exige materiais básicos e menor complexidade técnica.' + NOTA_DOMICILIAR,
+  'Curativo intermediário': 'Indicado quando há necessidade de maior tempo de atendimento, maior quantidade de material ou uso de coberturas específicas de custo moderado.',
+  'Curativo intermediário domiciliar': 'Indicado quando há necessidade de maior tempo de atendimento, maior quantidade de material ou uso de coberturas específicas de custo moderado.' + NOTA_DOMICILIAR,
+  'Curativo complexo': 'Indicado quando o cuidado exige maior complexidade técnica, maior tempo de atendimento ou uso de materiais mais específicos.',
+  'Curativo complexo domiciliar': 'Indicado quando o cuidado exige maior complexidade técnica, maior tempo de atendimento ou uso de materiais mais específicos.' + NOTA_DOMICILIAR,
+  'Curativo especial': 'Indicado quando há necessidade de materiais de alto custo, coberturas avançadas ou combinações específicas de produtos. O valor é calculado individualmente conforme o material utilizado, quantidade necessária, complexidade do cuidado e frequência dos atendimentos.',
+  'Curativo especial domiciliar': 'Indicado quando há necessidade de materiais de alto custo, coberturas avançadas ou combinações específicas de produtos. O valor é calculado individualmente conforme o material utilizado, quantidade necessária, complexidade do cuidado e frequência dos atendimentos.' + NOTA_DOMICILIAR,
+}
 
 let configPreco = { ...CONFIG_PRECO_PADRAO };
 let tabelaPreco = [];
@@ -903,6 +1062,19 @@ const fmtN = v => (v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, m
 const numPreco = v => (typeof v === 'number' ? v : parseFloat(String(v ?? '').replace(',', '.')) || 0);
 const arredCima = v => Math.ceil(v * 100 - 1e-6) / 100;
 
+function linhaParaArray(r) {
+  return [r.cod, r.servico, r.modalidade, r.tipo, r.tempo, r.insumos, r.regiao, r.atual, r.categoria, r.urtes, r.adicional ? 'Sim' : '', r.mat, r.obs];
+}
+function arrayParaLinha(a) {
+  return {
+    cod: String(a[0] ?? ''), servico: String(a[1] ?? ''), modalidade: MODALIDADES.includes(a[2]) ? a[2] : 'Presencial',
+    tipo: TIPOS_HORA.some(t => t.label === a[3]) ? a[3] : TIPOS_HORA[0].label,
+    tempo: numPreco(a[4]), insumos: numPreco(a[5]), regiao: REGIAO_CHAVE[a[6]] ? a[6] : '',
+    atual: numPreco(a[7]), categoria: a[8] || '', urtes: numPreco(a[9]), adicional: a[10] === 'Sim',
+    mat: String(a[11] ?? ''), obs: String(a[12] ?? ''),
+  };
+}
+
 async function salvarConfigPreco() {
   const values = [['Chave', 'Valor'], ...Object.keys(CONFIG_PRECO_PADRAO).map(k => [k, configPreco[k]])];
   await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_CONFIG_PRECO}'!A1:B${values.length}`)}?valueInputOption=RAW`, {
@@ -911,12 +1083,9 @@ async function salvarConfigPreco() {
 }
 
 async function salvarTabelaPreco() {
-  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_TABELA_PRECO}'!A2:H500`)}:clear`, { method: 'POST', body: '{}' });
-  const values = [
-    ['Serviço', 'Tipo de atendimento', 'Tempo (min)', 'Insumos (R$)', 'Deslocamento (R$)', 'Preço atual (R$)', 'Categoria no financeiro', 'URTEs (piso Cofen)'],
-    ...tabelaPreco.map(r => [r.servico, r.tipo, r.tempo, r.insumos, r.desloc, r.atual, r.categoria, r.urtes]),
-  ];
-  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_TABELA_PRECO}'!A1:H${values.length}`)}?valueInputOption=RAW`, {
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_TABELA_PRECO}'!A1:M500`)}:clear`, { method: 'POST', body: '{}' });
+  const values = [CABECALHO_TABELA, ...tabelaPreco.map(linhaParaArray)];
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_TABELA_PRECO}'!A1:M${values.length}`)}?valueInputOption=RAW`, {
     method: 'PUT', body: JSON.stringify({ values }),
   });
 }
@@ -930,23 +1099,33 @@ async function carregarPreco() {
       method: 'POST', body: JSON.stringify({ requests: faltando.map(title => ({ addSheet: { properties: { title } } })) }),
     });
   }
-  const ranges = [`'${SHEET_CONFIG_PRECO}'!A2:B200`, `'${SHEET_TABELA_PRECO}'!A2:H500`].map(r => `ranges=${encodeURIComponent(r)}`).join('&');
+  const ranges = [`'${SHEET_CONFIG_PRECO}'!A2:B200`, `'${SHEET_TABELA_PRECO}'!A1:M500`].map(r => `ranges=${encodeURIComponent(r)}`).join('&');
   const data = await sheetsFetch(`${spreadsheetId}/values:batchGet?${ranges}&valueRenderOption=UNFORMATTED_VALUE`);
   const cfgRows = (data.valueRanges[0].values || []).filter(r => r && r[0]);
-  const tabRows = (data.valueRanges[1].values || []).filter(r => r && r[0]);
+  const tabVals = data.valueRanges[1].values || [];
 
   configPreco = { ...CONFIG_PRECO_PADRAO };
   cfgRows.forEach(r => { if (r[0] in CONFIG_PRECO_PADRAO) configPreco[r[0]] = numPreco(r[1]); });
-  tabelaPreco = tabRows.map(r => ({
-    servico: String(r[0]), tipo: r[1] || TIPOS_HORA[0].label, tempo: numPreco(r[2]), insumos: numPreco(r[3]),
-    desloc: numPreco(r[4]), atual: numPreco(r[5]), categoria: r[6] || '', urtes: numPreco(r[7]),
-  }));
-
   if (!cfgRows.length) await salvarConfigPreco();
-  if (!tabelaPreco.length) {
-    tabelaPreco = TABELA_PRECO_PADRAO.map(r => ({ ...r }));
-    await salvarTabelaPreco();
+
+  const cab = tabVals[0] || [];
+  const corpo = tabVals.slice(1).filter(r => r && r.some(c => c !== '' && c != null));
+  let precisaSalvar = false;
+  if (cab[0] === 'Serviço') {
+    // Primeira versão da tabela (8 colunas): migra para o formato novo.
+    const antigas = corpo.filter(r => r[0]).map(r => ({
+      cod: '', servico: String(r[0]), modalidade: 'Presencial', tipo: TIPOS_HORA.some(t => t.label === r[1]) ? r[1] : TIPOS_HORA[0].label,
+      tempo: numPreco(r[2]), insumos: numPreco(r[3]), regiao: '', atual: numPreco(r[5]), categoria: r[6] || '', urtes: numPreco(r[7]),
+      adicional: false, mat: '', obs: '',
+    }));
+    const assinatura = antigas.map(r => [r.servico, r.tempo, r.insumos, r.atual].join('|')).join(';');
+    tabelaPreco = assinatura === ASSINATURA_TABELA_V1 ? TABELA_PRECO_PADRAO.map(r => ({ ...r })) : antigas;
+    precisaSalvar = true;
+  } else {
+    tabelaPreco = corpo.filter(r => r[1]).map(arrayParaLinha);
+    if (!tabelaPreco.length) { tabelaPreco = TABELA_PRECO_PADRAO.map(r => ({ ...r })); precisaSalvar = true; }
   }
+  if (precisaSalvar) await salvarTabelaPreco();
 }
 
 function horaDoTipo(label) {
@@ -954,37 +1133,51 @@ function horaDoTipo(label) {
   return t ? (configPreco[t.k] || 0) : 0;
 }
 
-function calcularPreco({ tipo, tempo, insumos, desloc }) {
+function calcularPreco({ tipo, tempo, insumos, desloc, semFixo }) {
   const honorario = horaDoTipo(tipo) * (tempo || 0) / 60;
-  const fixo = configPreco.atend_mes > 0 ? configPreco.custo_fixo / configPreco.atend_mes : 0;
+  const fixo = !semFixo && configPreco.atend_mes > 0 ? configPreco.custo_fixo / configPreco.atend_mes : 0;
   const base = honorario + fixo + (insumos || 0) + (desloc || 0);
   const margem = base * configPreco.margem;
   const final = arredCima((base + margem) / (1 - configPreco.imposto));
   return { honorario, fixo, insumos: insumos || 0, deslocamento: desloc || 0, base, margem, imposto: Math.max(0, Math.round((final - base - margem) * 100) / 100), final };
 }
 
+function deslocDaLinha(r) {
+  return r.regiao ? (configPreco[REGIAO_CHAVE[r.regiao]] || 0) : 0;
+}
+function calcularPrecoLinha(r) {
+  return calcularPreco({ tipo: r.tipo, tempo: r.tempo, insumos: r.insumos, desloc: deslocDaLinha(r), semFixo: r.adicional });
+}
+
 function renderTabelaPrecos() {
   document.getElementById('aviso-imposto').style.display = configPreco.imposto > 0 ? 'none' : 'block';
   const el = document.getElementById('tabela-precos');
   if (!tabelaPreco.length) { el.innerHTML = '<div class="vazio">Nenhum serviço cadastrado.</div>'; return; }
-  el.innerHTML = `
+  let html = `
     <div class="tm-row tp-row tm-cab">
       <div class="tm-mes">Serviço</div><div class="tm-num">Sugerido</div><div class="tm-num">Atual</div><div class="tm-num">Dif.</div><div class="tm-num">Piso</div>
-    </div>
-  ` + tabelaPreco.map(r => {
-    const sug = calcularPreco(r).final;
-    const dif = r.atual - sug;
-    const piso = r.urtes * configPreco.urte;
-    const abaixo = r.atual > 0 && piso > 0 && r.atual < piso;
-    return `
-    <div class="tm-row tp-row">
-      <div class="tm-mes">${esc(r.servico)}<small>${r.tempo} min</small></div>
-      <div class="tm-num">${fmtN(sug)}</div>
-      <div class="tm-num">${fmtN(r.atual)}${abaixo ? '<small>abaixo do piso</small>' : ''}</div>
-      <div class="tm-num ${dif >= 0 ? 'pos' : 'neg'}">${dif >= 0 ? '+' : ''}${fmtN(dif)}</div>
-      <div class="tm-num">${piso > 0 ? fmtN(piso) : '-'}</div>
     </div>`;
-  }).join('');
+  MODALIDADES.forEach(mod => {
+    const linhas = tabelaPreco.filter(r => r.modalidade === mod);
+    if (!linhas.length) return;
+    html += `<div class="tm-sub">${mod}</div>`;
+    html += linhas.map(r => {
+      const sobAval = !(r.atual > 0);
+      const sug = calcularPrecoLinha(r).final;
+      const dif = r.atual - sug;
+      const piso = r.urtes * configPreco.urte;
+      const abaixo = !sobAval && piso > 0 && r.atual < piso;
+      return `
+      <div class="tm-row tp-row">
+        <div class="tm-mes">${esc(r.servico)}<small>${r.cod ? esc(r.cod) + ' · ' : ''}${r.tempo} min${r.adicional ? ' · adicional' : ''}</small></div>
+        <div class="tm-num">${sobAval ? '-' : fmtN(sug)}</div>
+        <div class="tm-num">${sobAval ? 'Sob aval.' : fmtN(r.atual)}${abaixo ? '<small>abaixo do piso</small>' : ''}</div>
+        <div class="tm-num ${sobAval ? '' : (dif >= 0 ? 'pos' : 'neg')}">${sobAval ? '-' : (dif >= 0 ? '+' : '') + fmtN(dif)}</div>
+        <div class="tm-num">${piso > 0 ? fmtN(piso) : '-'}</div>
+      </div>`;
+    }).join('');
+  });
+  el.innerHTML = html;
 }
 
 function calcularRealidade() {
@@ -994,13 +1187,13 @@ function calcularRealidade() {
   const cats = new Set([...tabelaPreco.map(r => r.categoria).filter(Boolean), ...entradas.map(e => e.categoria).filter(Boolean)]);
   return [...cats].map(cat => {
     const es = entradas.filter(e => e.categoria === cat);
-    const servs = tabelaPreco.filter(r => r.categoria === cat);
+    const servs = tabelaPreco.filter(r => r.categoria === cat && r.atual > 0 && !r.adicional);
     return {
       cat,
       n: es.length,
       recebido: media(es.map(e => e.valor)),
       material: media(es.filter(e => e.id && custoPorId[e.id] !== undefined).map(e => custoPorId[e.id])),
-      sugerido: media(servs.map(r => calcularPreco(r).final)),
+      sugerido: media(servs.map(r => calcularPrecoLinha(r).final)),
     };
   }).filter(r => r.n > 0).sort((a, b) => b.n - a.n);
 }
@@ -1033,8 +1226,7 @@ function renderCalculadora() {
   if (!sel.options.length) sel.innerHTML = TIPOS_HORA.map(t => `<option>${esc(t.label)}</option>`).join('');
   const reg = document.getElementById('calc-regiao');
   if (!reg.options.length) reg.innerHTML = REGIOES_DESLOC.map(r => `<option value="${r.k}">${esc(r.label)}</option>`).join('');
-  const desloc = lerNumero('calc-desloc');
-  const r = calcularPreco({ tipo: sel.value, tempo: lerNumero('calc-tempo'), insumos: lerNumero('calc-insumos'), desloc });
+  const r = calcularPreco({ tipo: sel.value, tempo: lerNumero('calc-tempo'), insumos: lerNumero('calc-insumos'), desloc: lerNumero('calc-desloc') });
   document.getElementById('calc-resultado').innerHTML = `
     <p class="rp-rot">Preço final sugerido</p>
     <p class="rp-final">${fmtBRL(r.final)}</p>
@@ -1093,9 +1285,254 @@ function criarLinhaMaterialCalc() {
   document.getElementById('calc-materiais-lista').appendChild(row);
 }
 
+// ── Seletor de materiais (veio da antiga página de precificação) ─────────────
+// Mesmas chaves de localStorage da página antiga: a seleção e os custos já salvos continuam valendo.
+function lerJsonLocal(chave, padrao) {
+  try { return JSON.parse(localStorage.getItem(chave) || 'null') || padrao; } catch { return padrao; }
+}
+let selMat = lerJsonLocal('prec_selecao', {});
+let custosMat = (() => {
+  const base = {};
+  MATERIAIS.forEach(m => { if (m.custo !== null) base[m.id] = m.custo; });
+  return Object.assign(base, lerJsonLocal('prec_custos', {}));
+})();
+function salvarMat() {
+  try {
+    localStorage.setItem('prec_selecao', JSON.stringify(selMat));
+    localStorage.setItem('prec_custos', JSON.stringify(custosMat));
+  } catch { /* sem armazenamento local, segue sem salvar */ }
+}
+
+// Itens fracionados: subtotal = custo x (uso / embalagem). Itens normais: custo x quantidade.
+function calcSubtotalMat(m, s) {
+  const custo = custosMat[m.id];
+  if (custo == null || !s || !s.ativo) return null;
+  if (m.embalagem) {
+    const uso = s.uso || 0;
+    if (!uso) return null;
+    return custo * (uso / m.embalagem);
+  }
+  return custo * (s.qtd || 1);
+}
+
+function itensSelecionados() {
+  const itens = [];
+  MATERIAIS.forEach(m => {
+    const s = selMat[m.id];
+    if (!s || !s.ativo) return;
+    const quantidade = m.embalagem ? (s.uso || 0) : (s.qtd || 1);
+    if (quantidade > 0) itens.push({ item: m.item, quantidade });
+  });
+  return itens;
+}
+
+function totalSelMat() {
+  let total = 0, count = 0;
+  MATERIAIS.forEach(m => {
+    const s = selMat[m.id];
+    if (s && s.ativo) {
+      const sub = calcSubtotalMat(m, s);
+      if (sub != null) total += sub;
+      count++;
+    }
+  });
+  return { total, count };
+}
+
+function atualizarTotalMat() {
+  const { total, count } = totalSelMat();
+  document.getElementById('total-valor').textContent = fmtBRL(total);
+  document.getElementById('total-count').textContent = count + (count === 1 ? ' item selecionado' : ' itens selecionados');
+}
+
+function renderizarMateriais() {
+  const lista = document.getElementById('lista-materiais');
+  lista.innerHTML = '';
+  [...new Set(MATERIAIS.map(m => m.cat))].forEach(cat => {
+    const cab = document.createElement('div');
+    cab.className = 'sel-cat';
+    cab.innerHTML = `<span>${esc(cat)}</span><div class="l"></div>`;
+    lista.appendChild(cab);
+
+    MATERIAIS.filter(m => m.cat === cat).forEach(m => {
+      const s = selMat[m.id] || { ativo: false, qtd: 1, uso: 0 };
+      const custo = custosMat[m.id];
+      const subtotal = calcSubtotalMat(m, s);
+      const div = document.createElement('div');
+      div.className = 'sel-item' + (s.ativo ? ' ativo' : '');
+      const colQtd = m.embalagem
+        ? `<div class="qtd com-un"><input type="number" value="${s.uso || ''}" placeholder="0" min="0" step="0.5" data-uso ${!s.ativo ? 'disabled' : ''} title="Quantidade usada (${m.unidade})"><span>${m.unidade}</span></div>`
+        : `<div class="qtd"><input type="number" value="${s.qtd || 1}" min="1" step="1" data-qtd ${!s.ativo ? 'disabled' : ''}></div>`;
+      div.innerHTML = `
+        <input type="checkbox" class="c" ${s.ativo ? 'checked' : ''}>
+        <span class="n">${esc(m.item)}</span>
+        <div class="custo"><input type="number" value="${custo != null ? custo : ''}" placeholder="custo" min="0" step="0.01" data-custo title="${m.embalagem ? `Preço da embalagem (${m.embalagem} ${m.unidade})` : 'Custo unitário'}"></div>
+        ${colQtd}
+        <span class="sub">${subtotal !== null ? fmtBRL(subtotal) : '-'}</span>
+      `;
+      lista.appendChild(div);
+
+      const atualizarSub = () => {
+        const st = calcSubtotalMat(m, selMat[m.id]);
+        div.querySelector('.sub').textContent = st !== null ? fmtBRL(st) : '-';
+        atualizarTotalMat();
+      };
+      div.querySelector('.c').addEventListener('change', e => {
+        const atual = selMat[m.id] || {};
+        selMat[m.id] = { ativo: e.target.checked, qtd: atual.qtd || 1, uso: atual.uso || 0 };
+        salvarMat(); renderizarMateriais(); atualizarTotalMat();
+      });
+      div.querySelector('[data-custo]').addEventListener('input', e => {
+        custosMat[m.id] = parseFloat(e.target.value) || 0;
+        salvarMat(); atualizarSub();
+      });
+      const qtdEl = div.querySelector('[data-qtd]');
+      if (qtdEl) qtdEl.addEventListener('input', e => {
+        selMat[m.id] = Object.assign({ ativo: false, qtd: 1, uso: 0 }, selMat[m.id], { qtd: parseFloat(e.target.value) || 1 });
+        salvarMat(); atualizarSub();
+      });
+      const usoEl = div.querySelector('[data-uso]');
+      if (usoEl) usoEl.addEventListener('input', e => {
+        selMat[m.id] = Object.assign({ ativo: false, qtd: 1, uso: 0 }, selMat[m.id], { uso: parseFloat(e.target.value) || 0 });
+        salvarMat(); atualizarSub();
+      });
+    });
+  });
+  atualizarTotalMat();
+}
+
+function msgMat(texto, ok) { mostrarMsg('mat-msg', texto, ok); }
+
+function lancarConsumoNoFinanceiro() {
+  const itens = itensSelecionados();
+  if (!itens.length) { msgMat('Marque ao menos um material antes de lançar.', false); return; }
+  mostrarSecao('financeiro');
+  document.querySelector('.aba-btn[data-aba="entrada"]').click();
+  document.getElementById('ent-materiais-lista').innerHTML = '';
+  itens.forEach(p => {
+    criarLinhaMaterial();
+    const linhas = document.querySelectorAll('#ent-materiais-lista .material-row');
+    const ultima = linhas[linhas.length - 1];
+    ultima.querySelector('.mat-item').value = p.item;
+    ultima.querySelector('.mat-qtd').value = p.quantidade;
+  });
+  mostrarMsg('ent-msg', `${itens.length} ${itens.length === 1 ? 'material importado' : 'materiais importados'} da seleção. Confira data e valor e salve a entrada.`, true);
+  document.getElementById('form-entrada').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Simulador de orçamento para o paciente ───────────────────────────────────
+const SIM_DEFAULT = { honorario: 350, material: 110, multiplicador: 1.6, deslocamento: 0, laser: 70, tipoLabel: 'Avaliação inicial + primeiro curativo básico' };
+const SIM_CAMPOS = [
+  { key: 'honorario', label: 'Honorário técnico', hint: 'Escolha o tipo de atendimento na lista e o valor vem da tabela de serviços. Pode ajustar à mão depois.', prefix: true, step: 10 },
+  { key: 'material', label: 'Custo do material especial', hint: 'Custo real do material utilizado. Use o botão "Usar no orçamento" na aba Materiais.', prefix: true, step: 5 },
+  { key: 'multiplicador', label: 'Multiplicador do material', hint: '1,3 a 1,5: material simples, já disponível no consultório. 1,6 (padrão): cobertura especial comum. 1,7 a 2,0: material caro, difícil de repor ou domiciliar com transporte.', prefix: false, step: 0.1 },
+  { key: 'deslocamento', label: 'Taxa de deslocamento', hint: 'Preencher 0 se presencial ou região incluída. Veja as taxas na aba Tabelas.', prefix: true, step: 10 },
+  { key: 'laser', label: 'Laser associado', hint: 'Preencher 0 quando não houver laser.', prefix: true, step: 10 },
+];
+let simVals = Object.assign({}, SIM_DEFAULT, lerJsonLocal('prec_sim', {}));
+function salvarSim() { try { localStorage.setItem('prec_sim', JSON.stringify(simVals)); } catch { /* segue sem salvar */ } }
+
+function honorarioOpcoes() {
+  return tabelaPreco.filter(r => r.tipo !== 'Laserterapia' && !r.adicional).map(r => ({ label: r.servico, val: r.atual > 0 ? r.atual : null }));
+}
+function calcularSim() {
+  return simVals.honorario + simVals.material * simVals.multiplicador + simVals.deslocamento + simVals.laser;
+}
+function atualizarSim() {
+  document.getElementById('sim-total').textContent = fmtBRL(calcularSim());
+  document.getElementById('sim-formula').textContent =
+    `${fmtBRL(simVals.honorario)} + (${fmtBRL(simVals.material)} x ${simVals.multiplicador.toFixed(1).replace('.', ',')}) + ${fmtBRL(simVals.deslocamento)} + ${fmtBRL(simVals.laser)}`;
+}
+function renderizarSim() {
+  const wrap = document.getElementById('sim-campos');
+  const opcoes = honorarioOpcoes();
+  wrap.innerHTML = '';
+  SIM_CAMPOS.forEach((c, i) => {
+    const div = document.createElement('div');
+    if (i > 0) div.className = 'sim-sep-wrap';
+    const seletor = c.key === 'honorario'
+      ? `<select id="sim-honorario-tipo"><option value="">Tipo de atendimento (opcional, preenche o valor abaixo)</option>${opcoes.map((o, oi) => `<option value="${oi}">${esc(o.label)}${o.val == null ? ' (sob avaliação)' : ''}</option>`).join('')}</select>` : '';
+    div.innerHTML = `
+      ${i > 0 ? '<div class="sim-sep"></div>' : ''}
+      <label>${esc(c.label)}</label>
+      <p class="dica">${esc(c.hint)}</p>
+      ${seletor}
+      <input type="number" value="${simVals[c.key]}" min="0" step="${c.step}" data-sim="${c.key}" style="margin-top:8px">
+    `;
+    wrap.appendChild(div);
+    div.querySelector('[data-sim]').addEventListener('input', e => {
+      simVals[c.key] = parseFloat(e.target.value) || 0;
+      salvarSim(); atualizarSim();
+    });
+    if (c.key === 'honorario') {
+      const selectEl = div.querySelector('#sim-honorario-tipo');
+      const idx = opcoes.findIndex(o => o.label === simVals.tipoLabel);
+      if (idx > -1) selectEl.value = String(idx);
+      selectEl.addEventListener('change', e => {
+        if (e.target.value === '') return;
+        const opt = opcoes[parseInt(e.target.value, 10)];
+        simVals.honorario = opt.val ?? 0;
+        simVals.tipoLabel = opt.label;
+        div.querySelector('[data-sim="honorario"]').value = simVals.honorario;
+        salvarSim(); atualizarSim();
+      });
+    }
+  });
+  atualizarSim();
+}
+
+// ── Tabelas para o paciente ──────────────────────────────────────────────────
+function renderTabelaModalidade(id, mod) {
+  const linhas = tabelaPreco.filter(r => r.modalidade === mod);
+  document.getElementById(id).innerHTML = `
+    <div class="tm-row tp3 tm-cab"><div class="tm-mes">Serviço</div><div class="tm-num">Material</div><div class="tm-num">Valor</div></div>
+  ` + (linhas.length ? linhas.map(r => `
+    <div class="tm-row tp3">
+      <div class="tm-mes">${esc(r.servico)}<small>${r.cod ? esc(r.cod) + ' · ' : ''}${esc(r.obs)}</small></div>
+      <div class="tm-num" style="white-space:normal">${esc(r.mat) || '-'}</div>
+      <div class="tm-num">${r.atual > 0 ? fmtBRL(r.atual) : 'Sob avaliação'}</div>
+    </div>`).join('') : '<div class="vazio">Nenhum serviço nesta modalidade.</div>');
+}
+
+function renderTabelasPaciente() {
+  renderTabelaModalidade('tabela-presencial', 'Presencial');
+  renderTabelaModalidade('tabela-domiciliar', 'Domiciliar');
+  document.getElementById('tabela-desloc').innerHTML = `
+    <div class="tm-row tp3 tm-cab"><div class="tm-mes">Região</div><div class="tm-num">Taxa</div><div class="tm-num">Seu custo</div></div>
+  ` + DESLOCAMENTO_TAXAS.map(d => `
+    <div class="tm-row tp3">
+      <div class="tm-mes">${esc(d.tipo)}<small>${esc(d.regiao)}</small></div>
+      <div class="tm-num" style="white-space:normal">${esc(d.taxa)}</div>
+      <div class="tm-num">${d.chave ? fmtBRL(configPreco[d.chave] || 0) : '-'}</div>
+    </div>`).join('');
+
+  const precoDoCod = cod => { const r = tabelaPreco.find(x => x.cod === cod); return r && r.atual > 0 ? r.atual : null; };
+  let html = `<div class="tm-row tp4 tm-cab"><div class="tm-mes">Pacote</div><div class="tm-num">Pacote</div><div class="tm-num">Avulso</div><div class="tm-num">Desc.</div></div>`;
+  let grupoAtual = '';
+  PACOTES.forEach(p => {
+    if (p.grupo !== grupoAtual) { html += `<div class="tm-sub">${esc(p.grupo)}</div>`; grupoAtual = p.grupo; }
+    const partes = p.itens.map(([cod, q]) => { const v = precoDoCod(cod); return v === null ? null : v * q; });
+    const avulso = partes.every(v => v !== null) ? partes.reduce((a, b) => a + b, 0) : null;
+    const desc = avulso ? (1 - p.val / avulso) * 100 : null;
+    html += `
+    <div class="tm-row tp4">
+      <div class="tm-mes">${esc(p.nome)}<small>${esc(p.inclui)}</small></div>
+      <div class="tm-num">${fmtBRL(p.val)}</div>
+      <div class="tm-num">${avulso !== null ? fmtBRL(avulso) : '-'}</div>
+      <div class="tm-num ${desc !== null && desc < 0 ? 'neg' : ''}">${desc !== null ? Math.round(desc) + '%' : '-'}</div>
+    </div>`;
+  });
+  document.getElementById('tabela-pacotes').innerHTML = html;
+}
+
+// ── Editor de serviços e parâmetros ──────────────────────────────────────────
 function renderEditorServicos() {
   document.getElementById('editor-servicos').innerHTML = tabelaPreco.map((r, i) => `
     <div class="form-preco edit-serv" data-i="${i}">
+      <div class="grid-2">
+        <div><label>Código</label><input type="text" data-f="cod" value="${esc(r.cod)}"></div>
+        <div><label>Modalidade</label><select data-f="modalidade">${MODALIDADES.map(m => `<option ${m === r.modalidade ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+      </div>
       <label>Serviço</label>
       <input type="text" data-f="servico" value="${esc(r.servico)}">
       <label>Tipo de atendimento (valor da hora)</label>
@@ -1103,11 +1540,15 @@ function renderEditorServicos() {
       <div class="grid-2">
         <div><label>Tempo (min)</label><input type="number" data-f="tempo" min="0" step="5" value="${r.tempo}"></div>
         <div><label>Insumos (R$)</label><input type="number" data-f="insumos" min="0" step="0.01" value="${r.insumos}"></div>
-        <div><label>Deslocamento (R$)</label><input type="number" data-f="desloc" min="0" step="0.01" value="${r.desloc}"></div>
+        <div><label>Região do deslocamento</label><select data-f="regiao">${REGIOES.map(g => `<option value="${g}" ${g === r.regiao ? 'selected' : ''}>${g || 'Nenhuma'}</option>`).join('')}</select></div>
         <div><label>Preço atual (R$)</label><input type="number" data-f="atual" min="0" step="0.01" value="${r.atual}"></div>
         <div><label>Categoria no financeiro</label><select data-f="categoria">${CATEGORIAS_ENTRADA.map(c => `<option ${c === r.categoria ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select></div>
         <div><label>URTEs (piso Cofen)</label><input type="number" data-f="urtes" min="0" step="1" value="${r.urtes}"></div>
+        <div><label>Material incluído</label><input type="text" data-f="mat" value="${esc(r.mat)}"></div>
       </div>
+      <label>Observações</label>
+      <input type="text" data-f="obs" value="${esc(r.obs)}">
+      <label class="chk"><input type="checkbox" data-f="adicional" ${r.adicional ? 'checked' : ''}> Adicional ao curativo (não rateia custo fixo)</label>
       <button type="button" class="btn-remover-serv" data-rem="${i}">Remover serviço</button>
     </div>
   `).join('');
@@ -1115,9 +1556,14 @@ function renderEditorServicos() {
 
 function lerEditorServicos() {
   return Array.from(document.querySelectorAll('#editor-servicos .edit-serv')).map(div => {
-    const g = f => div.querySelector(`[data-f="${f}"]`).value;
+    const el = f => div.querySelector(`[data-f="${f}"]`);
+    const g = f => el(f).value;
     const n = f => numPreco(g(f));
-    return { servico: g('servico').trim(), tipo: g('tipo'), tempo: n('tempo'), insumos: n('insumos'), desloc: n('desloc'), atual: n('atual'), categoria: g('categoria'), urtes: n('urtes') };
+    return {
+      cod: g('cod').trim(), servico: g('servico').trim(), modalidade: g('modalidade'), tipo: g('tipo'),
+      tempo: n('tempo'), insumos: n('insumos'), regiao: g('regiao'), atual: n('atual'), categoria: g('categoria'),
+      urtes: n('urtes'), adicional: el('adicional').checked, mat: g('mat').trim(), obs: g('obs').trim(),
+    };
   }).filter(r => r.servico);
 }
 
@@ -1132,6 +1578,7 @@ function renderPreco() {
   renderTabelaPrecos();
   renderRealidade();
   renderCalculadora();
+  renderTabelasPaciente();
 }
 
 function mostrarMsg(id, texto, ok) {
@@ -1140,12 +1587,17 @@ function mostrarMsg(id, texto, ok) {
   el.className = 'form-msg ' + (ok ? 'ok' : 'erro');
 }
 
-document.querySelectorAll('#nav-sec button').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('#nav-sec button').forEach(x => x.classList.remove('ativa'));
-  b.classList.add('ativa');
-  document.getElementById('sec-financeiro').style.display = b.dataset.sec === 'financeiro' ? 'block' : 'none';
-  document.getElementById('sec-preco').style.display = b.dataset.sec === 'preco' ? 'block' : 'none';
-}));
+function mostrarSecao(nome) {
+  document.querySelectorAll('#nav-sec button').forEach(x => x.classList.toggle('ativa', x.dataset.sec === nome));
+  document.getElementById('sec-financeiro').style.display = nome === 'financeiro' ? 'block' : 'none';
+  document.getElementById('sec-preco').style.display = nome === 'preco' ? 'block' : 'none';
+}
+function mostrarSub(nome) {
+  document.querySelectorAll('#sub-nav button').forEach(x => x.classList.toggle('ativa', x.dataset.sub === nome));
+  document.querySelectorAll('.sub-panel').forEach(p => { p.style.display = p.id === 'sub-' + nome ? 'block' : 'none'; });
+}
+document.querySelectorAll('#nav-sec button').forEach(b => b.addEventListener('click', () => mostrarSecao(b.dataset.sec)));
+document.querySelectorAll('#sub-nav button').forEach(b => b.addEventListener('click', () => mostrarSub(b.dataset.sub)));
 
 ['calc-tipo', 'calc-tempo', 'calc-insumos', 'calc-desloc'].forEach(id =>
   document.getElementById(id).addEventListener('input', renderCalculadora));
@@ -1159,9 +1611,30 @@ function aplicarRegiao() {
 document.getElementById('calc-regiao').addEventListener('input', aplicarRegiao);
 document.getElementById('calc-add-material').addEventListener('click', criarLinhaMaterialCalc);
 
+document.getElementById('btn-limpar').addEventListener('click', () => { selMat = {}; salvarMat(); renderizarMateriais(); });
+document.getElementById('btn-restaurar-custos').addEventListener('click', () => {
+  const base = {};
+  MATERIAIS.forEach(m => { if (m.custo !== null) base[m.id] = m.custo; });
+  custosMat = base; salvarMat(); renderizarMateriais();
+});
+document.getElementById('mat-usar-calc').addEventListener('click', () => {
+  const { total, count } = totalSelMat();
+  if (!count) { msgMat('Marque ao menos um material antes.', false); return; }
+  document.getElementById('calc-insumos').value = (Math.round(total * 100) / 100).toString();
+  renderCalculadora(); mostrarSub('calc');
+});
+document.getElementById('mat-usar-sim').addEventListener('click', () => {
+  const { total, count } = totalSelMat();
+  if (!count) { msgMat('Marque ao menos um material antes.', false); return; }
+  simVals.material = Math.round(total * 100) / 100;
+  salvarSim(); renderizarSim(); mostrarSub('orc');
+});
+document.getElementById('mat-lancar').addEventListener('click', lancarConsumoNoFinanceiro);
+document.getElementById('btn-restaurar').addEventListener('click', () => { simVals = Object.assign({}, SIM_DEFAULT); salvarSim(); renderizarSim(); });
+
 document.getElementById('serv-add').addEventListener('click', () => {
   tabelaPreco = lerEditorServicos();
-  tabelaPreco.push({ servico: 'Novo serviço', tipo: TIPOS_HORA[0].label, tempo: 60, insumos: 0, desloc: 0, atual: 0, categoria: 'Procedimento', urtes: 0 });
+  tabelaPreco.push({ cod: '', servico: 'Novo serviço', modalidade: 'Presencial', tipo: TIPOS_HORA[0].label, tempo: 60, insumos: 0, regiao: '', atual: 0, categoria: 'Procedimento', urtes: 0, adicional: false, mat: '', obs: '' });
   renderEditorServicos();
 });
 document.getElementById('editor-servicos').addEventListener('click', e => {
@@ -1176,7 +1649,7 @@ document.getElementById('serv-salvar').addEventListener('click', async (e) => {
   try {
     tabelaPreco = lerEditorServicos();
     await salvarTabelaPreco();
-    renderEditorServicos(); renderPreco();
+    renderEditorServicos(); renderPreco(); renderizarSim();
     mostrarMsg('serv-msg', 'Tabela de serviços salva!', true);
   } catch (err) { mostrarMsg('serv-msg', 'Erro: ' + err.message, false); }
   finally { btn.disabled = false; }
@@ -1195,14 +1668,456 @@ document.getElementById('params-salvar').addEventListener('click', async (e) => 
   finally { btn.disabled = false; }
 });
 
+// ── Exportar PDF ─────────────────────────────────────────────────────────────
+// Paleta da nova identidade (musgo, salvia, por do sol, pergaminho)
+const PDF_CORES = {
+  CIP:   [51, 66, 31],
+  SAL:   [95, 122, 53],
+  TER:   [224, 122, 63],
+  PERG:  [246, 239, 226],
+  BORDA: [212, 205, 184],
+}
+const PIX_CNPJ = '66.913.603/0001-92'
+
+// Logo carregada com antecedencia para o PDF sair na hora do clique (sem esperar rede)
+let LOGO_DATA = null
+fetch('assets/logo.png')
+  .then(r => r.ok ? r.blob() : Promise.reject())
+  .then(b => new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(b) }))
+  .then(d => { LOGO_DATA = d })
+  .catch(() => {})
+
+function exportarMateriaisPDF() {
+  const msg = document.getElementById('msg-exportar-materiais')
+  const itens = []
+  let total = 0
+  MATERIAIS.forEach(m => {
+    const s = selMat[m.id]
+    if (!s || !s.ativo) return
+    const sub = calcSubtotalMat(m, s)
+    if (sub == null) return
+    total += sub
+    const descQtd = m.embalagem ? `${s.uso || 0} ${m.unidade}` : `${s.qtd || 1} un.`
+    itens.push([m.item, descQtd, fmtBRL(sub)])
+  })
+  if (!itens.length) {
+    msg.textContent = 'Marque os materiais (e a quantidade usada) antes de exportar.'
+    msg.style.display = 'block'; msg.className = 'form-msg erro'
+    return
+  }
+  msg.style.display = 'none'
+
+  const { jsPDF } = window.jspdf
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+  const { CIP, SAL, TER, PERG, BORDA } = PDF_CORES
+  const W = 210, M = 18
+  const nome = document.getElementById('nome-familiar').value.trim()
+  const data = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
+
+  // Faixa e cabeçalho
+  doc.setFillColor(...CIP); doc.rect(0, 0, W, 4, 'F')
+  doc.setFillColor(...PERG); doc.rect(0, 4, W, 38, 'F')
+  if (LOGO_DATA) {
+    doc.addImage(LOGO_DATA, 'PNG', M, 8, 56, 22.1)
+  } else {
+    doc.setFont('times', 'bolditalic'); doc.setFontSize(20); doc.setTextColor(...CIP)
+    doc.text('Enfermagem Especializada', M, 20)
+    doc.setFont('times', 'italic'); doc.setFontSize(12); doc.setTextColor(...SAL)
+    doc.text('por Bruna Arguelles', M, 27)
+  }
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...SAL)
+  doc.text(`CNPJ ${PIX_CNPJ}`, M, 37)
+  doc.setTextColor(...CIP)
+  doc.text(data, W - M, 16, { align: 'right' })
+  if (nome) {
+    doc.setFontSize(7.5); doc.setTextColor(...SAL); doc.setCharSpace(1)
+    doc.text('PARA', W - M, 24, { align: 'right' }); doc.setCharSpace(0)
+    doc.setFont('times', 'bolditalic'); doc.setFontSize(13); doc.setTextColor(...CIP)
+    doc.text(nome, W - M, 32, { align: 'right' })
+  }
+  doc.setDrawColor(...TER); doc.setLineWidth(0.5); doc.line(M, 42, W - M, 42)
+
+  // Título
+  doc.setFont('times', 'bolditalic'); doc.setFontSize(19); doc.setTextColor(...CIP)
+  doc.text('Materiais à parte', M, 55)
+  doc.setFont('times', 'italic'); doc.setFontSize(9.5); doc.setTextColor(...SAL)
+  doc.text('Valores dos materiais utilizados no atendimento, cobrados além do cuidado combinado.', M, 61)
+
+  // Tabela
+  doc.autoTable({
+    startY: 68,
+    head: [['Material', 'Qtd / uso', 'Valor']],
+    body: itens,
+    margin: { left: M, right: M },
+    styles: {
+      font: 'helvetica', fontSize: 9,
+      cellPadding: { top: 3.5, bottom: 3.5, left: 5, right: 5 },
+      textColor: CIP, lineColor: BORDA, lineWidth: 0.2,
+    },
+    headStyles: { fillColor: CIP, textColor: [255,255,255], fontSize: 7.5, fontStyle: 'normal' },
+    alternateRowStyles: { fillColor: PERG },
+    columnStyles: {
+      0: { cellWidth: 'auto' },
+      1: { cellWidth: 30, halign: 'center' },
+      2: { cellWidth: 30, halign: 'right', fontStyle: 'bold' },
+    },
+  })
+
+  let y = doc.lastAutoTable.finalY + 8
+  const precisa = h => { if (y + h > 270) { doc.addPage(); doc.setFillColor(...CIP); doc.rect(0, 0, W, 4, 'F'); y = 18 } }
+
+  // Total
+  precisa(16)
+  doc.setFillColor(...CIP); doc.rect(M, y, W - 2*M, 14, 'F')
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(255, 255, 255); doc.setCharSpace(1)
+  doc.text('TOTAL DOS MATERIAIS', M + 5, y + 8.5); doc.setCharSpace(0)
+  doc.setFont('times', 'bolditalic'); doc.setFontSize(17)
+  doc.text(fmtBRL(total), W - M - 5, y + 10, { align: 'right' })
+  y += 24
+
+  // Pix
+  precisa(36)
+  doc.setFillColor(...PERG); doc.rect(M, y, W - 2*M, 30, 'F')
+  doc.setDrawColor(...TER); doc.setLineWidth(1); doc.line(M, y, M, y + 30)
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...TER); doc.setCharSpace(1.5)
+  doc.text('PAGAMENTO VIA PIX', M + 8, y + 8); doc.setCharSpace(0)
+  doc.setFontSize(8.5); doc.setTextColor(...SAL)
+  doc.text('Chave Pix (CNPJ)', M + 8, y + 15)
+  doc.setFont('times', 'bolditalic'); doc.setFontSize(17); doc.setTextColor(...CIP)
+  doc.text(PIX_CNPJ, M + 8, y + 23)
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...SAL)
+  doc.text('Favorecido: Bruna Arguelles, Enfermagem Especializada', W - M - 5, y + 23, { align: 'right' })
+  y += 38
+
+  // Observação
+  precisa(14)
+  doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(...SAL)
+  doc.text(doc.splitTextToSize('Os valores correspondem ao material efetivamente utilizado. Após o pagamento, envie o comprovante pelo WhatsApp.', W - 2*M), M, y)
+
+  // Rodapé
+  doc.setDrawColor(...TER); doc.setLineWidth(0.4); doc.line(M, 277, W - M, 277)
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...SAL)
+  doc.text(`Enfermagem Especializada por Bruna Arguelles · CNPJ ${PIX_CNPJ}`, M, 282)
+  doc.setTextColor(...BORDA)
+  doc.text('@enfbruna.feridas', W - M, 282, { align: 'right' })
+
+  const nomeArq = nome
+    ? `materiais_${nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`
+    : `materiais_${new Date().toISOString().slice(0,10)}.pdf`
+  doc.setProperties({ title: nomeArq })
+  const janela = window.open(doc.output('bloburl'), '_blank')
+  if (!janela) doc.save(nomeArq)
+}
+
+function exportarPDF() {
+  const { jsPDF } = window.jspdf
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' })
+
+  const { CIP, SAL, TER, PERG, BORDA } = PDF_CORES
+  const W = 210, M = 18
+
+  const paciente = document.getElementById('nome-paciente').value.trim()
+  const data = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
+  const totalSim = calcularSim()
+
+  // ── Faixa topo
+  doc.setFillColor(...CIP)
+  doc.rect(0, 0, W, 4, 'F')
+
+  // ── Cabeçalho pergaminho
+  doc.setFillColor(...PERG)
+  doc.rect(0, 4, W, 38, 'F')
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...SAL)
+  doc.setCharSpace(1.5)
+  doc.text('ENFERMAGEM ESPECIALIZADA', M, 16)
+  doc.setCharSpace(0)
+
+  doc.setFont('times', 'bolditalic')
+  doc.setFontSize(21)
+  doc.setTextColor(...CIP)
+  doc.text('Bruna Arguelles', M, 26)
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8)
+  doc.setTextColor(...SAL)
+  doc.text('CNPJ 66.913.603/0001-92', M, 32)
+
+  // Data + paciente (direita)
+  doc.setFontSize(8)
+  doc.setTextColor(...CIP)
+  doc.text(data, W - M, 16, { align: 'right' })
+  if (paciente) {
+    doc.setFontSize(7.5)
+    doc.setTextColor(...SAL)
+    doc.setCharSpace(1)
+    doc.text('PACIENTE', W - M, 22, { align: 'right' })
+    doc.setCharSpace(0)
+    doc.setFontSize(13)
+    doc.setFont('times', 'bolditalic')
+    doc.setTextColor(...CIP)
+    doc.text(paciente, W - M, 30, { align: 'right' })
+  }
+
+  // ── Separador
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(0.5)
+  doc.line(M, 42, W - M, 42)
+
+  // ── Introdução do orçamento
+  doc.setFont('times', 'italic')
+  doc.setFontSize(9)
+  doc.setTextColor(...SAL)
+  doc.text('Orçamento personalizado: valores calculados conforme as características individuais do seu caso.', M, 47.5)
+  doc.setFontSize(8)
+  doc.text('Este é um valor estimado e pode ser ajustado após avaliação presencial da ferida.', M, 52.5)
+
+  // ── Composição do valor (tabela do simulador)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(...TER)
+  doc.setCharSpace(1.5)
+  doc.text('COMPOSIÇÃO DO ATENDIMENTO', M, 60)
+  doc.setCharSpace(0)
+
+  const linhasSim = [
+    ['Honorário técnico',              fmtBRL(simVals.honorario)],
+    ['Materiais especiais e insumos',  fmtBRL(simVals.material * simVals.multiplicador)],
+    ['Taxa de deslocamento',           fmtBRL(simVals.deslocamento)],
+    ['Laser associado',                fmtBRL(simVals.laser)],
+  ]
+
+  doc.autoTable({
+    startY: 64,
+    head: [['Item', 'Valor']],
+    body: linhasSim,
+    margin: { left: M, right: M },
+    tableWidth: 100,
+    styles: {
+      font: 'helvetica', fontSize: 9,
+      cellPadding: { top: 4, bottom: 4, left: 5, right: 5 },
+      textColor: CIP, lineColor: BORDA, lineWidth: 0.2,
+    },
+    headStyles: { fillColor: CIP, textColor: [255,255,255], fontSize: 7, fontStyle: 'normal' },
+    alternateRowStyles: { fillColor: PERG },
+    columnStyles: {
+      0: { cellWidth: 'auto' },
+      1: { cellWidth: 30, halign: 'right', fontStyle: 'bold' },
+    },
+  })
+
+  // ── Valor final (destaque)
+  const afterSim = doc.lastAutoTable.finalY + 5
+  doc.setFillColor(...CIP)
+  doc.rect(M, afterSim, 100, 14, 'F')
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(255, 255, 255)
+  doc.setCharSpace(1)
+  doc.text('VALOR TOTAL DO ATENDIMENTO', M + 5, afterSim + 6)
+  doc.setCharSpace(0)
+  doc.setFont('times', 'bolditalic')
+  doc.setFontSize(16)
+  doc.text(fmtBRL(totalSim), M + 95, afterSim + 10.5, { align: 'right' })
+
+  // ── Observação sobre a composição do valor
+  doc.setFont('helvetica', 'italic')
+  doc.setFontSize(7)
+  doc.setTextColor(...SAL)
+  const obsComposicao = doc.splitTextToSize(
+    'O valor considera avaliação individualizada, materiais especiais utilizados, tecnologias associadas e deslocamento, quando aplicável.',
+    100
+  )
+  doc.text(obsComposicao, M, afterSim + 22)
+
+  // ── Materiais selecionados (se houver)
+  const itensMat = []
+  MATERIAIS.forEach(m => {
+    const s = selMat[m.id]
+    if (!s || !s.ativo) return
+    const sub = calcSubtotalMat(m, s)
+    const descQtd = m.embalagem ? `${s.uso || 0} ${m.unidade}` : `${s.qtd || 1} un.`
+    itensMat.push([m.item, descQtd, sub != null ? fmtBRL(sub) : '—'])
+  })
+
+  if (itensMat.length > 0) {
+    const startMat = afterSim + 34
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(7)
+    doc.setTextColor(...TER)
+    doc.setCharSpace(1.5)
+    doc.text('MATERIAIS UTILIZADOS', M, startMat)
+    doc.setCharSpace(0)
+
+    doc.autoTable({
+      startY: startMat + 4,
+      head: [['Material', 'Qtd / uso', 'Custo']],
+      body: itensMat,
+      margin: { left: M, right: M },
+      styles: {
+        font: 'helvetica', fontSize: 8.5,
+        cellPadding: { top: 3, bottom: 3, left: 5, right: 5 },
+        textColor: CIP, lineColor: BORDA, lineWidth: 0.2,
+      },
+      headStyles: { fillColor: CIP, textColor: [255,255,255], fontSize: 7, fontStyle: 'normal' },
+      alternateRowStyles: { fillColor: PERG },
+      columnStyles: {
+        0: { cellWidth: 'auto' },
+        1: { cellWidth: 30, halign: 'center' },
+        2: { cellWidth: 28, halign: 'right', fontStyle: 'bold' },
+      },
+    })
+  }
+
+  // ── Página 2: sobre o atendimento (conteúdo educativo para o paciente)
+  doc.addPage()
+
+  doc.setFillColor(...CIP)
+  doc.rect(0, 0, W, 4, 'F')
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7.5)
+  doc.setTextColor(...SAL)
+  doc.setCharSpace(1.5)
+  doc.text('BRUNA ARGUELLES · ENFERMAGEM ESPECIALIZADA', M, 16)
+  doc.setCharSpace(0)
+
+  doc.setFont('times', 'bolditalic')
+  doc.setFontSize(17)
+  doc.setTextColor(...CIP)
+  doc.text('Sobre o seu atendimento', M, 25)
+
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(0.5)
+  doc.line(M, 30, W - M, 30)
+
+  let y2 = 40
+
+  const descTipo = DESCRICAO_TIPO[simVals.tipoLabel]
+  if (descTipo) {
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(7)
+    doc.setTextColor(...TER)
+    doc.setCharSpace(1.5)
+    doc.text(simVals.tipoLabel.toUpperCase(), M, y2)
+    doc.setCharSpace(0)
+    y2 += 6
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(9.5)
+    doc.setTextColor(...CIP)
+    const linhasDesc = doc.splitTextToSize(descTipo, W - 2*M)
+    doc.text(linhasDesc, M, y2)
+    y2 += linhasDesc.length * 4.6 + 10
+  }
+
+  if (simVals.laser > 0) {
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(7)
+    doc.setTextColor(...TER)
+    doc.setCharSpace(1.5)
+    doc.text('LASERTERAPIA', M, y2)
+    doc.setCharSpace(0)
+    y2 += 6
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(9.5)
+    doc.setTextColor(...CIP)
+    const linhasLaser = doc.splitTextToSize(
+      'A laserterapia pode ser associada ao tratamento quando houver indicação profissional, com efeitos anti-inflamatórios, analgésicos e de estímulo à regeneração tecidual. Está incluída no valor deste atendimento.',
+      W - 2*M
+    )
+    doc.text(linhasLaser, M, y2)
+    y2 += linhasLaser.length * 4.6 + 10
+  }
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(...TER)
+  doc.setCharSpace(1.5)
+  doc.text('COMO DEFINIMOS O VALOR DO SEU ATENDIMENTO', M, y2)
+  doc.setCharSpace(0)
+  y2 += 6
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(9.5)
+  doc.setTextColor(...CIP)
+  const linhasCriterio = doc.splitTextToSize(
+    'O valor de um curativo não é definido apenas pelo tamanho da ferida. Uma ferida pequena pode exigir materiais especiais e maior complexidade técnica, assim como uma ferida maior pode ter um cuidado mais simples. Por isso, a classificação considera:',
+    W - 2*M
+  )
+  doc.text(linhasCriterio, M, y2)
+  y2 += linhasCriterio.length * 4.6 + 6
+
+  const criterios = [
+    'Tipo de material utilizado',
+    'Cobertura necessária',
+    'Complexidade do cuidado',
+    'Tempo técnico do atendimento',
+    'Quantidade de material utilizado',
+    'Necessidade de laserterapia',
+    'Frequência de troca e acompanhamento',
+  ]
+  doc.setFontSize(9)
+  criterios.forEach((item, i) => {
+    const col = i % 2, row = Math.floor(i / 2)
+    const x = M + col * 90
+    const yy = y2 + row * 7
+    doc.setTextColor(...TER)
+    doc.text('•', x, yy)
+    doc.setTextColor(...CIP)
+    doc.text(item, x + 4, yy)
+  })
+  y2 += Math.ceil(criterios.length / 2) * 7 + 12
+
+  doc.setFillColor(...PERG)
+  const notaAltura = 24
+  doc.rect(M, y2, W - 2*M, notaAltura, 'F')
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(1)
+  doc.line(M, y2, M, y2 + notaAltura)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(8.5)
+  doc.setTextColor(...CIP)
+  const linhasNota = doc.splitTextToSize(
+    'Os valores incluem materiais básicos até o limite de cada categoria. Coberturas especiais, materiais com prata, carvão ativado, espumas premium, alginatos especiais, hidrogel, PHMB, superabsorventes ou outros insumos de alto custo poderão ser cobrados à parte, sempre com orientação prévia.',
+    W - 2*M - 10
+  )
+  doc.text(linhasNota, M + 6, y2 + 8)
+
+  // ── Rodapé
+  doc.setDrawColor(...TER)
+  doc.setLineWidth(0.4)
+  doc.line(M, 277, W - M, 277)
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(7)
+  doc.setTextColor(...SAL)
+  doc.text('Bruna Arguelles · Enfermagem Especializada · CNPJ 66.913.603/0001-92', M, 282)
+  doc.setFont('times', 'italic')
+  doc.text('Orçamento válido por 15 dias. Valores sujeitos a alteração conforme avaliação presencial da ferida.', M, 287)
+  doc.setTextColor(...BORDA)
+  doc.text('@enfbruna.feridas', W - M, 282, { align: 'right' })
+
+  const nomeArq = paciente
+    ? `orcamento_${paciente.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`
+    : `orcamento_${new Date().toISOString().slice(0,10)}.pdf`
+
+  doc.setProperties({ title: nomeArq })
+  window.open(doc.output('bloburl'), '_blank')
+}
+
+document.getElementById('btn-exportar').addEventListener('click', exportarPDF);
+document.getElementById('btn-exportar-materiais').addEventListener('click', exportarMateriaisPDF);
+
 async function iniciarPreco() {
   try {
     await carregarPreco();
-    renderEditorServicos(); renderParametros(); renderPreco();
+    renderEditorServicos(); renderParametros(); renderPreco(); renderizarSim();
   } catch (e) {
     document.getElementById('tabela-precos').innerHTML = `<div class="vazio">Erro ao carregar a precificação: ${esc(e.message)}</div>`;
   }
 }
+renderizarMateriais();
 
 async function entrarNoApp() {
   document.getElementById('login').style.display = 'none';
