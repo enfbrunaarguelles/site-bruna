@@ -192,6 +192,11 @@
   .edit-serv .chk{ display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:var(--ink-soft); }
   .edit-serv .chk input{ width:auto; }
 
+  .form-preco .chk{ display:flex; align-items:center; gap:8px; margin-top:12px; font-size:12px; color:var(--ink-soft); text-transform:none; letter-spacing:0; }
+  .form-preco .chk input{ width:auto; }
+  .lista-inc{ margin:6px 0 0; padding-left:18px; font-size:12.5px; line-height:1.7; }
+  .mini{ background:none; border:1px solid var(--line); color:var(--ink-soft); font-family:inherit; font-size:11px; letter-spacing:.06em; text-transform:uppercase; padding:7px 10px; cursor:pointer; }
+  .mini.perigo{ color:var(--terracota); }
   .comp-opcao{ margin-bottom:12px; }
   .comp-opcao .material-row{ grid-template-columns:1fr 84px 28px; }
   .comp-opcao .material-row select{ min-width:0; }
@@ -454,6 +459,18 @@
               <button type="button" class="btn-preco sec" id="comp-exemplo">Restaurar exemplo</button>
             </div>
             <div id="comp-resultado" style="margin-top:18px"></div>
+            <div class="form-preco" style="margin-top:18px">
+              <label>Nome para salvar esta comparação</label>
+              <input type="text" id="comp-nome-salvar" placeholder="Ex: Ferida exsudativa, Dona Maria">
+              <button type="button" class="btn-preco" id="comp-salvar">Salvar na planilha</button>
+              <p class="form-msg" id="comp-msg"></p>
+              <label style="margin-top:22px">Nome do paciente (para o PDF)</label>
+              <input type="text" id="nome-comp" placeholder="Ex: Maria da Silva">
+              <button type="button" class="btn-preco" id="comp-pdf">Exportar comparativo em PDF</button>
+              <p class="form-msg" id="comp-pdf-msg"></p>
+            </div>
+            <div class="grupo-label" style="margin-top:22px"><span class="d"></span><span>Comparações salvas</span></div>
+            <div id="comp-salvas"></div>
           </div>
         </div>
 
@@ -477,6 +494,10 @@
         </div>
 
         <div class="sub-panel" id="sub-tab" style="display:none">
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Para explicar ao paciente</span></div>
+            <div id="tab-explica"></div>
+          </div>
           <div class="grupo">
             <div class="grupo-label"><span class="d"></span><span>Presencial</span></div>
             <div class="tabela-mensal" id="tabela-presencial"></div>
@@ -1607,6 +1628,7 @@ function renderPreco() {
   renderRealidade();
   renderCalculadora();
   renderTabelasPaciente();
+  renderExplicacao();
   renderComparador();
 }
 
@@ -2143,7 +2165,7 @@ document.getElementById('btn-exportar-materiais').addEventListener('click', expo
 // os atendimentos. Uma cobertura cara pode compensar se ficar mais dias no leito e exigir
 // menos visitas. Valores de exemplo: o usuário troca pelos dele.
 const COMP_PADRAO = {
-  periodo: 14, servico: 'Curativo complexo', visitaManual: '', regiao: '', comuns: 0, mult: 1,
+  periodo: 14, servico: 'Curativo complexo', visitaManual: '', regiao: '', comuns: 0, mult: 1, visitaCada: 0, ferida: { c: 0, l: 0, sobra: 2 },
   opcoes: [
     { nome: 'Kerlix', prim: { item: 'Curativo Kerlix rolo 11,4 cm x 3,7 m', qtd: 100, freq: 3 }, sec: [{ item: 'Atadura crepom 15cm x 1,80m (rolo)', qtd: 1 }], secFreq: 3, secPor: 'Profissional' },
     { nome: 'DACC (Sorbact)', prim: { item: 'Cutimed Sorbact Contact 10 cm x 100 cm', qtd: 20, freq: 4 }, sec: [{ item: 'Gaze estéril', qtd: 10 }, { item: 'Atadura crepom 15cm x 1,80m (rolo)', qtd: 1 }], secFreq: 2, secPor: 'Paciente ou cuidador' },
@@ -2160,6 +2182,41 @@ function custoUnitMat(nome) {
   const c = custosMat[m.id];
   if (c == null) return 0;
   return m.embalagem ? c / m.embalagem : c;
+}
+// Medidas das coberturas, para calcular a quantidade pela área da ferida.
+// placa: área da placa em cm2. largura: largura do rolo em cm (a quantidade sai em cm de comprimento).
+const DIM_COBERTURA = {
+  'Hidrocoloide (placa 10x10)': { placa: 100 },
+  'Alginato de cálcio (placa 10x10)': { placa: 100 },
+  'Hidrofibra sem prata (placa grande, ~15x15)': { placa: 225 },
+  'Espuma de poliuretano (10x10)': { placa: 100 },
+  'Espuma com prata (10x10)': { placa: 100 },
+  'Carvão ativado com prata (10x10)': { placa: 100 },
+  'Tela com petrolatum 7,6x7,6 cm': { placa: 57.76 },
+  'Cobertura com PHMB (10,2x10,2 cm)': { placa: 104.04 },
+  'Curativo Mesalt com cloreto de sódio 10x10cm (Mölnlycke)': { placa: 100 },
+  'Cutimed Sorbact 4 cm x 6 cm': { placa: 24 },
+  'Pielsana sachet 7,5 cm x 15 cm (5 ml)': { placa: 112.5 },
+  'Cutimed Sorbact Contact 10 cm x 100 cm': { largura: 10 },
+  'Curativo Kerlix rolo 11,4 cm x 3,7 m': { largura: 11.4 },
+  'Atadura de rayon 7,5 cm x 5 m estéril': { largura: 7.5 },
+  'Filme transparente (rolo 10 cm x 10 m)': { largura: 10 },
+};
+function unidadeMat(nome) { const m = materialPorNome(nome); return m ? (m.unidade || 'un') : ''; }
+// Área que a cobertura precisa cobrir: ferida mais a sobra de cada lado.
+function areaCobertura() {
+  const f = comp.ferida || {};
+  const c = parseFloat(f.c) || 0, l = parseFloat(f.l) || 0, s = parseFloat(f.sobra) || 0;
+  if (c <= 0 || l <= 0) return 0;
+  return (c + 2 * s) * (l + 2 * s);
+}
+function qtdPrimaria(o) {
+  const dim = DIM_COBERTURA[o.prim.item];
+  const area = areaCobertura();
+  if (o.prim.auto && dim && area > 0) {
+    return dim.placa ? Math.ceil(area / dim.placa - 1e-9) : Math.ceil(area / dim.largura * 2 - 1e-9) / 2;
+  }
+  return o.prim.qtd || 0;
 }
 function multComp() { return comp.mult > 0 ? comp.mult : 1; }
 
@@ -2181,15 +2238,18 @@ function calcularOpcao(o, periodo, visita) {
   const trocasSec = temSec ? Math.ceil(P / Fs - 1e-9) : 0;
   // As visitas seguem a primária; se o secundário também é trocado por você, segue o mais frequente.
   const Fv = temSec && o.secPor === 'Profissional' ? Math.min(Fp, Fs) : Fp;
-  const visitas = Math.ceil(P / Fv - 1e-9);
-  const custoPrim = trocasPrim * (o.prim.qtd || 0) * custoUnitMat(o.prim.item);
+  // Se você visitaria o paciente a cada N dias de qualquer jeito, as visitas não caem abaixo disso.
+  const Fvr = comp.visitaCada > 0 ? Math.min(Fv, comp.visitaCada) : Fv;
+  const visitas = Math.ceil(P / Fvr - 1e-9);
+  const qtdPrim = qtdPrimaria(o);
+  const custoPrim = trocasPrim * qtdPrim * custoUnitMat(o.prim.item);
   const custoSec = trocasSec * o.sec.reduce((a, s) => a + (s.qtd || 0) * custoUnitMat(s.item), 0);
   const custoComuns = visitas * (comp.comuns || 0);
   const material = custoPrim + custoSec + custoComuns;
   const materialCobrado = material * multComp();
   const atendimentos = visitas * visita;
   const total = atendimentos + materialCobrado;
-  return { trocasPrim, trocasSec, visitas, custoPrim, custoSec, custoComuns, material, materialCobrado, atendimentos, total, porDia: total / P };
+  return { qtdPrim, trocasPrim, trocasSec, visitas, custoPrim, custoSec, custoComuns, material, materialCobrado, atendimentos, total, porDia: total / P };
 }
 
 function opcoesMaterialHtml(selecionado) {
@@ -2210,6 +2270,11 @@ function renderComparador() {
       <div><label>Valor por visita (R$)</label><input type="number" min="0" step="0.01" data-g="visitaManual" value="${comp.visitaManual}" placeholder="${fmtN(valorVisita())}"><p class="dica">Em branco usa o valor da tabela, sem material.</p></div>
       <div><label>Insumos comuns por visita (R$)</label><input type="number" min="0" step="0.01" data-g="comuns" value="${comp.comuns}"><p class="dica">Luvas, soro, gaze de limpeza. Pesa mais em quem tem mais visitas.</p></div>
       <div><label>Multiplicador do material</label><input type="number" min="0" step="0.1" data-g="mult" value="${comp.mult}"><p class="dica">1 se o paciente compra direto. 1,6 se você fornece e cobra à parte.</p></div>
+      <div><label>Você visitaria no mínimo a cada (dias)</label><input type="number" min="0" step="0.5" data-g="visitaCada" value="${comp.visitaCada || ''}" placeholder="não"><p class="dica">Se vai ao paciente a cada 2 dias de qualquer jeito (laser, reavaliação), preencha 2.</p></div>
+      <div><label>Ferida: comprimento (cm)</label><input type="number" min="0" step="0.5" data-fe="c" value="${comp.ferida.c || ''}" placeholder="0"></div>
+      <div><label>Ferida: largura (cm)</label><input type="number" min="0" step="0.5" data-fe="l" value="${comp.ferida.l || ''}" placeholder="0"></div>
+      <div><label>Sobra de cada lado (cm)</label><input type="number" min="0" step="0.5" data-fe="sobra" value="${comp.ferida.sobra}"><p class="dica">Quanto a cobertura deve passar da borda da ferida. Ajuste ao produto e à sua avaliação.</p></div>
+      <div><label>Área a cobrir</label><p class="dica" id="comp-area" style="margin-top:12px"></p></div>
     </div>`;
   document.getElementById('comp-opcoes').innerHTML = comp.opcoes.map((o, i) => `
     <div class="form-preco comp-opcao" data-o="${i}">
@@ -2221,6 +2286,8 @@ function renderComparador() {
         <div><label>Quantidade por troca</label><input type="number" min="0" step="0.5" data-f="prim.qtd" value="${o.prim.qtd}"></div>
         <div><label>Troca a cada (dias)</label><input type="number" min="0.5" step="0.5" data-f="prim.freq" value="${o.prim.freq}"></div>
       </div>
+      <label class="chk"><input type="checkbox" data-f="prim.auto" ${o.prim.auto ? 'checked' : ''}> Calcular a quantidade pela área da ferida</label>
+      <p class="dica" data-dim="${i}"></p>
       <label>Secundário e fixação (quantidade por troca)</label>
       ${o.sec.map((s, j) => `
         <div class="material-row">
@@ -2241,7 +2308,27 @@ function renderComparador() {
   atualizarResultadoComp();
 }
 
+function sincronizarMedidasComp() {
+  const area = areaCobertura();
+  const info = document.getElementById('comp-area');
+  if (info) info.textContent = area > 0 ? `${String(Math.round(area * 10) / 10).replace('.', ',')} cm2 (ferida ${comp.ferida.c} x ${comp.ferida.l} cm, mais ${comp.ferida.sobra} cm de cada lado)` : 'Preencha comprimento e largura para calcular.';
+  document.querySelectorAll('.comp-opcao').forEach(card => {
+    const o = comp.opcoes[Number(card.dataset.o)];
+    if (!o) return;
+    const dim = DIM_COBERTURA[o.prim.item];
+    const qtdEl = card.querySelector('[data-f="prim.qtd"]');
+    const auto = o.prim.auto && dim && area > 0;
+    qtdEl.disabled = !!auto;
+    if (document.activeElement !== qtdEl) qtdEl.value = auto ? qtdPrimaria(o) : o.prim.qtd;
+    const dica = card.querySelector('[data-dim]');
+    dica.textContent = dim
+      ? (dim.placa ? `Placa de ${String(dim.placa).replace('.', ',')} cm2.` : `Rolo de ${String(dim.largura).replace('.', ',')} cm de largura, a quantidade sai em cm de comprimento.`) + (o.prim.auto && area <= 0 ? ' Preencha as medidas da ferida acima.' : '')
+      : 'Sem medidas cadastradas para este item. Digite a quantidade.';
+  });
+}
+
 function atualizarResultadoComp() {
+  sincronizarMedidasComp();
   const el = document.getElementById('comp-resultado');
   if (!comp.opcoes.length) { el.innerHTML = '<div class="vazio">Adicione ao menos uma opção para comparar.</div>'; return; }
   const P = comp.periodo > 0 ? comp.periodo : 1;
@@ -2254,6 +2341,12 @@ function atualizarResultadoComp() {
   let html = `<div class="nota-preco">Cada visita custa ${fmtBRL(visita)} sem material. Período de ${P} dias.</div><div class="comp-res">` +
     res.map(({ o, r }) => {
       const melhor = res.length > 1 && r.total === menor;
+      let empate = '';
+      if (res.length > 1 && !melhor) {
+        const f = freqParaEmpatar(o, menor, P, visita);
+        const nomeMelhor = res.find(x => x.r.total === menor).o.nome || 'a melhor opção';
+        empate = `<p class="dica-tab" style="margin:8px 0 0">${f === null ? `Não empata com ${esc(nomeMelhor)} nem trocando a cada 30 dias.` : `Empata com ${esc(nomeMelhor)} se a troca da cobertura for a cada ${String(f).replace('.', ',')} dias, mantendo o resto igual (hoje: ${String(o.prim.freq).replace('.', ',')}).`}</p>`;
+      }
       return `
       <div class="comp-res-card ${melhor ? 'melhor' : ''}">
         ${melhor ? '<span class="comp-badge">Mais econômica</span>' : ''}
@@ -2262,10 +2355,12 @@ function atualizarResultadoComp() {
         <p class="comp-pordia">${fmtBRL(r.porDia)} por dia</p>
         <div class="comp-linha"><span>Visitas</span><span>${r.visitas} x ${fmtBRL(visita)} = ${fmtBRL(r.atendimentos)}</span></div>
         <div class="comp-linha"><span>Trocas da primária</span><span>${r.trocasPrim}</span></div>
+        <div class="comp-linha"><span>Quantidade por troca${o.prim.auto && areaCobertura() > 0 && DIM_COBERTURA[o.prim.item] ? ' (pela área)' : ''}</span><span>${String(r.qtdPrim).replace('.', ',')} ${unidadeMat(o.prim.item)}</span></div>
         <div class="comp-linha"><span>Material primário</span><span>${fmtBRL(r.custoPrim)}</span></div>
         <div class="comp-linha"><span>Secundário e fixação</span><span>${fmtBRL(r.custoSec)}</span></div>
         <div class="comp-linha"><span>Insumos comuns</span><span>${fmtBRL(r.custoComuns)}</span></div>
         <div class="comp-linha"><span>Material cobrado${mult !== 1 ? ` (x ${String(mult).replace('.', ',')})` : ''}</span><span>${fmtBRL(r.materialCobrado)}</span></div>
+        ${empate}
       </div>`;
     }).join('') + '</div>';
   if (res.length > 1) {
@@ -2285,7 +2380,7 @@ function setCampoComp(i, f, valor) {
   const op = comp.opcoes[i];
   const partes = f.split('.');
   const num = v => parseFloat(v) || 0;
-  if (partes[0] === 'prim') op.prim[partes[1]] = partes[1] === 'item' ? valor : num(valor);
+  if (partes[0] === 'prim') op.prim[partes[1]] = partes[1] === 'item' ? valor : (partes[1] === 'auto' ? !!valor : num(valor));
   else if (partes[0] === 'sec') op.sec[Number(partes[1])][partes[2]] = partes[2] === 'item' ? valor : num(valor);
   else if (f === 'secFreq') op.secFreq = num(valor);
   else op[f] = valor;
@@ -2294,14 +2389,20 @@ function setCampoComp(i, f, valor) {
 document.getElementById('comp-geral').addEventListener('input', e => {
   const g = e.target.dataset && e.target.dataset.g;
   if (!g) return;
-  comp[g] = ['periodo', 'comuns', 'mult'].includes(g) ? (parseFloat(e.target.value) || 0) : e.target.value;
+  comp[g] = ['periodo', 'comuns', 'mult', 'visitaCada'].includes(g) ? (parseFloat(e.target.value) || 0) : e.target.value;
+  salvarComp(); atualizarResultadoComp();
+});
+document.getElementById('comp-geral').addEventListener('input', e => {
+  const fe = e.target.dataset && e.target.dataset.fe;
+  if (!fe) return;
+  comp.ferida[fe] = parseFloat(e.target.value) || 0;
   salvarComp(); atualizarResultadoComp();
 });
 document.getElementById('comp-opcoes').addEventListener('input', e => {
   const f = e.target.dataset && e.target.dataset.f;
   const card = e.target.closest('.comp-opcao');
   if (!f || !card) return;
-  setCampoComp(Number(card.dataset.o), f, e.target.value);
+  setCampoComp(Number(card.dataset.o), f, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
   salvarComp(); atualizarResultadoComp();
 });
 document.getElementById('comp-opcoes').addEventListener('click', e => {
@@ -2322,10 +2423,299 @@ document.getElementById('comp-exemplo').addEventListener('click', () => {
   comp = clonar(COMP_PADRAO); salvarComp(); renderComparador();
 });
 
+// ── Comparador: ponto de empate, comparações salvas e PDF ────────────────────
+// Menor intervalo de troca da primária (em dias) em que a opção iguala o total alvo.
+function freqParaEmpatar(o, alvoTotal, periodo, visita) {
+  for (let f = 0.5; f <= 30; f += 0.5) {
+    const r = calcularOpcao({ ...o, prim: { ...o.prim, freq: f } }, periodo, visita);
+    if (r.total <= alvoTotal + 0.005) return f;
+  }
+  return null;
+}
+
+const SHEET_COMPARACOES = 'Comparacoes';
+let comparacoesSalvas = [];
+
+async function carregarComparacoes() {
+  try {
+    const meta = await sheetsFetch(`${spreadsheetId}?fields=sheets.properties.title`);
+    if (!meta.sheets.some(s => s.properties.title === SHEET_COMPARACOES)) { comparacoesSalvas = []; return; }
+    const d = await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_COMPARACOES}'!A2:C200`)}?valueRenderOption=UNFORMATTED_VALUE`);
+    comparacoesSalvas = (d.values || []).filter(r => r && r[0] && r[2]).map(r => ({ nome: String(r[0]), data: String(r[1] || ''), json: String(r[2]) }));
+  } catch { comparacoesSalvas = []; }
+}
+
+async function gravarComparacoes() {
+  const meta = await sheetsFetch(`${spreadsheetId}?fields=sheets.properties.title`);
+  if (!meta.sheets.some(s => s.properties.title === SHEET_COMPARACOES)) {
+    await sheetsFetch(`${spreadsheetId}:batchUpdate`, {
+      method: 'POST', body: JSON.stringify({ requests: [{ addSheet: { properties: { title: SHEET_COMPARACOES } } }] }),
+    });
+  }
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_COMPARACOES}'!A1:C200`)}:clear`, { method: 'POST', body: '{}' });
+  const values = [['Nome', 'Salva em', 'Dados'], ...comparacoesSalvas.map(c => [c.nome, c.data, c.json])];
+  await sheetsFetch(`${spreadsheetId}/values/${encodeURIComponent(`'${SHEET_COMPARACOES}'!A1:C${values.length}`)}?valueInputOption=RAW`, {
+    method: 'PUT', body: JSON.stringify({ values }),
+  });
+}
+
+function renderComparacoesSalvas() {
+  const el = document.getElementById('comp-salvas');
+  if (!comparacoesSalvas.length) { el.innerHTML = '<div class="lista"><div class="vazio">Nenhuma comparação salva ainda.</div></div>'; return; }
+  el.innerHTML = '<div class="lista">' + comparacoesSalvas.map((c, i) => `
+    <div class="item">
+      <div class="desc">${esc(c.nome)}<span class="data">Salva em ${esc(c.data)}</span></div>
+      <div style="display:flex;gap:6px">
+        <button type="button" class="mini" data-abrir="${i}">Abrir</button>
+        <button type="button" class="mini perigo" data-excluir="${i}">Excluir</button>
+      </div>
+    </div>`).join('') + '</div>';
+}
+
+document.getElementById('comp-salvar').addEventListener('click', async (e) => {
+  const btn = e.target; btn.disabled = true;
+  try {
+    const campo = document.getElementById('comp-nome-salvar');
+    const nome = campo.value.trim() || comp.opcoes.map(o => o.nome || 'Opção').join(' x ') || 'Comparação';
+    const item = { nome, data: new Date().toLocaleDateString('pt-BR'), json: JSON.stringify(comp) };
+    const i = comparacoesSalvas.findIndex(c => c.nome === nome);
+    if (i >= 0) comparacoesSalvas[i] = item; else comparacoesSalvas.push(item);
+    await gravarComparacoes();
+    renderComparacoesSalvas();
+    campo.value = '';
+    mostrarMsg('comp-msg', 'Comparação salva na planilha!', true);
+  } catch (err) { mostrarMsg('comp-msg', 'Erro: ' + err.message, false); }
+  finally { btn.disabled = false; }
+});
+document.getElementById('comp-salvas').addEventListener('click', async (e) => {
+  const d = e.target.dataset || {};
+  try {
+    if (d.abrir !== undefined) {
+      const c = comparacoesSalvas[Number(d.abrir)];
+      comp = Object.assign(clonar(COMP_PADRAO), JSON.parse(c.json));
+      salvarComp(); renderComparador();
+      mostrarMsg('comp-msg', `Comparação "${c.nome}" aberta.`, true);
+    } else if (d.excluir !== undefined) {
+      comparacoesSalvas.splice(Number(d.excluir), 1);
+      await gravarComparacoes();
+      renderComparacoesSalvas();
+    }
+  } catch (err) { mostrarMsg('comp-msg', 'Erro: ' + err.message, false); }
+});
+
+function exportarComparacaoPDF() {
+  if (!comp.opcoes.length) { mostrarMsg('comp-pdf-msg', 'Adicione ao menos uma opção antes de exportar.', false); return; }
+  document.getElementById('comp-pdf-msg').className = 'form-msg';
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const { CIP, SAL, TER, PERG, BORDA } = PDF_CORES;
+  const W = 210, M = 18;
+  const nome = document.getElementById('nome-comp').value.trim();
+  const data = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+  const P = comp.periodo > 0 ? comp.periodo : 1;
+  const visita = valorVisita();
+  const res = comp.opcoes.map(o => ({ o, r: calcularOpcao(o, P, visita) }));
+  const menor = Math.min(...res.map(x => x.r.total));
+  const idxMelhor = res.length > 1 ? res.findIndex(x => x.r.total === menor) : -1;
+
+  doc.setFillColor(...CIP); doc.rect(0, 0, W, 4, 'F');
+  doc.setFillColor(...PERG); doc.rect(0, 4, W, 38, 'F');
+  if (LOGO_DATA) {
+    doc.addImage(LOGO_DATA, 'PNG', M, 8, 56, 22.1);
+  } else {
+    doc.setFont('times', 'bolditalic'); doc.setFontSize(20); doc.setTextColor(...CIP);
+    doc.text('Enfermagem Especializada', M, 20);
+    doc.setFont('times', 'italic'); doc.setFontSize(12); doc.setTextColor(...SAL);
+    doc.text('por Bruna Arguelles', M, 27);
+  }
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...SAL);
+  doc.text(`CNPJ ${PIX_CNPJ}`, M, 37);
+  doc.setTextColor(...CIP);
+  doc.text(data, W - M, 16, { align: 'right' });
+  if (nome) {
+    doc.setFontSize(7.5); doc.setTextColor(...SAL); doc.setCharSpace(1);
+    doc.text('PARA', W - M, 24, { align: 'right' }); doc.setCharSpace(0);
+    doc.setFont('times', 'bolditalic'); doc.setFontSize(13); doc.setTextColor(...CIP);
+    doc.text(nome, W - M, 32, { align: 'right' });
+  }
+  doc.setDrawColor(...TER); doc.setLineWidth(0.5); doc.line(M, 42, W - M, 42);
+
+  doc.setFont('times', 'bolditalic'); doc.setFontSize(19); doc.setTextColor(...CIP);
+  doc.text('Comparativo de coberturas', M, 55);
+  doc.setFont('times', 'italic'); doc.setFontSize(9.5); doc.setTextColor(...SAL);
+  doc.text(`Estimativa de custo para ${P} dias de tratamento, somando materiais e atendimentos.`, M, 61);
+
+  const dias = v => `${String(v).replace('.', ',')} ${v === 1 ? 'dia' : 'dias'}`;
+  doc.autoTable({
+    startY: 68,
+    head: [['Opção', 'Troca da cobertura', 'Visitas', 'Material', 'Atendimentos', 'Total']],
+    body: res.map(({ o, r }) => [o.nome || 'Opção', `a cada ${dias(o.prim.freq)}`, String(r.visitas), fmtBRL(r.materialCobrado), fmtBRL(r.atendimentos), fmtBRL(r.total)]),
+    margin: { left: M, right: M },
+    styles: { font: 'helvetica', fontSize: 9, cellPadding: { top: 4, bottom: 4, left: 4, right: 4 }, textColor: CIP, lineColor: BORDA, lineWidth: 0.2 },
+    headStyles: { fillColor: CIP, textColor: [255, 255, 255], fontSize: 7.5, fontStyle: 'normal' },
+    alternateRowStyles: { fillColor: PERG },
+    columnStyles: { 0: { cellWidth: 'auto', fontStyle: 'bold' }, 2: { halign: 'center' }, 3: { halign: 'right' }, 4: { halign: 'right' }, 5: { halign: 'right', fontStyle: 'bold' } },
+    didParseCell: d => { if (d.section === 'body' && d.row.index === idxMelhor) { d.cell.styles.fillColor = [232, 240, 214]; } },
+  });
+
+  let y = doc.lastAutoTable.finalY + 10;
+  if (idxMelhor >= 0) {
+    const ord = [...res].sort((a, b) => a.r.total - b.r.total);
+    const dif = ord[ord.length - 1].r.total - ord[0].r.total;
+    doc.setFillColor(...CIP); doc.rect(M, y, W - 2 * M, 16, 'F');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(255, 255, 255); doc.setCharSpace(1);
+    doc.text('MAIS ECONÔMICA NO PERÍODO', M + 5, y + 6.5); doc.setCharSpace(0);
+    doc.setFont('times', 'bolditalic'); doc.setFontSize(14);
+    doc.text(res[idxMelhor].o.nome || 'Opção', M + 5, y + 12.5);
+    doc.setFontSize(12);
+    doc.text(dif > 0.005 ? `${fmtBRL(dif)} a menos` : 'mesmo valor', W - M - 5, y + 11.5, { align: 'right' });
+    y += 26;
+  }
+
+  doc.setFillColor(...PERG);
+  const medidasTexto = areaCobertura() > 0 ? ` Medidas consideradas: ferida de ${comp.ferida.c} x ${comp.ferida.l} cm, com ${comp.ferida.sobra} cm de sobra em cada lado para a cobertura.` : '';
+  const nota = doc.splitTextToSize('Valores estimados a partir dos tempos de troca informados. O tempo real de uso de cada cobertura depende da evolução da ferida e é definido na avaliação. A escolha é feita em conjunto, considerando o cuidado necessário e o que cabe no seu orçamento.' + medidasTexto, W - 2 * M - 12);
+  const alturaNota = nota.length * 4.2 + 10;
+  doc.rect(M, y, W - 2 * M, alturaNota, 'F');
+  doc.setDrawColor(...TER); doc.setLineWidth(1); doc.line(M, y, M, y + alturaNota);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...CIP);
+  doc.text(nota, M + 7, y + 7);
+
+  doc.setDrawColor(...TER); doc.setLineWidth(0.4); doc.line(M, 277, W - M, 277);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...SAL);
+  doc.text(`Enfermagem Especializada por Bruna Arguelles · CNPJ ${PIX_CNPJ}`, M, 282);
+  doc.setTextColor(...BORDA);
+  doc.text('@enfbruna.feridas', W - M, 282, { align: 'right' });
+
+  const base = nome ? nome.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '_') + '_' : '';
+  const nomeArq = `comparativo_${base}${new Date().toISOString().slice(0, 10)}.pdf`;
+  doc.setProperties({ title: nomeArq });
+  const janela = window.open(doc.output('bloburl'), '_blank');
+  if (!janela) doc.save(nomeArq);
+}
+document.getElementById('comp-pdf').addEventListener('click', exportarComparacaoPDF);
+
+// ── Explicação para o paciente (textos da antiga página de precificação) ─────
+const EXPLICACAO = {
+ "intro": "Cuidado técnico, individualizado e acompanhado de perto, do primeiro contato até a alta. A avaliação inicial já inclui o plano de cuidado e o primeiro curativo básico, e o valor de cada curativo considera o tipo de material utilizado, a complexidade do cuidado e o tempo técnico necessário, não apenas o tamanho da ferida.",
+ "criteriosIntro": [
+  "O valor do curativo não é definido apenas pelo tamanho da ferida. Uma ferida pequena pode exigir materiais especiais, coberturas antimicrobianas ou maior complexidade técnica. Da mesma forma, uma ferida maior pode ter um cuidado mais simples, dependendo das suas características.",
+  "Por isso, a classificação considera:"
+ ],
+ "criterios": [
+  "Tipo de material utilizado",
+  "Cobertura necessária",
+  "Complexidade do cuidado",
+  "Tempo técnico do atendimento",
+  "Quantidade de material utilizado",
+  "Necessidade de laserterapia",
+  "Frequência de troca e acompanhamento"
+ ],
+ "cards": [
+  {
+   "nome": "Curativo simples",
+   "desc": "Indicado quando o cuidado exige materiais básicos e menor complexidade técnica.",
+   "inclui": [
+    "Soro fisiológico",
+    "Gaze ou compressa estéril",
+    "Cobertura simples",
+    "Fixação com micropore, esparadrapo ou atadura",
+    "Proteção básica da pele ao redor"
+   ],
+   "obs": "Indicado para casos em que não há necessidade de coberturas especiais ou materiais de alto custo."
+  },
+  {
+   "nome": "Curativo intermediário",
+   "desc": "Indicado quando há necessidade de maior tempo de atendimento, maior quantidade de material ou uso de coberturas específicas de custo moderado.",
+   "inclui": [
+    "Compressas especiais",
+    "Coberturas não aderentes",
+    "Hidrogel",
+    "Alginato simples",
+    "Espuma simples",
+    "Barreira protetora de pele",
+    "Materiais para melhor controle de exsudato",
+    "Fixações mais elaboradas"
+   ],
+   "obs": "Pode ser indicado mesmo em feridas pequenas, caso o cuidado exija materiais ou técnica mais específicos."
+  },
+  {
+   "nome": "Curativo complexo",
+   "desc": "Indicado quando o cuidado exige maior complexidade técnica, maior tempo de atendimento ou uso de materiais mais específicos.",
+   "inclui": [
+    "Coberturas antimicrobianas",
+    "Coberturas com prata",
+    "Coberturas com PHMB",
+    "Espumas especiais",
+    "Alginatos especiais",
+    "Materiais para maior controle de exsudato",
+    "Proteção avançada da pele ao redor",
+    "Combinação de diferentes coberturas"
+   ],
+   "obs": "A classificação como curativo complexo não depende apenas do tamanho da ferida, mas principalmente da necessidade de materiais mais específicos e da complexidade do cuidado."
+  },
+  {
+   "nome": "Curativo especial",
+   "desc": "Indicado quando há necessidade de materiais de alto custo, coberturas avançadas ou combinações específicas de produtos.",
+   "inclui": [
+    "Coberturas com prata de maior custo",
+    "Carvão ativado",
+    "Carvão ativado com prata",
+    "Espumas premium",
+    "Superabsorventes",
+    "Coberturas importadas",
+    "Coberturas antimicrobianas específicas",
+    "Alginatos especiais",
+    "Hidrogel em maior quantidade",
+    "Produtos para controle de odor",
+    "Produtos para proteção avançada da pele",
+    "Combinação de múltiplas coberturas"
+   ],
+   "obs": "Nestes casos, o valor é calculado individualmente conforme o material utilizado, quantidade necessária, complexidade do cuidado e frequência dos atendimentos."
+  }
+ ],
+ "laserIntro": "A laserterapia pode ser associada ao tratamento quando houver indicação profissional. A indicação é avaliada individualmente durante o atendimento.",
+ "notas": [
+  "A laserterapia não está inclusa no valor do curativo básico, intermediário ou complexo. Quando indicada, será informada antes da realização.",
+  "Materiais básicos. Os valores dos curativos incluem materiais básicos até o limite de cada categoria.",
+  "Classificação. A classificação do curativo não depende somente do tamanho da ferida. Ela considera principalmente o tipo de material utilizado, complexidade técnica, quantidade de insumos, tempo de atendimento e necessidade de tecnologias associadas.",
+  "Materiais de alto custo. Coberturas especiais, materiais com prata, carvão ativado, espumas premium, alginatos especiais, hidrogel, PHMB, superabsorventes ou outros insumos de alto custo poderão ser cobrados à parte, sempre com orientação prévia.",
+  "Variações. Os valores podem variar conforme a avaliação da ferida, complexidade do caso, materiais necessários e frequência dos atendimentos.",
+  "Acompanhamento. O tratamento de feridas exige acompanhamento, constância e escolha adequada dos materiais. Por isso, cada plano é definido de forma individualizada."
+ ]
+};
+
+function notaHtml(texto) {
+  const k = texto.indexOf('. ');
+  return k > 0 && k < 30 ? `<b>${esc(texto.slice(0, k + 1))}</b> ${esc(texto.slice(k + 2))}` : esc(texto);
+}
+
+function renderExplicacao() {
+  const el = document.getElementById('tab-explica');
+  const E = EXPLICACAO;
+  const cods = ['CU01', 'CU02', 'CU03', 'CU04'];
+  const preco = cod => { const r = tabelaPreco.find(x => x.cod === cod); return r && r.atual > 0 ? fmtBRL(r.atual) : 'Sob avaliação'; };
+  el.innerHTML = `
+    <div class="nota-preco">${esc(E.intro)}</div>
+    <div class="nota-preco">${esc(E.criteriosIntro[0])}<br><br>${esc(E.criteriosIntro[1])}<ul class="lista-inc">${E.criterios.map(c => `<li>${esc(c)}</li>`).join('')}</ul></div>
+    <div class="comp-res">${E.cards.map((c, i) => `
+      <div class="comp-res-card">
+        <p class="comp-nome" style="padding-right:0">${esc(c.nome)}</p>
+        <p class="comp-total">${preco(cods[i])}</p>
+        <p class="comp-pordia">${esc(c.desc)}</p>
+        <p class="comp-nome" style="margin-top:6px;padding-right:0">Pode incluir, conforme avaliação</p>
+        <ul class="lista-inc">${c.inclui.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        <p class="dica-tab">${esc(c.obs)}</p>
+      </div>`).join('')}</div>
+    <div class="nota-preco"><b>Laserterapia.</b> ${esc(E.laserIntro)} ${esc(E.notas[0])}</div>
+    ${E.notas.slice(1).map(n => `<div class="nota-preco">${notaHtml(n)}</div>`).join('')}`;
+}
+
 async function iniciarPreco() {
   try {
     await carregarPreco();
     renderEditorServicos(); renderParametros(); renderPreco(); renderizarSim();
+    await carregarComparacoes(); renderComparacoesSalvas();
   } catch (e) {
     document.getElementById('tabela-precos').innerHTML = `<div class="vazio">Erro ao carregar a precificação: ${esc(e.message)}</div>`;
   }
