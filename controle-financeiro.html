@@ -191,6 +191,19 @@
   .tm-sub{ padding:8px 18px; background:var(--pergaminho); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--salvia); font-weight:600; border-bottom:.5px solid var(--line); }
   .edit-serv .chk{ display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:var(--ink-soft); }
   .edit-serv .chk input{ width:auto; }
+
+  .comp-opcao{ margin-bottom:12px; }
+  .comp-opcao .material-row{ grid-template-columns:1fr 84px 28px; }
+  .comp-opcao .material-row select{ min-width:0; }
+  .comp-res{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px; margin-bottom:14px; }
+  .comp-res-card{ position:relative; background:#fff; border:1px solid var(--line); padding:20px 18px 14px; }
+  .comp-res-card.melhor{ border:2px solid var(--terracota); }
+  .comp-badge{ position:absolute; top:-1px; right:-1px; background:var(--terracota); color:#fff; font-size:9.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:5px 9px; }
+  .comp-nome{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--salvia); font-weight:600; margin:0 0 4px; padding-right:90px; }
+  .comp-total{ font-family:var(--serif-display); font-size:30px; font-weight:600; color:var(--cipreste); margin:0; }
+  .comp-pordia{ font-size:12px; color:var(--ink-soft); margin:2px 0 12px; }
+  .comp-linha{ display:flex; justify-content:space-between; gap:10px; font-size:12.5px; padding:6px 0; border-top:.5px solid var(--line); }
+  .comp-linha span:last-child{ text-align:right; font-weight:600; }
   @media (max-width:600px){
     .sel-item{ grid-template-columns:22px 1fr 1fr 1fr; grid-template-areas:"c n n n" ". custo qtd sub"; row-gap:8px; }
     .tp3{ grid-template-columns:1.6fr 1fr .9fr; }
@@ -358,6 +371,7 @@
           <button type="button" class="ativa" data-sub="resumo">Resumo</button>
           <button type="button" data-sub="calc">Calculadora</button>
           <button type="button" data-sub="mat">Materiais</button>
+          <button type="button" data-sub="comp">Comparar</button>
           <button type="button" data-sub="orc">Orçamento</button>
           <button type="button" data-sub="tab">Tabelas</button>
           <button type="button" data-sub="aj">Ajustes</button>
@@ -426,6 +440,20 @@
               <button type="button" class="btn-preco sec" id="btn-restaurar-custos">Restaurar custos padrão</button>
             </div>
             <div id="lista-materiais"></div>
+          </div>
+        </div>
+
+        <div class="sub-panel" id="sub-comp" style="display:none">
+          <div class="grupo">
+            <div class="grupo-label"><span class="d"></span><span>Comparar coberturas</span></div>
+            <div class="nota-preco">Compara o custo total de cada opção no período, somando material e atendimentos. Os valores já preenchidos são um exemplo (Kerlix contra DACC): troque as coberturas, as quantidades e a frequência de troca pelos seus. A ferramenta compara custo. A escolha clínica e o tempo de uso de cada produto continuam sendo seus.</div>
+            <div class="form-preco" id="comp-geral"></div>
+            <div id="comp-opcoes" style="margin-top:14px"></div>
+            <div class="btn-linha">
+              <button type="button" class="btn-preco sec" id="comp-add">+ nova opção</button>
+              <button type="button" class="btn-preco sec" id="comp-exemplo">Restaurar exemplo</button>
+            </div>
+            <div id="comp-resultado" style="margin-top:18px"></div>
           </div>
         </div>
 
@@ -1579,6 +1607,7 @@ function renderPreco() {
   renderRealidade();
   renderCalculadora();
   renderTabelasPaciente();
+  renderComparador();
 }
 
 function mostrarMsg(id, texto, ok) {
@@ -2108,6 +2137,190 @@ function exportarPDF() {
 
 document.getElementById('btn-exportar').addEventListener('click', exportarPDF);
 document.getElementById('btn-exportar-materiais').addEventListener('click', exportarMateriaisPDF);
+
+// ── Comparador de coberturas ─────────────────────────────────────────────────
+// Custo total de cada opção no período: material (primário, secundário, insumos comuns) mais
+// os atendimentos. Uma cobertura cara pode compensar se ficar mais dias no leito e exigir
+// menos visitas. Valores de exemplo: o usuário troca pelos dele.
+const COMP_PADRAO = {
+  periodo: 14, servico: 'Curativo complexo', visitaManual: '', regiao: '', comuns: 0, mult: 1,
+  opcoes: [
+    { nome: 'Kerlix', prim: { item: 'Curativo Kerlix rolo 11,4 cm x 3,7 m', qtd: 100, freq: 3 }, sec: [{ item: 'Atadura crepom 15cm x 1,80m (rolo)', qtd: 1 }], secFreq: 3, secPor: 'Profissional' },
+    { nome: 'DACC (Sorbact)', prim: { item: 'Cutimed Sorbact Contact 10 cm x 100 cm', qtd: 20, freq: 4 }, sec: [{ item: 'Gaze estéril', qtd: 10 }, { item: 'Atadura crepom 15cm x 1,80m (rolo)', qtd: 1 }], secFreq: 2, secPor: 'Paciente ou cuidador' },
+  ],
+};
+const clonar = o => JSON.parse(JSON.stringify(o));
+let comp = Object.assign(clonar(COMP_PADRAO), lerJsonLocal('prec_comp', {}));
+function salvarComp() { try { localStorage.setItem('prec_comp', JSON.stringify(comp)); } catch { /* segue sem salvar */ } }
+
+function materialPorNome(nome) { return MATERIAIS.find(m => m.item === nome) || null; }
+function custoUnitMat(nome) {
+  const m = materialPorNome(nome);
+  if (!m) return 0;
+  const c = custosMat[m.id];
+  if (c == null) return 0;
+  return m.embalagem ? c / m.embalagem : c;
+}
+function multComp() { return comp.mult > 0 ? comp.mult : 1; }
+
+function valorVisita() {
+  const manual = parseFloat(comp.visitaManual);
+  if (!isNaN(manual)) return manual;
+  const r = tabelaPreco.find(x => x.servico === comp.servico) || tabelaPreco.find(x => x.tipo !== 'Laserterapia' && !x.adicional);
+  if (!r) return 0;
+  const desloc = comp.regiao ? (configPreco[REGIAO_CHAVE[comp.regiao]] || 0) : 0;
+  return calcularPreco({ tipo: r.tipo, tempo: r.tempo, insumos: 0, desloc }).final;
+}
+
+function calcularOpcao(o, periodo, visita) {
+  const P = Math.max(1, periodo);
+  const Fp = Math.max(0.5, o.prim.freq || 1);
+  const Fs = Math.max(0.5, o.secFreq || 1);
+  const temSec = o.sec.some(s => s.item && s.qtd > 0);
+  const trocasPrim = Math.ceil(P / Fp - 1e-9);
+  const trocasSec = temSec ? Math.ceil(P / Fs - 1e-9) : 0;
+  // As visitas seguem a primária; se o secundário também é trocado por você, segue o mais frequente.
+  const Fv = temSec && o.secPor === 'Profissional' ? Math.min(Fp, Fs) : Fp;
+  const visitas = Math.ceil(P / Fv - 1e-9);
+  const custoPrim = trocasPrim * (o.prim.qtd || 0) * custoUnitMat(o.prim.item);
+  const custoSec = trocasSec * o.sec.reduce((a, s) => a + (s.qtd || 0) * custoUnitMat(s.item), 0);
+  const custoComuns = visitas * (comp.comuns || 0);
+  const material = custoPrim + custoSec + custoComuns;
+  const materialCobrado = material * multComp();
+  const atendimentos = visitas * visita;
+  const total = atendimentos + materialCobrado;
+  return { trocasPrim, trocasSec, visitas, custoPrim, custoSec, custoComuns, material, materialCobrado, atendimentos, total, porDia: total / P };
+}
+
+function opcoesMaterialHtml(selecionado) {
+  return [...new Set(MATERIAIS.map(m => m.cat))].map(cat =>
+    `<optgroup label="${esc(cat)}">${MATERIAIS.filter(m => m.cat === cat).map(m =>
+      `<option value="${esc(m.item)}" ${m.item === selecionado ? 'selected' : ''}>${esc(m.item)} [${m.unidade || 'un'}]</option>`).join('')}</optgroup>`
+  ).join('');
+}
+
+function renderComparador() {
+  const servs = tabelaPreco.filter(r => r.tipo !== 'Laserterapia' && !r.adicional);
+  if (servs.length && !servs.some(s => s.servico === comp.servico)) comp.servico = servs[0].servico;
+  document.getElementById('comp-geral').innerHTML = `
+    <div class="grid-2">
+      <div><label>Período da comparação (dias)</label><input type="number" min="1" step="1" data-g="periodo" value="${comp.periodo}"></div>
+      <div><label>Atendimento de cada visita</label><select data-g="servico">${servs.map(s => `<option ${s.servico === comp.servico ? 'selected' : ''}>${esc(s.servico)}</option>`).join('')}</select></div>
+      <div><label>Onde é o atendimento</label><select data-g="regiao">${REGIOES.map(g => `<option value="${g}" ${g === comp.regiao ? 'selected' : ''}>${g || 'Consultório'}</option>`).join('')}</select></div>
+      <div><label>Valor por visita (R$)</label><input type="number" min="0" step="0.01" data-g="visitaManual" value="${comp.visitaManual}" placeholder="${fmtN(valorVisita())}"><p class="dica">Em branco usa o valor da tabela, sem material.</p></div>
+      <div><label>Insumos comuns por visita (R$)</label><input type="number" min="0" step="0.01" data-g="comuns" value="${comp.comuns}"><p class="dica">Luvas, soro, gaze de limpeza. Pesa mais em quem tem mais visitas.</p></div>
+      <div><label>Multiplicador do material</label><input type="number" min="0" step="0.1" data-g="mult" value="${comp.mult}"><p class="dica">1 se o paciente compra direto. 1,6 se você fornece e cobra à parte.</p></div>
+    </div>`;
+  document.getElementById('comp-opcoes').innerHTML = comp.opcoes.map((o, i) => `
+    <div class="form-preco comp-opcao" data-o="${i}">
+      <label>Nome da opção</label>
+      <input type="text" data-f="nome" value="${esc(o.nome)}">
+      <label>Cobertura primária (a que fica no leito da ferida)</label>
+      <select data-f="prim.item">${opcoesMaterialHtml(o.prim.item)}</select>
+      <div class="grid-2">
+        <div><label>Quantidade por troca</label><input type="number" min="0" step="0.5" data-f="prim.qtd" value="${o.prim.qtd}"></div>
+        <div><label>Troca a cada (dias)</label><input type="number" min="0.5" step="0.5" data-f="prim.freq" value="${o.prim.freq}"></div>
+      </div>
+      <label>Secundário e fixação (quantidade por troca)</label>
+      ${o.sec.map((s, j) => `
+        <div class="material-row">
+          <select data-f="sec.${j}.item">${opcoesMaterialHtml(s.item)}</select>
+          <input type="number" min="0" step="0.5" data-f="sec.${j}.qtd" value="${s.qtd}" placeholder="Qtd">
+          <button type="button" class="btn-remover" data-rem-sec="${i}.${j}">×</button>
+        </div>`).join('')}
+      <button type="button" class="btn-preco sec" data-add-sec="${i}" style="margin-top:0">+ item secundário</button>
+      <div class="grid-2">
+        <div><label>Secundário trocado a cada (dias)</label><input type="number" min="0.5" step="0.5" data-f="secFreq" value="${o.secFreq}"></div>
+        <div><label>Quem troca o secundário</label><select data-f="secPor">${['Profissional', 'Paciente ou cuidador'].map(v => `<option ${v === o.secPor ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+      </div>
+      <div class="btn-linha" style="margin-top:14px">
+        <button type="button" class="btn-preco sec" data-dup="${i}" style="margin-top:0">Duplicar opção</button>
+        <button type="button" class="btn-remover-serv" data-rem-op="${i}" style="margin-top:0">Remover opção</button>
+      </div>
+    </div>`).join('');
+  atualizarResultadoComp();
+}
+
+function atualizarResultadoComp() {
+  const el = document.getElementById('comp-resultado');
+  if (!comp.opcoes.length) { el.innerHTML = '<div class="vazio">Adicione ao menos uma opção para comparar.</div>'; return; }
+  const P = comp.periodo > 0 ? comp.periodo : 1;
+  const visita = valorVisita();
+  const ph = document.querySelector('#comp-geral [data-g="visitaManual"]');
+  if (ph) ph.placeholder = fmtN(visita);
+  const res = comp.opcoes.map(o => ({ o, r: calcularOpcao(o, P, visita) }));
+  const menor = Math.min(...res.map(x => x.r.total));
+  const mult = multComp();
+  let html = `<div class="nota-preco">Cada visita custa ${fmtBRL(visita)} sem material. Período de ${P} dias.</div><div class="comp-res">` +
+    res.map(({ o, r }) => {
+      const melhor = res.length > 1 && r.total === menor;
+      return `
+      <div class="comp-res-card ${melhor ? 'melhor' : ''}">
+        ${melhor ? '<span class="comp-badge">Mais econômica</span>' : ''}
+        <p class="comp-nome">${esc(o.nome || 'Opção')}</p>
+        <p class="comp-total">${fmtBRL(r.total)}</p>
+        <p class="comp-pordia">${fmtBRL(r.porDia)} por dia</p>
+        <div class="comp-linha"><span>Visitas</span><span>${r.visitas} x ${fmtBRL(visita)} = ${fmtBRL(r.atendimentos)}</span></div>
+        <div class="comp-linha"><span>Trocas da primária</span><span>${r.trocasPrim}</span></div>
+        <div class="comp-linha"><span>Material primário</span><span>${fmtBRL(r.custoPrim)}</span></div>
+        <div class="comp-linha"><span>Secundário e fixação</span><span>${fmtBRL(r.custoSec)}</span></div>
+        <div class="comp-linha"><span>Insumos comuns</span><span>${fmtBRL(r.custoComuns)}</span></div>
+        <div class="comp-linha"><span>Material cobrado${mult !== 1 ? ` (x ${String(mult).replace('.', ',')})` : ''}</span><span>${fmtBRL(r.materialCobrado)}</span></div>
+      </div>`;
+    }).join('') + '</div>';
+  if (res.length > 1) {
+    const ord = [...res].sort((a, b) => a.r.total - b.r.total);
+    const a = ord[0], z = ord[ord.length - 1];
+    const dif = z.r.total - a.r.total;
+    html += dif > 0.005
+      ? `<div class="nota-preco">Em ${P} dias, ${esc(a.o.nome || 'a primeira opção')} sai ${fmtBRL(dif)} mais barata que ${esc(z.o.nome || 'a outra')}, ${Math.round(dif / z.r.total * 100)}% a menos.</div>`
+      : '<div class="nota-preco">As opções saem pelo mesmo valor neste período.</div>';
+  }
+  html += `<div class="tabela-mensal"><div class="tm-row tm-cab"><div class="tm-mes">Total por período</div><div class="tm-num">7 dias</div><div class="tm-num">14 dias</div><div class="tm-num">30 dias</div></div>` +
+    res.map(({ o }) => `<div class="tm-row"><div class="tm-mes">${esc(o.nome || 'Opção')}</div>${[7, 14, 30].map(d => `<div class="tm-num">${fmtN(calcularOpcao(o, d, visita).total)}</div>`).join('')}</div>`).join('') + '</div>';
+  el.innerHTML = html;
+}
+
+function setCampoComp(i, f, valor) {
+  const op = comp.opcoes[i];
+  const partes = f.split('.');
+  const num = v => parseFloat(v) || 0;
+  if (partes[0] === 'prim') op.prim[partes[1]] = partes[1] === 'item' ? valor : num(valor);
+  else if (partes[0] === 'sec') op.sec[Number(partes[1])][partes[2]] = partes[2] === 'item' ? valor : num(valor);
+  else if (f === 'secFreq') op.secFreq = num(valor);
+  else op[f] = valor;
+}
+
+document.getElementById('comp-geral').addEventListener('input', e => {
+  const g = e.target.dataset && e.target.dataset.g;
+  if (!g) return;
+  comp[g] = ['periodo', 'comuns', 'mult'].includes(g) ? (parseFloat(e.target.value) || 0) : e.target.value;
+  salvarComp(); atualizarResultadoComp();
+});
+document.getElementById('comp-opcoes').addEventListener('input', e => {
+  const f = e.target.dataset && e.target.dataset.f;
+  const card = e.target.closest('.comp-opcao');
+  if (!f || !card) return;
+  setCampoComp(Number(card.dataset.o), f, e.target.value);
+  salvarComp(); atualizarResultadoComp();
+});
+document.getElementById('comp-opcoes').addEventListener('click', e => {
+  const d = e.target.dataset || {};
+  if (d.addSec !== undefined) comp.opcoes[Number(d.addSec)].sec.push({ item: MATERIAIS[0].item, qtd: 1 });
+  else if (d.remSec !== undefined) { const [i, j] = d.remSec.split('.').map(Number); comp.opcoes[i].sec.splice(j, 1); }
+  else if (d.remOp !== undefined) comp.opcoes.splice(Number(d.remOp), 1);
+  else if (d.dup !== undefined) { const c = clonar(comp.opcoes[Number(d.dup)]); c.nome = (c.nome || 'Opção') + ' (cópia)'; comp.opcoes.splice(Number(d.dup) + 1, 0, c); }
+  else return;
+  salvarComp(); renderComparador();
+});
+document.getElementById('comp-add').addEventListener('click', () => {
+  if (comp.opcoes.length >= 4) return;
+  comp.opcoes.push({ nome: 'Nova opção', prim: { item: MATERIAIS[0].item, qtd: 1, freq: 3 }, sec: [], secFreq: 3, secPor: 'Profissional' });
+  salvarComp(); renderComparador();
+});
+document.getElementById('comp-exemplo').addEventListener('click', () => {
+  comp = clonar(COMP_PADRAO); salvarComp(); renderComparador();
+});
 
 async function iniciarPreco() {
   try {
