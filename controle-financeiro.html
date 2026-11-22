@@ -611,12 +611,17 @@ const MATERIAIS_BASE = [
   { cat:'Coberturas primárias e especiais',       item:'Flaminal Hydro (50 g)',                     custo:290.00, embalagem:50,  unidade:'ml' },
   { cat:'Coberturas primárias e especiais',       item:'Flaminal Forte (50 g)',                     custo:290.00, embalagem:50,  unidade:'ml' },
   { cat:'Coberturas primárias e especiais',       item:'Flaminal Activ (50 g)',                     custo:155.00, embalagem:50,  unidade:'ml' },
-  { cat:'Coberturas primárias e especiais',       item:'Curativo Mesalt com cloreto de sódio 10x10cm (Mölnlycke)', custo:21.00 },
+  { cat:'Coberturas primárias e especiais',       item:'Curativo Mesalt com cloreto de sódio 10x10cm (Mölnlycke)', custo:36.50, embalagem:2, unidade:'un' },
   { cat:'Coberturas primárias e especiais',       item:'Cutimed Sorbact Contact 10 cm x 100 cm',    custo:263.87, embalagem:100, unidade:'cm' },
   { cat:'Coberturas primárias e especiais',       item:'Cutimed Sorbact 4 cm x 6 cm',               custo:77.31 },
   { cat:'Materiais básicos de curativo',          item:'Swab para coleta estéril, haste plástica (caixa c/ 100, Absorve)', custo:29.50, embalagem:100, unidade:'un' },
   { cat:'Materiais básicos de curativo',          item:'Pinça anatômica descartável em resina estéril (caixa c/ 10, Kolplast)', custo:175.91, embalagem:10, unidade:'un' },
   { cat:'Materiais para desbridamento',           item:'Lâmina de bisturi nº 15 (caixa c/ 100)',    custo:50.24, embalagem:100, unidade:'un' },
+  { cat:'Materiais básicos de curativo',          item:'Atadura autoadesiva K-pro 10 cm (pacote c/ 5 rolos)', custo:99.50, embalagem:5, unidade:'un' },
+  { cat:'Materiais básicos de curativo',          item:'Espátula plástica descartável (pacote c/ 50)', custo:27.00, embalagem:50, unidade:'un' },
+  { cat:'Materiais para desbridamento',           item:'Kit para desbridamento de ferida (pacote c/ 2, Kolplast)', custo:92.49, embalagem:2, unidade:'un' },
+  { cat:'Coberturas primárias e especiais',       item:'Curativo Melolin 20 cm x 10 cm (caixa c/ 10)', custo:149.99, embalagem:10, unidade:'un' },
+  { cat:'Coberturas primárias e especiais',       item:'Hidrofibra extra absorvente 10x10 cm (caixa c/ 10)', custo:300.70, embalagem:10, unidade:'un' },
 ]
 
 function slugify(txt) {
@@ -1340,17 +1345,35 @@ function lerJsonLocal(chave, padrao) {
   try { return JSON.parse(localStorage.getItem(chave) || 'null') || padrao; } catch { return padrao; }
 }
 let selMat = lerJsonLocal('prec_selecao', {});
-let custosMat = (() => {
+function custosBase() {
   const base = {};
   MATERIAIS.forEach(m => { if (m.custo !== null) base[m.id] = m.custo; });
-  return Object.assign(base, lerJsonLocal('prec_custos', {}));
+  return base;
+}
+// Custos que a lista tinha antes de serem atualizados. Até a v2 o navegador guardava
+// todos os custos; um valor salvo igual ao antigo não foi editado e passa a seguir a lista.
+const CUSTOS_BASE_ANTIGOS = { 'Curativo Mesalt com cloreto de sódio 10x10cm (Mölnlycke)': 21 };
+let custosMat = (() => {
+  const base = custosBase();
+  let salvos = lerJsonLocal('prec_custos', {});
+  if (lerJsonLocal('prec_custos_v', 0) < 2) {
+    const antigo = { ...base };
+    MATERIAIS.forEach(m => { if (m.item in CUSTOS_BASE_ANTIGOS) antigo[m.id] = CUSTOS_BASE_ANTIGOS[m.item]; });
+    salvos = Object.fromEntries(Object.entries(salvos).filter(([id, v]) => v !== antigo[id]));
+  }
+  return Object.assign(base, salvos);
 })();
+// Guarda só os custos que você editou; o resto acompanha a lista quando ela for atualizada.
 function salvarMat() {
   try {
+    const base = custosBase();
+    const editados = Object.fromEntries(Object.entries(custosMat).filter(([id, v]) => v !== base[id]));
     localStorage.setItem('prec_selecao', JSON.stringify(selMat));
-    localStorage.setItem('prec_custos', JSON.stringify(custosMat));
+    localStorage.setItem('prec_custos', JSON.stringify(editados));
+    localStorage.setItem('prec_custos_v', '2');
   } catch { /* sem armazenamento local, segue sem salvar */ }
 }
+salvarMat();
 
 // Itens fracionados: subtotal = custo x (uso / embalagem). Itens normais: custo x quantidade.
 function calcSubtotalMat(m, s) {
@@ -2196,6 +2219,8 @@ const DIM_COBERTURA = {
   'Cobertura com PHMB (10,2x10,2 cm)': { placa: 104.04 },
   'Curativo Mesalt com cloreto de sódio 10x10cm (Mölnlycke)': { placa: 100 },
   'Cutimed Sorbact 4 cm x 6 cm': { placa: 24 },
+  'Curativo Melolin 20 cm x 10 cm (caixa c/ 10)': { placa: 200 },
+  'Hidrofibra extra absorvente 10x10 cm (caixa c/ 10)': { placa: 100 },
   'Pielsana sachet 7,5 cm x 15 cm (5 ml)': { placa: 112.5 },
   'Cutimed Sorbact Contact 10 cm x 100 cm': { largura: 10 },
   'Curativo Kerlix rolo 11,4 cm x 3,7 m': { largura: 11.4 },
