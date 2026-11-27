@@ -351,25 +351,8 @@
           </div>
         </section>
 
-        <section class="block">
-          <h2 class="sec">Acompanhamento da evolução</h2>
-          <div class="nota-box">
-            <div class="fase-body" contenteditable="true" data-k="mensuracao" data-placeholder="Como o progresso será acompanhado...">Vou tirar fotos da ferida a cada visita, sempre do mesmo jeito, para acompanhar a evolução com mais precisão.</div>
-          </div>
-        </section>
-
-        <section class="block">
-          <h2 class="sec">Sobre os valores</h2>
-          <div class="nota-box">
-            <div class="fase-body" contenteditable="true" data-k="nota_valores" data-placeholder="Metodologia de precificação...">
-              <p style="margin:0 0 6px;">O valor de cada visita considera o material realmente utilizado naquele dia, por isso pode variar. O intervalo tende a aumentar e o custo por visita a diminuir conforme o quadro evolui e a fase avança. O pacote de 8 sessões é uma alternativa de pagamento fechado, com valor fixo combinado antes do início da fase. Se for mais confortável parcelar no cartão, sem problema algum, só repasso a taxa da maquininha nesse caso.</p>
-              <p style="margin:0;">O período de cada fase é uma estimativa de tratamento. Este documento pode apresentar uma ou mais fases do plano completo, as fases seguintes serão detalhadas e enviadas conforme a evolução do paciente. Pelo caráter crônico da lesão, pela resposta individual de cada paciente e por fatores clínicos associados (como a circulação da região), não há garantia de fechamento completo da ferida no prazo estimado, o tempo real de tratamento pode ser maior.</p>
-            </div>
-          </div>
-        </section>
-
         <div class="sign-wrap">
-          <div class="declaracao" contenteditable="true" data-k="declaracao" data-placeholder="Declaração de ciência do paciente/família...">Declaro estar ciente do plano de cuidados acima, das fases, valores e da metodologia de precificação descrita, e de acordo com o acompanhamento proposto. Estou ciente também de que os prazos e fases descritos são estimativas de tratamento: o tempo real de reparo depende das condições de saúde do paciente, da resposta individual ao tratamento e de fatores clínicos associados, podendo ser maior ou exigir ajustes ao longo do acompanhamento.</div>
+          <div class="declaracao" contenteditable="true" data-k="declaracao" data-placeholder="Declaração de ciência do paciente/família...">Declaro estar ciente do plano de cuidados acima, das fases e dos valores, e de acordo com o acompanhamento proposto. Estou ciente também de que os prazos e fases descritos são estimativas de tratamento: o tempo real de reparo depende das condições de saúde do paciente, da resposta individual ao tratamento e de fatores clínicos associados, podendo ser maior ou exigir ajustes ao longo do acompanhamento.</div>
           <div class="place-date">
             <input class="fld cidade" type="text" data-k="cidade_ass" value="Juiz de Fora/MG">
             <span>,</span>
@@ -430,7 +413,7 @@
         var k = el.dataset.k;
         if (!(k in saved)) return;
         if (el.type === 'checkbox') el.checked = !!saved[k];
-        else if (el.isContentEditable) el.innerHTML = saved[k];
+        else if (el.isContentEditable) el.innerHTML = k === 'declaracao' ? String(saved[k]).replace('das fases, valores e da metodologia de precificação descrita,', 'das fases e dos valores,') : saved[k];
         else el.value = saved[k];
       });
 
